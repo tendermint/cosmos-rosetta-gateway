@@ -2,7 +2,7 @@ package rosetta
 
 import "github.com/coinbase/rosetta-sdk-go/types"
 
-type Rosetta interface {
+type Adapter interface {
 	DataAPI
 }
 
