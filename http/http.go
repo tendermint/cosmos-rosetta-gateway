@@ -3,8 +3,9 @@
 package http
 
 import (
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 	"net/http"
+
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 
 	"github.com/coinbase/rosetta-sdk-go/asserter"
 	"github.com/coinbase/rosetta-sdk-go/server"
@@ -17,15 +18,22 @@ type Service struct {
 }
 
 func New(adapter rosetta.Adapter) (*Service, error) {
-	asserter, err := asserter.NewServer([]string{}, false, []*types.NetworkIdentifier{})
+	asserter, err := asserter.NewServer(
+		[]string{"Transfer", "Reward"},
+		false,
+		[]*types.NetworkIdentifier{},
+	)
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot build asserter")
 	}
+
 	h := server.NewRouter(
 		server.NewAccountAPIController(adapter, asserter),
 	)
+
 	s := &Service{
 		Handler: h,
 	}
+
 	return s, nil
 }
