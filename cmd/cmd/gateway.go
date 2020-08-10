@@ -3,7 +3,7 @@
 package cmd
 
 import (
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad"
 	"net/http"
 
 	"github.com/spf13/cobra"
