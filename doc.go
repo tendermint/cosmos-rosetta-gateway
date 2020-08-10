@@ -18,4 +18,5 @@
 // │   └── doc.go
 // └── service                        > the actual Rosatta API implementation as high level Go funcs.
 //	└── service.go
+
 package crg

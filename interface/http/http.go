@@ -9,7 +9,7 @@ import (
 	"github.com/coinbase/rosetta-sdk-go/server"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/pkg/errors"
-	"github.com/tendermint/cosmos-rosetta-gateway/crg/service"
+	"github.com/tendermint/cosmos-rosetta-gateway/service"
 )
 
 type Service struct {
