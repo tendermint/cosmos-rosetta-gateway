@@ -5,18 +5,25 @@ package service
 
 import (
 	"context"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
 
 type Service struct {
+	adapter rosetta.Adapter
 }
 
-func New() *Service {
-	return &Service{}
+func New(adapter rosetta.Adapter) *Service {
+	return &Service{
+		adapter: adapter,
+	}
 }
 
-func (s *Service) AccountBalance(context.Context, *types.AccountBalanceRequest) (
+func (s *Service) AccountBalance(ctx context.Context, req *types.AccountBalanceRequest) (
 	*types.AccountBalanceResponse, *types.Error) {
-	return nil, nil
+
+	resp := s.adapter.AccountBalance(req)
+
+	return resp, nil
 }
