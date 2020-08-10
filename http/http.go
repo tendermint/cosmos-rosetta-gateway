@@ -17,11 +17,21 @@ type Service struct {
 	http.Handler
 }
 
-func New(adapter rosetta.Adapter) (*Service, error) {
+type Options struct {
+	Blockchain string
+	Network    string
+}
+
+func New(opts Options, adapter rosetta.Adapter) (*Service, error) {
 	asserter, err := asserter.NewServer(
 		[]string{"Transfer", "Reward"},
 		false,
-		[]*types.NetworkIdentifier{},
+		[]*types.NetworkIdentifier{
+			{
+				Blockchain: opts.Blockchain,
+				Network:    opts.Network,
+			},
+		},
 	)
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot build asserter")
