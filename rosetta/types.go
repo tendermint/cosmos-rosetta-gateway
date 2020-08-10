@@ -11,3 +11,6 @@ type Adapter interface {
 type DataAPI interface {
 	server.AccountAPIServicer
 }
+
+type ConstructionAPI interface {
+}
