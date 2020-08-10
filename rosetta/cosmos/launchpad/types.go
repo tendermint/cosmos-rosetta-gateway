@@ -7,5 +7,6 @@ import (
 var _ rosetta.Adapter = Launchpad{}
 
 type Launchpad struct {
+	endpoint string
 }
 
