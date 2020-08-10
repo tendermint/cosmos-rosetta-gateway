@@ -6,8 +6,8 @@ import (
 	"net/http"
 
 	"github.com/spf13/cobra"
-	crghttp "github.com/tendermint/cosmos-rosetta-gateway/crg/interface/http"
-	"github.com/tendermint/cosmos-rosetta-gateway/crg/service"
+	crghttp "github.com/tendermint/cosmos-rosetta-gateway/http"
+	"github.com/tendermint/cosmos-rosetta-gateway/service"
 )
 
 func New() *cobra.Command {

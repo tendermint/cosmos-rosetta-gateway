@@ -4,7 +4,7 @@ package main
 import (
 	"log"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/crg/interface/cli/crg/cmd"
+	"github.com/tendermint/cosmos-rosetta-gateway/cmd/cmd"
 )
 
 func main() {
