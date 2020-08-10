@@ -21,8 +21,7 @@ func New() *cobra.Command {
 }
 
 func runHandler(cmd *cobra.Command, args []string) error {
-	s := service.New(launchpad.Launchpad{}) // TODO: maybe create some constructor for specific adapters or Factory.
-	h, err := crghttp.New(s)
+	h, err := crghttp.New(launchpad.Launchpad{}) // TODO: maybe create some constructor for specific adapters or Factory.
 	if err != nil {
 		return err
 	}

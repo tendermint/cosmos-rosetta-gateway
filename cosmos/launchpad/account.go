@@ -1,8 +1,11 @@
 package launchpad
 
-import "github.com/coinbase/rosetta-sdk-go/types"
+import (
+	"context"
+	"github.com/coinbase/rosetta-sdk-go/types"
+)
 
-func (l Launchpad) AccountBalance(request *types.AccountBalanceRequest) *types.AccountBalanceResponse {
+func (l Launchpad) AccountBalance(ctx context.Context, request *types.AccountBalanceRequest) (
+	*types.AccountBalanceResponse, *types.Error) {
 	panic("implement me")
 }
-
