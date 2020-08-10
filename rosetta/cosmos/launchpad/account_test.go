@@ -2,16 +2,24 @@ package launchpad
 
 import (
 	"context"
-	"github.com/coinbase/rosetta-sdk-go/types"
+	"fmt"
 	"testing"
+
+	"github.com/coinbase/rosetta-sdk-go/types"
+	"github.com/stretchr/testify/require"
 )
 
 func TestLaunchpad_AccountBalance(t *testing.T) {
-	adapter := Launchpad{}
+	adapter := NewLaunchpad("http://localhost:1317/")
 
-	adapter.AccountBalance(context.Background(), &types.AccountBalanceRequest{
+	res, err := adapter.AccountBalance(context.Background(), &types.AccountBalanceRequest{
 		NetworkIdentifier: nil,
-		AccountIdentifier: nil,
-		BlockIdentifier:   nil,
+		AccountIdentifier: &types.AccountIdentifier{
+			Address: "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na",
+		},
+		BlockIdentifier: nil,
 	})
+	require.Nil(t, err)
+
+	fmt.Printf("%v\n", res.Balances[0].Value)
 }
