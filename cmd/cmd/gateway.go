@@ -3,6 +3,7 @@
 package cmd
 
 import (
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad"
 	"net/http"
 
 	"github.com/spf13/cobra"
@@ -20,7 +21,7 @@ func New() *cobra.Command {
 }
 
 func runHandler(cmd *cobra.Command, args []string) error {
-	s := service.New()
+	s := service.New(launchpad.Launchpad{}) // TODO: maybe create some constructor for specific adapters or Factory.
 	h, err := crghttp.New(s)
 	if err != nil {
 		return err
