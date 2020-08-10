@@ -18,15 +18,20 @@ const AccountSdkHandler = "bank/balances/"
 func (l Launchpad) AccountBalance(ctx context.Context, request *types.AccountBalanceRequest) (
 	*types.AccountBalanceResponse, *types.Error) {
 
-	get, err := http.Get(fmt.Sprintf("%s%s%s", l.endpoint, AccountSdkHandler, request.AccountIdentifier.Address))
+	get, err := http.Get(
+		fmt.Sprintf("%s%s%s", l.endpoint, AccountSdkHandler,
+			request.AccountIdentifier.Address))
 	if err != nil {
 		return nil, rosetta.NewError(1, "error getting data from node")
 	}
 
 	body := get.Body
-	defer body.Close()
 
-	all, _ := ioutil.ReadAll(body)
+	all, err := ioutil.ReadAll(body)
+	if err != nil {
+		return nil, rosetta.NewError(1, "error reading data from node")
+	}
+	defer body.Close()
 
 	var res balanceResp
 	err = json.Unmarshal(all, &res)
