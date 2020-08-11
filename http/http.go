@@ -18,13 +18,13 @@ type Service struct {
 }
 
 type Network struct {
-	Options Options
-	Adapter rosetta.Adapter
+	Blockchain string
+	Network    string
+	Options    Options
+	Adapter    rosetta.Adapter
 }
 
 type Options struct {
-	Blockchain          string
-	Network             string
 	SupportedOperations []string
 }
 
@@ -34,8 +34,8 @@ func New(network Network) (*Service, error) {
 		false,
 		[]*types.NetworkIdentifier{
 			{
-				Blockchain: network.Options.Blockchain,
-				Network:    network.Options.Network,
+				Blockchain: network.Blockchain,
+				Network:    network.Network,
 			},
 		},
 	)
