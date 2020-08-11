@@ -13,35 +13,33 @@ import (
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
-const AccountSdkHandler = "bank/balances/"
+const AccountSdkHandler = "/bank/balances"
 
 func (l Launchpad) AccountBalance(ctx context.Context, request *types.AccountBalanceRequest) (
 	*types.AccountBalanceResponse, *types.Error) {
 
-	get, err := http.Get(
+	resp, err := http.Get(
 		fmt.Sprintf("%s%s%s", l.endpoint, AccountSdkHandler,
 			request.AccountIdentifier.Address))
 	if err != nil {
+		fmt.Println(err)
 		return nil, rosetta.NewError(1, "error getting data from node")
 	}
+	defer resp.Body.Close()
 
-	body := get.Body
-
-	all, err := ioutil.ReadAll(body)
+	all, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, rosetta.NewError(1, "error reading data from node")
 	}
-	defer body.Close()
 
 	var res balanceResp
-	err = json.Unmarshal(all, &res)
-	if err != nil {
+
+	if err := json.Unmarshal(all, &res); err != nil {
 		return nil, rosetta.NewError(1, "error interpreting data from node")
 	}
 
 	return &types.AccountBalanceResponse{
-		BlockIdentifier: nil,
-		Balances:        convertCoinsToRosettaBalances(res.Result),
+		Balances: convertCoinsToRosettaBalances(res.Result),
 	}, nil
 }
 
@@ -52,8 +50,7 @@ func convertCoinsToRosettaBalances(coins sdk.Coins) []*types.Amount {
 		amounts = append(amounts, &types.Amount{
 			Value: coin.Amount.String(),
 			Currency: &types.Currency{
-				Symbol:   coin.Denom,
-				Decimals: 0,
+				Symbol: coin.Denom,
 			},
 		})
 	}
