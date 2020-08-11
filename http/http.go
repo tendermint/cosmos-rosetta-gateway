@@ -45,6 +45,7 @@ func New(network Network) (*Service, error) {
 
 	h := server.NewRouter(
 		server.NewAccountAPIController(network.Adapter, asserter),
+		server.NewNetworkAPIController(network.Adapter, asserter),
 	)
 
 	s := &Service{

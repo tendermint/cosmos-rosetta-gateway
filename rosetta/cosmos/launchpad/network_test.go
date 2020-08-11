@@ -5,8 +5,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func TestLaunchpad_NetworkList(t *testing.T) {
@@ -16,7 +14,7 @@ func TestLaunchpad_NetworkList(t *testing.T) {
 	adapter := NewLaunchpad(nil, "http://the-url", blockchain, network)
 
 	list, err := adapter.NetworkList(context.Background(), nil)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 
 	require.Len(t, list.NetworkIdentifiers, 1)
 	require.Equal(t, list.NetworkIdentifiers[0].Network, network)
