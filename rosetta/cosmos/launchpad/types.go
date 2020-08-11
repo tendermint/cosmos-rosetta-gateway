@@ -1,9 +1,15 @@
 package launchpad
 
+import "net/http"
+
 type Launchpad struct {
 	endpoint string
+	c        *http.Client
 }
 
-func NewLaunchpad(endpoint string) *Launchpad {
-	return &Launchpad{endpoint: endpoint}
+func NewLaunchpad(c *http.Client, endpoint string) *Launchpad {
+	return &Launchpad{
+		c:        c,
+		endpoint: endpoint,
+	}
 }

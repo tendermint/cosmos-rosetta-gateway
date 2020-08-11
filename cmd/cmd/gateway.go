@@ -4,6 +4,7 @@ package cmd
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad"
 
@@ -21,13 +22,16 @@ func New() *cobra.Command {
 }
 
 func runHandler(cmd *cobra.Command, args []string) error {
+	c := &http.Client{
+		Timeout: time.Minute * 3,
+	}
 	h, err := crghttp.New(
 		crghttp.Options{
 			Blockchain: "Test",
 			Network:    "test",
 		},
 
-		launchpad.NewLaunchpad("http://localhost:1317/"),
+		launchpad.NewLaunchpad(c, "http://localhost:1317"),
 	) // TODO: maybe create some constructor for specific adapters or Factory.
 	if err != nil {
 		return err
