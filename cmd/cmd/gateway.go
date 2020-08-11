@@ -26,12 +26,14 @@ func runHandler(cmd *cobra.Command, args []string) error {
 		Timeout: time.Minute * 3,
 	}
 	h, err := crghttp.New(
-		crghttp.Options{
-			Blockchain: "Test",
-			Network:    "test",
+		crghttp.Network{
+			Options: crghttp.Options{
+				Blockchain:          "Test",
+				Network:             "test",
+				SupportedOperations: []string{"Transfer", "Reward"},
+			},
+			Adapter: launchpad.NewLaunchpad(c, "http://localhost:1317"),
 		},
-
-		launchpad.NewLaunchpad(c, "http://localhost:1317"),
 	) // TODO: maybe create some constructor for specific adapters or Factory.
 	if err != nil {
 		return err
