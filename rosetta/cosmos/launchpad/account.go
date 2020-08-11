@@ -22,7 +22,6 @@ func (l Launchpad) AccountBalance(ctx context.Context, request *types.AccountBal
 		fmt.Sprintf("%s%s%s", l.endpoint, AccountSdkHandler,
 			request.AccountIdentifier.Address))
 	if err != nil {
-		fmt.Println(err)
 		return nil, rosetta.NewError(1, "error getting data from node")
 	}
 	defer resp.Body.Close()
