@@ -26,7 +26,7 @@ func (l Launchpad) AccountBalance(ctx context.Context, request *types.AccountBal
 	var res balanceResp
 
 	if err := json.NewDecoder(resp.Body).Decode(&res); err != nil {
-		return nil, rosetta.NewError(1, "error interpreting data from node")
+		return nil, ErrInterpreting
 	}
 
 	return &types.AccountBalanceResponse{

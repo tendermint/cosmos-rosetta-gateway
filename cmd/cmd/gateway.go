@@ -28,7 +28,7 @@ func runHandler(cmd *cobra.Command, args []string) error {
 	h, err := crghttp.New(
 		crghttp.Network{
 			Blockchain: "Test",
-			Network:    "test",
+			Network:    "Test",
 
 			Options: crghttp.Options{
 				SupportedOperations: []string{"Transfer", "Reward"},
@@ -43,6 +43,7 @@ func runHandler(cmd *cobra.Command, args []string) error {
 
 	hserver := &http.Server{
 		Handler: h,
+		Addr:    ":8080",
 	}
 	return hserver.ListenAndServe()
 }
