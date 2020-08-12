@@ -1,6 +1,8 @@
 package stargate
 
-import "github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+import (
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+)
 
 type Stargate struct {
 }

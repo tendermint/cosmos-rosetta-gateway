@@ -17,19 +17,25 @@ type Service struct {
 	http.Handler
 }
 
-type Options struct {
+type Network struct {
 	Blockchain string
 	Network    string
+	Options    Options
+	Adapter    rosetta.Adapter
 }
 
-func New(opts Options, adapter rosetta.Adapter) (*Service, error) {
+type Options struct {
+	SupportedOperations []string
+}
+
+func New(network Network) (*Service, error) {
 	asserter, err := asserter.NewServer(
-		[]string{"Transfer", "Reward"},
+		network.Options.SupportedOperations,
 		false,
 		[]*types.NetworkIdentifier{
 			{
-				Blockchain: opts.Blockchain,
-				Network:    opts.Network,
+				Blockchain: network.Blockchain,
+				Network:    network.Network,
 			},
 		},
 	)
@@ -38,7 +44,8 @@ func New(opts Options, adapter rosetta.Adapter) (*Service, error) {
 	}
 
 	h := server.NewRouter(
-		server.NewAccountAPIController(adapter, asserter),
+		server.NewAccountAPIController(network.Adapter, asserter),
+		server.NewNetworkAPIController(network.Adapter, asserter),
 	)
 
 	s := &Service{

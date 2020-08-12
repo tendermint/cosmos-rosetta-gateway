@@ -6,9 +6,11 @@ import (
 
 type Adapter interface {
 	DataAPI
+	ConstructionAPI
 }
 
 type DataAPI interface {
+	server.NetworkAPIServicer
 	server.AccountAPIServicer
 }
 

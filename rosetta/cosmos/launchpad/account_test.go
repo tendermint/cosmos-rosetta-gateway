@@ -24,7 +24,7 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	adapter := NewLaunchpad(http.DefaultClient, ts.URL)
+	adapter := NewLaunchpad(http.DefaultClient, ts.URL, "TheBlockchain", "TheNetwork")
 
 	res, err := adapter.AccountBalance(context.Background(), &types.AccountBalanceRequest{
 		AccountIdentifier: &types.AccountIdentifier{
