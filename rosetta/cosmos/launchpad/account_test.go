@@ -7,6 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+
 	"github.com/coinbase/rosetta-sdk-go/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
@@ -24,7 +26,11 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	adapter := NewLaunchpad(http.DefaultClient, ts.URL, "TheBlockchain", "TheNetwork", nil)
+	properties := rosetta.NetworkProperties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+	}
+	adapter := NewLaunchpad(http.DefaultClient, ts.URL, properties)
 
 	res, err := adapter.AccountBalance(context.Background(), &types.AccountBalanceRequest{
 		AccountIdentifier: &types.AccountIdentifier{
