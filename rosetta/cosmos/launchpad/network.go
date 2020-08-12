@@ -3,9 +3,9 @@ package launchpad
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 const (
@@ -32,10 +32,10 @@ type nodeResponse struct {
 }
 
 func (l Launchpad) NetworkOptions(ctx context.Context, request *types.NetworkRequest) (*types.NetworkOptionsResponse, *types.Error) {
-	addr := l.endpoint + endpointNodeInfo
+	addr := fmt.Sprintf("%s%s", l.endpoint, endpointNodeInfo)
 	resp, err := l.c.Get(addr)
 	if err != nil {
-		return nil, rosetta.NewError(1, "error getting data from node")
+		return nil, ErrNodeConnection
 	}
 	defer resp.Body.Close()
 
@@ -56,10 +56,7 @@ func (l Launchpad) NetworkOptions(ctx context.Context, request *types.NetworkReq
 					Successful: true,
 				},
 			},
-			OperationTypes: []string{
-				"Transfer",
-				"Reward",
-			},
+			OperationTypes: l.operations,
 		},
 	}, nil
 }

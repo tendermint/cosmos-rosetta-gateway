@@ -15,7 +15,7 @@ func TestLaunchpad_NetworkList(t *testing.T) {
 	blockchain := "TheBlockchain"
 	network := "TheNetwork"
 
-	adapter := NewLaunchpad(nil, "http://the-url", blockchain, network)
+	adapter := NewLaunchpad(nil, "http://the-url", blockchain, network, nil)
 
 	list, err := adapter.NetworkList(context.Background(), nil)
 	require.Nil(t, err)
@@ -36,10 +36,16 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	blockchain := "TheBlockchain"
-	network := "TheNetwork"
+	var (
+		blockchain = "TheBlockchain"
+		network    = "TheNetwork"
+		operations = []string{
+			"Transfer",
+			"Reward",
+		}
+	)
 
-	adapter := NewLaunchpad(http.DefaultClient, ts.URL, blockchain, network)
+	adapter := NewLaunchpad(http.DefaultClient, ts.URL, blockchain, network, operations)
 
 	options, err := adapter.NetworkOptions(context.Background(), nil)
 	require.Nil(t, err)

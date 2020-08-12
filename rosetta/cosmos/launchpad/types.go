@@ -9,15 +9,18 @@ import (
 type Launchpad struct {
 	blockchain string
 	network    string
+	operations []string
 
 	endpoint string
 	c        *http.Client
 }
 
-func NewLaunchpad(c *http.Client, endpoint string, blockchain string, network string) rosetta.Adapter {
+func NewLaunchpad(c *http.Client, endpoint string, blockchain string, network string,
+	operations []string) rosetta.Adapter {
 	return &Launchpad{
 		blockchain: blockchain,
 		network:    network,
+		operations: operations,
 		c:          c,
 		endpoint:   endpoint,
 	}
