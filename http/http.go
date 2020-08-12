@@ -22,9 +22,6 @@ type Network struct {
 	Adapter    rosetta.Adapter
 }
 
-type Options struct {
-}
-
 func New(network Network) (*Service, error) {
 	asserter, err := asserter.NewServer(
 		network.Properties.SupportedOperations,
