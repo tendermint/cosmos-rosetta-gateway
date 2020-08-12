@@ -6,10 +6,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad"
-
 	"github.com/spf13/cobra"
+
 	crghttp "github.com/tendermint/cosmos-rosetta-gateway/http"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad"
 )
 
 func New() *cobra.Command {
@@ -18,6 +19,7 @@ func New() *cobra.Command {
 		Short: "Run Cosmos Rosetta Gateway as a service",
 		RunE:  runHandler,
 	}
+
 	return c
 }
 
@@ -25,16 +27,18 @@ func runHandler(cmd *cobra.Command, args []string) error {
 	c := &http.Client{
 		Timeout: time.Minute * 3,
 	}
+
+	properties := rosetta.NetworkProperties{
+		Blockchain:          "Test",
+		Network:             "Test",
+		SupportedOperations: []string{"Transfer", "Reward"},
+	}
+
 	h, err := crghttp.New(
 		crghttp.Network{
-			Blockchain: "Test",
-			Network:    "test",
-
-			Options: crghttp.Options{
-				SupportedOperations: []string{"Transfer", "Reward"},
-			},
-
-			Adapter: launchpad.NewLaunchpad(c, "http://localhost:1317", "Test", "Test"),
+			Properties: properties,
+			Adapter: launchpad.NewLaunchpad(
+				c, "http://localhost:1317", properties),
 		},
 	) // TODO: maybe create some constructor for specific adapters or Factory.
 	if err != nil {
@@ -43,6 +47,7 @@ func runHandler(cmd *cobra.Command, args []string) error {
 
 	hserver := &http.Server{
 		Handler: h,
+		Addr:    ":8080",
 	}
 	return hserver.ListenAndServe()
 }
