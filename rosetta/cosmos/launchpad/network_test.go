@@ -7,14 +7,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	http2 "github.com/tendermint/cosmos-rosetta-gateway/http"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestLaunchpad_NetworkList(t *testing.T) {
-	properties := http2.Properties{
+	properties := rosetta.NetworkProperties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 	}
@@ -40,7 +40,7 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	properties := http2.Properties{
+	properties := rosetta.NetworkProperties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 		SupportedOperations: []string{

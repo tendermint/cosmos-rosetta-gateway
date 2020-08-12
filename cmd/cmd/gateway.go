@@ -6,10 +6,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 
 	"github.com/spf13/cobra"
 	crghttp "github.com/tendermint/cosmos-rosetta-gateway/http"
+
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad"
 )
 
 func New() *cobra.Command {
@@ -27,7 +29,7 @@ func runHandler(cmd *cobra.Command, args []string) error {
 		Timeout: time.Minute * 3,
 	}
 
-	properties := crghttp.Properties{
+	properties := rosetta.NetworkProperties{
 		Blockchain:          "Test",
 		Network:             "Test",
 		SupportedOperations: []string{"Transfer", "Reward"},

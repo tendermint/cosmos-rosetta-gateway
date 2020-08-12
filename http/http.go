@@ -17,15 +17,8 @@ type Service struct {
 	http.Handler
 }
 
-type Properties struct {
-	// Mandatory properties
-	Blockchain          string
-	Network             string
-	SupportedOperations []string
-}
-
 type Network struct {
-	Properties Properties
+	Properties rosetta.NetworkProperties
 	Adapter    rosetta.Adapter
 }
 
