@@ -23,10 +23,12 @@ func (l Launchpad) NetworkList(ctx context.Context, request *types.MetadataReque
 	}, nil
 }
 
+type nodeInfo struct {
+	Version string `json:"version"`
+}
+
 type nodeResponse struct {
-	NodeInfo struct {
-		Version string `json:"version"`
-	} `json:"node_info"`
+	NodeInfo nodeInfo `json:"node_info"`
 }
 
 func (l Launchpad) NetworkOptions(ctx context.Context, request *types.NetworkRequest) (*types.NetworkOptionsResponse, *types.Error) {
