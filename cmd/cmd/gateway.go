@@ -6,11 +6,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
-
 	"github.com/spf13/cobra"
-	crghttp "github.com/tendermint/cosmos-rosetta-gateway/http"
 
+	crghttp "github.com/tendermint/cosmos-rosetta-gateway/http"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad"
 )
 
