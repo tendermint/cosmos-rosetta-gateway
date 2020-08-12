@@ -7,22 +7,26 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	http2 "github.com/tendermint/cosmos-rosetta-gateway/http"
+
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestLaunchpad_NetworkList(t *testing.T) {
-	blockchain := "TheBlockchain"
-	network := "TheNetwork"
+	properties := http2.Properties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+	}
 
-	adapter := NewLaunchpad(nil, "http://the-url", blockchain, network)
+	adapter := NewLaunchpad(nil, "http://the-url", properties)
 
 	list, err := adapter.NetworkList(context.Background(), nil)
 	require.Nil(t, err)
 
 	require.Len(t, list.NetworkIdentifiers, 1)
-	require.Equal(t, list.NetworkIdentifiers[0].Network, network)
-	require.Equal(t, list.NetworkIdentifiers[0].Blockchain, blockchain)
+	require.Equal(t, list.NetworkIdentifiers[0].Network, "TheNetwork")
+	require.Equal(t, list.NetworkIdentifiers[0].Blockchain, "TheBlockchain")
 }
 
 func TestLaunchpad_NetworkOptions(t *testing.T) {
@@ -36,10 +40,16 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	blockchain := "TheBlockchain"
-	network := "TheNetwork"
+	properties := http2.Properties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+		SupportedOperations: []string{
+			"Transfer",
+			"Reward",
+		},
+	}
 
-	adapter := NewLaunchpad(http.DefaultClient, ts.URL, blockchain, network)
+	adapter := NewLaunchpad(http.DefaultClient, ts.URL, properties)
 
 	options, err := adapter.NetworkOptions(context.Background(), nil)
 	require.Nil(t, err)
@@ -57,10 +67,7 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 					Successful: true,
 				},
 			},
-			OperationTypes: []string{
-				"Transfer",
-				"Reward",
-			},
+			OperationTypes: properties.SupportedOperations,
 		},
 	}, options)
 }

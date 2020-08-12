@@ -18,6 +18,7 @@ func New() *cobra.Command {
 		Short: "Run Cosmos Rosetta Gateway as a service",
 		RunE:  runHandler,
 	}
+
 	return c
 }
 
@@ -25,16 +26,18 @@ func runHandler(cmd *cobra.Command, args []string) error {
 	c := &http.Client{
 		Timeout: time.Minute * 3,
 	}
+
+	properties := crghttp.Properties{
+		Blockchain:          "Test",
+		Network:             "Test",
+		SupportedOperations: []string{"Transfer", "Reward"},
+	}
+
 	h, err := crghttp.New(
 		crghttp.Network{
-			Blockchain: "Test",
-			Network:    "Test",
-
-			Options: crghttp.Options{
-				SupportedOperations: []string{"Transfer", "Reward"},
-			},
-
-			Adapter: launchpad.NewLaunchpad(c, "http://localhost:1317", "Test", "Test"),
+			Properties: properties,
+			Adapter: launchpad.NewLaunchpad(
+				c, "http://localhost:1317", properties),
 		},
 	) // TODO: maybe create some constructor for specific adapters or Factory.
 	if err != nil {

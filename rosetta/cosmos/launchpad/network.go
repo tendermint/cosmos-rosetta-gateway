@@ -16,8 +16,8 @@ func (l Launchpad) NetworkList(ctx context.Context, request *types.MetadataReque
 	return &types.NetworkListResponse{
 		NetworkIdentifiers: []*types.NetworkIdentifier{
 			{
-				Blockchain: l.blockchain,
-				Network:    l.network,
+				Blockchain: l.properties.Blockchain,
+				Network:    l.properties.Network,
 			},
 		},
 	}, nil
@@ -56,10 +56,7 @@ func (l Launchpad) NetworkOptions(ctx context.Context, request *types.NetworkReq
 					Successful: true,
 				},
 			},
-			OperationTypes: []string{
-				"Transfer",
-				"Reward",
-			},
+			OperationTypes: l.properties.SupportedOperations,
 		},
 	}, nil
 }

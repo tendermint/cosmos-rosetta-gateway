@@ -17,25 +17,29 @@ type Service struct {
 	http.Handler
 }
 
+type Properties struct {
+	// Mandatory properties
+	Blockchain          string
+	Network             string
+	SupportedOperations []string
+}
+
 type Network struct {
-	Blockchain string
-	Network    string
-	Options    Options
+	Properties Properties
 	Adapter    rosetta.Adapter
 }
 
 type Options struct {
-	SupportedOperations []string
 }
 
 func New(network Network) (*Service, error) {
 	asserter, err := asserter.NewServer(
-		network.Options.SupportedOperations,
+		network.Properties.SupportedOperations,
 		false,
 		[]*types.NetworkIdentifier{
 			{
-				Blockchain: network.Blockchain,
-				Network:    network.Network,
+				Blockchain: network.Properties.Blockchain,
+				Network:    network.Properties.Network,
 			},
 		},
 	)
