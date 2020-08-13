@@ -1,22 +1,30 @@
 package launchpad
 
 import (
-	"net/http"
+	"time"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+	"github.com/tendermint/cosmos-rosetta-gateway/util/jsonutil"
 )
 
-type Launchpad struct {
-	properties rosetta.NetworkProperties
-
-	endpoint string
-	c        *http.Client
+type nodeInfo struct {
+	ID      string `json:"id"`
+	Version string `json:"version"`
 }
 
-func NewLaunchpad(c *http.Client, endpoint string, properties rosetta.NetworkProperties) rosetta.Adapter {
-	return &Launchpad{
-		properties: properties,
-		c:          c,
-		endpoint:   endpoint,
-	}
+type block struct {
+	Header blockHeader `json:"header"`
+}
+
+type blockHeader struct {
+	Height      jsonutil.Int `json:"height"`
+	LastBlockID blockID      `json:"last_block_id"`
+	Time        time.Time    `json:"time"`
+}
+
+type blockID struct {
+	Hash string `json:"hash"`
+}
+
+type peer struct {
+	NodeInfo nodeInfo `json:"node_info"`
 }

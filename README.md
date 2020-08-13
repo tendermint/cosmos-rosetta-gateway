@@ -1,6 +1,6 @@
 # cosmos-rosetta-gateway
 Rosetta Libraries for Cosmos SDK apps
 
-## Terminolog
+## Terminology
 ### crg
 crg is a shortening of Cosmos Rosetta Gateway.

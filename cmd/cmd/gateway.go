@@ -23,7 +23,7 @@ func New() *cobra.Command {
 	return c
 }
 
-func runHandler(cmd *cobra.Command, args []string) error {
+func runHandler(*cobra.Command, []string) error {
 	c := &http.Client{
 		Timeout: time.Minute * 3,
 	}
@@ -38,7 +38,7 @@ func runHandler(cmd *cobra.Command, args []string) error {
 		crghttp.Network{
 			Properties: properties,
 			Adapter: launchpad.NewLaunchpad(
-				c, "http://localhost:1317", properties),
+				c, "http://localhost:26657", "http://localhost:1317", properties),
 		},
 	) // TODO: maybe create some constructor for specific adapters or Factory.
 	if err != nil {
