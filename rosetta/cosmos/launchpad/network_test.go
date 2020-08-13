@@ -79,15 +79,18 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 		switch r.URL.Path {
 		case "/net_info":
 			peersContent := getContentsFromFile(t, "testdata/peers.json")
-			w.Write(peersContent)
+			_, err := w.Write(peersContent)
+			require.NoError(t, err)
 		case "/block":
 			callingGenesis := r.URL.Query().Get("height") == "1"
 			if callingGenesis {
 				genesisContent := getContentsFromFile(t, "testdata/genesis-block.json")
-				w.Write(genesisContent)
+				_, err := w.Write(genesisContent)
+				require.NoError(t, err)
 			} else {
 				latestContent := getContentsFromFile(t, "testdata/latest-block.json")
-				w.Write(latestContent)
+				_, err := w.Write(latestContent)
+				require.NoError(t, err)
 			}
 		}
 	}))
