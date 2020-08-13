@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"time"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 
@@ -74,48 +73,149 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 }
 
 func TestLaunchpad_NetworkStatus(t *testing.T) {
-	tm, err := time.Parse(time.RFC3339, "2019-04-22T17:01:51Z")
-	require.NoError(t, err)
-
-	tsCosmos := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		require.Equal(t, "/blocks/latest", r.URL.Path)
-		json.NewEncoder(w).Encode(map[string]interface{}{
-			"block": map[string]interface{}{
-				"header": map[string]interface{}{
-					"time":   tm.Format(time.RFC3339),
-					"height": "16",
-					"last_block_id": map[string]interface{}{
-						"hash": "ABC",
-					},
-				},
-			},
-		})
-	}))
-	defer tsCosmos.Close()
-
 	tsTendermint := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case "/net_info":
-			json.NewEncoder(w).Encode(map[string]interface{}{
-				"result": map[string]interface{}{
-					"peers": []map[string]interface{}{
-						{
-							"node_info": map[string]interface{}{
-								"id": "YZ",
-							},
-						},
-					},
-				},
-			})
+			w.Write([]byte(`{
+  "jsonrpc": "2.0",
+  "id": -1,
+  "result": {
+    "listening": true,
+    "listeners": [
+      "Listener(@)"
+    ],
+    "n_peers": "0",
+    "peers": []
+  }
+}`))
 		case "/block":
-			require.Equal(t, "1", r.URL.Query().Get("height"))
-			json.NewEncoder(w).Encode(map[string]interface{}{
-				"result": map[string]interface{}{
-					"block_id": map[string]interface{}{
-						"hash": "DEF",
-					},
-				},
-			})
+			callingGenesis := r.URL.Query().Get("height") == "1"
+			if callingGenesis {
+				w.Write([]byte(`{
+  "jsonrpc": "2.0",
+  "id": -1,
+  "result": {
+    "block_id": {
+      "hash": "360A1DED0DEE79A8A28FBD88517EA3B6A9719460A9BE30D8E8D786D5AD79127B",
+      "parts": {
+        "total": "1",
+        "hash": "82914D192B2C538716049AA0193DDADD8F855AAA04B596587E0B2BE4CEF27E5E"
+      }
+    },
+    "block": {
+      "header": {
+        "version": {
+          "block": "10",
+          "app": "0"
+        },
+        "chain_id": "blog",
+        "height": "1",
+        "time": "2020-08-13T11:36:18.162487Z",
+        "last_block_id": {
+          "hash": "",
+          "parts": {
+            "total": "0",
+            "hash": ""
+          }
+        },
+        "last_commit_hash": "",
+        "data_hash": "",
+        "validators_hash": "6260C775FAC0092DFD7574B4943F6A180F409189BA24BF9B9A3A4C74CA512D47",
+        "next_validators_hash": "6260C775FAC0092DFD7574B4943F6A180F409189BA24BF9B9A3A4C74CA512D47",
+        "consensus_hash": "048091BC7DDC283F77BFBF91D73C44DA58C3DF8A9CBC867405D8B7F3DAADA22F",
+        "app_hash": "",
+        "last_results_hash": "",
+        "evidence_hash": "",
+        "proposer_address": "89E00B1FA0E5DACAAB55AD38C422ADB433936C69"
+      },
+      "data": {
+        "txs": null
+      },
+      "evidence": {
+        "evidence": null
+      },
+      "last_commit": {
+        "height": "0",
+        "round": "0",
+        "block_id": {
+          "hash": "",
+          "parts": {
+            "total": "0",
+            "hash": ""
+          }
+        },
+        "signatures": null
+      }
+    }
+  }
+}`))
+			} else {
+				w.Write([]byte(`{
+  "jsonrpc": "2.0",
+  "id": -1,
+  "result": {
+    "block_id": {
+      "hash": "8FEB56E18A7B5FE53C42EEB43CD0113D24BB1B2DCEA4747004887A1464E5826C",
+      "parts": {
+        "total": "1",
+        "hash": "0AB661CF6539F5CDAE6FD6DFE9F9B6AB87126578BF5D39CD5987888451938217"
+      }
+    },
+    "block": {
+      "header": {
+        "version": {
+          "block": "10",
+          "app": "0"
+        },
+        "chain_id": "blog",
+        "height": "1230",
+        "time": "2020-08-13T13:32:57.228899Z",
+        "last_block_id": {
+          "hash": "8C11129024646574E9A6E6B861C45ABAC7AE5684EA187621AEBF14B93DD44F2D",
+          "parts": {
+            "total": "1",
+            "hash": "CB57B80F10351B55AA76F11343E8B65F8E5CCDEF5C9C3218B4CFF01616F8C6F4"
+          }
+        },
+        "last_commit_hash": "DE38C291699FECB9AAECEF5F083B2ED090CA0B98BB9F883E1FCD479765F73AFF",
+        "data_hash": "",
+        "validators_hash": "6260C775FAC0092DFD7574B4943F6A180F409189BA24BF9B9A3A4C74CA512D47",
+        "next_validators_hash": "6260C775FAC0092DFD7574B4943F6A180F409189BA24BF9B9A3A4C74CA512D47",
+        "consensus_hash": "048091BC7DDC283F77BFBF91D73C44DA58C3DF8A9CBC867405D8B7F3DAADA22F",
+        "app_hash": "E906D1B22F83CB7C7B8E838D4C4B96F114780F6A09C341ED508AED87CF7C367F",
+        "last_results_hash": "",
+        "evidence_hash": "",
+        "proposer_address": "89E00B1FA0E5DACAAB55AD38C422ADB433936C69"
+      },
+      "data": {
+        "txs": null
+      },
+      "evidence": {
+        "evidence": null
+      },
+      "last_commit": {
+        "height": "1229",
+        "round": "0",
+        "block_id": {
+          "hash": "8C11129024646574E9A6E6B861C45ABAC7AE5684EA187621AEBF14B93DD44F2D",
+          "parts": {
+            "total": "1",
+            "hash": "CB57B80F10351B55AA76F11343E8B65F8E5CCDEF5C9C3218B4CFF01616F8C6F4"
+          }
+        },
+        "signatures": [
+          {
+            "block_id_flag": 2,
+            "validator_address": "89E00B1FA0E5DACAAB55AD38C422ADB433936C69",
+            "timestamp": "2020-08-13T13:32:57.228899Z",
+            "signature": "A1TjQYHitfWrQDz9+Xvj8aJymj+HSPSHZOJHblF8dJBoUTNnrHRqVAJsMH0LWBItyn7JJdCGd9cci4VfwBnNBQ=="
+          }
+        ]
+      }
+    }
+  }
+}`))
+			}
 		}
 	}))
 	defer tsTendermint.Close()
@@ -129,7 +229,7 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(http.DefaultClient, tsTendermint.URL, tsCosmos.URL, properties)
+	adapter := NewLaunchpad(http.DefaultClient, tsTendermint.URL, "", properties)
 
 	status, adapterErr := adapter.NetworkStatus(context.Background(), nil)
 	require.Nil(t, adapterErr)
@@ -137,17 +237,14 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 
 	require.Equal(t, &types.NetworkStatusResponse{
 		CurrentBlockIdentifier: &types.BlockIdentifier{
-			Index: 16,
-			Hash:  "ABC",
+			Index: 1230,
+			Hash:  "8FEB56E18A7B5FE53C42EEB43CD0113D24BB1B2DCEA4747004887A1464E5826C",
 		},
-		CurrentBlockTimestamp: tm.UnixNano() / 1000000,
+		CurrentBlockTimestamp: 1597325577228,
 		GenesisBlockIdentifier: &types.BlockIdentifier{
-			Hash: "DEF",
+			Hash:  "360A1DED0DEE79A8A28FBD88517EA3B6A9719460A9BE30D8E8D786D5AD79127B",
+			Index: 1,
 		},
-		Peers: []*types.Peer{
-			{
-				PeerID: "YZ",
-			},
-		},
+		Peers: nil,
 	}, status)
 }
