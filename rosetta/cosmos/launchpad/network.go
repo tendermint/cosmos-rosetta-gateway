@@ -86,9 +86,9 @@ type netInfoResult struct {
 
 func (l Launchpad) NetworkStatus(ctx context.Context, request *types.NetworkRequest) (*types.NetworkStatusResponse, *types.Error) {
 	var (
-		latestBlockResp   blockResponse
-		genesistBlockResp blockResponse
-		netInfoResp       netInfoResponse
+		latestBlockResp  blockResponse
+		genesisBlockResp blockResponse
+		netInfoResp      netInfoResponse
 	)
 
 	g, ctx := errgroup.WithContext(ctx)
@@ -132,7 +132,7 @@ func (l Launchpad) NetworkStatus(ctx context.Context, request *types.NetworkRequ
 			return err
 		}
 		defer resp.Body.Close()
-		return json.NewDecoder(resp.Body).Decode(&genesistBlockResp)
+		return json.NewDecoder(resp.Body).Decode(&genesisBlockResp)
 	})
 	if err := g.Wait(); err != nil {
 		fmt.Println(err)
@@ -154,7 +154,7 @@ func (l Launchpad) NetworkStatus(ctx context.Context, request *types.NetworkRequ
 		CurrentBlockTimestamp: latestBlockResp.Result.Block.Header.Time.UnixNano() / 1000000,
 		GenesisBlockIdentifier: &types.BlockIdentifier{
 			Index: 1,
-			Hash:  genesistBlockResp.Result.BlockID.Hash,
+			Hash:  genesisBlockResp.Result.BlockID.Hash,
 		},
 		Peers: peers,
 	}, nil
