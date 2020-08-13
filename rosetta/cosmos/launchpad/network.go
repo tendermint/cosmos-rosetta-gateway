@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"golang.org/x/sync/errgroup"
@@ -35,7 +36,11 @@ type nodeResponse struct {
 }
 
 func (l Launchpad) NetworkOptions(ctx context.Context, request *types.NetworkRequest) (*types.NetworkOptionsResponse, *types.Error) {
-	resp, err := l.request(ctx, l.cosmos(endpointNodeInfo), nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, l.cosmos(endpointNodeInfo), nil)
+	if err != nil {
+		return nil, ErrNodeConnection
+	}
+	resp, err := l.c.Do(req)
 	if err != nil {
 		return nil, ErrNodeConnection
 	}
@@ -72,7 +77,8 @@ type genesisResponse struct {
 }
 
 type genesisResult struct {
-	Block block `json:"block"`
+	BlockID blockID `json:"block_id"`
+	Block   block   `json:"block"`
 }
 
 type netInfoResponse struct {
@@ -92,7 +98,11 @@ func (l Launchpad) NetworkStatus(ctx context.Context, request *types.NetworkRequ
 
 	g, ctx := errgroup.WithContext(ctx)
 	g.Go(func() error {
-		resp, err := l.request(ctx, l.cosmos(endpointBlockLatest), nil)
+		req, err := http.NewRequestWithContext(ctx, http.MethodGet, l.cosmos(endpointBlockLatest), nil)
+		if err != nil {
+			return err
+		}
+		resp, err := l.c.Do(req)
 		if err != nil {
 			return err
 		}
@@ -100,7 +110,11 @@ func (l Launchpad) NetworkStatus(ctx context.Context, request *types.NetworkRequ
 		return json.NewDecoder(resp.Body).Decode(&latestBlockResp)
 	})
 	g.Go(func() error {
-		resp, err := l.request(ctx, l.tendermint(endpointNetInfo), nil)
+		req, err := http.NewRequestWithContext(ctx, http.MethodGet, l.tendermint(endpointNetInfo), nil)
+		if err != nil {
+			return err
+		}
+		resp, err := l.c.Do(req)
 		if err != nil {
 			return err
 		}
@@ -108,7 +122,15 @@ func (l Launchpad) NetworkStatus(ctx context.Context, request *types.NetworkRequ
 		return json.NewDecoder(resp.Body).Decode(&netInfoResp)
 	})
 	g.Go(func() error {
-		resp, err := l.request(ctx, l.tendermint(fmt.Sprintf("%s/1", endpointBlock)), nil)
+		req, err := http.NewRequestWithContext(ctx, http.MethodGet, l.tendermint(endpointBlock), nil)
+		if err != nil {
+			return err
+		}
+		q := req.URL.Query()
+		q.Add("height", "1")
+		req.URL.RawQuery = q.Encode()
+
+		resp, err := l.c.Do(req)
 		if err != nil {
 			return err
 		}
@@ -134,8 +156,7 @@ func (l Launchpad) NetworkStatus(ctx context.Context, request *types.NetworkRequ
 		},
 		CurrentBlockTimestamp: latestBlockResp.Block.Header.Time.UnixNano() / 1000000,
 		GenesisBlockIdentifier: &types.BlockIdentifier{
-			Index: genesistBlockResp.Result.Block.Header.Height.Int64(),
-			Hash:  genesistBlockResp.Result.Block.Header.LastBlockID.Hash,
+			Hash: genesistBlockResp.Result.BlockID.Hash,
 		},
 		Peers: peers,
 	}, nil

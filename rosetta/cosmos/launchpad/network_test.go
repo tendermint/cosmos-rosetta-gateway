@@ -107,16 +107,12 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 					},
 				},
 			})
-		case "/block/1":
+		case "/block":
+			require.Equal(t, "1", r.URL.Query().Get("height"))
 			json.NewEncoder(w).Encode(map[string]interface{}{
 				"result": map[string]interface{}{
-					"block": map[string]interface{}{
-						"header": map[string]interface{}{
-							"height": "18",
-							"last_block_id": map[string]interface{}{
-								"hash": "DEF",
-							},
-						},
+					"block_id": map[string]interface{}{
+						"hash": "DEF",
 					},
 				},
 			})
@@ -146,8 +142,7 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 		},
 		CurrentBlockTimestamp: tm.UnixNano() / 1000000,
 		GenesisBlockIdentifier: &types.BlockIdentifier{
-			Index: 18,
-			Hash:  "DEF",
+			Hash: "DEF",
 		},
 		Peers: []*types.Peer{
 			{
