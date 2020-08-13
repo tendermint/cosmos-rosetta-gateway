@@ -38,7 +38,7 @@ func runHandler(cmd *cobra.Command, args []string) error {
 		crghttp.Network{
 			Properties: properties,
 			Adapter: launchpad.NewLaunchpad(
-				c, "http://localhost:1317", properties),
+				c, "http://localhost:26657", "http://localhost:1317", properties),
 		},
 	) // TODO: maybe create some constructor for specific adapters or Factory.
 	if err != nil {

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 
@@ -19,7 +20,7 @@ func TestLaunchpad_NetworkList(t *testing.T) {
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(nil, "http://the-url", properties)
+	adapter := NewLaunchpad(nil, "", "http://the-url", properties)
 
 	list, err := adapter.NetworkList(context.Background(), nil)
 	require.Nil(t, err)
@@ -49,7 +50,7 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(http.DefaultClient, ts.URL, properties)
+	adapter := NewLaunchpad(http.DefaultClient, "", ts.URL, properties)
 
 	options, err := adapter.NetworkOptions(context.Background(), nil)
 	require.Nil(t, err)
@@ -70,4 +71,88 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 			OperationTypes: properties.SupportedOperations,
 		},
 	}, options)
+}
+
+func TestLaunchpad_NetworkStatus(t *testing.T) {
+	tm, err := time.Parse(time.RFC3339, "2019-04-22T17:01:51Z")
+	require.NoError(t, err)
+
+	tsCosmos := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		require.Equal(t, "/blocks/latest", r.URL.Path)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"block": map[string]interface{}{
+				"header": map[string]interface{}{
+					"time":   tm.Format(time.RFC3339),
+					"height": "16",
+					"last_block_id": map[string]interface{}{
+						"hash": "ABC",
+					},
+				},
+			},
+		})
+	}))
+	defer tsCosmos.Close()
+
+	tsTendermint := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/net_info":
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"result": map[string]interface{}{
+					"peers": []map[string]interface{}{
+						{
+							"node_info": map[string]interface{}{
+								"id": "YZ",
+							},
+						},
+					},
+				},
+			})
+		case "/block":
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"result": map[string]interface{}{
+					"block": map[string]interface{}{
+						"header": map[string]interface{}{
+							"height": "18",
+							"last_block_id": map[string]interface{}{
+								"hash": "DEF",
+							},
+						},
+					},
+				},
+			})
+		}
+	}))
+	defer tsTendermint.Close()
+
+	properties := rosetta.NetworkProperties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+		SupportedOperations: []string{
+			"Transfer",
+			"Reward",
+		},
+	}
+
+	adapter := NewLaunchpad(http.DefaultClient, tsTendermint.URL, tsCosmos.URL, properties)
+
+	status, adapterErr := adapter.NetworkStatus(context.Background(), nil)
+	require.Nil(t, adapterErr)
+	require.NotNil(t, status)
+
+	require.Equal(t, &types.NetworkStatusResponse{
+		CurrentBlockIdentifier: &types.BlockIdentifier{
+			Index: 16,
+			Hash:  "ABC",
+		},
+		CurrentBlockTimestamp: tm.UnixNano() / 1000000,
+		GenesisBlockIdentifier: &types.BlockIdentifier{
+			Index: 18,
+			Hash:  "DEF",
+		},
+		Peers: []*types.Peer{
+			{
+				PeerID: "YZ",
+			},
+		},
+	}, status)
 }
