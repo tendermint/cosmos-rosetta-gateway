@@ -11,7 +11,7 @@ import (
 
 const AccountSdkHandler = "/bank/balances"
 
-func (l Launchpad) AccountBalance(ctx context.Context, request *types.AccountBalanceRequest) (
+func (l Launchpad) AccountBalance(_ context.Context, request *types.AccountBalanceRequest) (
 	*types.AccountBalanceResponse, *types.Error) {
 
 	addr := fmt.Sprintf("%s/%s", l.cosmos(AccountSdkHandler), request.AccountIdentifier.Address)

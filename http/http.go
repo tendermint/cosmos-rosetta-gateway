@@ -5,12 +5,12 @@ package http
 import (
 	"net/http"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
-
-	"github.com/coinbase/rosetta-sdk-go/asserter"
+	assert "github.com/coinbase/rosetta-sdk-go/asserter"
 	"github.com/coinbase/rosetta-sdk-go/server"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/pkg/errors"
+
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 type Service struct {
@@ -23,7 +23,7 @@ type Network struct {
 }
 
 func New(network Network) (*Service, error) {
-	asserter, err := asserter.NewServer(
+	asserter, err := assert.NewServer(
 		network.Properties.SupportedOperations,
 		false,
 		[]*types.NetworkIdentifier{

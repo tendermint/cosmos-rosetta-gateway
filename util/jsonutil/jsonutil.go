@@ -11,7 +11,7 @@ type Int struct {
 	value uint64
 }
 
-// UnmarshalJSON impelents json.Unmarshaler.
+// UnmarshalJSON implements json.Unmarshaler.
 func (i *Int) UnmarshalJSON(data []byte) error {
 	var (
 		s   string

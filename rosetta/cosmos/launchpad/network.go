@@ -19,7 +19,7 @@ const (
 	endpointBlock   = "/block"
 )
 
-func (l Launchpad) NetworkList(ctx context.Context, request *types.MetadataRequest) (*types.NetworkListResponse, *types.Error) {
+func (l Launchpad) NetworkList(context.Context, *types.MetadataRequest) (*types.NetworkListResponse, *types.Error) {
 	return &types.NetworkListResponse{
 		NetworkIdentifiers: []*types.NetworkIdentifier{
 			{
@@ -34,7 +34,7 @@ type nodeResponse struct {
 	NodeInfo nodeInfo `json:"node_info"`
 }
 
-func (l Launchpad) NetworkOptions(ctx context.Context, request *types.NetworkRequest) (*types.NetworkOptionsResponse, *types.Error) {
+func (l Launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) (*types.NetworkOptionsResponse, *types.Error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, l.cosmos(endpointNodeInfo), nil)
 	if err != nil {
 		return nil, ErrNodeConnection
@@ -84,7 +84,7 @@ type netInfoResult struct {
 	Peers []peer `json:"peers"`
 }
 
-func (l Launchpad) NetworkStatus(ctx context.Context, request *types.NetworkRequest) (*types.NetworkStatusResponse, *types.Error) {
+func (l Launchpad) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (*types.NetworkStatusResponse, *types.Error) {
 	var (
 		latestBlockResp  blockResponse
 		genesisBlockResp blockResponse

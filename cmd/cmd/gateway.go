@@ -23,7 +23,7 @@ func New() *cobra.Command {
 	return c
 }
 
-func runHandler(cmd *cobra.Command, args []string) error {
+func runHandler(*cobra.Command, []string) error {
 	c := &http.Client{
 		Timeout: time.Minute * 3,
 	}

@@ -34,11 +34,12 @@ func TestLaunchpad_NetworkList(t *testing.T) {
 func TestLaunchpad_NetworkOptions(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		require.Equal(t, "/node_info", r.URL.Path)
-		json.NewEncoder(w).Encode(nodeResponse{
+		err := json.NewEncoder(w).Encode(nodeResponse{
 			NodeInfo: nodeInfo{
 				Version: "5",
 			},
 		})
+		require.NoError(t, err)
 	}))
 	defer ts.Close()
 
