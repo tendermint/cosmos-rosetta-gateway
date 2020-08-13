@@ -12,8 +12,7 @@ import (
 
 const (
 	// cosmos.
-	endpointNodeInfo    = "/node_info"
-	endpointBlockLatest = "/blocks/latest"
+	endpointNodeInfo = "/node_info"
 
 	// tendermint.
 	endpointNetInfo = "/net_info"
@@ -68,15 +67,11 @@ func (l Launchpad) NetworkOptions(ctx context.Context, request *types.NetworkReq
 	}, nil
 }
 
-type latestBlockResponse struct {
-	Block block `json:"block"`
+type blockResponse struct {
+	Result result `json:"result"`
 }
 
-type genesisResponse struct {
-	Result genesisResult `json:"result"`
-}
-
-type genesisResult struct {
+type result struct {
 	BlockID blockID `json:"block_id"`
 	Block   block   `json:"block"`
 }
@@ -91,22 +86,24 @@ type netInfoResult struct {
 
 func (l Launchpad) NetworkStatus(ctx context.Context, request *types.NetworkRequest) (*types.NetworkStatusResponse, *types.Error) {
 	var (
-		latestBlockResp   latestBlockResponse
-		genesistBlockResp genesisResponse
+		latestBlockResp   blockResponse
+		genesistBlockResp blockResponse
 		netInfoResp       netInfoResponse
 	)
 
 	g, ctx := errgroup.WithContext(ctx)
 	g.Go(func() error {
-		req, err := http.NewRequestWithContext(ctx, http.MethodGet, l.cosmos(endpointBlockLatest), nil)
+		req, err := http.NewRequestWithContext(ctx, http.MethodGet, l.tendermint(endpointBlock), nil)
 		if err != nil {
 			return err
 		}
+
 		resp, err := l.c.Do(req)
 		if err != nil {
 			return err
 		}
 		defer resp.Body.Close()
+
 		return json.NewDecoder(resp.Body).Decode(&latestBlockResp)
 	})
 	g.Go(func() error {
@@ -151,10 +148,10 @@ func (l Launchpad) NetworkStatus(ctx context.Context, request *types.NetworkRequ
 
 	return &types.NetworkStatusResponse{
 		CurrentBlockIdentifier: &types.BlockIdentifier{
-			Index: latestBlockResp.Block.Header.Height.Int64(),
-			Hash:  latestBlockResp.Block.Header.LastBlockID.Hash,
+			Index: latestBlockResp.Result.Block.Header.Height.Int64(),
+			Hash:  latestBlockResp.Result.BlockID.Hash,
 		},
-		CurrentBlockTimestamp: latestBlockResp.Block.Header.Time.UnixNano() / 1000000,
+		CurrentBlockTimestamp: latestBlockResp.Result.Block.Header.Time.UnixNano() / 1000000,
 		GenesisBlockIdentifier: &types.BlockIdentifier{
 			Index: 1,
 			Hash:  genesistBlockResp.Result.BlockID.Hash,
