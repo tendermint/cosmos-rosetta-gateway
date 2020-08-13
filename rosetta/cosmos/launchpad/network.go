@@ -108,7 +108,7 @@ func (l Launchpad) NetworkStatus(ctx context.Context, request *types.NetworkRequ
 		return json.NewDecoder(resp.Body).Decode(&netInfoResp)
 	})
 	g.Go(func() error {
-		resp, err := l.request(ctx, l.tendermint(endpointBlock), nil)
+		resp, err := l.request(ctx, l.tendermint(fmt.Sprintf("%s/1", endpointBlock)), nil)
 		if err != nil {
 			return err
 		}

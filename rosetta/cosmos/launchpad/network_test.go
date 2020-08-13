@@ -107,7 +107,7 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 					},
 				},
 			})
-		case "/block":
+		case "/block/1":
 			json.NewEncoder(w).Encode(map[string]interface{}{
 				"result": map[string]interface{}{
 					"block": map[string]interface{}{
