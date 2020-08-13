@@ -156,7 +156,8 @@ func (l Launchpad) NetworkStatus(ctx context.Context, request *types.NetworkRequ
 		},
 		CurrentBlockTimestamp: latestBlockResp.Block.Header.Time.UnixNano() / 1000000,
 		GenesisBlockIdentifier: &types.BlockIdentifier{
-			Hash: genesistBlockResp.Result.BlockID.Hash,
+			Index: 1,
+			Hash:  genesistBlockResp.Result.BlockID.Hash,
 		},
 		Peers: peers,
 	}, nil
