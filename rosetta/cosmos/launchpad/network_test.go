@@ -122,7 +122,11 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 			Hash:  "360A1DED0DEE79A8A28FBD88517EA3B6A9719460A9BE30D8E8D786D5AD79127B",
 			Index: 1,
 		},
-		Peers: nil,
+		Peers: []*types.Peer{
+			{
+				PeerID: "5576458aef205977e18fd50b274e9b5d9014525a",
+			},
+		},
 	}, status)
 }
 
