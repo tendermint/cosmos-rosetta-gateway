@@ -1,18 +1,9 @@
 #!/bin/bash
 
 cosmos=generated/cosmos-launchpad
-cosmosurl=https://raw.githubusercontent.com/cosmos/cosmos-sdk/v0.39.1/client/lcd/swagger-ui/swagger.yaml
-cosmosyml=/tmp/cosmos.yml
-
-## generate for Cosmos.
-curl -s -o $cosmosyml $cosmosurl
-
-# yml interprets following as boolean so make sure them they are
-# interpreted as strings.
-sed -i "s/no:/\"no\":/g" $cosmosyml 
-sed -i "s/yes:/\"yes\":/g" $cosmosyml 
 
 mkdir -p $cosmos
+
 # https://openapi-generator.tech/
 openapi-generator generate -g go -i $cosmosyml -o $cosmos
 
