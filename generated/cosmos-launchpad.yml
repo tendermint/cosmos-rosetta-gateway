@@ -397,9 +397,14 @@ paths:
         200:
           description: Account balances
           schema:
-            type: array
-            items:
-              $ref: "#/definitions/Coin"
+            type: object
+            properties:
+              height:
+                type: string
+              result:
+                type: array
+                items:
+                  $ref: "#/definitions/Coin"
         500:
           description: Server internal error
   /bank/accounts/{address}/transfers:
@@ -2337,13 +2342,13 @@ definitions:
   TallyResult:
     type: object
     properties:
-      yes:
+      "yes":
         type: string
         example: "0.0000000000"
       abstain:
         type: string
         example: "0.0000000000"
-      no:
+      "no":
         type: string
         example: "0.0000000000"
       no_with_veto:
