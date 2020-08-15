@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## AuthAccountsAddressGet
 
-> InlineResponse2004 AuthAccountsAddressGet(ctx, address)
+> InlineResponse2005 AuthAccountsAddressGet(ctx, address)
 
 Get the account information on blockchain
 
@@ -24,7 +24,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**InlineResponse2004**](inline_response_200_4.md)
+[**InlineResponse2005**](inline_response_200_5.md)
 
 ### Authorization
 

@@ -779,16 +779,16 @@ func (a *StakingApiService) StakingDelegatorsDelegatorAddrValidatorsValidatorAdd
 /*
 StakingParametersGet Get the current staking parameter values
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return InlineResponse2006
+@return InlineResponse2007
 */
-func (a *StakingApiService) StakingParametersGet(ctx _context.Context) (InlineResponse2006, *_nethttp.Response, error) {
+func (a *StakingApiService) StakingParametersGet(ctx _context.Context) (InlineResponse2007, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  InlineResponse2006
+		localVarReturnValue  InlineResponse2007
 	)
 
 	// create path and map variables
@@ -853,16 +853,16 @@ func (a *StakingApiService) StakingParametersGet(ctx _context.Context) (InlineRe
 /*
 StakingPoolGet Get the current state of the staking pool
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return InlineResponse2005
+@return InlineResponse2006
 */
-func (a *StakingApiService) StakingPoolGet(ctx _context.Context) (InlineResponse2005, *_nethttp.Response, error) {
+func (a *StakingApiService) StakingPoolGet(ctx _context.Context) (InlineResponse2006, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  InlineResponse2005
+		localVarReturnValue  InlineResponse2006
 	)
 
 	// create path and map variables

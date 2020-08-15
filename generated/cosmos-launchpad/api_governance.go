@@ -30,16 +30,16 @@ type GovernanceApiService service
 GovParametersDepositGet Query governance deposit parameters
 Query governance deposit parameters. The max_deposit_period units are in nanoseconds.
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return InlineResponse2008
+@return InlineResponse2009
 */
-func (a *GovernanceApiService) GovParametersDepositGet(ctx _context.Context) (InlineResponse2008, *_nethttp.Response, error) {
+func (a *GovernanceApiService) GovParametersDepositGet(ctx _context.Context) (InlineResponse2009, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  InlineResponse2008
+		localVarReturnValue  InlineResponse2009
 	)
 
 	// create path and map variables

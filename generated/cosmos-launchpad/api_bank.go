@@ -109,16 +109,16 @@ func (a *BankApiService) BankAccountsAddressTransfersPost(ctx _context.Context, 
 BankBalancesAddressGet Get the account balances
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param address Account address in bech32 format
-@return []Coin
+@return InlineResponse2004
 */
-func (a *BankApiService) BankBalancesAddressGet(ctx _context.Context, address string) ([]Coin, *_nethttp.Response, error) {
+func (a *BankApiService) BankBalancesAddressGet(ctx _context.Context, address string) (InlineResponse2004, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  []Coin
+		localVarReturnValue  InlineResponse2004
 	)
 
 	// create path and map variables

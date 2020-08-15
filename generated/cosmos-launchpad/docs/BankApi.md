@@ -44,7 +44,7 @@ No authorization required
 
 ## BankBalancesAddressGet
 
-> []Coin BankBalancesAddressGet(ctx, address)
+> InlineResponse2004 BankBalancesAddressGet(ctx, address)
 
 Get the account balances
 
@@ -58,7 +58,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**[]Coin**](Coin.md)
+[**InlineResponse2004**](inline_response_200_4.md)
 
 ### Authorization
 

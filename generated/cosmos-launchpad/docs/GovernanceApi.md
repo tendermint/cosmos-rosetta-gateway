@@ -24,7 +24,7 @@ Method | HTTP request | Description
 
 ## GovParametersDepositGet
 
-> InlineResponse2008 GovParametersDepositGet(ctx, )
+> InlineResponse2009 GovParametersDepositGet(ctx, )
 
 Query governance deposit parameters
 
@@ -36,7 +36,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**InlineResponse2008**](inline_response_200_8.md)
+[**InlineResponse2009**](inline_response_200_9.md)
 
 ### Authorization
 

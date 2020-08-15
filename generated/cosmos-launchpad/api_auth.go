@@ -29,16 +29,16 @@ type AuthApiService service
 AuthAccountsAddressGet Get the account information on blockchain
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param address Account address
-@return InlineResponse2004
+@return InlineResponse2005
 */
-func (a *AuthApiService) AuthAccountsAddressGet(ctx _context.Context, address string) (InlineResponse2004, *_nethttp.Response, error) {
+func (a *AuthApiService) AuthAccountsAddressGet(ctx _context.Context, address string) (InlineResponse2005, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  InlineResponse2004
+		localVarReturnValue  InlineResponse2005
 	)
 
 	// create path and map variables

@@ -349,7 +349,7 @@ No authorization required
 
 ## StakingParametersGet
 
-> InlineResponse2006 StakingParametersGet(ctx, )
+> InlineResponse2007 StakingParametersGet(ctx, )
 
 Get the current staking parameter values
 
@@ -359,7 +359,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**InlineResponse2006**](inline_response_200_6.md)
+[**InlineResponse2007**](inline_response_200_7.md)
 
 ### Authorization
 
@@ -377,7 +377,7 @@ No authorization required
 
 ## StakingPoolGet
 
-> InlineResponse2005 StakingPoolGet(ctx, )
+> InlineResponse2006 StakingPoolGet(ctx, )
 
 Get the current state of the staking pool
 
@@ -387,7 +387,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**InlineResponse2005**](inline_response_200_5.md)
+[**InlineResponse2006**](inline_response_200_6.md)
 
 ### Authorization
 
