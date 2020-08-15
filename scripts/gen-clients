@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cosmos=generated/cosmos-launchpad
+cosmosyml=$cosmos.yml
 
 mkdir -p $cosmos
 

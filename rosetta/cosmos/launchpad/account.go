@@ -2,42 +2,30 @@ package launchpad
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	cosmoslp "github.com/tendermint/cosmos-rosetta-gateway/generated/cosmos-launchpad"
 )
 
-const AccountSdkHandler = "/bank/balances"
-
-func (l Launchpad) AccountBalance(_ context.Context, request *types.AccountBalanceRequest) (
+func (l Launchpad) AccountBalance(ctx context.Context, request *types.AccountBalanceRequest) (
 	*types.AccountBalanceResponse, *types.Error) {
-
-	addr := fmt.Sprintf("%s/%s", l.cosmos(AccountSdkHandler), request.AccountIdentifier.Address)
-	resp, err := l.c.Get(addr)
+	resp, _, err := l.api.Bank.BankBalancesAddressGet(ctx, request.AccountIdentifier.Address)
 	if err != nil {
 		return nil, ErrNodeConnection
 	}
-	defer resp.Body.Close()
-
-	var res balanceResp
-
-	if err := json.NewDecoder(resp.Body).Decode(&res); err != nil {
-		return nil, ErrInterpreting
-	}
 
 	return &types.AccountBalanceResponse{
-		Balances: convertCoinsToRosettaBalances(res.Result),
+		Balances: convertCoinsToRosettaBalances(resp.Result),
 	}, nil
 }
 
-func convertCoinsToRosettaBalances(coins sdk.Coins) []*types.Amount {
+func convertCoinsToRosettaBalances(coins []cosmoslp.Coin) []*types.Amount {
 	var amounts []*types.Amount
 
 	for _, coin := range coins {
 		amounts = append(amounts, &types.Amount{
-			Value: coin.Amount.String(),
+			Value: coin.Amount,
 			Currency: &types.Currency{
 				Symbol: coin.Denom,
 			},

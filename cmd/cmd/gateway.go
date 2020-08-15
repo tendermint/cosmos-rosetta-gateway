@@ -8,6 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	cosmoslp "github.com/tendermint/cosmos-rosetta-gateway/generated/cosmos-launchpad"
 	crghttp "github.com/tendermint/cosmos-rosetta-gateway/http"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad"
@@ -28,6 +29,15 @@ func runHandler(*cobra.Command, []string) error {
 		Timeout: time.Minute * 3,
 	}
 
+	cc := cosmoslp.NewAPIClient(&cosmoslp.Configuration{
+		Host:   "localhost:1317",
+		Scheme: "http",
+	})
+	api := launchpad.API{
+		Bank:       cc.BankApi,
+		Tendermint: cc.TendermintRPCApi,
+	}
+
 	properties := rosetta.NetworkProperties{
 		Blockchain:          "Test",
 		Network:             "Test",
@@ -38,7 +48,7 @@ func runHandler(*cobra.Command, []string) error {
 		crghttp.Network{
 			Properties: properties,
 			Adapter: launchpad.NewLaunchpad(
-				c, "http://localhost:26657", "http://localhost:1317", properties),
+				c, api, "http://localhost:26657", properties),
 		},
 	) // TODO: maybe create some constructor for specific adapters or Factory.
 	if err != nil {
