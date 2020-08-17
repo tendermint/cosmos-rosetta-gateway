@@ -7,9 +7,9 @@ import (
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/cosmos/generated"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/cosmos/mocks"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
-	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/cosmos/generated"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/cosmos/mocks"
 )
 
 func TestLaunchpad_AccountBalance(t *testing.T) {

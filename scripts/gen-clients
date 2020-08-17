@@ -1,10 +1,10 @@
 #!/bin/bash
 
-cosmos=rosetta/cosmos/launchpad/client/cosmos/generated
-cosmosyml=rosetta/cosmos/launchpad/client/cosmos/swagger.yml
+cosmos=cosmos/launchpad/client/cosmos/generated
+cosmosyml=cosmos/launchpad/client/cosmos/swagger.yml
 
-tendermint=rosetta/cosmos/launchpad/client/tendermint/generated
-tendermintyml=rosetta/cosmos/launchpad/client/tendermint/openapi.yml
+tendermint=cosmos/launchpad/client/tendermint/generated
+tendermintyml=cosmos/launchpad/client/tendermint/openapi.yml
 
 mkdir -p $cosmos
 mkdir -p $tendermint
