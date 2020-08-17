@@ -2,17 +2,18 @@ package launchpad
 
 import (
 	"context"
-	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"testing"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
-
 	"github.com/coinbase/rosetta-sdk-go/types"
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+	client "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/cosmos/generated"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/cosmos/mocks"
 )
 
 func TestLaunchpad_NetworkList(t *testing.T) {
@@ -21,7 +22,7 @@ func TestLaunchpad_NetworkList(t *testing.T) {
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(nil, "", "http://the-url", properties)
+	adapter := NewLaunchpad(nil, API{}, "http://the-url", properties)
 
 	list, err := adapter.NetworkList(context.Background(), nil)
 	require.Nil(t, err)
@@ -32,16 +33,17 @@ func TestLaunchpad_NetworkList(t *testing.T) {
 }
 
 func TestLaunchpad_NetworkOptions(t *testing.T) {
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		require.Equal(t, "/node_info", r.URL.Path)
-		err := json.NewEncoder(w).Encode(nodeResponse{
-			NodeInfo: nodeInfo{
+	m := &mocks.TendermintAPI{}
+	defer m.AssertExpectations(t)
+
+	m.
+		On("NodeInfoGet", mock.Anything).
+		Return(client.InlineResponse200{
+			NodeInfo: client.InlineResponse200NodeInfo{
 				Version: "5",
 			},
-		})
-		require.NoError(t, err)
-	}))
-	defer ts.Close()
+		}, nil, nil).
+		Once()
 
 	properties := rosetta.NetworkProperties{
 		Blockchain: "TheBlockchain",
@@ -52,7 +54,7 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(http.DefaultClient, "", ts.URL, properties)
+	adapter := NewLaunchpad(http.DefaultClient, API{Tendermint: m}, "", properties)
 
 	options, err := adapter.NetworkOptions(context.Background(), nil)
 	require.Nil(t, err)
@@ -106,7 +108,7 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(http.DefaultClient, tsTendermint.URL, "", properties)
+	adapter := NewLaunchpad(http.DefaultClient, API{}, tsTendermint.URL, properties)
 
 	status, adapterErr := adapter.NetworkStatus(context.Background(), nil)
 	require.Nil(t, adapterErr)

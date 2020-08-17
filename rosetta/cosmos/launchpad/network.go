@@ -11,9 +11,6 @@ import (
 )
 
 const (
-	// cosmos.
-	endpointNodeInfo = "/node_info"
-
 	// tendermint.
 	endpointNetInfo = "/net_info"
 	endpointBlock   = "/block"
@@ -35,25 +32,15 @@ type nodeResponse struct {
 }
 
 func (l Launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) (*types.NetworkOptionsResponse, *types.Error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, l.cosmos(endpointNodeInfo), nil)
+	resp, _, err := l.api.Tendermint.NodeInfoGet(ctx)
 	if err != nil {
 		return nil, ErrNodeConnection
-	}
-	resp, err := l.c.Do(req)
-	if err != nil {
-		return nil, ErrNodeConnection
-	}
-	defer resp.Body.Close()
-
-	var nodeResp nodeResponse
-	if err := json.NewDecoder(resp.Body).Decode(&nodeResp); err != nil {
-		return nil, ErrInterpreting
 	}
 
 	return &types.NetworkOptionsResponse{
 		Version: &types.Version{
 			RosettaVersion: "1.2.5",
-			NodeVersion:    nodeResp.NodeInfo.Version,
+			NodeVersion:    resp.NodeInfo.Version,
 		},
 		Allow: &types.Allow{
 			OperationStatuses: []*types.OperationStatus{
