@@ -1,3 +1,5 @@
+gen-all: gen-clients gen-mocks
+
 gen-clients:
 	scripts/gen-clients
 
