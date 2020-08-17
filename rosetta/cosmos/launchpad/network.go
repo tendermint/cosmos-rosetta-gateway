@@ -11,12 +11,6 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-const (
-	// tendermint.
-	endpointNetInfo = "/net_info"
-	endpointBlock   = "/block"
-)
-
 func (l Launchpad) NetworkList(context.Context, *types.MetadataRequest) (*types.NetworkListResponse, *types.Error) {
 	return &types.NetworkListResponse{
 		NetworkIdentifiers: []*types.NetworkIdentifier{
@@ -26,10 +20,6 @@ func (l Launchpad) NetworkList(context.Context, *types.MetadataRequest) (*types.
 			},
 		},
 	}, nil
-}
-
-type nodeResponse struct {
-	NodeInfo nodeInfo `json:"node_info"`
 }
 
 func (l Launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) (*types.NetworkOptionsResponse, *types.Error) {
@@ -53,23 +43,6 @@ func (l Launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) 
 			OperationTypes: l.properties.SupportedOperations,
 		},
 	}, nil
-}
-
-type blockResponse struct {
-	Result result `json:"result"`
-}
-
-type result struct {
-	BlockID blockID `json:"block_id"`
-	Block   block   `json:"block"`
-}
-
-type netInfoResponse struct {
-	Result netInfoResult `json:"result"`
-}
-
-type netInfoResult struct {
-	Peers []peer `json:"peers"`
 }
 
 func (l Launchpad) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (*types.NetworkStatusResponse, *types.Error) {

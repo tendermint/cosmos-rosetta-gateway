@@ -30,10 +30,10 @@ type CosmosTendermintAPI interface {
 }
 
 type TendermintAPI struct {
-	Info TendermintInfo
+	Info TendermintInfoAPI
 }
 
-type TendermintInfo interface {
+type TendermintInfoAPI interface {
 	NetInfo(ctx context.Context) (tendermintclient.NetInfoResponse, *http.Response, error)
 	Block(ctx context.Context, localVarOptionals *tendermintclient.BlockOpts) (tendermintclient.BlockResponse, *http.Response, error)
 }

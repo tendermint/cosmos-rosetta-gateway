@@ -3,17 +3,19 @@ package launchpad
 import (
 	"context"
 	"io/ioutil"
-	"net/http"
-	"net/http/httptest"
 	"os"
 	"testing"
+	"time"
 
+	"github.com/antihax/optional"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
-	client "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/cosmos/generated"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/cosmos/mocks"
+	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/cosmos/generated"
+	cosmosmocks "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/cosmos/mocks"
+	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/tendermint/generated"
+	tendermintmocks "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/tendermint/mocks"
 )
 
 func TestLaunchpad_NetworkList(t *testing.T) {
@@ -22,7 +24,7 @@ func TestLaunchpad_NetworkList(t *testing.T) {
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(nil, API{}, "http://the-url", properties)
+	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, properties)
 
 	list, err := adapter.NetworkList(context.Background(), nil)
 	require.Nil(t, err)
@@ -33,13 +35,13 @@ func TestLaunchpad_NetworkList(t *testing.T) {
 }
 
 func TestLaunchpad_NetworkOptions(t *testing.T) {
-	m := &mocks.TendermintAPI{}
+	m := &cosmosmocks.CosmosTendermintAPI{}
 	defer m.AssertExpectations(t)
 
 	m.
 		On("NodeInfoGet", mock.Anything).
-		Return(client.InlineResponse200{
-			NodeInfo: client.InlineResponse200NodeInfo{
+		Return(cosmosclient.InlineResponse200{
+			NodeInfo: cosmosclient.InlineResponse200NodeInfo{
 				Version: "5",
 			},
 		}, nil, nil).
@@ -54,7 +56,7 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(http.DefaultClient, API{Tendermint: m}, "", properties)
+	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{Tendermint: m}, properties)
 
 	options, err := adapter.NetworkOptions(context.Background(), nil)
 	require.Nil(t, err)
@@ -78,26 +80,67 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 }
 
 func TestLaunchpad_NetworkStatus(t *testing.T) {
-	tsTendermint := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		switch r.URL.Path {
-		case "/net_info":
-			peersContent := getContentsFromFile(t, "testdata/peers.json")
-			_, err := w.Write(peersContent)
-			require.NoError(t, err)
-		case "/block":
-			callingGenesis := r.URL.Query().Get("height") == "1"
-			if callingGenesis {
-				genesisContent := getContentsFromFile(t, "testdata/genesis-block.json")
-				_, err := w.Write(genesisContent)
-				require.NoError(t, err)
-			} else {
-				latestContent := getContentsFromFile(t, "testdata/latest-block.json")
-				_, err := w.Write(latestContent)
-				require.NoError(t, err)
-			}
-		}
-	}))
-	defer tsTendermint.Close()
+	m := &tendermintmocks.TendermintInfoAPI{}
+	defer m.AssertExpectations(t)
+
+	var blockOpts *tendermintclient.BlockOpts
+	ti, err := time.Parse(time.RFC3339, "2019-04-22T17:01:51Z")
+	require.NoError(t, err)
+
+	m.
+		On("Block", mock.Anything, blockOpts).
+		Return(tendermintclient.BlockResponse{
+			Result: tendermintclient.BlockComplete{
+				Block: tendermintclient.Block{
+					Header: tendermintclient.BlockHeader{
+						Time:   ti.Format(time.RFC3339),
+						Height: "2",
+					},
+				},
+				BlockId: tendermintclient.BlockId{
+					Hash: "3",
+				},
+			},
+		}, nil, nil).
+		Once()
+
+	m.
+		On("Block", mock.Anything, &tendermintclient.BlockOpts{
+			Height: optional.NewFloat32(1),
+		}).
+		Return(tendermintclient.BlockResponse{
+			Result: tendermintclient.BlockComplete{
+				Block: tendermintclient.Block{
+					Header: tendermintclient.BlockHeader{
+						Height: "1",
+					},
+				},
+				BlockId: tendermintclient.BlockId{
+					Hash: "4",
+				},
+			},
+		}, nil, nil).
+		Once()
+
+	m.
+		On("NetInfo", mock.Anything).
+		Return(tendermintclient.NetInfoResponse{
+			Result: tendermintclient.NetInfo{
+				Peers: []tendermintclient.Peer{
+					{
+						NodeInfo: tendermintclient.NodeInfo{
+							Id: "1",
+						},
+					},
+					{
+						NodeInfo: tendermintclient.NodeInfo{
+							Id: "2",
+						},
+					},
+				},
+			},
+		}, nil, nil).
+		Once()
 
 	properties := rosetta.NetworkProperties{
 		Blockchain: "TheBlockchain",
@@ -108,7 +151,7 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(http.DefaultClient, API{}, tsTendermint.URL, properties)
+	adapter := NewLaunchpad(TendermintAPI{Info: m}, CosmosAPI{}, properties)
 
 	status, adapterErr := adapter.NetworkStatus(context.Background(), nil)
 	require.Nil(t, adapterErr)
@@ -116,17 +159,20 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 
 	require.Equal(t, &types.NetworkStatusResponse{
 		CurrentBlockIdentifier: &types.BlockIdentifier{
-			Index: 1230,
-			Hash:  "8FEB56E18A7B5FE53C42EEB43CD0113D24BB1B2DCEA4747004887A1464E5826C",
+			Index: 2,
+			Hash:  "3",
 		},
-		CurrentBlockTimestamp: 1597325577228,
+		CurrentBlockTimestamp: ti.UnixNano() / 1000000,
 		GenesisBlockIdentifier: &types.BlockIdentifier{
-			Hash:  "360A1DED0DEE79A8A28FBD88517EA3B6A9719460A9BE30D8E8D786D5AD79127B",
 			Index: 1,
+			Hash:  "4",
 		},
 		Peers: []*types.Peer{
 			{
-				PeerID: "5576458aef205977e18fd50b274e9b5d9014525a",
+				PeerID: "1",
+			},
+			{
+				PeerID: "2",
 			},
 		},
 	}, status)
