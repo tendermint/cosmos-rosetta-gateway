@@ -4,7 +4,6 @@ package cmd
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/spf13/cobra"
 
@@ -12,6 +11,7 @@ import (
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad"
 	cosmoslaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/cosmos/generated"
+	tendermintlaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/tendermint/generated"
 )
 
 func New() *cobra.Command {
@@ -25,17 +25,21 @@ func New() *cobra.Command {
 }
 
 func runHandler(*cobra.Command, []string) error {
-	c := &http.Client{
-		Timeout: time.Minute * 3,
-	}
-
-	cc := cosmoslaunchpadclient.NewAPIClient(&cosmoslaunchpadclient.Configuration{
+	cosmoslpc := cosmoslaunchpadclient.NewAPIClient(&cosmoslaunchpadclient.Configuration{
 		Host:   "localhost:1317",
 		Scheme: "http",
 	})
-	api := launchpad.API{
-		Bank:       cc.BankApi,
-		Tendermint: cc.TendermintRPCApi,
+	tendermintlpc := tendermintlaunchpadclient.NewAPIClient(&tendermintlaunchpadclient.Configuration{
+		Host:   "localhost:26657",
+		Scheme: "http",
+	})
+
+	cosmoslp := launchpad.CosmosAPI{
+		Bank:       cosmoslpc.BankApi,
+		Tendermint: cosmoslpc.TendermintRPCApi,
+	}
+	tendermintlp := launchpad.TendermintAPI{
+		Info: tendermintlpc.InfoApi,
 	}
 
 	properties := rosetta.NetworkProperties{
@@ -47,8 +51,7 @@ func runHandler(*cobra.Command, []string) error {
 	h, err := crghttp.New(
 		crghttp.Network{
 			Properties: properties,
-			Adapter: launchpad.NewLaunchpad(
-				c, api, "http://localhost:26657", properties),
+			Adapter:    launchpad.NewLaunchpad(tendermintlp, cosmoslp, properties),
 		},
 	) // TODO: maybe create some constructor for specific adapters or Factory.
 	if err != nil {

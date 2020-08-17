@@ -3,7 +3,12 @@
 cosmos=rosetta/cosmos/launchpad/client/cosmos/generated
 cosmosyml=rosetta/cosmos/launchpad/client/cosmos/swagger.yml
 
+tendermint=rosetta/cosmos/launchpad/client/tendermint/generated
+tendermintyml=rosetta/cosmos/launchpad/client/tendermint/openapi.yml
+
 mkdir -p $cosmos
+mkdir -p $tendermint
 
 # https://openapi-generator.tech/
 openapi-generator generate -g go -i $cosmosyml -o $cosmos
+openapi-generator generate -g go -i $tendermintyml -o $tendermint
