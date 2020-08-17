@@ -8,13 +8,12 @@ import (
 	"os"
 	"testing"
 
-	cosmoslp "github.com/tendermint/cosmos-rosetta-gateway/generated/cosmos-launchpad"
-	"github.com/tendermint/cosmos-rosetta-gateway/mocks"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
-
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+	client "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/generated"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/mocks"
 )
 
 func TestLaunchpad_NetworkList(t *testing.T) {
@@ -39,8 +38,8 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 
 	m.
 		On("NodeInfoGet", mock.Anything).
-		Return(cosmoslp.InlineResponse200{
-			NodeInfo: cosmoslp.InlineResponse200NodeInfo{
+		Return(client.InlineResponse200{
+			NodeInfo: client.InlineResponse200NodeInfo{
 				Version: "5",
 			},
 		}, nil, nil).

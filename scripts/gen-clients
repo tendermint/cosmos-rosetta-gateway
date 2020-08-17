@@ -1,10 +1,9 @@
 #!/bin/bash
 
-cosmos=generated/cosmos-launchpad
-cosmosyml=$cosmos.yml
+cosmos=rosetta/cosmos/launchpad/client/generated
+cosmosyml=rosetta/cosmos/launchpad/client/swagger.yml
 
 mkdir -p $cosmos
 
 # https://openapi-generator.tech/
 openapi-generator generate -g go -i $cosmosyml -o $cosmos
-

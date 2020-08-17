@@ -5,7 +5,7 @@ import (
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	cosmoslp "github.com/tendermint/cosmos-rosetta-gateway/generated/cosmos-launchpad"
+	client "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/generated"
 )
 
 func (l Launchpad) AccountBalance(ctx context.Context, request *types.AccountBalanceRequest) (
@@ -20,7 +20,7 @@ func (l Launchpad) AccountBalance(ctx context.Context, request *types.AccountBal
 	}, nil
 }
 
-func convertCoinsToRosettaBalances(coins []cosmoslp.Coin) []*types.Amount {
+func convertCoinsToRosettaBalances(coins []client.Coin) []*types.Amount {
 	var amounts []*types.Amount
 
 	for _, coin := range coins {

@@ -5,13 +5,12 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/mocks"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
-
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	cosmoslp "github.com/tendermint/cosmos-rosetta-gateway/generated/cosmos-launchpad"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+	client "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/generated"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/mocks"
 )
 
 func TestLaunchpad_AccountBalance(t *testing.T) {
@@ -20,8 +19,8 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 
 	m.
 		On("BankBalancesAddressGet", mock.Anything, "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na").
-		Return(cosmoslp.InlineResponse2004{
-			Result: []cosmoslp.Coin{
+		Return(client.InlineResponse2004{
+			Result: []client.Coin{
 				{"stake", "400"},
 				{"token", "600"},
 			},

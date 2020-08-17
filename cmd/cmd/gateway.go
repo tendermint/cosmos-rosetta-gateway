@@ -8,10 +8,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	cosmoslp "github.com/tendermint/cosmos-rosetta-gateway/generated/cosmos-launchpad"
 	crghttp "github.com/tendermint/cosmos-rosetta-gateway/http"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad"
+	cosmoslaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/generated"
 )
 
 func New() *cobra.Command {
@@ -29,7 +29,7 @@ func runHandler(*cobra.Command, []string) error {
 		Timeout: time.Minute * 3,
 	}
 
-	cc := cosmoslp.NewAPIClient(&cosmoslp.Configuration{
+	cc := cosmoslaunchpadclient.NewAPIClient(&cosmoslaunchpadclient.Configuration{
 		Host:   "localhost:1317",
 		Scheme: "http",
 	})

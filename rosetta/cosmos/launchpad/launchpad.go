@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	cosmoslp "github.com/tendermint/cosmos-rosetta-gateway/generated/cosmos-launchpad"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+	client "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/generated"
 )
 
 type Launchpad struct {
@@ -23,11 +23,11 @@ type API struct {
 }
 
 type BankAPI interface {
-	BankBalancesAddressGet(ctx context.Context, address string) (cosmoslp.InlineResponse2004, *http.Response, error)
+	BankBalancesAddressGet(ctx context.Context, address string) (client.InlineResponse2004, *http.Response, error)
 }
 
 type TendermintAPI interface {
-	NodeInfoGet(ctx context.Context) (cosmoslp.InlineResponse200, *http.Response, error)
+	NodeInfoGet(ctx context.Context) (client.InlineResponse200, *http.Response, error)
 }
 
 func NewLaunchpad(c *http.Client, api API, tendermintEndpoint string, properties rosetta.NetworkProperties) rosetta.Adapter {
