@@ -2,43 +2,46 @@ package launchpad
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
-	client "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/cosmos/generated"
+	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/cosmos/generated"
+	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/tendermint/generated"
 )
 
 type Launchpad struct {
-	api                API
-	tendermintEndpoint string
-	c                  *http.Client
+	cosmos     CosmosAPI
+	tendermint TendermintAPI
 
 	properties rosetta.NetworkProperties
 }
 
-type API struct {
-	Bank       BankAPI
-	Tendermint TendermintAPI
+type CosmosAPI struct {
+	Bank       CosmosBankAPI
+	Tendermint CosmosTendermintAPI
 }
 
-type BankAPI interface {
-	BankBalancesAddressGet(ctx context.Context, address string) (client.InlineResponse2004, *http.Response, error)
+type CosmosBankAPI interface {
+	BankBalancesAddressGet(ctx context.Context, address string) (cosmosclient.InlineResponse2004, *http.Response, error)
 }
 
-type TendermintAPI interface {
-	NodeInfoGet(ctx context.Context) (client.InlineResponse200, *http.Response, error)
+type CosmosTendermintAPI interface {
+	NodeInfoGet(ctx context.Context) (cosmosclient.InlineResponse200, *http.Response, error)
 }
 
-func NewLaunchpad(c *http.Client, api API, tendermintEndpoint string, properties rosetta.NetworkProperties) rosetta.Adapter {
+type TendermintAPI struct {
+	Info TendermintInfo
+}
+
+type TendermintInfo interface {
+	NetInfo(ctx context.Context) (tendermintclient.NetInfoResponse, *http.Response, error)
+	Block(ctx context.Context, localVarOptionals *tendermintclient.BlockOpts) (tendermintclient.BlockResponse, *http.Response, error)
+}
+
+func NewLaunchpad(tendermint TendermintAPI, cosmos CosmosAPI, properties rosetta.NetworkProperties) rosetta.Adapter {
 	return &Launchpad{
-		api:                api,
-		c:                  c,
-		tendermintEndpoint: tendermintEndpoint,
-		properties:         properties,
+		tendermint: tendermint,
+		cosmos:     cosmos,
+		properties: properties,
 	}
-}
-
-func (l Launchpad) tendermint(path string) string {
-	return fmt.Sprintf("%s%s", l.tendermintEndpoint, path)
 }

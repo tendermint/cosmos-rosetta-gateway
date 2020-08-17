@@ -10,7 +10,7 @@ import (
 
 func (l Launchpad) AccountBalance(ctx context.Context, request *types.AccountBalanceRequest) (
 	*types.AccountBalanceResponse, *types.Error) {
-	resp, _, err := l.api.Bank.BankBalancesAddressGet(ctx, request.AccountIdentifier.Address)
+	resp, _, err := l.cosmos.Bank.BankBalancesAddressGet(ctx, request.AccountIdentifier.Address)
 	if err != nil {
 		return nil, ErrNodeConnection
 	}
