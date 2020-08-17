@@ -2,7 +2,6 @@ package launchpad
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 	"time"
 
@@ -69,7 +68,6 @@ func (l Launchpad) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (
 		return
 	})
 	if err := g.Wait(); err != nil {
-		fmt.Println(err)
 		return nil, ErrNodeConnection
 	}
 
@@ -82,13 +80,11 @@ func (l Launchpad) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (
 
 	height, err := strconv.ParseUint(latestBlock.Result.Block.Header.Height, 10, 64)
 	if err != nil {
-		fmt.Println(1, err)
 		return nil, ErrInterpreting
 	}
 
 	t, err := time.Parse(time.RFC3339Nano, latestBlock.Result.Block.Header.Time)
 	if err != nil {
-		fmt.Println(2, err)
 		return nil, ErrInterpreting
 	}
 
