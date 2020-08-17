@@ -1,3 +1,4 @@
 #!/bin/bash
 
-mockery --name .*?API --dir rosetta/cosmos/launchpad --output rosetta/cosmos/launchpad/client/cosmos/mocks
+mockery --name Cosmos.*?API --dir rosetta/cosmos/launchpad --output rosetta/cosmos/launchpad/client/cosmos/mocks
+mockery --name Tendermint.*?API --dir rosetta/cosmos/launchpad --output rosetta/cosmos/launchpad/client/tendermint/mocks
