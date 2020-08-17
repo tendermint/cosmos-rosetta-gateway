@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
-	client "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/generated"
+	client "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/cosmos/generated"
 )
 
 type Launchpad struct {

@@ -12,8 +12,8 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
-	client "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/generated"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/mocks"
+	client "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/cosmos/generated"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/cosmos/mocks"
 )
 
 func TestLaunchpad_NetworkList(t *testing.T) {

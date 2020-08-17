@@ -5,7 +5,7 @@ import (
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	client "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/generated"
+	client "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/cosmos/generated"
 )
 
 func (l Launchpad) AccountBalance(ctx context.Context, request *types.AccountBalanceRequest) (

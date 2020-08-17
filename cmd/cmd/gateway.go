@@ -11,7 +11,7 @@ import (
 	crghttp "github.com/tendermint/cosmos-rosetta-gateway/http"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad"
-	cosmoslaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/generated"
+	cosmoslaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/cosmos/generated"
 )
 
 func New() *cobra.Command {

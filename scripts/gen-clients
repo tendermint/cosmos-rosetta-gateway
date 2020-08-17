@@ -1,7 +1,7 @@
 #!/bin/bash
 
-cosmos=rosetta/cosmos/launchpad/client/generated
-cosmosyml=rosetta/cosmos/launchpad/client/swagger.yml
+cosmos=rosetta/cosmos/launchpad/client/cosmos/generated
+cosmosyml=rosetta/cosmos/launchpad/client/cosmos/swagger.yml
 
 mkdir -p $cosmos
 
