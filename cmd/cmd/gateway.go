@@ -7,11 +7,11 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad"
+	cosmoslaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
+	tendermintlaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 	crghttp "github.com/tendermint/cosmos-rosetta-gateway/http"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad"
-	cosmoslaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/cosmos/generated"
-	tendermintlaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/rosetta/cosmos/launchpad/client/tendermint/generated"
 )
 
 func New() *cobra.Command {
