@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/cosmos/generated"
+	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
