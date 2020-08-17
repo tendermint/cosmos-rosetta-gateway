@@ -1362,7 +1362,7 @@ components:
             type: string
             example: "Listener(@)"
         n_peers:
-          type: number
+          type: string 
           example: "1"
         peers:
           type: array
@@ -1390,7 +1390,7 @@ components:
             - "hash"
           properties:
             total:
-              type: number
+              type: string 
               example: 1
             hash:
               type: string
@@ -1539,21 +1539,23 @@ components:
         header:
           $ref: "#/components/schemas/BlockHeader"
         data:
-          type: array
-          items:
-            type: string
-            example: "yQHwYl3uCkKoo2GaChRnd+THLQ2RM87nEZrE19910Z28ABIUWW/t8AtIMwcyU0sT32RcMDI9GF0aEAoFdWF0b20SBzEwMDAwMDASEwoNCgV1YXRvbRIEMzEwMRCd8gEaagom61rphyEDoJPxlcjRoNDtZ9xMdvs+lRzFaHe2dl2P5R2yVCWrsHISQKkqX5H1zXAIJuC57yw0Yb03Fwy75VRip0ZBtLiYsUqkOsPUoQZAhDNP+6LY+RUwz/nVzedkF0S29NZ32QXdGv0="
+          type: object
+          properties:
+            txs:
+              type: array
+              x-nullable: true
+              items:
+                type: string
+                x-nullable: true
         evidence:
-          type: array
-          items:
-            $ref: "#/components/schemas/Evidence"
+          $ref: "#/components/schemas/Evidence"
         last_commit:
           type: object
           properties:
             height:
-              type: number
+              type: string 
             round:
-              type: number
+              type: string 
             block_id:
               $ref: "#/components/schemas/BlockID"
             signatures:

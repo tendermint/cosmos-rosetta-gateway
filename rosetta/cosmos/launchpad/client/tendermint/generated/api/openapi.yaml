@@ -1415,8 +1415,8 @@ components:
             type: string
           type: array
         n_peers:
-          example: 1
-          type: number
+          example: "1"
+          type: string
         peers:
           items:
             $ref: '#/components/schemas/Peer'
@@ -1564,14 +1564,9 @@ components:
         header:
           $ref: '#/components/schemas/BlockHeader'
         data:
-          items:
-            example: yQHwYl3uCkKoo2GaChRnd+THLQ2RM87nEZrE19910Z28ABIUWW/t8AtIMwcyU0sT32RcMDI9GF0aEAoFdWF0b20SBzEwMDAwMDASEwoNCgV1YXRvbRIEMzEwMRCd8gEaagom61rphyEDoJPxlcjRoNDtZ9xMdvs+lRzFaHe2dl2P5R2yVCWrsHISQKkqX5H1zXAIJuC57yw0Yb03Fwy75VRip0ZBtLiYsUqkOsPUoQZAhDNP+6LY+RUwz/nVzedkF0S29NZ32QXdGv0=
-            type: string
-          type: array
+          $ref: '#/components/schemas/Block_data'
         evidence:
-          items:
-            $ref: '#/components/schemas/Evidence'
-          type: array
+          $ref: '#/components/schemas/Evidence'
         last_commit:
           $ref: '#/components/schemas/Block_last_commit'
       type: object
@@ -2474,13 +2469,10 @@ components:
         result:
           $ref: '#/components/schemas/NetInfo'
     BlockID_parts:
-      example:
-        total: 1
-        hash: CB02DCAA7FB46BF874052EC2273FD0B1F2CF2E1593298D9781E60FE9C3DB8638
       properties:
         total:
-          example: 1
-          type: number
+          example: "1"
+          type: string
         hash:
           example: CB02DCAA7FB46BF874052EC2273FD0B1F2CF2E1593298D9781E60FE9C3DB8638
           type: string
@@ -2505,12 +2497,20 @@ components:
       properties:
         result:
           $ref: '#/components/schemas/Blockchain'
+    Block_data:
+      properties:
+        txs:
+          items:
+            type: string
+            x-nullable: true
+          type: array
+          x-nullable: true
     Block_last_commit:
       properties:
         height:
-          type: number
+          type: string
         round:
-          type: number
+          type: string
         block_id:
           $ref: '#/components/schemas/BlockID'
         signatures:
@@ -2802,6 +2802,20 @@ components:
           $ref: '#/components/schemas/BlockResultsResponse_result_consensus_param_updates'
       required:
       - height
+    CommitResponse_result_signed_header_header_last_block_id_parts:
+      example:
+        total: 1
+        hash: CB02DCAA7FB46BF874052EC2273FD0B1F2CF2E1593298D9781E60FE9C3DB8638
+      properties:
+        total:
+          example: 1
+          type: number
+        hash:
+          example: CB02DCAA7FB46BF874052EC2273FD0B1F2CF2E1593298D9781E60FE9C3DB8638
+          type: string
+      required:
+      - hash
+      - total
     CommitResponse_result_signed_header_header_last_block_id:
       example:
         parts:
@@ -2813,7 +2827,7 @@ components:
           example: D82C2734BB0E76C772A10994B210EF9D11505D1B98CB189D9CF7F9A5488672A5
           type: string
         parts:
-          $ref: '#/components/schemas/BlockID_parts'
+          $ref: '#/components/schemas/CommitResponse_result_signed_header_header_last_block_id_parts'
       required:
       - hash
       - parts

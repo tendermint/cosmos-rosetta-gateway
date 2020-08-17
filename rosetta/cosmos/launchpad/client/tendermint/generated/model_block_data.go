@@ -8,10 +8,7 @@
  */
 
 package openapi
-// Block struct for Block
-type Block struct {
-	Header BlockHeader `json:"header,omitempty"`
-	Data BlockData `json:"data,omitempty"`
-	Evidence Evidence `json:"evidence,omitempty"`
-	LastCommit BlockLastCommit `json:"last_commit,omitempty"`
+// BlockData struct for BlockData
+type BlockData struct {
+	Txs []string `json:"txs,omitempty"`
 }

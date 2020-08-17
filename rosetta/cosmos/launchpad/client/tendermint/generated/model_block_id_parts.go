@@ -10,6 +10,6 @@
 package openapi
 // BlockIdParts struct for BlockIdParts
 type BlockIdParts struct {
-	Total float32 `json:"total"`
+	Total string `json:"total"`
 	Hash string `json:"hash"`
 }

@@ -11,5 +11,5 @@ package openapi
 // CommitResponseResultSignedHeaderHeaderLastBlockId struct for CommitResponseResultSignedHeaderHeaderLastBlockId
 type CommitResponseResultSignedHeaderHeaderLastBlockId struct {
 	Hash string `json:"hash"`
-	Parts BlockIdParts `json:"parts"`
+	Parts CommitResponseResultSignedHeaderHeaderLastBlockIdParts `json:"parts"`
 }

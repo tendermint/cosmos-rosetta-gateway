@@ -12,6 +12,6 @@ package openapi
 type NetInfo struct {
 	Listening bool `json:"listening,omitempty"`
 	Listeners []string `json:"listeners,omitempty"`
-	NPeers float32 `json:"n_peers,omitempty"`
+	NPeers string `json:"n_peers,omitempty"`
 	Peers []Peer `json:"peers,omitempty"`
 }

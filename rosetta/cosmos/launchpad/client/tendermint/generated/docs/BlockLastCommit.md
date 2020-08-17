@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Height** | **float32** |  | [optional] 
-**Round** | **float32** |  | [optional] 
+**Height** | **string** |  | [optional] 
+**Round** | **string** |  | [optional] 
 **BlockId** | [**BlockId**](BlockID.md) |  | [optional] 
 **Signatures** | [**[]Commit**](Commit.md) |  | [optional] 
 

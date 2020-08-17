@@ -10,8 +10,8 @@
 package openapi
 // BlockLastCommit struct for BlockLastCommit
 type BlockLastCommit struct {
-	Height float32 `json:"height,omitempty"`
-	Round float32 `json:"round,omitempty"`
+	Height string `json:"height,omitempty"`
+	Round string `json:"round,omitempty"`
 	BlockId BlockId `json:"block_id,omitempty"`
 	Signatures []Commit `json:"signatures,omitempty"`
 }
