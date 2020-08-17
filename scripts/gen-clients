@@ -13,7 +13,4 @@ mkdir -p $tendermint
 openapi-generator generate -g go -i $cosmosyml -o $cosmos
 openapi-generator generate -g go -i $tendermintyml -o $tendermint
 
-rm cosmos/launchpad/client/sdk/generated/go.mod
-rm cosmos/launchpad/client/sdk/generated/go.sum
-rm cosmos/launchpad/client/tendermint/generated/go.mod
-rm cosmos/launchpad/client/tendermint/generated/go.sum
+rm $cosmos/go.mod $cosmos/go.sum $tendermint/go.mod $tendermint/go.sum
