@@ -17,9 +17,8 @@ import (
 
 func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.BlockResponse, *types.Error) {
 	var (
-		blockResp       tendermintclient.BlockResponse
-		parentBlockResp tendermintclient.BlockResponse
-		err             error
+		blockResp tendermintclient.BlockResponse
+		err       error
 	)
 	if r.BlockIdentifier.Index != nil {
 		blockResp, _, err = l.tendermint.Info.Block(ctx, &tendermintclient.BlockOpts{
@@ -61,15 +60,13 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 	}
 	hasParentBlock := blockResp.Result.Block.Header.LastBlockId.Hash != ""
 	if hasParentBlock {
-		parentBlockResp, _, err = l.tendermint.Info.BlockByHash(ctx, ensurehex.String(blockResp.Result.Block.Header.LastBlockId.Hash))
-		if err != nil {
-			return nil, ErrNodeConnection
-		}
-		parentBlock, err := toBlockIdentifier(parentBlockResp.Result)
 		if err != nil {
 			return nil, ErrInterpreting
 		}
-		resp.Block.ParentBlockIdentifier = parentBlock
+		resp.Block.ParentBlockIdentifier = &types.BlockIdentifier{
+			Index: block.Index - 1,
+			Hash:  blockResp.Result.Block.Header.LastBlockId.Hash,
+		}
 	}
 	return resp, nil
 }
