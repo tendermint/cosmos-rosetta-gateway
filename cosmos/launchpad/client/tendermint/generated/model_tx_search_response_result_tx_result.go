@@ -13,5 +13,5 @@ type TxSearchResponseResultTxResult struct {
 	Log string `json:"log"`
 	GasWanted string `json:"gas_wanted"`
 	GasUsed string `json:"gas_used"`
-	Tags []TxSearchResponseResultTxResultTags `json:"tags"`
+	Events []TxSearchResponseResultTxResultEvents `json:"events"`
 }

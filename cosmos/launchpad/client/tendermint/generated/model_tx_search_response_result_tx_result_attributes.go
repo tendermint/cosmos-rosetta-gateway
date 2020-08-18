@@ -8,11 +8,8 @@
  */
 
 package openapi
-// TxResponseResult struct for TxResponseResult
-type TxResponseResult struct {
-	Hash string `json:"hash"`
-	Height string `json:"height"`
-	Index float32 `json:"index"`
-	TxResult TxResponseResultTxResult `json:"tx_result"`
-	Tx string `json:"tx"`
+// TxSearchResponseResultTxResultAttributes struct for TxSearchResponseResultTxResultAttributes
+type TxSearchResponseResultTxResultAttributes struct {
+	Key string `json:"key,omitempty"`
+	Value string `json:"value,omitempty"`
 }

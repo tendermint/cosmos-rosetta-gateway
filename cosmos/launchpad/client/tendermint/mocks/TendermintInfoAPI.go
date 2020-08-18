@@ -105,3 +105,33 @@ func (_m *TendermintInfoAPI) NetInfo(ctx context.Context) (openapi.NetInfoRespon
 
 	return r0, r1, r2
 }
+
+// TxSearch provides a mock function with given fields: ctx, query, localVarOptionals
+func (_m *TendermintInfoAPI) TxSearch(ctx context.Context, query string, localVarOptionals *openapi.TxSearchOpts) (openapi.TxSearchResponse, *http.Response, error) {
+	ret := _m.Called(ctx, query, localVarOptionals)
+
+	var r0 openapi.TxSearchResponse
+	if rf, ok := ret.Get(0).(func(context.Context, string, *openapi.TxSearchOpts) openapi.TxSearchResponse); ok {
+		r0 = rf(ctx, query, localVarOptionals)
+	} else {
+		r0 = ret.Get(0).(openapi.TxSearchResponse)
+	}
+
+	var r1 *http.Response
+	if rf, ok := ret.Get(1).(func(context.Context, string, *openapi.TxSearchOpts) *http.Response); ok {
+		r1 = rf(ctx, query, localVarOptionals)
+	} else {
+		if ret.Get(1) != nil {
+			r1 = ret.Get(1).(*http.Response)
+		}
+	}
+
+	var r2 error
+	if rf, ok := ret.Get(2).(func(context.Context, string, *openapi.TxSearchOpts) error); ok {
+		r2 = rf(ctx, query, localVarOptionals)
+	} else {
+		r2 = ret.Error(2)
+	}
+
+	return r0, r1, r2
+}
