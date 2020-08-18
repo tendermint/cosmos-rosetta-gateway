@@ -37,6 +37,7 @@ type TendermintInfoAPI interface {
 	NetInfo(ctx context.Context) (tendermintclient.NetInfoResponse, *http.Response, error)
 	Block(ctx context.Context, localVarOptionals *tendermintclient.BlockOpts) (tendermintclient.BlockResponse, *http.Response, error)
 	BlockByHash(ctx context.Context, hash string) (tendermintclient.BlockResponse, *http.Response, error)
+	TxSearch(ctx context.Context, query string, localVarOptionals *tendermintclient.TxSearchOpts) (tendermintclient.TxSearchResponse, *http.Response, error)
 }
 
 func NewLaunchpad(tendermint TendermintAPI, cosmos CosmosAPI, properties rosetta.NetworkProperties) rosetta.Adapter {
