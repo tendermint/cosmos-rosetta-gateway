@@ -8,3 +8,6 @@ gen-mocks:
 
 dev:
 	scripts/dev
+
+test:
+	go test ./...
