@@ -5,3 +5,6 @@ gen-clients:
 
 gen-mocks:
 	scripts/gen-mocks
+
+dev:
+	scripts/dev
