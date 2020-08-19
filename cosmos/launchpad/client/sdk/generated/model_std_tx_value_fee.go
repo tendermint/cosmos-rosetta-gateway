@@ -8,10 +8,8 @@
  */
 
 package openapi
-// TxQuery struct for TxQuery
-type TxQuery struct {
-	Txhash string `json:"txhash,omitempty"`
-	Height string `json:"height,omitempty"`
-	Tx StdTx `json:"tx,omitempty"`
-	Result TxQueryResult `json:"result,omitempty"`
+// StdTxValueFee struct for StdTxValueFee
+type StdTxValueFee struct {
+	Gas string `json:"gas,omitempty"`
+	Amount []Coin `json:"amount,omitempty"`
 }

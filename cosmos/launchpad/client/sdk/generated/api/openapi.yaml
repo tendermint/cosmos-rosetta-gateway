@@ -2194,7 +2194,22 @@ components:
           type: string
       type: object
     Msg:
-      type: string
+      example:
+        type: type
+        value:
+          creator: creator
+          amount:
+          - amount: "50"
+            denom: stake
+          - amount: "50"
+            denom: stake
+          from_address: from_address
+      properties:
+        type:
+          type: string
+        value:
+          $ref: '#/components/schemas/Msg_value'
+      type: object
     Address:
       description: bech32 encoded address
       example: cosmos1depk54cuajgkzea6zpgkq36tnjwdzv4afc3d27
@@ -2230,33 +2245,50 @@ components:
           - value: value
             key: key
         tx:
-          msg:
-          - null
-          - null
-          signature:
-            account_number: "0"
-            sequence: "0"
-            signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
-            pub_key:
-              type: tendermint/PubKeySecp256k1
-              value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
-          fee:
-            amount:
-            - amount: "50"
-              denom: stake
-            - amount: "50"
-              denom: stake
-            gas: gas
-          memo: memo
-        hash: D085138D913993919295FF4B0A9107F1F2CDE0D37A87CE0644E217CBF3B49656
-        height: 368.0
+          value:
+            msg:
+            - type: type
+              value:
+                creator: creator
+                amount:
+                - amount: "50"
+                  denom: stake
+                - amount: "50"
+                  denom: stake
+                from_address: from_address
+            - type: type
+              value:
+                creator: creator
+                amount:
+                - amount: "50"
+                  denom: stake
+                - amount: "50"
+                  denom: stake
+                from_address: from_address
+            signature:
+              account_number: "0"
+              sequence: "0"
+              signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
+              pub_key:
+                type: tendermint/PubKeySecp256k1
+                value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
+            fee:
+              amount:
+              - amount: "50"
+                denom: stake
+              - amount: "50"
+                denom: stake
+              gas: gas
+            memo: memo
+        txhash: D085138D913993919295FF4B0A9107F1F2CDE0D37A87CE0644E217CBF3B49656
+        height: "368"
       properties:
-        hash:
+        txhash:
           example: D085138D913993919295FF4B0A9107F1F2CDE0D37A87CE0644E217CBF3B49656
           type: string
         height:
-          example: 368.0
-          type: number
+          example: "368"
+          type: string
         tx:
           $ref: '#/components/schemas/StdTx'
         result:
@@ -2280,26 +2312,43 @@ components:
             - value: value
               key: key
           tx:
-            msg:
-            - null
-            - null
-            signature:
-              account_number: "0"
-              sequence: "0"
-              signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
-              pub_key:
-                type: tendermint/PubKeySecp256k1
-                value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
-            fee:
-              amount:
-              - amount: "50"
-                denom: stake
-              - amount: "50"
-                denom: stake
-              gas: gas
-            memo: memo
-          hash: D085138D913993919295FF4B0A9107F1F2CDE0D37A87CE0644E217CBF3B49656
-          height: 368.0
+            value:
+              msg:
+              - type: type
+                value:
+                  creator: creator
+                  amount:
+                  - amount: "50"
+                    denom: stake
+                  - amount: "50"
+                    denom: stake
+                  from_address: from_address
+              - type: type
+                value:
+                  creator: creator
+                  amount:
+                  - amount: "50"
+                    denom: stake
+                  - amount: "50"
+                    denom: stake
+                  from_address: from_address
+              signature:
+                account_number: "0"
+                sequence: "0"
+                signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
+                pub_key:
+                  type: tendermint/PubKeySecp256k1
+                  value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
+              fee:
+                amount:
+                - amount: "50"
+                  denom: stake
+                - amount: "50"
+                  denom: stake
+                gas: gas
+              memo: memo
+          txhash: D085138D913993919295FF4B0A9107F1F2CDE0D37A87CE0644E217CBF3B49656
+          height: "368"
         - result:
             log: log
             gas_used: "26354"
@@ -2310,26 +2359,43 @@ components:
             - value: value
               key: key
           tx:
-            msg:
-            - null
-            - null
-            signature:
-              account_number: "0"
-              sequence: "0"
-              signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
-              pub_key:
-                type: tendermint/PubKeySecp256k1
-                value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
-            fee:
-              amount:
-              - amount: "50"
-                denom: stake
-              - amount: "50"
-                denom: stake
-              gas: gas
-            memo: memo
-          hash: D085138D913993919295FF4B0A9107F1F2CDE0D37A87CE0644E217CBF3B49656
-          height: 368.0
+            value:
+              msg:
+              - type: type
+                value:
+                  creator: creator
+                  amount:
+                  - amount: "50"
+                    denom: stake
+                  - amount: "50"
+                    denom: stake
+                  from_address: from_address
+              - type: type
+                value:
+                  creator: creator
+                  amount:
+                  - amount: "50"
+                    denom: stake
+                  - amount: "50"
+                    denom: stake
+                  from_address: from_address
+              signature:
+                account_number: "0"
+                sequence: "0"
+                signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
+                pub_key:
+                  type: tendermint/PubKeySecp256k1
+                  value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
+              fee:
+                amount:
+                - amount: "50"
+                  denom: stake
+                - amount: "50"
+                  denom: stake
+                gas: gas
+              memo: memo
+          txhash: D085138D913993919295FF4B0A9107F1F2CDE0D37A87CE0644E217CBF3B49656
+          height: "368"
       properties:
         total_count:
           example: 1.0
@@ -2353,35 +2419,44 @@ components:
       type: object
     StdTx:
       example:
-        msg:
-        - null
-        - null
-        signature:
-          account_number: "0"
-          sequence: "0"
-          signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
-          pub_key:
-            type: tendermint/PubKeySecp256k1
-            value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
-        fee:
-          amount:
-          - amount: "50"
-            denom: stake
-          - amount: "50"
-            denom: stake
-          gas: gas
-        memo: memo
+        value:
+          msg:
+          - type: type
+            value:
+              creator: creator
+              amount:
+              - amount: "50"
+                denom: stake
+              - amount: "50"
+                denom: stake
+              from_address: from_address
+          - type: type
+            value:
+              creator: creator
+              amount:
+              - amount: "50"
+                denom: stake
+              - amount: "50"
+                denom: stake
+              from_address: from_address
+          signature:
+            account_number: "0"
+            sequence: "0"
+            signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
+            pub_key:
+              type: tendermint/PubKeySecp256k1
+              value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
+          fee:
+            amount:
+            - amount: "50"
+              denom: stake
+            - amount: "50"
+              denom: stake
+            gas: gas
+          memo: memo
       properties:
-        msg:
-          items:
-            $ref: '#/components/schemas/Msg'
-          type: array
-        fee:
-          $ref: '#/components/schemas/StdTx_fee'
-        memo:
-          type: string
-        signature:
-          $ref: '#/components/schemas/StdTx_signature'
+        value:
+          $ref: '#/components/schemas/StdTx_value'
       type: object
     BlockID:
       example:
@@ -3569,6 +3644,24 @@ components:
         base_req:
           $ref: '#/components/schemas/BaseReq'
       type: object
+    Msg_value:
+      example:
+        creator: creator
+        amount:
+        - amount: "50"
+          denom: stake
+        - amount: "50"
+          denom: stake
+        from_address: from_address
+      properties:
+        from_address:
+          type: string
+        creator:
+          type: string
+        amount:
+          items:
+            $ref: '#/components/schemas/Coin'
+          type: array
     TxQuery_result:
       example:
         log: log
@@ -3592,7 +3685,7 @@ components:
           items:
             $ref: '#/components/schemas/KVPair'
           type: array
-    StdTx_fee:
+    StdTx_value_fee:
       example:
         amount:
         - amount: "50"
@@ -3607,7 +3700,7 @@ components:
           items:
             $ref: '#/components/schemas/Coin'
           type: array
-    StdTx_signature_pub_key:
+    StdTx_value_signature_pub_key:
       example:
         type: tendermint/PubKeySecp256k1
         value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
@@ -3618,7 +3711,7 @@ components:
         value:
           example: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
           type: string
-    StdTx_signature:
+    StdTx_value_signature:
       example:
         account_number: "0"
         sequence: "0"
@@ -3631,13 +3724,60 @@ components:
           example: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
           type: string
         pub_key:
-          $ref: '#/components/schemas/StdTx_signature_pub_key'
+          $ref: '#/components/schemas/StdTx_value_signature_pub_key'
         account_number:
           example: "0"
           type: string
         sequence:
           example: "0"
           type: string
+    StdTx_value:
+      example:
+        msg:
+        - type: type
+          value:
+            creator: creator
+            amount:
+            - amount: "50"
+              denom: stake
+            - amount: "50"
+              denom: stake
+            from_address: from_address
+        - type: type
+          value:
+            creator: creator
+            amount:
+            - amount: "50"
+              denom: stake
+            - amount: "50"
+              denom: stake
+            from_address: from_address
+        signature:
+          account_number: "0"
+          sequence: "0"
+          signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
+          pub_key:
+            type: tendermint/PubKeySecp256k1
+            value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
+        fee:
+          amount:
+          - amount: "50"
+            denom: stake
+          - amount: "50"
+            denom: stake
+          gas: gas
+        memo: memo
+      properties:
+        msg:
+          items:
+            $ref: '#/components/schemas/Msg'
+          type: array
+        fee:
+          $ref: '#/components/schemas/StdTx_value_fee'
+        memo:
+          type: string
+        signature:
+          $ref: '#/components/schemas/StdTx_value_signature'
     BlockID_parts:
       example:
         total: 0.0
