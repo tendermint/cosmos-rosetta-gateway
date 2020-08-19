@@ -28,4 +28,5 @@ type TendermintAPI struct {
 type TendermintInfoAPI interface {
 	NetInfo(ctx context.Context) (tendermintclient.NetInfoResponse, *http.Response, error)
 	Block(ctx context.Context, localVarOptionals *tendermintclient.BlockOpts) (tendermintclient.BlockResponse, *http.Response, error)
+	UnconfirmedTxs(ctx context.Context, localVarOptionals *tendermintclient.UnconfirmedTxsOpts) (tendermintclient.UnconfirmedTransactionsResponse, *http.Response, error)
 }
