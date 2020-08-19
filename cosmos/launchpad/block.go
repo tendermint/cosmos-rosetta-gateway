@@ -116,40 +116,43 @@ func toBlockIdentifier(result tendermintclient.BlockComplete) (*types.BlockIdent
 
 func toTransactions(txs []cosmosclient.TxQuery) (transactions []*types.Transaction, err error) {
 	for _, tx := range txs {
-		var operations []*types.Operation
-		for i, msg := range tx.Tx.Value.Msg {
-			account := msg.Value.Creator
-			if account == "" {
-				account = msg.Value.FromAddress
-			}
-			var amount *types.Amount
-			amounts := msg.Value.Amount
-			if len(amounts) > 0 {
-				am := amounts[0]
-				amount = &types.Amount{
-					Value: am.Amount,
-					Currency: &types.Currency{
-						Symbol: am.Denom,
-					},
-				}
-			}
-			operations = append(operations, &types.Operation{
-				OperationIdentifier: &types.OperationIdentifier{
-					Index: int64(i),
-				},
-				Type:   msg.Type,
-				Status: "TODO",
-				Account: &types.AccountIdentifier{
-					Address: account,
-				},
-				Amount: amount,
-			})
-		}
 		transactions = append(transactions, &types.Transaction{
 			TransactionIdentifier: &types.TransactionIdentifier{
 				Hash: tx.Txhash,
 			},
-			Operations: operations,
+			Operations: toOperations(tx.Tx.Value.Msg),
+		})
+	}
+	return
+}
+
+func toOperations(msg []cosmosclient.Msg) (operations []*types.Operation) {
+	for i, msg := range msg {
+		account := msg.Value.Creator
+		if account == "" {
+			account = msg.Value.FromAddress
+		}
+		var amount *types.Amount
+		amounts := msg.Value.Amount
+		if len(amounts) > 0 {
+			am := amounts[0]
+			amount = &types.Amount{
+				Value: am.Amount,
+				Currency: &types.Currency{
+					Symbol: am.Denom,
+				},
+			}
+		}
+		operations = append(operations, &types.Operation{
+			OperationIdentifier: &types.OperationIdentifier{
+				Index: int64(i),
+			},
+			Type:   msg.Type,
+			Status: "TODO",
+			Account: &types.AccountIdentifier{
+				Address: account,
+			},
+			Amount: amount,
 		})
 	}
 	return
