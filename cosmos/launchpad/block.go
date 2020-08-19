@@ -17,10 +17,10 @@ import (
 
 func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.BlockResponse, *types.Error) {
 	var (
-		blockResp       tendermintclient.BlockResponse
-		parentBlockResp tendermintclient.BlockResponse
-		err             error
+		blockResp tendermintclient.BlockResponse
+		err       error
 	)
+
 	if r.BlockIdentifier.Index != nil {
 		blockResp, _, err = l.tendermint.Info.Block(ctx, &tendermintclient.BlockOpts{
 			Height: optional.NewFloat32(float32(*r.BlockIdentifier.Index)),
@@ -52,25 +52,24 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 		return nil, ErrInterpreting
 	}
 
-	resp := &types.BlockResponse{
-		Block: &types.Block{
-			BlockIdentifier: block,
-			Transactions:    transactions,
-			Timestamp:       timestamp.UnixNano() / 1000000,
-		},
-	}
+	var parentBlockId *types.BlockIdentifier
 	hasParentBlock := blockResp.Result.Block.Header.LastBlockId.Hash != ""
 	if hasParentBlock {
-		parentBlockResp, _, err = l.tendermint.Info.BlockByHash(ctx, ensurehex.String(blockResp.Result.Block.Header.LastBlockId.Hash))
-		if err != nil {
-			return nil, ErrNodeConnection
+		parentBlockId = &types.BlockIdentifier{
+			Index: block.Index - 1,
+			Hash:  blockResp.Result.Block.Header.LastBlockId.Hash,
 		}
-		parentBlock, err := toBlockIdentifier(parentBlockResp.Result)
-		if err != nil {
-			return nil, ErrInterpreting
-		}
-		resp.Block.ParentBlockIdentifier = parentBlock
 	}
+
+	resp := &types.BlockResponse{
+		Block: &types.Block{
+			BlockIdentifier:       block,
+			Transactions:          transactions,
+			Timestamp:             timestamp.UnixNano() / 1000000,
+			ParentBlockIdentifier: parentBlockId,
+		},
+	}
+
 	return resp, nil
 }
 
