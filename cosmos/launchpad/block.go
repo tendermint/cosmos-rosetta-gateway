@@ -5,14 +5,15 @@ import (
 	"encoding/base64"
 	"fmt"
 	"strconv"
-	"strings"
+	"sync"
 	"time"
 
 	"github.com/antihax/optional"
 	"github.com/coinbase/rosetta-sdk-go/types"
-	cosmostypes "github.com/cosmos/cosmos-sdk/types"
+	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 	"github.com/tendermint/cosmos-rosetta-gateway/pkg/ensurehex"
+	"golang.org/x/sync/errgroup"
 )
 
 func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.BlockResponse, *types.Error) {
@@ -21,6 +22,7 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 		err       error
 	)
 
+	// retrieve the block first.
 	if r.BlockIdentifier.Index != nil {
 		blockResp, _, err = l.tendermint.Info.Block(ctx, &tendermintclient.BlockOpts{
 			Height: optional.NewFloat32(float32(*r.BlockIdentifier.Index)),
@@ -29,26 +31,53 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 		blockResp, _, err = l.tendermint.Info.BlockByHash(ctx, ensurehex.String(*r.BlockIdentifier.Hash))
 	}
 	if err != nil {
+		fmt.Println(3, err)
 		return nil, ErrNodeConnection
 	}
 
-	timestamp, err := time.Parse(time.RFC3339Nano, blockResp.Result.Block.Header.Time)
-	if err != nil {
-		return nil, ErrInterpreting
-	}
-
+	// get all transactions for the block.
+	var (
+		txs []cosmosclient.TxQuery
+		m   sync.Mutex
+	)
 	txsquery := fmt.Sprintf(`"tx.height=%s"`, blockResp.Result.Block.Header.Height)
 	txsResp, _, err := l.tendermint.Info.TxSearch(ctx, txsquery, nil)
 	if err != nil {
 		return nil, ErrNodeConnection
 	}
-	transactions, err := toTransactions(txsResp.Result)
+	g, ctx := errgroup.WithContext(ctx)
+	for _, txshort := range txsResp.Result.Txs {
+		hash := txshort.Hash
+		g.Go(func() error {
+			tx, _, err := l.cosmos.Transactions.TxsHashGet(ctx, hash)
+			if err != nil {
+				fmt.Println(5, err)
+				return err
+			}
+			m.Lock()
+			defer m.Unlock()
+			txs = append(txs, tx)
+			return nil
+		})
+	}
+	if err := g.Wait(); err != nil {
+		fmt.Println(1, err)
+		return nil, ErrNodeConnection
+	}
+
+	transactions, err := toTransactions(txs)
 	if err != nil {
 		return nil, ErrInterpreting
 	}
 
 	block, err := toBlockIdentifier(blockResp.Result)
 	if err != nil {
+		return nil, ErrInterpreting
+	}
+
+	timestamp, err := time.Parse(time.RFC3339Nano, blockResp.Result.Block.Header.Time)
+	if err != nil {
+		fmt.Println(2, err)
 		return nil, ErrInterpreting
 	}
 
@@ -91,72 +120,39 @@ func toBlockIdentifier(result tendermintclient.BlockComplete) (*types.BlockIdent
 	}, nil
 }
 
-func toTransactions(result tendermintclient.TxSearchResponseResult) (transactions []*types.Transaction, err error) {
-	for _, tx := range result.Txs {
+func toTransactions(txs []cosmosclient.TxQuery) (transactions []*types.Transaction, err error) {
+	for _, tx := range txs {
 		var operations []*types.Operation
-		for _, event := range tx.TxResult.Events {
-			switch event.Type {
-			case "transfer":
-				var (
-					recipient string
-					sender    string
-					amount    string
-				)
-				for _, attr := range event.Attributes {
-					key, value, err := decodeAttr(attr)
-					if err != nil {
-						return nil, err
-					}
-					switch key {
-					case "recipient":
-						recipient = value
-					case "sender":
-						sender = value
-					case "amount":
-						amount = value
-					}
-				}
-				if amount != "" {
-					coin, err := cosmostypes.ParseCoin(amount)
-					if err != nil {
-						return nil, err
-					}
-					amt := &types.Amount{
-						Value: fmt.Sprintf("%d", coin.Amount.Int64()),
-						Currency: &types.Currency{
-							Symbol: coin.Denom,
-						},
-					}
-					opType := strings.Title(event.Type)
-					operations = append(operations,
-						&types.Operation{
-							OperationIdentifier: &types.OperationIdentifier{},
-							Type:                opType,
-							Status:              "Sent",
-							Amount:              amt,
-							Account: &types.AccountIdentifier{
-								Address: sender,
-							},
-						},
-						&types.Operation{
-							OperationIdentifier: &types.OperationIdentifier{
-								Index: 1,
-							},
-							Type:   opType,
-							Status: "Received",
-							Amount: amt,
-							Account: &types.AccountIdentifier{
-								Address: recipient,
-							},
-						},
-					)
+		for i, msg := range tx.Tx.Value.Msg {
+			account := msg.Value.Creator
+			if account == "" {
+				account = msg.Value.FromAddress
+			}
+			operation := &types.Operation{
+				OperationIdentifier: &types.OperationIdentifier{
+					Index: int64(i),
+				},
+				Type:   msg.Type,
+				Status: "TODO",
+				Account: &types.AccountIdentifier{
+					Address: account,
+				},
+			}
+			amounts := msg.Value.Amount
+			if len(amounts) > 0 {
+				am := amounts[0]
+				operation.Amount = &types.Amount{
+					Value: am.Amount,
+					Currency: &types.Currency{
+						Symbol: am.Denom,
+					},
 				}
 			}
+			operations = append(operations, operation)
 		}
-
 		transactions = append(transactions, &types.Transaction{
 			TransactionIdentifier: &types.TransactionIdentifier{
-				Hash: tx.Hash,
+				Hash: tx.Txhash,
 			},
 			Operations: operations,
 		})

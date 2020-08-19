@@ -17,8 +17,9 @@ type Launchpad struct {
 }
 
 type CosmosAPI struct {
-	Bank       CosmosBankAPI
-	Tendermint CosmosTendermintAPI
+	Bank         CosmosBankAPI
+	Tendermint   CosmosTendermintAPI
+	Transactions CosmosTransactionsAPI
 }
 
 type CosmosBankAPI interface {
@@ -27,6 +28,10 @@ type CosmosBankAPI interface {
 
 type CosmosTendermintAPI interface {
 	NodeInfoGet(ctx context.Context) (cosmosclient.InlineResponse200, *http.Response, error)
+}
+
+type CosmosTransactionsAPI interface {
+	TxsHashGet(ctx context.Context, hash string) (cosmosclient.TxQuery, *http.Response, error)
 }
 
 type TendermintAPI struct {
