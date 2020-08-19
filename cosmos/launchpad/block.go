@@ -2,7 +2,6 @@ package launchpad
 
 import (
 	"context"
-	"encoding/base64"
 	"fmt"
 	"strconv"
 	"sync"
@@ -31,7 +30,6 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 		blockResp, _, err = l.tendermint.Info.BlockByHash(ctx, ensurehex.String(*r.BlockIdentifier.Hash))
 	}
 	if err != nil {
-		fmt.Println(3, err)
 		return nil, ErrNodeConnection
 	}
 
@@ -51,7 +49,6 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 		g.Go(func() error {
 			tx, _, err := l.cosmos.Transactions.TxsHashGet(ctx, hash)
 			if err != nil {
-				fmt.Println(5, err)
 				return err
 			}
 			m.Lock()
@@ -61,10 +58,10 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 		})
 	}
 	if err := g.Wait(); err != nil {
-		fmt.Println(1, err)
 		return nil, ErrNodeConnection
 	}
 
+	// prepare other data.
 	transactions, err := toTransactions(txs)
 	if err != nil {
 		return nil, ErrInterpreting
@@ -77,7 +74,6 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 
 	timestamp, err := time.Parse(time.RFC3339Nano, blockResp.Result.Block.Header.Time)
 	if err != nil {
-		fmt.Println(2, err)
 		return nil, ErrInterpreting
 	}
 
@@ -90,16 +86,14 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 		}
 	}
 
-	resp := &types.BlockResponse{
+	return &types.BlockResponse{
 		Block: &types.Block{
 			BlockIdentifier:       block,
 			Transactions:          transactions,
 			Timestamp:             timestamp.UnixNano() / 1000000,
 			ParentBlockIdentifier: parentBlockId,
 		},
-	}
-
-	return resp, nil
+	}, nil
 }
 
 func (l Launchpad) BlockTransaction(ctx context.Context, r *types.BlockTransactionRequest) (*types.BlockTransactionResponse, *types.Error) {
@@ -128,7 +122,18 @@ func toTransactions(txs []cosmosclient.TxQuery) (transactions []*types.Transacti
 			if account == "" {
 				account = msg.Value.FromAddress
 			}
-			operation := &types.Operation{
+			var amount *types.Amount
+			amounts := msg.Value.Amount
+			if len(amounts) > 0 {
+				am := amounts[0]
+				amount = &types.Amount{
+					Value: am.Amount,
+					Currency: &types.Currency{
+						Symbol: am.Denom,
+					},
+				}
+			}
+			operations = append(operations, &types.Operation{
 				OperationIdentifier: &types.OperationIdentifier{
 					Index: int64(i),
 				},
@@ -137,18 +142,8 @@ func toTransactions(txs []cosmosclient.TxQuery) (transactions []*types.Transacti
 				Account: &types.AccountIdentifier{
 					Address: account,
 				},
-			}
-			amounts := msg.Value.Amount
-			if len(amounts) > 0 {
-				am := amounts[0]
-				operation.Amount = &types.Amount{
-					Value: am.Amount,
-					Currency: &types.Currency{
-						Symbol: am.Denom,
-					},
-				}
-			}
-			operations = append(operations, operation)
+				Amount: amount,
+			})
 		}
 		transactions = append(transactions, &types.Transaction{
 			TransactionIdentifier: &types.TransactionIdentifier{
@@ -157,19 +152,5 @@ func toTransactions(txs []cosmosclient.TxQuery) (transactions []*types.Transacti
 			Operations: operations,
 		})
 	}
-	return
-}
-
-func decodeAttr(attr tendermintclient.TxSearchResponseResultTxResultAttributes) (key, value string, err error) {
-	keyb, err := base64.StdEncoding.DecodeString(attr.Key)
-	if err != nil {
-		return "", "", err
-	}
-	valueb, err := base64.StdEncoding.DecodeString(attr.Value)
-	if err != nil {
-		return "", "", err
-	}
-	key = string(keyb)
-	value = string(valueb)
 	return
 }
