@@ -2,7 +2,8 @@ package launchpad
 
 import (
 	"context"
-	"fmt"
+	"encoding/base64"
+	"encoding/hex"
 
 	tmtypes "github.com/tendermint/tendermint/types"
 
@@ -15,12 +16,20 @@ func (l Launchpad) Mempool(ctx context.Context, request *types.NetworkRequest) (
 		return nil, ErrNodeConnection
 	}
 
+	var txsResp []*types.TransactionIdentifier
 	for _, tx := range txs.Result.Txs {
-		t := tmtypes.Tx(tx)
-		fmt.Printf("%s\n", t.Hash())
+		decodeString, err := base64.StdEncoding.DecodeString(tx)
+		if err != nil {
+			return nil, ErrInterpreting
+		}
+
+		txId := &types.TransactionIdentifier{Hash: hex.EncodeToString(tmtypes.Tx(decodeString).Hash())}
+		txsResp = append(txsResp, txId)
 	}
 
-	return &types.MempoolResponse{}, nil
+	return &types.MempoolResponse{
+		TransactionIdentifiers: txsResp,
+	}, nil
 }
 
 func (l Launchpad) MempoolTransaction(ctx context.Context, request *types.MempoolTransactionRequest) (*types.MempoolTransactionResponse, *types.Error) {
