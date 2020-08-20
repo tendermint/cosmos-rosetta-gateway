@@ -17,8 +17,9 @@ func TestLaunchpad_Mempool(t *testing.T) {
 	m := &mocks.TendermintInfoAPI{}
 	defer m.AssertExpectations(t)
 
+	var opt *tendermintclient.UnconfirmedTxsOpts
 	m.
-		On("UnconfirmedTxs", mock.Anything, mock.Anything).
+		On("UnconfirmedTxs", mock.Anything, opt).
 		Return(tendermintclient.UnconfirmedTransactionsResponse{
 			Result: tendermintclient.UnconfirmedTransactionsResponseResult{
 				NTxs:       "1",
