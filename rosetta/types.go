@@ -19,7 +19,6 @@ type ConstructionAPI interface {
 }
 
 type NetworkProperties struct {
-	// Mandatory properties
 	Blockchain          string
 	Network             string
 	SupportedOperations []string
