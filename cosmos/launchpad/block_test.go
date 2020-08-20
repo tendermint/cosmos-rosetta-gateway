@@ -130,6 +130,21 @@ func TestLaunchpad_Block(t *testing.T) {
 	require.Nil(t, blockErr)
 	require.NotNil(t, block)
 
+	require.NotNil(t, block.Block)
+
+	// a small hack to get the transactions in the same order.
+	// without the hack, we need to check BlockResponse.Block props one by one, which is longer.
+	require.Len(t, block.Block.Transactions, 2)
+	require.NotNil(t, block.Block.Transactions[0].TransactionIdentifier)
+
+	if block.Block.Transactions[0].TransactionIdentifier.Hash == "3" {
+		block.Block.Transactions[0],
+			block.Block.Transactions[1] =
+			block.Block.Transactions[1],
+			block.Block.Transactions[0]
+	}
+
+	// compare the full response.
 	require.Equal(t, &types.BlockResponse{
 		Block: &types.Block{
 			BlockIdentifier: &types.BlockIdentifier{
