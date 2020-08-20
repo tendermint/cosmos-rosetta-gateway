@@ -10,7 +10,7 @@ import (
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad"
 	cosmoslaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 	tendermintlaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
-	crghttp "github.com/tendermint/cosmos-rosetta-gateway/http"
+	crghttp "github.com/tendermint/cosmos-rosetta-gateway/service"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
