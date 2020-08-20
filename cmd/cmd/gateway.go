@@ -5,13 +5,14 @@ package cmd
 import (
 	"net/http"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/service"
+
 	"github.com/spf13/cobra"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad"
 	cosmoslaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 	tendermintlaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
-	"github.com/tendermint/cosmos-rosetta-gateway/service"
 )
 
 func New() *cobra.Command {

@@ -9,8 +9,13 @@ import (
 )
 
 type CosmosAPI struct {
-	Bank       CosmosBankAPI
-	Tendermint CosmosTendermintAPI
+	Bank         CosmosBankAPI
+	Tendermint   CosmosTendermintAPI
+	Transactions CosmosTransactionsAPI
+}
+
+type CosmosTransactionsAPI interface {
+	TxsHashGet(ctx context.Context, hash string) (cosmosclient.TxQuery, *http.Response, error)
 }
 
 type CosmosBankAPI interface {
@@ -29,4 +34,6 @@ type TendermintInfoAPI interface {
 	NetInfo(ctx context.Context) (tendermintclient.NetInfoResponse, *http.Response, error)
 	Block(ctx context.Context, localVarOptionals *tendermintclient.BlockOpts) (tendermintclient.BlockResponse, *http.Response, error)
 	UnconfirmedTxs(ctx context.Context, localVarOptionals *tendermintclient.UnconfirmedTxsOpts) (tendermintclient.UnconfirmedTransactionsResponse, *http.Response, error)
+	BlockByHash(ctx context.Context, hash string) (tendermintclient.BlockResponse, *http.Response, error)
+	TxSearch(ctx context.Context, query string, localVarOptionals *tendermintclient.TxSearchOpts) (tendermintclient.TxSearchResponse, *http.Response, error)
 }
