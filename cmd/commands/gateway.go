@@ -1,6 +1,6 @@
 // Package cmd exposes Rosetta API for Cosmos SDK as a cli command that can be
 // used as a (sub)command to start a standalone Gateway.
-package cmd
+package commands
 
 import (
 	"net/http"
