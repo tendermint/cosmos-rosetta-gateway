@@ -5,9 +5,9 @@ gen-clients:
 
 gen-mocks:
 	scripts/gen-mocks
-
-dev:
-	scripts/dev
-
+format:
+	go fmt ./...
 test:
 	go test ./...
+dev:
+	scripts/dev

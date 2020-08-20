@@ -8,10 +8,11 @@
  */
 
 package openapi
+
 // StdTxSignature struct for StdTxSignature
 type StdTxSignature struct {
-	Signature string `json:"signature,omitempty"`
-	PubKey StdTxSignaturePubKey `json:"pub_key,omitempty"`
-	AccountNumber string `json:"account_number,omitempty"`
-	Sequence string `json:"sequence,omitempty"`
+	Signature     string               `json:"signature,omitempty"`
+	PubKey        StdTxSignaturePubKey `json:"pub_key,omitempty"`
+	AccountNumber string               `json:"account_number,omitempty"`
+	Sequence      string               `json:"sequence,omitempty"`
 }
