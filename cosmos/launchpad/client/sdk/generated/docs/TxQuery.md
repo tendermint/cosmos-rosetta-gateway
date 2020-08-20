@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Hash** | **string** |  | [optional] 
-**Height** | **float32** |  | [optional] 
+**Txhash** | **string** |  | [optional] 
+**Height** | **string** |  | [optional] 
 **Tx** | [**StdTx**](StdTx.md) |  | [optional] 
 **Result** | [**TxQueryResult**](TxQuery_result.md) |  | [optional] 
 

@@ -1,14 +1,12 @@
-# TxResponseResult
+# MsgValue
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Hash** | **string** |  | 
-**Height** | **string** |  | 
-**Index** | **float32** |  | 
-**TxResult** | [**TxResponseResultTxResult**](TxResponse_result_tx_result.md) |  | 
-**Tx** | **string** |  | 
+**FromAddress** | **string** |  | [optional] 
+**Creator** | **string** |  | [optional] 
+**Amount** | [**[]Coin**](Coin.md) |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

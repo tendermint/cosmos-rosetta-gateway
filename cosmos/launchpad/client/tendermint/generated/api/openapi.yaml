@@ -2147,11 +2147,19 @@ components:
               log: '[{"msg_index":"0","success":true,"log":""}]'
               gas_used: "28596"
               gas_wanted: "200000"
-              tags:
-              - value: c2VuZA==
-                key: YWN0aW9u
-              - value: c2VuZA==
-                key: YWN0aW9u
+              events:
+              - attributes:
+                - value: c2VuZA==
+                  key: YWN0aW9u
+                - value: c2VuZA==
+                  key: YWN0aW9u
+                type: type
+              - attributes:
+                - value: c2VuZA==
+                  key: YWN0aW9u
+                - value: c2VuZA==
+                  key: YWN0aW9u
+                type: type
             index: 0
             proof:
               RootHash: 72FE6BF6D4109105357AECE0A82E99D0F6288854D16D8767C5E72C57F876A14D
@@ -2169,11 +2177,19 @@ components:
               log: '[{"msg_index":"0","success":true,"log":""}]'
               gas_used: "28596"
               gas_wanted: "200000"
-              tags:
-              - value: c2VuZA==
-                key: YWN0aW9u
-              - value: c2VuZA==
-                key: YWN0aW9u
+              events:
+              - attributes:
+                - value: c2VuZA==
+                  key: YWN0aW9u
+                - value: c2VuZA==
+                  key: YWN0aW9u
+                type: type
+              - attributes:
+                - value: c2VuZA==
+                  key: YWN0aW9u
+                - value: c2VuZA==
+                  key: YWN0aW9u
+                type: type
             index: 0
             proof:
               RootHash: 72FE6BF6D4109105357AECE0A82E99D0F6288854D16D8767C5E72C57F876A14D
@@ -4188,7 +4204,7 @@ components:
       - total
       - total_bytes
       - txs
-    TxSearchResponse_result_tx_result_tags:
+    TxSearchResponse_result_tx_result_attributes:
       example:
         value: c2VuZA==
         key: YWN0aW9u
@@ -4199,16 +4215,39 @@ components:
         value:
           example: c2VuZA==
           type: string
+    TxSearchResponse_result_tx_result_events:
+      example:
+        attributes:
+        - value: c2VuZA==
+          key: YWN0aW9u
+        - value: c2VuZA==
+          key: YWN0aW9u
+        type: type
+      properties:
+        type:
+          type: string
+        attributes:
+          items:
+            $ref: '#/components/schemas/TxSearchResponse_result_tx_result_attributes'
+          type: array
     TxSearchResponse_result_tx_result:
       example:
         log: '[{"msg_index":"0","success":true,"log":""}]'
         gas_used: "28596"
         gas_wanted: "200000"
-        tags:
-        - value: c2VuZA==
-          key: YWN0aW9u
-        - value: c2VuZA==
-          key: YWN0aW9u
+        events:
+        - attributes:
+          - value: c2VuZA==
+            key: YWN0aW9u
+          - value: c2VuZA==
+            key: YWN0aW9u
+          type: type
+        - attributes:
+          - value: c2VuZA==
+            key: YWN0aW9u
+          - value: c2VuZA==
+            key: YWN0aW9u
+          type: type
       properties:
         log:
           example: '[{"msg_index":"0","success":true,"log":""}]'
@@ -4219,15 +4258,15 @@ components:
         gas_used:
           example: "28596"
           type: string
-        tags:
+        events:
           items:
-            $ref: '#/components/schemas/TxSearchResponse_result_tx_result_tags'
+            $ref: '#/components/schemas/TxSearchResponse_result_tx_result_events'
           type: array
       required:
+      - events
       - gas_used
       - gas_wanted
       - log
-      - tags
     TxSearchResponse_result_proof_Proof:
       example:
         total: "2"
@@ -4286,11 +4325,19 @@ components:
           log: '[{"msg_index":"0","success":true,"log":""}]'
           gas_used: "28596"
           gas_wanted: "200000"
-          tags:
-          - value: c2VuZA==
-            key: YWN0aW9u
-          - value: c2VuZA==
-            key: YWN0aW9u
+          events:
+          - attributes:
+            - value: c2VuZA==
+              key: YWN0aW9u
+            - value: c2VuZA==
+              key: YWN0aW9u
+            type: type
+          - attributes:
+            - value: c2VuZA==
+              key: YWN0aW9u
+            - value: c2VuZA==
+              key: YWN0aW9u
+            type: type
         index: 0
         proof:
           RootHash: 72FE6BF6D4109105357AECE0A82E99D0F6288854D16D8767C5E72C57F876A14D
@@ -4329,11 +4376,19 @@ components:
             log: '[{"msg_index":"0","success":true,"log":""}]'
             gas_used: "28596"
             gas_wanted: "200000"
-            tags:
-            - value: c2VuZA==
-              key: YWN0aW9u
-            - value: c2VuZA==
-              key: YWN0aW9u
+            events:
+            - attributes:
+              - value: c2VuZA==
+                key: YWN0aW9u
+              - value: c2VuZA==
+                key: YWN0aW9u
+              type: type
+            - attributes:
+              - value: c2VuZA==
+                key: YWN0aW9u
+              - value: c2VuZA==
+                key: YWN0aW9u
+              type: type
           index: 0
           proof:
             RootHash: 72FE6BF6D4109105357AECE0A82E99D0F6288854D16D8767C5E72C57F876A14D
@@ -4351,11 +4406,19 @@ components:
             log: '[{"msg_index":"0","success":true,"log":""}]'
             gas_used: "28596"
             gas_wanted: "200000"
-            tags:
-            - value: c2VuZA==
-              key: YWN0aW9u
-            - value: c2VuZA==
-              key: YWN0aW9u
+            events:
+            - attributes:
+              - value: c2VuZA==
+                key: YWN0aW9u
+              - value: c2VuZA==
+                key: YWN0aW9u
+              type: type
+            - attributes:
+              - value: c2VuZA==
+                key: YWN0aW9u
+              - value: c2VuZA==
+                key: YWN0aW9u
+              type: type
           index: 0
           proof:
             RootHash: 72FE6BF6D4109105357AECE0A82E99D0F6288854D16D8767C5E72C57F876A14D
@@ -4379,6 +4442,35 @@ components:
       required:
       - total_count
       - txs
+    TxResponse_result_tx_result:
+      example:
+        log: '[{"msg_index":"0","success":true,"log":""}]'
+        gas_used: "28596"
+        gas_wanted: "200000"
+        tags:
+        - value: c2VuZA==
+          key: YWN0aW9u
+        - value: c2VuZA==
+          key: YWN0aW9u
+      properties:
+        log:
+          example: '[{"msg_index":"0","success":true,"log":""}]'
+          type: string
+        gas_wanted:
+          example: "200000"
+          type: string
+        gas_used:
+          example: "28596"
+          type: string
+        tags:
+          items:
+            $ref: '#/components/schemas/TxSearchResponse_result_tx_result_attributes'
+          type: array
+      required:
+      - gas_used
+      - gas_wanted
+      - log
+      - tags
     TxResponse_result:
       example:
         tx: 5wHwYl3uCkaoo2GaChQmSIu8hxpJxLcCuIi8fiHN4TMwrRIU/Af1cEG7Rcs/6LjTl7YjRSymJfYaFAoFdWF0b20SCzE0OTk5OTk1MDAwEhMKDQoFdWF0b20SBDUwMDAQwJoMGmoKJuta6YchAwswBShaB1wkZBctLIhYqBC3JrAI28XGzxP+rVEticGEEkAc+khTkKL9CDE47aDvjEHvUNt+izJfT4KVF2v2JkC+bmlH9K08q3PqHeMI9Z5up+XMusnTqlP985KF+SI5J3ZOIhhNYWRlIGJ5IENpcmNsZSB3aXRoIGxvdmU=
@@ -4405,7 +4497,7 @@ components:
           example: 0
           type: number
         tx_result:
-          $ref: '#/components/schemas/TxSearchResponse_result_tx_result'
+          $ref: '#/components/schemas/TxResponse_result_tx_result'
         tx:
           example: 5wHwYl3uCkaoo2GaChQmSIu8hxpJxLcCuIi8fiHN4TMwrRIU/Af1cEG7Rcs/6LjTl7YjRSymJfYaFAoFdWF0b20SCzE0OTk5OTk1MDAwEhMKDQoFdWF0b20SBDUwMDAQwJoMGmoKJuta6YchAwswBShaB1wkZBctLIhYqBC3JrAI28XGzxP+rVEticGEEkAc+khTkKL9CDE47aDvjEHvUNt+izJfT4KVF2v2JkC+bmlH9K08q3PqHeMI9Z5up+XMusnTqlP985KF+SI5J3ZOIhhNYWRlIGJ5IENpcmNsZSB3aXRoIGxvdmU=
           type: string
