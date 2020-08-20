@@ -8,11 +8,12 @@
  */
 
 package openapi
+
 // RedelegationEntry struct for RedelegationEntry
 type RedelegationEntry struct {
-	CreationHeight int32 `json:"creation_height,omitempty"`
-	CompletionTime int32 `json:"completion_time,omitempty"`
+	CreationHeight int32  `json:"creation_height,omitempty"`
+	CompletionTime int32  `json:"completion_time,omitempty"`
 	InitialBalance string `json:"initial_balance,omitempty"`
-	Balance string `json:"balance,omitempty"`
-	SharesDst string `json:"shares_dst,omitempty"`
+	Balance        string `json:"balance,omitempty"`
+	SharesDst      string `json:"shares_dst,omitempty"`
 }

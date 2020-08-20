@@ -8,8 +8,9 @@
  */
 
 package openapi
+
 // StdTxFee struct for StdTxFee
 type StdTxFee struct {
-	Gas string `json:"gas,omitempty"`
+	Gas    string `json:"gas,omitempty"`
 	Amount []Coin `json:"amount,omitempty"`
 }

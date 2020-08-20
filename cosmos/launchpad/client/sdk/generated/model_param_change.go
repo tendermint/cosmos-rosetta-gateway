@@ -8,10 +8,11 @@
  */
 
 package openapi
+
 // ParamChange struct for ParamChange
 type ParamChange struct {
-	Subspace string `json:"subspace,omitempty"`
-	Key string `json:"key,omitempty"`
-	Subkey string `json:"subkey,omitempty"`
-	Value map[string]interface{} `json:"value,omitempty"`
+	Subspace string                 `json:"subspace,omitempty"`
+	Key      string                 `json:"key,omitempty"`
+	Subkey   string                 `json:"subkey,omitempty"`
+	Value    map[string]interface{} `json:"value,omitempty"`
 }

@@ -4,16 +4,13 @@ import (
 	"context"
 	"testing"
 
+	"github.com/coinbase/rosetta-sdk-go/types"
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/coinbase/rosetta-sdk-go/types"
-
-	"github.com/stretchr/testify/mock"
-
 	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
-
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_Mempool(t *testing.T) {

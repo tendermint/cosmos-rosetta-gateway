@@ -8,8 +8,9 @@
  */
 
 package openapi
+
 // Proposer struct for Proposer
 type Proposer struct {
 	ProposalId string `json:"proposal_id,omitempty"`
-	Proposer string `json:"proposer,omitempty"`
+	Proposer   string `json:"proposer,omitempty"`
 }

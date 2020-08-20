@@ -8,13 +8,14 @@
  */
 
 package openapi
+
 // CheckTxResult struct for CheckTxResult
 type CheckTxResult struct {
-	Code int32 `json:"code,omitempty"`
-	Data string `json:"data,omitempty"`
-	GasUsed int32 `json:"gas_used,omitempty"`
-	GasWanted int32 `json:"gas_wanted,omitempty"`
-	Info string `json:"info,omitempty"`
-	Log string `json:"log,omitempty"`
-	Tags []KvPair `json:"tags,omitempty"`
+	Code      int32    `json:"code,omitempty"`
+	Data      string   `json:"data,omitempty"`
+	GasUsed   int32    `json:"gas_used,omitempty"`
+	GasWanted int32    `json:"gas_wanted,omitempty"`
+	Info      string   `json:"info,omitempty"`
+	Log       string   `json:"log,omitempty"`
+	Tags      []KvPair `json:"tags,omitempty"`
 }

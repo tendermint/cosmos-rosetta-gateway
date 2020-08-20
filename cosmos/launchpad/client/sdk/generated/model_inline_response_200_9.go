@@ -8,8 +8,9 @@
  */
 
 package openapi
+
 // InlineResponse2009 struct for InlineResponse2009
 type InlineResponse2009 struct {
-	MinDeposit []Coin `json:"min_deposit,omitempty"`
+	MinDeposit       []Coin `json:"min_deposit,omitempty"`
 	MaxDepositPeriod string `json:"max_deposit_period,omitempty"`
 }

@@ -8,10 +8,11 @@
  */
 
 package openapi
+
 // Redelegation struct for Redelegation
 type Redelegation struct {
-	DelegatorAddress string `json:"delegator_address,omitempty"`
-	ValidatorSrcAddress string `json:"validator_src_address,omitempty"`
-	ValidatorDstAddress string `json:"validator_dst_address,omitempty"`
-	Entries []Redelegation `json:"entries,omitempty"`
+	DelegatorAddress    string         `json:"delegator_address,omitempty"`
+	ValidatorSrcAddress string         `json:"validator_src_address,omitempty"`
+	ValidatorDstAddress string         `json:"validator_dst_address,omitempty"`
+	Entries             []Redelegation `json:"entries,omitempty"`
 }

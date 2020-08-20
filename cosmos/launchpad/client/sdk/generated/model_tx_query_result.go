@@ -8,10 +8,11 @@
  */
 
 package openapi
+
 // TxQueryResult struct for TxQueryResult
 type TxQueryResult struct {
-	Log string `json:"log,omitempty"`
-	GasWanted string `json:"gas_wanted,omitempty"`
-	GasUsed string `json:"gas_used,omitempty"`
-	Tags []KvPair `json:"tags,omitempty"`
+	Log       string   `json:"log,omitempty"`
+	GasWanted string   `json:"gas_wanted,omitempty"`
+	GasUsed   string   `json:"gas_used,omitempty"`
+	Tags      []KvPair `json:"tags,omitempty"`
 }

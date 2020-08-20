@@ -8,12 +8,13 @@
  */
 
 package openapi
+
 // UnbondingDelegation struct for UnbondingDelegation
 type UnbondingDelegation struct {
 	DelegatorAddress string `json:"delegator_address,omitempty"`
 	ValidatorAddress string `json:"validator_address,omitempty"`
-	InitialBalance string `json:"initial_balance,omitempty"`
-	Balance string `json:"balance,omitempty"`
-	CreationHeight int32 `json:"creation_height,omitempty"`
-	MinTime int32 `json:"min_time,omitempty"`
+	InitialBalance   string `json:"initial_balance,omitempty"`
+	Balance          string `json:"balance,omitempty"`
+	CreationHeight   int32  `json:"creation_height,omitempty"`
+	MinTime          int32  `json:"min_time,omitempty"`
 }

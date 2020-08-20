@@ -8,8 +8,9 @@
  */
 
 package openapi
+
 // DelegatorTotalRewards struct for DelegatorTotalRewards
 type DelegatorTotalRewards struct {
 	Rewards []DelegationDelegatorReward `json:"rewards,omitempty"`
-	Total []Coin `json:"total,omitempty"`
+	Total   []Coin                      `json:"total,omitempty"`
 }

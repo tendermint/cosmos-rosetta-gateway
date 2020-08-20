@@ -8,9 +8,10 @@
  */
 
 package openapi
+
 // Deposit struct for Deposit
 type Deposit struct {
-	Amount []Coin `json:"amount,omitempty"`
+	Amount     []Coin `json:"amount,omitempty"`
 	ProposalId string `json:"proposal_id,omitempty"`
 	// bech32 encoded address
 	Depositor string `json:"depositor,omitempty"`

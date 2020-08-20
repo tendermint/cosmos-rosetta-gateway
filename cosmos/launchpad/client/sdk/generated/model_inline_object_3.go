@@ -8,8 +8,9 @@
  */
 
 package openapi
+
 // InlineObject3 struct for InlineObject3
 type InlineObject3 struct {
 	BaseReq BaseReq `json:"base_req,omitempty"`
-	Amount []Coin `json:"amount,omitempty"`
+	Amount  []Coin  `json:"amount,omitempty"`
 }

@@ -8,13 +8,14 @@
  */
 
 package openapi
+
 // InlineObject8 struct for InlineObject8
 type InlineObject8 struct {
-	BaseReq BaseReq `json:"base_req,omitempty"`
-	Title string `json:"title,omitempty"`
-	Description string `json:"description,omitempty"`
-	ProposalType string `json:"proposal_type,omitempty"`
+	BaseReq      BaseReq `json:"base_req,omitempty"`
+	Title        string  `json:"title,omitempty"`
+	Description  string  `json:"description,omitempty"`
+	ProposalType string  `json:"proposal_type,omitempty"`
 	// bech32 encoded address
-	Proposer string `json:"proposer,omitempty"`
+	Proposer       string `json:"proposer,omitempty"`
 	InitialDeposit []Coin `json:"initial_deposit,omitempty"`
 }

@@ -43,7 +43,7 @@ func (a *TendermintRPCApiService) BlocksHeightGet(ctx _context.Context, height f
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/blocks/{height}"
-	localVarPath = strings.Replace(localVarPath, "{"+"height"+"}", _neturl.QueryEscape(parameterToString(height, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"height"+"}", _neturl.QueryEscape(parameterToString(height, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -344,7 +344,7 @@ func (a *TendermintRPCApiService) ValidatorsetsHeightGet(ctx _context.Context, h
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/validatorsets/{height}"
-	localVarPath = strings.Replace(localVarPath, "{"+"height"+"}", _neturl.QueryEscape(parameterToString(height, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"height"+"}", _neturl.QueryEscape(parameterToString(height, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}

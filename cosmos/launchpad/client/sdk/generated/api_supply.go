@@ -43,7 +43,7 @@ func (a *SupplyApiService) SupplyTotalDenominationGet(ctx _context.Context, deno
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/supply/total/{denomination}"
-	localVarPath = strings.Replace(localVarPath, "{"+"denomination"+"}", _neturl.QueryEscape(parameterToString(denomination, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"denomination"+"}", _neturl.QueryEscape(parameterToString(denomination, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}

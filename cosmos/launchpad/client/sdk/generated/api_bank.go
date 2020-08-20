@@ -44,7 +44,7 @@ func (a *BankApiService) BankAccountsAddressTransfersPost(ctx _context.Context, 
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/bank/accounts/{address}/transfers"
-	localVarPath = strings.Replace(localVarPath, "{"+"address"+"}", _neturl.QueryEscape(parameterToString(address, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"address"+"}", _neturl.QueryEscape(parameterToString(address, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -123,7 +123,7 @@ func (a *BankApiService) BankBalancesAddressGet(ctx _context.Context, address st
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/bank/balances/{address}"
-	localVarPath = strings.Replace(localVarPath, "{"+"address"+"}", _neturl.QueryEscape(parameterToString(address, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"address"+"}", _neturl.QueryEscape(parameterToString(address, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}

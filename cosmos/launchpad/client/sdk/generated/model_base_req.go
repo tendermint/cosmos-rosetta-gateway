@@ -8,17 +8,18 @@
  */
 
 package openapi
+
 // BaseReq struct for BaseReq
 type BaseReq struct {
 	// Sender address or Keybase name to generate a transaction
-	From string `json:"from,omitempty"`
-	Memo string `json:"memo,omitempty"`
-	ChainId string `json:"chain_id,omitempty"`
+	From          string `json:"from,omitempty"`
+	Memo          string `json:"memo,omitempty"`
+	ChainId       string `json:"chain_id,omitempty"`
 	AccountNumber string `json:"account_number,omitempty"`
-	Sequence string `json:"sequence,omitempty"`
-	Gas string `json:"gas,omitempty"`
+	Sequence      string `json:"sequence,omitempty"`
+	Gas           string `json:"gas,omitempty"`
 	GasAdjustment string `json:"gas_adjustment,omitempty"`
-	Fees []Coin `json:"fees,omitempty"`
+	Fees          []Coin `json:"fees,omitempty"`
 	// Estimate gas for a transaction (cannot be used in conjunction with generate_only)
 	Simulate bool `json:"simulate,omitempty"`
 }

@@ -8,8 +8,9 @@
  */
 
 package openapi
+
 // InlineObject struct for InlineObject
 type InlineObject struct {
-	Tx StdTx `json:"tx,omitempty"`
+	Tx   StdTx  `json:"tx,omitempty"`
 	Mode string `json:"mode,omitempty"`
 }

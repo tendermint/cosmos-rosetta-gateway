@@ -8,10 +8,11 @@
  */
 
 package openapi
+
 // TallyResult struct for TallyResult
 type TallyResult struct {
-	Yes string `json:"yes,omitempty"`
-	Abstain string `json:"abstain,omitempty"`
-	No string `json:"no,omitempty"`
+	Yes        string `json:"yes,omitempty"`
+	Abstain    string `json:"abstain,omitempty"`
+	No         string `json:"no,omitempty"`
 	NoWithVeto string `json:"no_with_veto,omitempty"`
 }

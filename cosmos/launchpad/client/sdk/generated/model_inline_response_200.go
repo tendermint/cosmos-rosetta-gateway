@@ -8,8 +8,9 @@
  */
 
 package openapi
+
 // InlineResponse200 struct for InlineResponse200
 type InlineResponse200 struct {
 	ApplicationVersion InlineResponse200ApplicationVersion `json:"application_version,omitempty"`
-	NodeInfo InlineResponse200NodeInfo `json:"node_info,omitempty"`
+	NodeInfo           InlineResponse200NodeInfo           `json:"node_info,omitempty"`
 }

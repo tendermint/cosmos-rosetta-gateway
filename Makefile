@@ -5,5 +5,7 @@ gen-clients:
 
 gen-mocks:
 	scripts/gen-mocks
+format:
+	go fmt ./...
 test:
 	go test ./...
