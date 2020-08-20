@@ -5,12 +5,13 @@ package cmd
 import (
 	"net/http"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/service"
+
 	"github.com/spf13/cobra"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad"
 	cosmoslaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 	tendermintlaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
-	crghttp "github.com/tendermint/cosmos-rosetta-gateway/http"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
@@ -49,8 +50,8 @@ func runHandler(*cobra.Command, []string) error {
 		SupportedOperations: []string{"Transfer", "Reward"},
 	}
 
-	h, err := crghttp.New(
-		crghttp.Network{
+	h, err := service.New(
+		service.Network{
 			Properties: properties,
 			Adapter:    launchpad.NewLaunchpad(tendermintlp, cosmoslp, properties),
 		},
@@ -63,5 +64,6 @@ func runHandler(*cobra.Command, []string) error {
 		Handler: h,
 		Addr:    ":8080",
 	}
+
 	return hserver.ListenAndServe()
 }
