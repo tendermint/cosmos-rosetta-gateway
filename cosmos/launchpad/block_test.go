@@ -183,3 +183,76 @@ func TestLaunchpad_Block(t *testing.T) {
 	}, block)
 
 }
+
+func TestLaunchpad_BlockTransaction(t *testing.T) {
+	mc := &cosmosmocks.CosmosTransactionsAPI{}
+	defer mc.AssertExpectations(t)
+
+	mc.
+		On("TxsHashGet", mock.Anything, "1").
+		Return(cosmosclient.TxQuery{
+			Txhash: "1",
+			Tx: cosmosclient.StdTx{
+				Value: cosmosclient.StdTxValue{
+					Msg: []cosmosclient.Msg{
+						{
+							Type: "2",
+							Value: cosmosclient.MsgValue{
+								FromAddress: "3",
+								Amount: []cosmosclient.Coin{
+									{
+										Amount: "4",
+										Denom:  "5",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		}, nil, nil).
+		Once()
+
+	properties := rosetta.NetworkProperties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+		SupportedOperations: []string{
+			"Transfer",
+			"Reward",
+		},
+	}
+
+	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{Transactions: mc}, properties)
+
+	tx, txErr := adapter.BlockTransaction(context.Background(), &types.BlockTransactionRequest{
+		TransactionIdentifier: &types.TransactionIdentifier{
+			Hash: "1",
+		},
+	})
+	require.Nil(t, txErr)
+	require.NotNil(t, tx)
+
+	require.Equal(t, &types.BlockTransactionResponse{
+		Transaction: &types.Transaction{
+			TransactionIdentifier: &types.TransactionIdentifier{
+				Hash: "1",
+			},
+			Operations: []*types.Operation{
+				&types.Operation{
+					OperationIdentifier: &types.OperationIdentifier{},
+					Type:                "2",
+					Status:              "TODO",
+					Account: &types.AccountIdentifier{
+						Address: "3",
+					},
+					Amount: &types.Amount{
+						Value: "4",
+						Currency: &types.Currency{
+							Symbol: "5",
+						},
+					},
+				},
+			},
+		},
+	}, tx)
+}
