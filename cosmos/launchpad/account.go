@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	client "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 )
 
@@ -33,8 +32,4 @@ func convertCoinsToRosettaBalances(coins []client.Coin) []*types.Amount {
 	}
 
 	return amounts
-}
-
-type balanceResp struct {
-	Result sdk.Coins
 }
