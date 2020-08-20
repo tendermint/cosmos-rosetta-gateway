@@ -8,11 +8,10 @@
  */
 
 package openapi
-
 // Delegation struct for Delegation
 type Delegation struct {
 	DelegatorAddress string `json:"delegator_address,omitempty"`
 	ValidatorAddress string `json:"validator_address,omitempty"`
-	Shares           string `json:"shares,omitempty"`
-	Balance          Coin   `json:"balance,omitempty"`
+	Shares string `json:"shares,omitempty"`
+	Balance Coin `json:"balance,omitempty"`
 }

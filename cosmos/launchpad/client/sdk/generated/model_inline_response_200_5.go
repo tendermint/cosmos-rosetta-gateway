@@ -8,9 +8,8 @@
  */
 
 package openapi
-
 // InlineResponse2005 struct for InlineResponse2005
 type InlineResponse2005 struct {
-	Type  string                  `json:"type,omitempty"`
+	Type string `json:"type,omitempty"`
 	Value InlineResponse2005Value `json:"value,omitempty"`
 }

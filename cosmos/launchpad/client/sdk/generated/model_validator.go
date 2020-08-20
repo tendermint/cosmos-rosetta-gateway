@@ -8,20 +8,19 @@
  */
 
 package openapi
-
 // Validator struct for Validator
 type Validator struct {
 	// bech32 encoded address
-	OperatorAddress    string               `json:"operator_address,omitempty"`
-	ConsensusPubkey    string               `json:"consensus_pubkey,omitempty"`
-	Jailed             bool                 `json:"jailed,omitempty"`
-	Status             int32                `json:"status,omitempty"`
-	Tokens             string               `json:"tokens,omitempty"`
-	DelegatorShares    string               `json:"delegator_shares,omitempty"`
-	Description        ValidatorDescription `json:"description,omitempty"`
-	BondHeight         string               `json:"bond_height,omitempty"`
-	BondIntraTxCounter int32                `json:"bond_intra_tx_counter,omitempty"`
-	UnbondingHeight    string               `json:"unbonding_height,omitempty"`
-	UnbondingTime      string               `json:"unbonding_time,omitempty"`
-	Commission         ValidatorCommission  `json:"commission,omitempty"`
+	OperatorAddress string `json:"operator_address,omitempty"`
+	ConsensusPubkey string `json:"consensus_pubkey,omitempty"`
+	Jailed bool `json:"jailed,omitempty"`
+	Status int32 `json:"status,omitempty"`
+	Tokens string `json:"tokens,omitempty"`
+	DelegatorShares string `json:"delegator_shares,omitempty"`
+	Description ValidatorDescription `json:"description,omitempty"`
+	BondHeight string `json:"bond_height,omitempty"`
+	BondIntraTxCounter int32 `json:"bond_intra_tx_counter,omitempty"`
+	UnbondingHeight string `json:"unbonding_height,omitempty"`
+	UnbondingTime string `json:"unbonding_time,omitempty"`
+	Commission ValidatorCommission `json:"commission,omitempty"`
 }

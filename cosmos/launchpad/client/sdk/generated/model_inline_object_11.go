@@ -8,11 +8,10 @@
  */
 
 package openapi
-
 // InlineObject11 struct for InlineObject11
 type InlineObject11 struct {
 	BaseReq BaseReq `json:"base_req,omitempty"`
 	// bech32 encoded address
-	Voter  string `json:"voter,omitempty"`
+	Voter string `json:"voter,omitempty"`
 	Option string `json:"option,omitempty"`
 }

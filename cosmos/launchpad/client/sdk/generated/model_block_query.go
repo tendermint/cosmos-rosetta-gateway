@@ -8,9 +8,8 @@
  */
 
 package openapi
-
 // BlockQuery struct for BlockQuery
 type BlockQuery struct {
 	BlockMeta BlockQueryBlockMeta `json:"block_meta,omitempty"`
-	Block     Block               `json:"block,omitempty"`
+	Block Block `json:"block,omitempty"`
 }

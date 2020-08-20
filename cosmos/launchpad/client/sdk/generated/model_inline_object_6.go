@@ -8,7 +8,6 @@
  */
 
 package openapi
-
 // InlineObject6 struct for InlineObject6
 type InlineObject6 struct {
 	BaseReq BaseReq `json:"base_req,omitempty"`
@@ -18,5 +17,5 @@ type InlineObject6 struct {
 	ValidatorSrcAddressess string `json:"validator_src_addressess,omitempty"`
 	// bech32 encoded address
 	ValidatorDstAddress string `json:"validator_dst_address,omitempty"`
-	Shares              string `json:"shares,omitempty"`
+	Shares string `json:"shares,omitempty"`
 }

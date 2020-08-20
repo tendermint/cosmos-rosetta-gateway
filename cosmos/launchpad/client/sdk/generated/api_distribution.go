@@ -11,11 +11,11 @@ package openapi
 
 import (
 	_context "context"
-	"github.com/antihax/optional"
 	_ioutil "io/ioutil"
 	_nethttp "net/http"
 	_neturl "net/url"
 	"strings"
+	"github.com/antihax/optional"
 )
 
 // Linger please
@@ -119,7 +119,7 @@ func (a *DistributionApiService) DistributionDelegatorsDelegatorAddrRewardsGet(c
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/distribution/delegators/{delegatorAddr}/rewards"
-	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")) , -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -180,7 +180,7 @@ func (a *DistributionApiService) DistributionDelegatorsDelegatorAddrRewardsGet(c
 
 // DistributionDelegatorsDelegatorAddrRewardsPostOpts Optional parameters for the method 'DistributionDelegatorsDelegatorAddrRewardsPost'
 type DistributionDelegatorsDelegatorAddrRewardsPostOpts struct {
-	WithdrawRequestBody optional.Interface
+    WithdrawRequestBody optional.Interface
 }
 
 /*
@@ -189,7 +189,7 @@ Withdraw all the delegator&#39;s delegation rewards
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param delegatorAddr Bech32 AccAddress of Delegator
  * @param optional nil or *DistributionDelegatorsDelegatorAddrRewardsPostOpts - Optional Parameters:
- * @param "WithdrawRequestBody" (optional.Interface of InlineObject12) -
+ * @param "WithdrawRequestBody" (optional.Interface of InlineObject12) - 
 @return BroadcastTxCommitResult
 */
 func (a *DistributionApiService) DistributionDelegatorsDelegatorAddrRewardsPost(ctx _context.Context, delegatorAddr string, localVarOptionals *DistributionDelegatorsDelegatorAddrRewardsPostOpts) (BroadcastTxCommitResult, *_nethttp.Response, error) {
@@ -204,7 +204,7 @@ func (a *DistributionApiService) DistributionDelegatorsDelegatorAddrRewardsPost(
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/distribution/delegators/{delegatorAddr}/rewards"
-	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")) , -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -292,9 +292,9 @@ func (a *DistributionApiService) DistributionDelegatorsDelegatorAddrRewardsValid
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/distribution/delegators/{delegatorAddr}/rewards/{validatorAddr}"
-	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")) , -1)
 
-	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")) , -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -355,7 +355,7 @@ func (a *DistributionApiService) DistributionDelegatorsDelegatorAddrRewardsValid
 
 // DistributionDelegatorsDelegatorAddrRewardsValidatorAddrPostOpts Optional parameters for the method 'DistributionDelegatorsDelegatorAddrRewardsValidatorAddrPost'
 type DistributionDelegatorsDelegatorAddrRewardsValidatorAddrPostOpts struct {
-	WithdrawRequestBody optional.Interface
+    WithdrawRequestBody optional.Interface
 }
 
 /*
@@ -365,7 +365,7 @@ Withdraw a delegator&#39;s delegation reward from a single validator
  * @param delegatorAddr Bech32 AccAddress of Delegator
  * @param validatorAddr Bech32 OperatorAddress of validator
  * @param optional nil or *DistributionDelegatorsDelegatorAddrRewardsValidatorAddrPostOpts - Optional Parameters:
- * @param "WithdrawRequestBody" (optional.Interface of InlineObject13) -
+ * @param "WithdrawRequestBody" (optional.Interface of InlineObject13) - 
 @return BroadcastTxCommitResult
 */
 func (a *DistributionApiService) DistributionDelegatorsDelegatorAddrRewardsValidatorAddrPost(ctx _context.Context, delegatorAddr string, validatorAddr string, localVarOptionals *DistributionDelegatorsDelegatorAddrRewardsValidatorAddrPostOpts) (BroadcastTxCommitResult, *_nethttp.Response, error) {
@@ -380,9 +380,9 @@ func (a *DistributionApiService) DistributionDelegatorsDelegatorAddrRewardsValid
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/distribution/delegators/{delegatorAddr}/rewards/{validatorAddr}"
-	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")) , -1)
 
-	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")) , -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -469,7 +469,7 @@ func (a *DistributionApiService) DistributionDelegatorsDelegatorAddrWithdrawAddr
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/distribution/delegators/{delegatorAddr}/withdraw_address"
-	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")) , -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -530,7 +530,7 @@ func (a *DistributionApiService) DistributionDelegatorsDelegatorAddrWithdrawAddr
 
 // DistributionDelegatorsDelegatorAddrWithdrawAddressPostOpts Optional parameters for the method 'DistributionDelegatorsDelegatorAddrWithdrawAddressPost'
 type DistributionDelegatorsDelegatorAddrWithdrawAddressPostOpts struct {
-	WithdrawRequestBody optional.Interface
+    WithdrawRequestBody optional.Interface
 }
 
 /*
@@ -539,7 +539,7 @@ Replace the delegations&#39; rewards withdrawal address for a new one.
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param delegatorAddr Bech32 AccAddress of Delegator
  * @param optional nil or *DistributionDelegatorsDelegatorAddrWithdrawAddressPostOpts - Optional Parameters:
- * @param "WithdrawRequestBody" (optional.Interface of InlineObject14) -
+ * @param "WithdrawRequestBody" (optional.Interface of InlineObject14) - 
 @return BroadcastTxCommitResult
 */
 func (a *DistributionApiService) DistributionDelegatorsDelegatorAddrWithdrawAddressPost(ctx _context.Context, delegatorAddr string, localVarOptionals *DistributionDelegatorsDelegatorAddrWithdrawAddressPostOpts) (BroadcastTxCommitResult, *_nethttp.Response, error) {
@@ -554,7 +554,7 @@ func (a *DistributionApiService) DistributionDelegatorsDelegatorAddrWithdrawAddr
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/distribution/delegators/{delegatorAddr}/withdraw_address"
-	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")) , -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -715,7 +715,7 @@ func (a *DistributionApiService) DistributionValidatorsValidatorAddrGet(ctx _con
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/distribution/validators/{validatorAddr}"
-	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")) , -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -792,7 +792,7 @@ func (a *DistributionApiService) DistributionValidatorsValidatorAddrOutstandingR
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/distribution/validators/{validatorAddr}/outstanding_rewards"
-	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")) , -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -870,7 +870,7 @@ func (a *DistributionApiService) DistributionValidatorsValidatorAddrRewardsGet(c
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/distribution/validators/{validatorAddr}/rewards"
-	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")) , -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -931,7 +931,7 @@ func (a *DistributionApiService) DistributionValidatorsValidatorAddrRewardsGet(c
 
 // DistributionValidatorsValidatorAddrRewardsPostOpts Optional parameters for the method 'DistributionValidatorsValidatorAddrRewardsPost'
 type DistributionValidatorsValidatorAddrRewardsPostOpts struct {
-	WithdrawRequestBody optional.Interface
+    WithdrawRequestBody optional.Interface
 }
 
 /*
@@ -940,7 +940,7 @@ Withdraw the validator&#39;s self-delegation and commissions rewards
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param validatorAddr Bech32 OperatorAddress of validator
  * @param optional nil or *DistributionValidatorsValidatorAddrRewardsPostOpts - Optional Parameters:
- * @param "WithdrawRequestBody" (optional.Interface of InlineObject15) -
+ * @param "WithdrawRequestBody" (optional.Interface of InlineObject15) - 
 @return BroadcastTxCommitResult
 */
 func (a *DistributionApiService) DistributionValidatorsValidatorAddrRewardsPost(ctx _context.Context, validatorAddr string, localVarOptionals *DistributionValidatorsValidatorAddrRewardsPostOpts) (BroadcastTxCommitResult, *_nethttp.Response, error) {
@@ -955,7 +955,7 @@ func (a *DistributionApiService) DistributionValidatorsValidatorAddrRewardsPost(
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/distribution/validators/{validatorAddr}/rewards"
-	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")) , -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}

@@ -8,16 +8,15 @@
  */
 
 package openapi
-
 // InlineResponse200NodeInfo struct for InlineResponse200NodeInfo
 type InlineResponse200NodeInfo struct {
-	Id              string                                   `json:"id,omitempty"`
-	Moniker         string                                   `json:"moniker,omitempty"`
+	Id string `json:"id,omitempty"`
+	Moniker string `json:"moniker,omitempty"`
 	ProtocolVersion InlineResponse200NodeInfoProtocolVersion `json:"protocol_version,omitempty"`
-	Network         string                                   `json:"network,omitempty"`
-	Channels        string                                   `json:"channels,omitempty"`
-	ListenAddr      string                                   `json:"listen_addr,omitempty"`
+	Network string `json:"network,omitempty"`
+	Channels string `json:"channels,omitempty"`
+	ListenAddr string `json:"listen_addr,omitempty"`
 	// Tendermint version
-	Version string                         `json:"version,omitempty"`
-	Other   InlineResponse200NodeInfoOther `json:"other,omitempty"`
+	Version string `json:"version,omitempty"`
+	Other InlineResponse200NodeInfoOther `json:"other,omitempty"`
 }

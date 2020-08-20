@@ -8,9 +8,8 @@
  */
 
 package openapi
-
 // InlineResponse2002 struct for InlineResponse2002
 type InlineResponse2002 struct {
-	BlockHeight string                `json:"block_height,omitempty"`
-	Validators  []TendermintValidator `json:"validators,omitempty"`
+	BlockHeight string `json:"block_height,omitempty"`
+	Validators []TendermintValidator `json:"validators,omitempty"`
 }

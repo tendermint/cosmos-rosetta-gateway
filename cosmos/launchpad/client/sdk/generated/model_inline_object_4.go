@@ -8,7 +8,6 @@
  */
 
 package openapi
-
 // InlineObject4 struct for InlineObject4
 type InlineObject4 struct {
 	BaseReq BaseReq `json:"base_req,omitempty"`
@@ -16,5 +15,5 @@ type InlineObject4 struct {
 	DelegatorAddress string `json:"delegator_address,omitempty"`
 	// bech32 encoded address
 	ValidatorAddress string `json:"validator_address,omitempty"`
-	Delegation       Coin   `json:"delegation,omitempty"`
+	Delegation Coin `json:"delegation,omitempty"`
 }

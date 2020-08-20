@@ -8,7 +8,6 @@
  */
 
 package openapi
-
 // InlineResponse2001 struct for InlineResponse2001
 type InlineResponse2001 struct {
 	Syncing bool `json:"syncing,omitempty"`

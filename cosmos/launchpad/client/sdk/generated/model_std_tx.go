@@ -8,11 +8,7 @@
  */
 
 package openapi
-
 // StdTx struct for StdTx
 type StdTx struct {
-	Msg       []string       `json:"msg,omitempty"`
-	Fee       StdTxFee       `json:"fee,omitempty"`
-	Memo      string         `json:"memo,omitempty"`
-	Signature StdTxSignature `json:"signature,omitempty"`
+	Value StdTxValue `json:"value,omitempty"`
 }

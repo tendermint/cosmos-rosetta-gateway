@@ -8,7 +8,6 @@
  */
 
 package openapi
-
 // InlineObject15 struct for InlineObject15
 type InlineObject15 struct {
 	BaseReq BaseReq `json:"base_req,omitempty"`

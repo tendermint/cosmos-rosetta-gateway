@@ -8,11 +8,10 @@
  */
 
 package openapi
-
 // InlineObject10 struct for InlineObject10
 type InlineObject10 struct {
 	BaseReq BaseReq `json:"base_req,omitempty"`
 	// bech32 encoded address
 	Depositor string `json:"depositor,omitempty"`
-	Amount    []Coin `json:"amount,omitempty"`
+	Amount []Coin `json:"amount,omitempty"`
 }

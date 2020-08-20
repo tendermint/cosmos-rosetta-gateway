@@ -8,9 +8,8 @@
  */
 
 package openapi
-
 // BlockQueryBlockMeta struct for BlockQueryBlockMeta
 type BlockQueryBlockMeta struct {
-	Header  BlockHeader `json:"header,omitempty"`
-	BlockId BlockId     `json:"block_id,omitempty"`
+	Header BlockHeader `json:"header,omitempty"`
+	BlockId BlockId `json:"block_id,omitempty"`
 }

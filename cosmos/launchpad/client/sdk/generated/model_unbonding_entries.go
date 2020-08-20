@@ -8,11 +8,10 @@
  */
 
 package openapi
-
 // UnbondingEntries struct for UnbondingEntries
 type UnbondingEntries struct {
 	InitialBalance string `json:"initial_balance,omitempty"`
-	Balance        string `json:"balance,omitempty"`
+	Balance string `json:"balance,omitempty"`
 	CreationHeight string `json:"creation_height,omitempty"`
-	MinTime        string `json:"min_time,omitempty"`
+	MinTime string `json:"min_time,omitempty"`
 }

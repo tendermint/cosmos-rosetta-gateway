@@ -8,11 +8,10 @@
  */
 
 package openapi
-
 // SigningInfo struct for SigningInfo
 type SigningInfo struct {
-	StartHeight         string `json:"start_height,omitempty"`
-	IndexOffset         string `json:"index_offset,omitempty"`
-	JailedUntil         string `json:"jailed_until,omitempty"`
+	StartHeight string `json:"start_height,omitempty"`
+	IndexOffset string `json:"index_offset,omitempty"`
+	JailedUntil string `json:"jailed_until,omitempty"`
 	MissedBlocksCounter string `json:"missed_blocks_counter,omitempty"`
 }

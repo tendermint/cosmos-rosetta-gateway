@@ -8,11 +8,10 @@
  */
 
 package openapi
-
 // ValidatorDistInfo struct for ValidatorDistInfo
 type ValidatorDistInfo struct {
 	// bech32 encoded address
 	OperatorAddress string `json:"operator_address,omitempty"`
 	SelfBondRewards []Coin `json:"self_bond_rewards,omitempty"`
-	ValCommission   []Coin `json:"val_commission,omitempty"`
+	ValCommission []Coin `json:"val_commission,omitempty"`
 }

@@ -8,7 +8,6 @@
  */
 
 package openapi
-
 // InlineObject2 struct for InlineObject2
 type InlineObject2 struct {
 	Tx string `json:"tx,omitempty"`

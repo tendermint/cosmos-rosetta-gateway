@@ -8,10 +8,9 @@
  */
 
 package openapi
-
 // InlineResponse200NodeInfoProtocolVersion struct for InlineResponse200NodeInfoProtocolVersion
 type InlineResponse200NodeInfoProtocolVersion struct {
-	P2p   string `json:"p2p,omitempty"`
+	P2p string `json:"p2p,omitempty"`
 	Block string `json:"block,omitempty"`
-	App   string `json:"app,omitempty"`
+	App string `json:"app,omitempty"`
 }

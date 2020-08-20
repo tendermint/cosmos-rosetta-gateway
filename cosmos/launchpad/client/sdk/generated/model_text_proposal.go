@@ -8,16 +8,15 @@
  */
 
 package openapi
-
 // TextProposal struct for TextProposal
 type TextProposal struct {
-	ProposalId       int32       `json:"proposal_id,omitempty"`
-	Title            string      `json:"title,omitempty"`
-	Description      string      `json:"description,omitempty"`
-	ProposalType     string      `json:"proposal_type,omitempty"`
-	ProposalStatus   string      `json:"proposal_status,omitempty"`
+	ProposalId int32 `json:"proposal_id,omitempty"`
+	Title string `json:"title,omitempty"`
+	Description string `json:"description,omitempty"`
+	ProposalType string `json:"proposal_type,omitempty"`
+	ProposalStatus string `json:"proposal_status,omitempty"`
 	FinalTallyResult TallyResult `json:"final_tally_result,omitempty"`
-	SubmitTime       string      `json:"submit_time,omitempty"`
-	TotalDeposit     []Coin      `json:"total_deposit,omitempty"`
-	VotingStartTime  string      `json:"voting_start_time,omitempty"`
+	SubmitTime string `json:"submit_time,omitempty"`
+	TotalDeposit []Coin `json:"total_deposit,omitempty"`
+	VotingStartTime string `json:"voting_start_time,omitempty"`
 }

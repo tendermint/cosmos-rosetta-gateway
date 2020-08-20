@@ -43,7 +43,7 @@ func (a *AuthApiService) AuthAccountsAddressGet(ctx _context.Context, address st
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/auth/accounts/{address}"
-	localVarPath = strings.Replace(localVarPath, "{"+"address"+"}", _neturl.QueryEscape(parameterToString(address, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"address"+"}", _neturl.QueryEscape(parameterToString(address, "")) , -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}

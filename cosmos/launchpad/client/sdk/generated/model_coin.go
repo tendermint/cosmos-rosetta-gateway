@@ -8,9 +8,8 @@
  */
 
 package openapi
-
 // Coin struct for Coin
 type Coin struct {
-	Denom  string `json:"denom,omitempty"`
+	Denom string `json:"denom,omitempty"`
 	Amount string `json:"amount,omitempty"`
 }

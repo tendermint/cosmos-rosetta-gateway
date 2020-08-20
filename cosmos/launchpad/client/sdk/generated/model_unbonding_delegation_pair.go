@@ -8,10 +8,9 @@
  */
 
 package openapi
-
 // UnbondingDelegationPair struct for UnbondingDelegationPair
 type UnbondingDelegationPair struct {
-	DelegatorAddress string             `json:"delegator_address,omitempty"`
-	ValidatorAddress string             `json:"validator_address,omitempty"`
-	Entries          []UnbondingEntries `json:"entries,omitempty"`
+	DelegatorAddress string `json:"delegator_address,omitempty"`
+	ValidatorAddress string `json:"validator_address,omitempty"`
+	Entries []UnbondingEntries `json:"entries,omitempty"`
 }

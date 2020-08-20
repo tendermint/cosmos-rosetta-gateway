@@ -8,9 +8,8 @@
  */
 
 package openapi
-
 // BlockLastCommit struct for BlockLastCommit
 type BlockLastCommit struct {
-	BlockId    BlockId                     `json:"block_id,omitempty"`
+	BlockId BlockId `json:"block_id,omitempty"`
 	Precommits []BlockLastCommitPrecommits `json:"precommits,omitempty"`
 }

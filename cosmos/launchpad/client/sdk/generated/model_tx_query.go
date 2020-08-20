@@ -8,11 +8,10 @@
  */
 
 package openapi
-
 // TxQuery struct for TxQuery
 type TxQuery struct {
-	Hash   string        `json:"hash,omitempty"`
-	Height float32       `json:"height,omitempty"`
-	Tx     StdTx         `json:"tx,omitempty"`
+	Txhash string `json:"txhash,omitempty"`
+	Height string `json:"height,omitempty"`
+	Tx StdTx `json:"tx,omitempty"`
 	Result TxQueryResult `json:"result,omitempty"`
 }

@@ -8,11 +8,10 @@
  */
 
 package openapi
-
 // ValidatorCommission struct for ValidatorCommission
 type ValidatorCommission struct {
-	Rate          string `json:"rate,omitempty"`
-	MaxRate       string `json:"max_rate,omitempty"`
+	Rate string `json:"rate,omitempty"`
+	MaxRate string `json:"max_rate,omitempty"`
 	MaxChangeRate string `json:"max_change_rate,omitempty"`
-	UpdateTime    string `json:"update_time,omitempty"`
+	UpdateTime string `json:"update_time,omitempty"`
 }

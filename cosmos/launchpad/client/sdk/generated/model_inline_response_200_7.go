@@ -8,14 +8,13 @@
  */
 
 package openapi
-
 // InlineResponse2007 struct for InlineResponse2007
 type InlineResponse2007 struct {
 	InflationRateChange string `json:"inflation_rate_change,omitempty"`
-	InflationMax        string `json:"inflation_max,omitempty"`
-	InflationMin        string `json:"inflation_min,omitempty"`
-	GoalBonded          string `json:"goal_bonded,omitempty"`
-	UnbondingTime       string `json:"unbonding_time,omitempty"`
-	MaxValidators       int32  `json:"max_validators,omitempty"`
-	BondDenom           string `json:"bond_denom,omitempty"`
+	InflationMax string `json:"inflation_max,omitempty"`
+	InflationMin string `json:"inflation_min,omitempty"`
+	GoalBonded string `json:"goal_bonded,omitempty"`
+	UnbondingTime string `json:"unbonding_time,omitempty"`
+	MaxValidators int32 `json:"max_validators,omitempty"`
+	BondDenom string `json:"bond_denom,omitempty"`
 }

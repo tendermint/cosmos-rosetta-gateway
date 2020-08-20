@@ -8,24 +8,23 @@
  */
 
 package openapi
-
 // BlockHeader struct for BlockHeader
 type BlockHeader struct {
-	ChainId            string  `json:"chain_id,omitempty"`
-	Height             float32 `json:"height,omitempty"`
-	Time               string  `json:"time,omitempty"`
-	NumTxs             float32 `json:"num_txs,omitempty"`
-	LastBlockId        BlockId `json:"last_block_id,omitempty"`
-	TotalTxs           float32 `json:"total_txs,omitempty"`
-	LastCommitHash     string  `json:"last_commit_hash,omitempty"`
-	DataHash           string  `json:"data_hash,omitempty"`
-	ValidatorsHash     string  `json:"validators_hash,omitempty"`
-	NextValidatorsHash string  `json:"next_validators_hash,omitempty"`
-	ConsensusHash      string  `json:"consensus_hash,omitempty"`
-	AppHash            string  `json:"app_hash,omitempty"`
-	LastResultsHash    string  `json:"last_results_hash,omitempty"`
-	EvidenceHash       string  `json:"evidence_hash,omitempty"`
+	ChainId string `json:"chain_id,omitempty"`
+	Height float32 `json:"height,omitempty"`
+	Time string `json:"time,omitempty"`
+	NumTxs float32 `json:"num_txs,omitempty"`
+	LastBlockId BlockId `json:"last_block_id,omitempty"`
+	TotalTxs float32 `json:"total_txs,omitempty"`
+	LastCommitHash string `json:"last_commit_hash,omitempty"`
+	DataHash string `json:"data_hash,omitempty"`
+	ValidatorsHash string `json:"validators_hash,omitempty"`
+	NextValidatorsHash string `json:"next_validators_hash,omitempty"`
+	ConsensusHash string `json:"consensus_hash,omitempty"`
+	AppHash string `json:"app_hash,omitempty"`
+	LastResultsHash string `json:"last_results_hash,omitempty"`
+	EvidenceHash string `json:"evidence_hash,omitempty"`
 	// bech32 encoded address
-	ProposerAddress string             `json:"proposer_address,omitempty"`
-	Version         BlockHeaderVersion `json:"version,omitempty"`
+	ProposerAddress string `json:"proposer_address,omitempty"`
+	Version BlockHeaderVersion `json:"version,omitempty"`
 }

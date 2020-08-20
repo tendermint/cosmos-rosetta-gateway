@@ -198,7 +198,7 @@ func (a *SlashingApiService) SlashingValidatorsValidatorAddrUnjailPost(ctx _cont
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/slashing/validators/{validatorAddr}/unjail"
-	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")) , -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}

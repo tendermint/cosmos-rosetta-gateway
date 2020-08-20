@@ -8,10 +8,9 @@
  */
 
 package openapi
-
 // Vote struct for Vote
 type Vote struct {
-	Voter      string `json:"voter,omitempty"`
+	Voter string `json:"voter,omitempty"`
 	ProposalId string `json:"proposal_id,omitempty"`
-	Option     string `json:"option,omitempty"`
+	Option string `json:"option,omitempty"`
 }

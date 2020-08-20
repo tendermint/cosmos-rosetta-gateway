@@ -8,10 +8,9 @@
  */
 
 package openapi
-
 // DelegationDelegatorReward struct for DelegationDelegatorReward
 type DelegationDelegatorReward struct {
 	// bech32 encoded address
 	ValidatorAddress string `json:"validator_address,omitempty"`
-	Reward           []Coin `json:"reward,omitempty"`
+	Reward []Coin `json:"reward,omitempty"`
 }

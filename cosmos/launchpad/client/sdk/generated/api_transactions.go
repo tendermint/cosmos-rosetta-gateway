@@ -11,11 +11,11 @@ package openapi
 
 import (
 	_context "context"
-	"github.com/antihax/optional"
 	_ioutil "io/ioutil"
 	_nethttp "net/http"
 	_neturl "net/url"
 	"strings"
+	"github.com/antihax/optional"
 )
 
 // Linger please
@@ -184,12 +184,12 @@ func (a *TransactionsApiService) TxsEncodePost(ctx _context.Context, tx InlineOb
 
 // TxsGetOpts Optional parameters for the method 'TxsGet'
 type TxsGetOpts struct {
-	MessageAction optional.String
-	MessageSender optional.String
-	Page          optional.Int32
-	Limit         optional.Int32
-	TxMinheight   optional.Int32
-	TxMaxheight   optional.Int32
+    MessageAction optional.String
+    MessageSender optional.String
+    Page optional.Int32
+    Limit optional.Int32
+    TxMinheight optional.Int32
+    TxMaxheight optional.Int32
 }
 
 /*
@@ -311,7 +311,7 @@ func (a *TransactionsApiService) TxsHashGet(ctx _context.Context, hash string) (
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/txs/{hash}"
-	localVarPath = strings.Replace(localVarPath, "{"+"hash"+"}", _neturl.QueryEscape(parameterToString(hash, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"hash"+"}", _neturl.QueryEscape(parameterToString(hash, "")) , -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}

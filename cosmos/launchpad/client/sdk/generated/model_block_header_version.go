@@ -8,9 +8,8 @@
  */
 
 package openapi
-
 // BlockHeaderVersion struct for BlockHeaderVersion
 type BlockHeaderVersion struct {
 	Block string `json:"block,omitempty"`
-	App   string `json:"app,omitempty"`
+	App string `json:"app,omitempty"`
 }

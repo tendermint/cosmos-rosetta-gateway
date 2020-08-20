@@ -8,7 +8,6 @@
  */
 
 package openapi
-
 // Supply struct for Supply
 type Supply struct {
 	Total []Coin `json:"total,omitempty"`

@@ -8,9 +8,8 @@
  */
 
 package openapi
-
 // BlockId struct for BlockId
 type BlockId struct {
-	Hash  string       `json:"hash,omitempty"`
+	Hash string `json:"hash,omitempty"`
 	Parts BlockIdParts `json:"parts,omitempty"`
 }

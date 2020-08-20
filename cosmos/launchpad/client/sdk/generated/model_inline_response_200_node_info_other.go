@@ -8,9 +8,8 @@
  */
 
 package openapi
-
 // InlineResponse200NodeInfoOther more information on versions
 type InlineResponse200NodeInfoOther struct {
-	TxIndex    string `json:"tx_index,omitempty"`
+	TxIndex string `json:"tx_index,omitempty"`
 	RpcAddress string `json:"rpc_address,omitempty"`
 }
