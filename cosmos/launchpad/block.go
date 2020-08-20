@@ -97,7 +97,14 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 }
 
 func (l Launchpad) BlockTransaction(ctx context.Context, r *types.BlockTransactionRequest) (*types.BlockTransactionResponse, *types.Error) {
-	panic("unimplemented")
+	hash := r.TransactionIdentifier.Hash
+	tx, _, err := l.cosmos.Transactions.TxsHashGet(ctx, hash)
+	if err != nil {
+		return nil, ErrNodeConnection
+	}
+	return &types.BlockTransactionResponse{
+		Transaction: toTransaction(tx),
+	}, nil
 }
 
 func toBlockIdentifier(result tendermintclient.BlockComplete) (*types.BlockIdentifier, error) {
@@ -116,14 +123,18 @@ func toBlockIdentifier(result tendermintclient.BlockComplete) (*types.BlockIdent
 
 func toTransactions(txs []cosmosclient.TxQuery) (transactions []*types.Transaction, err error) {
 	for _, tx := range txs {
-		transactions = append(transactions, &types.Transaction{
-			TransactionIdentifier: &types.TransactionIdentifier{
-				Hash: tx.Txhash,
-			},
-			Operations: toOperations(tx.Tx.Value.Msg),
-		})
+		transactions = append(transactions, toTransaction(tx))
 	}
 	return
+}
+
+func toTransaction(tx cosmosclient.TxQuery) *types.Transaction {
+	return &types.Transaction{
+		TransactionIdentifier: &types.TransactionIdentifier{
+			Hash: tx.Txhash,
+		},
+		Operations: toOperations(tx.Tx.Value.Msg),
+	}
 }
 
 func toOperations(msg []cosmosclient.Msg) (operations []*types.Operation) {
