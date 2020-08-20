@@ -4,7 +4,7 @@ package main
 import (
 	"log"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cmd/commands"
+	"github.com/tendermint/cosmos-rosetta-gateway/cmd/cosmosapi/commands"
 )
 
 func main() {
