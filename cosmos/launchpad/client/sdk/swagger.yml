@@ -2006,7 +2006,22 @@ definitions:
       value:
         type: string
   Msg:
-    type: string
+    type: object
+    properties:
+      type:
+        type: string
+      value:
+        type: object
+        properties:
+          from_address:
+            type: string
+          creator:
+            type: string
+          amount:
+            type: array
+            items:
+              $ref: "#/definitions/Coin"
+
   Address:
     type: string
     description: bech32 encoded address
@@ -2030,11 +2045,11 @@ definitions:
   TxQuery:
     type: object
     properties:
-      hash:
+      txhash:
         type: string
         example: "D085138D913993919295FF4B0A9107F1F2CDE0D37A87CE0644E217CBF3B49656"
       height:
-        type: number
+        type: string 
         example: 368
       tx:
         $ref: "#/definitions/StdTx"
@@ -2078,42 +2093,45 @@ definitions:
   StdTx:
     type: object
     properties:
-      msg:
-        type: array
-        items:
-          $ref: "#/definitions/Msg"
-      fee:
+      value:
         type: object
         properties:
-          gas:
-            type: string
-          amount:
+          msg:
             type: array
             items:
-              $ref: "#/definitions/Coin"
-      memo:
-        type: string
-      signature:
-        type: object
-        properties:
-          signature:
-            type: string
-            example: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
-          pub_key:
+              $ref: "#/definitions/Msg"
+          fee:
             type: object
             properties:
-              type:
+              gas:
                 type: string
-                example: "tendermint/PubKeySecp256k1"
-              value:
+              amount:
+                type: array
+                items:
+                  $ref: "#/definitions/Coin"
+          memo:
+            type: string
+          signature:
+            type: object
+            properties:
+              signature:
                 type: string
-                example: "Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH"
-          account_number:
-            type: string
-            example: "0"
-          sequence:
-            type: string
-            example: "0"
+                example: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
+              pub_key:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: "tendermint/PubKeySecp256k1"
+                  value:
+                    type: string
+                    example: "Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH"
+              account_number:
+                type: string
+                example: "0"
+              sequence:
+                type: string
+                example: "0"
   BlockID:
     type: object
     properties:

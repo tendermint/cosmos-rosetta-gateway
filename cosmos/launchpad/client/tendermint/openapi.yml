@@ -2717,7 +2717,7 @@ components:
                       - "log"
                       - "gas_wanted"
                       - "gas_used"
-                      - "tags"
+                      - "events"
                     properties:
                       log:
                         type: "string"
@@ -2728,17 +2728,24 @@ components:
                       gas_used:
                         type: "string"
                         example: "28596"
-                      tags:
+                      events:
                         type: "array"
                         items:
                           type: "object"
                           properties:
-                            key:
+                            type:
                               type: "string"
-                              example: "YWN0aW9u"
-                            value:
-                              type: "string"
-                              example: "c2VuZA=="
+                            attributes:
+                              type: "array"
+                              items:
+                                type: "object"
+                                properties:
+                                  key:
+                                    type: "string"
+                                    example: "YWN0aW9u"
+                                  value:
+                                    type: "string"
+                                    example: "c2VuZA=="
                     type: "object"
                   tx:
                     type: "string"

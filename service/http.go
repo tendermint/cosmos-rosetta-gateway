@@ -1,4 +1,6 @@
-package service
+// Package http exposes Rosetta API over HTTP by wrapping functions from the
+// crg/services package.
+package http
 
 import (
 	"net/http"
