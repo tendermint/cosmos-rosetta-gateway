@@ -4,11 +4,11 @@ package main
 import (
 	"log"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cmd/cmd"
+	"github.com/tendermint/cosmos-rosetta-gateway/cmd/cosmosapi/commands"
 )
 
 func main() {
-	if err := cmd.New().Execute(); err != nil {
+	if err := commands.New().Execute(); err != nil {
 		log.Fatal(err)
 	}
 }

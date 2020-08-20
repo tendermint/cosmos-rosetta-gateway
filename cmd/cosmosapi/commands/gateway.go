@@ -1,11 +1,9 @@
 // Package cmd exposes Rosetta API for Cosmos SDK as a cli command that can be
 // used as a (sub)command to start a standalone Gateway.
-package cmd
+package commands
 
 import (
 	"net/http"
-
-	"github.com/tendermint/cosmos-rosetta-gateway/service"
 
 	"github.com/spf13/cobra"
 
@@ -13,6 +11,7 @@ import (
 	cosmoslaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 	tendermintlaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+	"github.com/tendermint/cosmos-rosetta-gateway/service"
 )
 
 func New() *cobra.Command {
