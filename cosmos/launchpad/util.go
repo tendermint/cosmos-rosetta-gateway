@@ -17,7 +17,7 @@ func (l Launchpad) getTxByHash(ctx context.Context, hash string) (*types.Transac
 		return nil, ErrNodeConnection
 	}
 
-	tx := toTransaction(txQuery)
+	tx := cosmosTxToRosettaTx(txQuery)
 
 	return tx, nil
 }
@@ -37,12 +37,25 @@ func toBlockIdentifier(result tendermintclient.BlockComplete) (*types.BlockIdent
 
 func toTransactions(txs []cosmosclient.TxQuery) (transactions []*types.Transaction, err error) {
 	for _, tx := range txs {
-		transactions = append(transactions, toTransaction(tx))
+		transactions = append(transactions, cosmosTxToRosettaTx(tx))
 	}
 	return
 }
 
-func toTransaction(tx cosmosclient.TxQuery) *types.Transaction {
+// tendermintTxToRosettaTx converts a Tendermint api TxResponseResult to a Transaction
+// in the type expected by Rosetta.
+func tendermintTxToRosettaTx(res tendermintclient.TxResponseResult) *types.Transaction {
+	return &types.Transaction{
+		TransactionIdentifier: &types.TransactionIdentifier{
+			Hash: res.Hash,
+		},
+		Operations: nil, // TODO difficult to get the operations from the mempool (maybe not worth it due to block times).
+	}
+}
+
+// cosmosTxToRosettaTx converts a Cosmos api TxQuery to a Transaction
+// in the type expected by Rosetta.
+func cosmosTxToRosettaTx(tx cosmosclient.TxQuery) *types.Transaction {
 	return &types.Transaction{
 		TransactionIdentifier: &types.TransactionIdentifier{
 			Hash: tx.Txhash,
