@@ -42,3 +42,6 @@ func TestLaunchpad_Mempool(t *testing.T) {
 		},
 	}}, mempool)
 }
+
+func TestLaunchpad_MempoolTransaction(t *testing.T) {
+}
