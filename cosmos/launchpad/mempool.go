@@ -33,5 +33,12 @@ func (l Launchpad) Mempool(ctx context.Context, request *types.NetworkRequest) (
 }
 
 func (l Launchpad) MempoolTransaction(ctx context.Context, request *types.MempoolTransactionRequest) (*types.MempoolTransactionResponse, *types.Error) {
-	panic("implement me")
+	tx, err := l.getTxByHash(ctx, request.TransactionIdentifier.Hash)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.MempoolTransactionResponse{
+		Transaction: tx,
+	}, nil
 }
