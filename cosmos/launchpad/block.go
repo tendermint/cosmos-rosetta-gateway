@@ -9,10 +9,11 @@ import (
 
 	"github.com/antihax/optional"
 	"github.com/coinbase/rosetta-sdk-go/types"
+	"golang.org/x/sync/errgroup"
+
 	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 	"github.com/tendermint/cosmos-rosetta-gateway/pkg/ensurehex"
-	"golang.org/x/sync/errgroup"
 )
 
 func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.BlockResponse, *types.Error) {

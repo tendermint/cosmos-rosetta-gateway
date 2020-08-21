@@ -7,8 +7,9 @@ import (
 
 	"github.com/antihax/optional"
 	"github.com/coinbase/rosetta-sdk-go/types"
-	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 	"golang.org/x/sync/errgroup"
+
+	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 )
 
 func (l Launchpad) NetworkList(context.Context, *types.MetadataRequest) (*types.NetworkListResponse, *types.Error) {

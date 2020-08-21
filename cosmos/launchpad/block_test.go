@@ -9,6 +9,7 @@ import (
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+
 	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 	cosmosmocks "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
 	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
@@ -152,12 +153,12 @@ func TestLaunchpad_Block(t *testing.T) {
 				Hash:  "11",
 			},
 			Transactions: []*types.Transaction{
-				&types.Transaction{
+				{
 					TransactionIdentifier: &types.TransactionIdentifier{
 						Hash: "4",
 					},
 					Operations: []*types.Operation{
-						&types.Operation{
+						{
 							OperationIdentifier: &types.OperationIdentifier{},
 							Type:                "7",
 							Status:              "TODO",
@@ -173,12 +174,12 @@ func TestLaunchpad_Block(t *testing.T) {
 						},
 					},
 				},
-				&types.Transaction{
+				{
 					TransactionIdentifier: &types.TransactionIdentifier{
 						Hash: "3",
 					},
 					Operations: []*types.Operation{
-						&types.Operation{
+						{
 							OperationIdentifier: &types.OperationIdentifier{},
 							Type:                "5",
 							Status:              "TODO",
@@ -253,7 +254,7 @@ func TestLaunchpad_BlockTransaction(t *testing.T) {
 				Hash: "1",
 			},
 			Operations: []*types.Operation{
-				&types.Operation{
+				{
 					OperationIdentifier: &types.OperationIdentifier{},
 					Type:                "2",
 					Status:              "TODO",
