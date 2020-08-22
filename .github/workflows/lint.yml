@@ -1,7 +1,6 @@
 name: Lint
 # Lint runs golangci-lint over the entire cosmos-rosetta-gateway repository
 # This workflow is run on every pull request and push to master or develop
-# The `golangci` will pass without running if no *.{go, mod, sum} files have been changed.
 on:
   pull_request:
   push:
@@ -15,12 +14,6 @@ jobs:
     timeout-minutes: 6
     steps:
       - uses: actions/checkout@v2
-      - uses: technote-space/get-diff-action@v3
-        with:
-          SUFFIX_FILTER: |
-            .go
-            .mod
-            .sum
       - uses: golangci/golangci-lint-action@master
         with:
           # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
