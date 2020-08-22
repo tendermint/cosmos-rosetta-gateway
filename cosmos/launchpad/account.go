@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
+
 	client "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 )
 
