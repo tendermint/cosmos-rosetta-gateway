@@ -2,8 +2,6 @@ package launchpad
 
 import (
 	"context"
-	"io/ioutil"
-	"os"
 	"testing"
 	"time"
 
@@ -177,12 +175,4 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 			},
 		},
 	}, status)
-}
-
-func getContentsFromFile(t *testing.T, filename string) []byte {
-	file, err := os.Open(filename)
-	require.NoError(t, err)
-
-	genesisContent, err := ioutil.ReadAll(file)
-	return genesisContent
 }
