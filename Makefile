@@ -7,7 +7,7 @@ gen-mocks:
 	scripts/gen-mocks
 
 test:
-	go test -race ./...
+	go test -race github.com/tendermint/cosmos-rosetta-gateway/...
 
 dev:
 	scripts/dev
