@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
-	cosmostypes "github.com/cosmos/cosmos-sdk/0391/types"
+	cosmostypes "sdk-v0.39.1/types"
 )
 
 func (l Launchpad) ConstructionDerive(ctx context.Context, r *types.ConstructionDeriveRequest) (*types.ConstructionDeriveResponse, *types.Error) {
