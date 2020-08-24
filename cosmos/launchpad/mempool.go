@@ -5,7 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 
-	tmtypes "tendermint-v0.33.7/types"
+	tmtypes "github.com/tendermint/tendermint/types"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 )

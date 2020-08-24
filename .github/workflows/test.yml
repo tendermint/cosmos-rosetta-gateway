@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: '1.14'
-      - run: go test -v -race -coverprofile coverage.txt ./...
+      - run: go test -v -race -coverprofile coverage.txt github.com/tendermint/cosmos-rosetta-gateway/...
       - uses: codecov/codecov-action@v1
         with:
           file: ./coverage.txt
