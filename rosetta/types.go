@@ -14,6 +14,7 @@ type DataAPI interface {
 	server.AccountAPIServicer
 	server.MempoolAPIServicer
 	server.BlockAPIServicer
+	server.ConstructionAPIServicer
 }
 
 type ConstructionAPI interface {

@@ -41,6 +41,7 @@ func New(network Network) (*Service, error) {
 		server.NewAccountAPIController(network.Adapter, asserter),
 		server.NewNetworkAPIController(network.Adapter, asserter),
 		server.NewMempoolAPIController(network.Adapter, asserter),
+		server.NewConstructionAPIController(network.Adapter, asserter),
 	)
 
 	s := &Service{
