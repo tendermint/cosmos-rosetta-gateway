@@ -42,3 +42,27 @@ func TestLaunchpad_Mempool(t *testing.T) {
 		},
 	}}, mempool)
 }
+
+func TestLaunchpad_MempoolTransaction(t *testing.T) {
+	m := &mocks.TendermintInfoAPI{}
+	defer m.AssertExpectations(t)
+
+	var opt *tendermintclient.TxOpts
+	m.
+		On("Tx", context.Background(), "ABCTHEHASH", opt).
+		Return(tendermintclient.TxResponse{
+			Result: tendermintclient.TxResponseResult{
+				Hash: "ABCTHEHASH",
+			},
+		},
+			nil, nil)
+
+	adapter := NewLaunchpad(TendermintAPI{Info: m}, CosmosAPI{}, rosetta.NetworkProperties{})
+	res, err := adapter.MempoolTransaction(context.Background(), &types.MempoolTransactionRequest{
+		TransactionIdentifier: &types.TransactionIdentifier{Hash: "ABCTHEHASH"},
+	})
+
+	require.Nil(t, err)
+
+	require.Equal(t, "ABCTHEHASH", res.Transaction.TransactionIdentifier.Hash)
+}

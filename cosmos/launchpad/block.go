@@ -3,7 +3,6 @@ package launchpad
 import (
 	"context"
 	"fmt"
-	"strconv"
 	"sync"
 	"time"
 
@@ -98,74 +97,11 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 }
 
 func (l Launchpad) BlockTransaction(ctx context.Context, r *types.BlockTransactionRequest) (*types.BlockTransactionResponse, *types.Error) {
-	hash := r.TransactionIdentifier.Hash
-	tx, _, err := l.cosmos.Transactions.TxsHashGet(ctx, hash)
-	if err != nil {
-		return nil, ErrNodeConnection
-	}
-	return &types.BlockTransactionResponse{
-		Transaction: toTransaction(tx),
-	}, nil
-}
-
-func toBlockIdentifier(result tendermintclient.BlockComplete) (*types.BlockIdentifier, error) {
-	if result.BlockId.Hash == "" {
-		return nil, nil
-	}
-	height, err := strconv.ParseUint(result.Block.Header.Height, 10, 64)
+	tx, err := l.getTxByHash(ctx, r.TransactionIdentifier.Hash)
 	if err != nil {
 		return nil, err
 	}
-	return &types.BlockIdentifier{
-		Index: int64(height),
-		Hash:  result.BlockId.Hash,
+	return &types.BlockTransactionResponse{
+		Transaction: tx,
 	}, nil
-}
-
-func toTransactions(txs []cosmosclient.TxQuery) (transactions []*types.Transaction, err error) {
-	for _, tx := range txs {
-		transactions = append(transactions, toTransaction(tx))
-	}
-	return
-}
-
-func toTransaction(tx cosmosclient.TxQuery) *types.Transaction {
-	return &types.Transaction{
-		TransactionIdentifier: &types.TransactionIdentifier{
-			Hash: tx.Txhash,
-		},
-		Operations: toOperations(tx.Tx.Value.Msg),
-	}
-}
-
-func toOperations(msg []cosmosclient.Msg) (operations []*types.Operation) {
-	for i, msg := range msg {
-		account := msg.Value.Creator
-		if account == "" {
-			account = msg.Value.FromAddress
-		}
-		var amount *types.Amount
-		amounts := msg.Value.Amount
-		if len(amounts) > 0 {
-			am := amounts[0]
-			amount = &types.Amount{
-				Value: am.Amount,
-				Currency: &types.Currency{
-					Symbol: am.Denom,
-				},
-			}
-		}
-		operations = append(operations, &types.Operation{
-			OperationIdentifier: &types.OperationIdentifier{
-				Index: int64(i),
-			},
-			Type:   msg.Type,
-			Status: "TODO",
-			Account: &types.AccountIdentifier{
-				Address: account,
-			},
-			Amount: amount,
-		})
-	}
-	return
 }

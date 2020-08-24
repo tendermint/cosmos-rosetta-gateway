@@ -33,5 +33,14 @@ func (l Launchpad) Mempool(ctx context.Context, request *types.NetworkRequest) (
 }
 
 func (l Launchpad) MempoolTransaction(ctx context.Context, request *types.MempoolTransactionRequest) (*types.MempoolTransactionResponse, *types.Error) {
-	panic("implement me")
+	res, _, err := l.tendermint.Info.Tx(ctx, request.TransactionIdentifier.Hash, nil)
+	if err != nil {
+		return nil, ErrNodeConnection
+	}
+
+	theTx := tendermintTxToRosettaTx(res.Result)
+
+	return &types.MempoolTransactionResponse{
+		Transaction: theTx,
+	}, nil
 }
