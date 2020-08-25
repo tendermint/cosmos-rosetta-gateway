@@ -18,10 +18,6 @@ func (l Launchpad) ConstructionMetadata(context.Context, *types.ConstructionMeta
 	panic("unimplemented")
 }
 
-func (l Launchpad) ConstructionParse(context.Context, *types.ConstructionParseRequest) (*types.ConstructionParseResponse, *types.Error) {
-	panic("unimplemented")
-}
-
 func (l Launchpad) ConstructionPayloads(context.Context, *types.ConstructionPayloadsRequest) (*types.ConstructionPayloadsResponse, *types.Error) {
 	panic("unimplemented")
 }

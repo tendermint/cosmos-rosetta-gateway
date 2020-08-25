@@ -9,6 +9,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/cobra v1.0.0
 	github.com/stretchr/testify v1.6.1
+	github.com/tendermint/go-amino v0.15.1
 	github.com/tendermint/tendermint v0.33.7
 	github.com/vektra/mockery/v2 v2.2.1
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
