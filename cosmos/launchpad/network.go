@@ -37,11 +37,15 @@ func (l Launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) 
 		Allow: &types.Allow{
 			OperationStatuses: []*types.OperationStatus{
 				{
-					Status:     "SUCCESS",
+					Status:     StatusSuccess,
 					Successful: true,
 				},
+				{
+					Status:     StatusReverted,
+					Successful: false,
+				},
 			},
-			OperationTypes: l.properties.SupportedOperations,
+			OperationTypes: []string{OperationTransfer},
 		},
 	}, nil
 }
