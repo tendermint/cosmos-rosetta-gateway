@@ -69,11 +69,17 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 		Allow: &types.Allow{
 			OperationStatuses: []*types.OperationStatus{
 				{
-					Status:     "SUCCESS",
+					Status:     StatusSuccess,
 					Successful: true,
 				},
+				{
+					Status:     StatusReverted,
+					Successful: false,
+				},
 			},
-			OperationTypes: properties.SupportedOperations,
+			OperationTypes: []string{
+				OperationTransfer,
+			},
 		},
 	}, options)
 }

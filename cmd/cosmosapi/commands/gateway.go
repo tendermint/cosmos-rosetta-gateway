@@ -46,7 +46,7 @@ func runHandler(*cobra.Command, []string) error {
 	properties := rosetta.NetworkProperties{
 		Blockchain:          "Test",
 		Network:             "Test",
-		SupportedOperations: []string{"Transfer", "Reward"},
+		SupportedOperations: []string{launchpad.OperationTransfer},
 	}
 
 	h, err := service.New(
