@@ -77,7 +77,7 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 		return nil, ErrInterpreting
 	}
 
-	var parentBlockId *types.BlockIdentifier
+	parentBlockId := block // If it does not have parent block it is the same as block 1.
 	hasParentBlock := blockResp.Result.Block.Header.LastBlockId.Hash != ""
 	if hasParentBlock {
 		parentBlockId = &types.BlockIdentifier{

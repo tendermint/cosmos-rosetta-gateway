@@ -11,6 +11,6 @@ package openapi
 // MsgValue struct for MsgValue
 type MsgValue struct {
 	FromAddress string `json:"from_address,omitempty"`
-	Creator string `json:"creator,omitempty"`
+	ToAddress string `json:"to_address,omitempty"`
 	Amount []Coin `json:"amount,omitempty"`
 }

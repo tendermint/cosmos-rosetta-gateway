@@ -75,9 +75,16 @@ func TestLaunchpad_Block(t *testing.T) {
 				Value: cosmosclient.StdTxValue{
 					Msg: []cosmosclient.Msg{
 						{
-							Type: "5",
+							Type: "cosmos-sdk/MsgSend",
 							Value: cosmosclient.MsgValue{
-								Creator: "6",
+								FromAddress: "6",
+								ToAddress:   "15",
+								Amount: []cosmosclient.Coin{
+									{
+										Amount: "13",
+										Denom:  "14",
+									},
+								},
 							},
 						},
 					},
@@ -94,9 +101,10 @@ func TestLaunchpad_Block(t *testing.T) {
 				Value: cosmosclient.StdTxValue{
 					Msg: []cosmosclient.Msg{
 						{
-							Type: "7",
+							Type: "cosmos-sdk/MsgSend",
 							Value: cosmosclient.MsgValue{
 								FromAddress: "8",
+								ToAddress:   "16",
 								Amount: []cosmosclient.Coin{
 									{
 										Amount: "9",
@@ -159,10 +167,26 @@ func TestLaunchpad_Block(t *testing.T) {
 					Operations: []*types.Operation{
 						{
 							OperationIdentifier: &types.OperationIdentifier{},
-							Type:                "7",
-							Status:              "TODO",
+							Type:                "cosmos-sdk/MsgSend",
+							Status:              "Exchange",
 							Account: &types.AccountIdentifier{
 								Address: "8",
+							},
+							Amount: &types.Amount{
+								Value: "-9",
+								Currency: &types.Currency{
+									Symbol: "10",
+								},
+							},
+						},
+						{
+							OperationIdentifier: &types.OperationIdentifier{
+								Index: 1,
+							},
+							Type:   "cosmos-sdk/MsgSend",
+							Status: "Exchange",
+							Account: &types.AccountIdentifier{
+								Address: "16",
 							},
 							Amount: &types.Amount{
 								Value: "9",
@@ -180,10 +204,32 @@ func TestLaunchpad_Block(t *testing.T) {
 					Operations: []*types.Operation{
 						{
 							OperationIdentifier: &types.OperationIdentifier{},
-							Type:                "5",
-							Status:              "TODO",
+							Type:                "cosmos-sdk/MsgSend",
+							Status:              "Exchange",
 							Account: &types.AccountIdentifier{
 								Address: "6",
+							},
+							Amount: &types.Amount{
+								Value: "-13",
+								Currency: &types.Currency{
+									Symbol: "14",
+								},
+							},
+						},
+						{
+							OperationIdentifier: &types.OperationIdentifier{
+								Index: 1,
+							},
+							Type:   "cosmos-sdk/MsgSend",
+							Status: "Exchange",
+							Account: &types.AccountIdentifier{
+								Address: "15",
+							},
+							Amount: &types.Amount{
+								Value: "13",
+								Currency: &types.Currency{
+									Symbol: "14",
+								},
 							},
 						},
 					},
@@ -211,9 +257,10 @@ func TestLaunchpad_BlockTransaction(t *testing.T) {
 				Value: cosmosclient.StdTxValue{
 					Msg: []cosmosclient.Msg{
 						{
-							Type: "2",
+							Type: "cosmos-sdk/MsgSend",
 							Value: cosmosclient.MsgValue{
 								FromAddress: "3",
+								ToAddress:   "6",
 								Amount: []cosmosclient.Coin{
 									{
 										Amount: "4",
@@ -255,10 +302,25 @@ func TestLaunchpad_BlockTransaction(t *testing.T) {
 			Operations: []*types.Operation{
 				{
 					OperationIdentifier: &types.OperationIdentifier{},
-					Type:                "2",
-					Status:              "TODO",
+					Type:                "cosmos-sdk/MsgSend",
+					Status:              "Exchange",
 					Account: &types.AccountIdentifier{
 						Address: "3",
+					}, Amount: &types.Amount{
+						Value: "-4",
+						Currency: &types.Currency{
+							Symbol: "5",
+						},
+					},
+				},
+				{
+					OperationIdentifier: &types.OperationIdentifier{
+						Index: 1,
+					},
+					Type:   "cosmos-sdk/MsgSend",
+					Status: "Exchange",
+					Account: &types.AccountIdentifier{
+						Address: "6",
 					},
 					Amount: &types.Amount{
 						Value: "4",
