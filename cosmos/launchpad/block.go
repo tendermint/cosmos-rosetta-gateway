@@ -77,7 +77,10 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 		return nil, ErrInterpreting
 	}
 
-	var parentBlockId *types.BlockIdentifier
+	var parentBlockId = &types.BlockIdentifier{ // TODO investigate how others do this.
+		Index: 0,
+		Hash:  "Genesis",
+	}
 	hasParentBlock := blockResp.Result.Block.Header.LastBlockId.Hash != ""
 	if hasParentBlock {
 		parentBlockId = &types.BlockIdentifier{
