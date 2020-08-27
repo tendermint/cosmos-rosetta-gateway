@@ -26,10 +26,21 @@ func TestLaunchpad_ConstructionDerive(t *testing.T) {
 	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, properties)
 	deriveResp, deriveErr := adapter.ConstructionDerive(context.Background(), &types.ConstructionDeriveRequest{
 		PublicKey: &types.PublicKey{
-			Bytes: data,
+			Bytes:     data,
+			CurveType: "secp256k1",
 		},
 	})
 	require.Nil(t, deriveErr)
 	require.NotNil(t, deriveResp)
 	require.Equal(t, "cosmos15tltvs59rt88geyenetv3klavlq2z30fe8z6hj", deriveResp.Address)
+
+	// TODO: Use table driven tests
+	// check unsupported curve returns error
+	_, deriveErr = adapter.ConstructionDerive(context.Background(), &types.ConstructionDeriveRequest{
+		PublicKey: &types.PublicKey{
+			Bytes:     data,
+			CurveType: "edwards25519",
+		},
+	})
+	require.NotNil(t, deriveErr)
 }
