@@ -115,8 +115,7 @@ func TestLaunchpad_Block(t *testing.T) {
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 		SupportedOperations: []string{
-			"Transfer",
-			"Reward",
+			OperationTransfer,
 		},
 	}
 
