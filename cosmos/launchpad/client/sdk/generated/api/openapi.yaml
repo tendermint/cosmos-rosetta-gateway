@@ -2197,12 +2197,12 @@ components:
       example:
         type: type
         value:
-          creator: creator
           amount:
           - amount: "50"
             denom: stake
           - amount: "50"
             denom: stake
+          to_address: to_address
           from_address: from_address
       properties:
         type:
@@ -2249,21 +2249,21 @@ components:
             msg:
             - type: type
               value:
-                creator: creator
                 amount:
                 - amount: "50"
                   denom: stake
                 - amount: "50"
                   denom: stake
+                to_address: to_address
                 from_address: from_address
             - type: type
               value:
-                creator: creator
                 amount:
                 - amount: "50"
                   denom: stake
                 - amount: "50"
                   denom: stake
+                to_address: to_address
                 from_address: from_address
             signature:
               account_number: "0"
@@ -2316,21 +2316,21 @@ components:
               msg:
               - type: type
                 value:
-                  creator: creator
                   amount:
                   - amount: "50"
                     denom: stake
                   - amount: "50"
                     denom: stake
+                  to_address: to_address
                   from_address: from_address
               - type: type
                 value:
-                  creator: creator
                   amount:
                   - amount: "50"
                     denom: stake
                   - amount: "50"
                     denom: stake
+                  to_address: to_address
                   from_address: from_address
               signature:
                 account_number: "0"
@@ -2363,21 +2363,21 @@ components:
               msg:
               - type: type
                 value:
-                  creator: creator
                   amount:
                   - amount: "50"
                     denom: stake
                   - amount: "50"
                     denom: stake
+                  to_address: to_address
                   from_address: from_address
               - type: type
                 value:
-                  creator: creator
                   amount:
                   - amount: "50"
                     denom: stake
                   - amount: "50"
                     denom: stake
+                  to_address: to_address
                   from_address: from_address
               signature:
                 account_number: "0"
@@ -2423,21 +2423,21 @@ components:
           msg:
           - type: type
             value:
-              creator: creator
               amount:
               - amount: "50"
                 denom: stake
               - amount: "50"
                 denom: stake
+              to_address: to_address
               from_address: from_address
           - type: type
             value:
-              creator: creator
               amount:
               - amount: "50"
                 denom: stake
               - amount: "50"
                 denom: stake
+              to_address: to_address
               from_address: from_address
           signature:
             account_number: "0"
@@ -3646,17 +3646,17 @@ components:
       type: object
     Msg_value:
       example:
-        creator: creator
         amount:
         - amount: "50"
           denom: stake
         - amount: "50"
           denom: stake
+        to_address: to_address
         from_address: from_address
       properties:
         from_address:
           type: string
-        creator:
+        to_address:
           type: string
         amount:
           items:
@@ -3736,21 +3736,21 @@ components:
         msg:
         - type: type
           value:
-            creator: creator
             amount:
             - amount: "50"
               denom: stake
             - amount: "50"
               denom: stake
+            to_address: to_address
             from_address: from_address
         - type: type
           value:
-            creator: creator
             amount:
             - amount: "50"
               denom: stake
             - amount: "50"
               denom: stake
+            to_address: to_address
             from_address: from_address
         signature:
           account_number: "0"

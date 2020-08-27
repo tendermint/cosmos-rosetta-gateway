@@ -10,6 +10,11 @@ import (
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
 
+const (
+	StatusExchange = "Exchange"
+	TypeMsgSend    = "cosmos-sdk/MsgSend"
+)
+
 // getTxByHash calls
 func (l Launchpad) getTxByHash(ctx context.Context, hash string) (*types.Transaction, *types.Error) {
 	txQuery, _, err := l.cosmos.Transactions.TxsHashGet(ctx, hash)
@@ -66,32 +71,38 @@ func cosmosTxToRosettaTx(tx cosmosclient.TxQuery) *types.Transaction {
 
 func toOperations(msg []cosmosclient.Msg) (operations []*types.Operation) {
 	for i, msg := range msg {
-		account := msg.Value.Creator
-		if account == "" {
-			account = msg.Value.FromAddress
+		if msg.Type != TypeMsgSend {
+			continue
 		}
-		var amount *types.Amount
+		fromAddress := msg.Value.FromAddress
+		toAddress := msg.Value.ToAddress
 		amounts := msg.Value.Amount
-		if len(amounts) > 0 {
-			am := amounts[0]
-			amount = &types.Amount{
-				Value: am.Amount,
-				Currency: &types.Currency{
-					Symbol: am.Denom,
+		if len(amounts) == 0 {
+			continue
+		}
+		coin := amounts[0]
+		sendOp := func(account, amount string, index int) *types.Operation {
+			return &types.Operation{
+				OperationIdentifier: &types.OperationIdentifier{
+					Index: int64(index),
+				},
+				Type:   msg.Type,
+				Status: StatusExchange,
+				Account: &types.AccountIdentifier{
+					Address: account,
+				},
+				Amount: &types.Amount{
+					Value: amount,
+					Currency: &types.Currency{
+						Symbol: coin.Denom,
+					},
 				},
 			}
 		}
-		operations = append(operations, &types.Operation{
-			OperationIdentifier: &types.OperationIdentifier{
-				Index: int64(i),
-			},
-			Type:   msg.Type,
-			Status: "TODO",
-			Account: &types.AccountIdentifier{
-				Address: account,
-			},
-			Amount: amount,
-		})
+		operations = append(operations,
+			sendOp(fromAddress, "-"+coin.Amount, i),
+			sendOp(toAddress, coin.Amount, i+1),
+		)
 	}
 	return
 }

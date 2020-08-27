@@ -2015,7 +2015,7 @@ definitions:
         properties:
           from_address:
             type: string
-          creator:
+          to_address:
             type: string
           amount:
             type: array
