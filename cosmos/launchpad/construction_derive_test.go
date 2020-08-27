@@ -42,5 +42,5 @@ func TestLaunchpad_ConstructionDerive(t *testing.T) {
 			CurveType: "edwards25519",
 		},
 	})
-	require.NotNil(t, deriveErr)
+	require.Equal(t, ErrUnsupportedCurve, deriveErr)
 }
