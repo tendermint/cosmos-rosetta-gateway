@@ -11,8 +11,7 @@ import (
 )
 
 const (
-	statusExchange = "Exchange"
-	typeMsgSend    = "cosmos-sdk/MsgSend"
+	typeMsgSend = "cosmos-sdk/MsgSend"
 )
 
 // getTxByHash calls
