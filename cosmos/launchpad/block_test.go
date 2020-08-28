@@ -333,3 +333,54 @@ func TestLaunchpad_BlockTransaction(t *testing.T) {
 		},
 	}, tx)
 }
+
+func TestLaunchpad_BlockTransactionWithError(t *testing.T) {
+	mc := &cosmosmocks.CosmosTransactionsAPI{}
+	defer mc.AssertExpectations(t)
+
+	mc.
+		On("TxsHashGet", mock.Anything, "1").
+		Return(cosmosclient.TxQuery{
+			Txhash: "1",
+			Code:   7,
+			Tx: cosmosclient.StdTx{
+				Value: cosmosclient.StdTxValue{
+					Msg: []cosmosclient.Msg{
+						{
+							Type: "cosmos-sdk/MsgSend",
+							Value: cosmosclient.MsgValue{
+								FromAddress: "3",
+								ToAddress:   "6",
+								Amount: []cosmosclient.Coin{
+									{
+										Amount: "4",
+										Denom:  "5",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		}, nil, nil).
+		Once()
+
+	properties := rosetta.NetworkProperties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+		SupportedOperations: []string{
+			"Transfer",
+			"Reward",
+		},
+	}
+
+	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{Transactions: mc}, properties)
+
+	tx, _ := adapter.BlockTransaction(context.Background(), &types.BlockTransactionRequest{
+		TransactionIdentifier: &types.TransactionIdentifier{
+			Hash: "1",
+		},
+	})
+	require.Equal(t, "Reverted", tx.Transaction.Operations[0].Status)
+	require.Equal(t, "Reverted", tx.Transaction.Operations[1].Status)
+}
