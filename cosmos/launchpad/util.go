@@ -11,8 +11,7 @@ import (
 )
 
 const (
-	StatusExchange = "Exchange"
-	TypeMsgSend    = "cosmos-sdk/MsgSend"
+	typeMsgSend = "cosmos-sdk/MsgSend"
 )
 
 // getTxByHash calls
@@ -71,7 +70,7 @@ func cosmosTxToRosettaTx(tx cosmosclient.TxQuery) *types.Transaction {
 
 func toOperations(msg []cosmosclient.Msg) (operations []*types.Operation) {
 	for i, msg := range msg {
-		if msg.Type != TypeMsgSend {
+		if msg.Type != typeMsgSend {
 			continue
 		}
 		fromAddress := msg.Value.FromAddress
@@ -86,8 +85,8 @@ func toOperations(msg []cosmosclient.Msg) (operations []*types.Operation) {
 				OperationIdentifier: &types.OperationIdentifier{
 					Index: int64(index),
 				},
-				Type:   msg.Type,
-				Status: StatusExchange,
+				Type:   OperationTransfer,
+				Status: StatusSuccess,
 				Account: &types.AccountIdentifier{
 					Address: account,
 				},

@@ -167,8 +167,8 @@ func TestLaunchpad_Block(t *testing.T) {
 					Operations: []*types.Operation{
 						{
 							OperationIdentifier: &types.OperationIdentifier{},
-							Type:                "cosmos-sdk/MsgSend",
-							Status:              "Exchange",
+							Type:                OperationTransfer,
+							Status:              StatusSuccess,
 							Account: &types.AccountIdentifier{
 								Address: "8",
 							},
@@ -183,8 +183,8 @@ func TestLaunchpad_Block(t *testing.T) {
 							OperationIdentifier: &types.OperationIdentifier{
 								Index: 1,
 							},
-							Type:   "cosmos-sdk/MsgSend",
-							Status: "Exchange",
+							Type:   OperationTransfer,
+							Status: StatusSuccess,
 							Account: &types.AccountIdentifier{
 								Address: "16",
 							},
@@ -204,8 +204,8 @@ func TestLaunchpad_Block(t *testing.T) {
 					Operations: []*types.Operation{
 						{
 							OperationIdentifier: &types.OperationIdentifier{},
-							Type:                "cosmos-sdk/MsgSend",
-							Status:              "Exchange",
+							Type:                OperationTransfer,
+							Status:              StatusSuccess,
 							Account: &types.AccountIdentifier{
 								Address: "6",
 							},
@@ -220,8 +220,8 @@ func TestLaunchpad_Block(t *testing.T) {
 							OperationIdentifier: &types.OperationIdentifier{
 								Index: 1,
 							},
-							Type:   "cosmos-sdk/MsgSend",
-							Status: "Exchange",
+							Type:   OperationTransfer,
+							Status: StatusSuccess,
 							Account: &types.AccountIdentifier{
 								Address: "15",
 							},
@@ -302,8 +302,8 @@ func TestLaunchpad_BlockTransaction(t *testing.T) {
 			Operations: []*types.Operation{
 				{
 					OperationIdentifier: &types.OperationIdentifier{},
-					Type:                "cosmos-sdk/MsgSend",
-					Status:              "Exchange",
+					Type:                OperationTransfer,
+					Status:              StatusSuccess,
 					Account: &types.AccountIdentifier{
 						Address: "3",
 					}, Amount: &types.Amount{
@@ -317,8 +317,8 @@ func TestLaunchpad_BlockTransaction(t *testing.T) {
 					OperationIdentifier: &types.OperationIdentifier{
 						Index: 1,
 					},
-					Type:   "cosmos-sdk/MsgSend",
-					Status: "Exchange",
+					Type:   OperationTransfer,
+					Status: StatusSuccess,
 					Account: &types.AccountIdentifier{
 						Address: "6",
 					},
