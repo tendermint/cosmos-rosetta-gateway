@@ -105,3 +105,4 @@ func toOperations(msg []cosmosclient.Msg) (operations []*types.Operation) {
 	}
 	return
 }
+
