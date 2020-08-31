@@ -400,7 +400,7 @@ paths:
             type: object
             properties:
               height:
-                type: string
+                type: integer
               result:
                 type: array
                 items:
