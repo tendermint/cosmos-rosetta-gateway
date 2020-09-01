@@ -3,5 +3,6 @@
 rm -rf cosmos/launchpad/client/tendermint/mocks/
 rm -rf cosmos/launchpad/client/sdk/mocks/
 
-mockery --name ^Tendermint.*?API --dir cosmos/launchpad --output cosmos/launchpad/client/tendermint/mocks
-mockery --name ^Cosmos.*?API --dir cosmos/launchpad --output cosmos/launchpad/client/sdk/mocks
+cd cosmos/launchpad && \
+    mockery --name ^Tendermint.*?API --output client/tendermint/mocks && \
+    mockery --name ^Cosmos.*?API --output client/sdk/mocks

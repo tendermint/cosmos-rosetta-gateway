@@ -36,11 +36,11 @@ func TestLaunchpad_ConstructionDerive(t *testing.T) {
 
 	// TODO: Use table driven tests
 	// check unsupported curve returns error
-	deriveResp, deriveErr = adapter.ConstructionDerive(context.Background(), &types.ConstructionDeriveRequest{
+	_, deriveErr = adapter.ConstructionDerive(context.Background(), &types.ConstructionDeriveRequest{
 		PublicKey: &types.PublicKey{
 			Bytes:     data,
 			CurveType: "edwards25519",
 		},
 	})
-	require.NotNil(t, deriveErr)
+	require.Equal(t, ErrUnsupportedCurve, deriveErr)
 }
