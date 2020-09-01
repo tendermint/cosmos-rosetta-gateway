@@ -375,12 +375,12 @@ func TestLaunchpad_BlockTransactionWithError(t *testing.T) {
 	}
 
 	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{Transactions: mc}, properties)
-
-	tx, _ := adapter.BlockTransaction(context.Background(), &types.BlockTransactionRequest{
+	tx, txErr := adapter.BlockTransaction(context.Background(), &types.BlockTransactionRequest{
 		TransactionIdentifier: &types.TransactionIdentifier{
 			Hash: "1",
 		},
 	})
+	require.Nil(t, txErr)
 	require.Equal(t, "Reverted", tx.Transaction.Operations[0].Status)
 	require.Equal(t, "Reverted", tx.Transaction.Operations[1].Status)
 }
