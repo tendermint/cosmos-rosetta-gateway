@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
+	types2 "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
@@ -49,4 +50,41 @@ func TestPayloadsEndpoint_Errors(t *testing.T) {
 			require.Equal(t, err, ErrInvalidOperation)
 		})
 	}
+}
+
+func TestGetSenderByOperations(t *testing.T) {
+	ops := []*types.Operation{
+		{
+			Account: &types.AccountIdentifier{
+				Address: "cosmos15tltvs59rt88geyenetv3klavlq2z30fe8z6hj",
+			},
+			Type: OperationTransfer,
+			Amount: &types.Amount{
+				Value:    "12345",
+				Currency: nil,
+				Metadata: nil,
+			},
+		},
+		{
+			Account: &types.AccountIdentifier{
+				Address: "cosmos16xyempempp92x9hyzz9wrgf94r6j9h5f06pxxv",
+			},
+			Type: OperationTransfer,
+			Amount: &types.Amount{
+				Value:    "-12345",
+				Currency: nil,
+				Metadata: nil,
+			},
+		},
+	}
+
+	transferData, err := getFromAndToAddressFromOperations(ops)
+	require.NoError(t, err)
+
+	expectedFrom, err := types2.AccAddressFromBech32(ops[1].Account.Address)
+	expectedTo, err := types2.AccAddressFromBech32(ops[0].Account.Address)
+	require.NoError(t, err)
+
+	require.Equal(t, expectedFrom, transferData.From)
+	require.Equal(t, expectedTo, transferData.To)
 }
