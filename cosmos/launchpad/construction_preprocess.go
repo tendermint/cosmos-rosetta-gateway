@@ -13,12 +13,7 @@ func (l Launchpad) ConstructionPreprocess(ctx context.Context, r *types.Construc
 	}
 
 	account := operations[0].Account
-
-	for _, operation := range operations {
-		if operation.Account != account {
-			return nil, ErrInvalidOperations
-		}
-	}
+	// TODO: Validate if address is unique
 
 	var res = &types.ConstructionPreprocessResponse{
 		Options: map[string]interface{}{
