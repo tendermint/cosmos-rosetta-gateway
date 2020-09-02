@@ -60,15 +60,16 @@ func tendermintTxToRosettaTx(res tendermintclient.TxResponseResult) *types.Trans
 // cosmosTxToRosettaTx converts a Cosmos api TxQuery to a Transaction
 // in the type expected by Rosetta.
 func cosmosTxToRosettaTx(tx cosmosclient.TxQuery) *types.Transaction {
+	hasError := tx.Code > 0
 	return &types.Transaction{
 		TransactionIdentifier: &types.TransactionIdentifier{
 			Hash: tx.Txhash,
 		},
-		Operations: toOperations(tx.Tx.Value.Msg),
+		Operations: toOperations(tx.Tx.Value.Msg, hasError),
 	}
 }
 
-func toOperations(msg []cosmosclient.Msg) (operations []*types.Operation) {
+func toOperations(msg []cosmosclient.Msg, hasError bool) (operations []*types.Operation) {
 	for i, msg := range msg {
 		if msg.Type != typeMsgSend {
 			continue
@@ -81,12 +82,16 @@ func toOperations(msg []cosmosclient.Msg) (operations []*types.Operation) {
 		}
 		coin := amounts[0]
 		sendOp := func(account, amount string, index int) *types.Operation {
+			status := StatusSuccess
+			if hasError {
+				status = StatusReverted
+			}
 			return &types.Operation{
 				OperationIdentifier: &types.OperationIdentifier{
 					Index: int64(index),
 				},
 				Type:   OperationTransfer,
-				Status: StatusSuccess,
+				Status: status,
 				Account: &types.AccountIdentifier{
 					Address: account,
 				},

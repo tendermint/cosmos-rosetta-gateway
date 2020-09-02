@@ -10,6 +10,7 @@
 package openapi
 // TxQuery struct for TxQuery
 type TxQuery struct {
+	Code int32 `json:"code,omitempty"`
 	Txhash string `json:"txhash,omitempty"`
 	Height string `json:"height,omitempty"`
 	Tx StdTx `json:"tx,omitempty"`

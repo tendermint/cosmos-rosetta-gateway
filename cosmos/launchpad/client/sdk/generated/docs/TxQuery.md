@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Code** | **int32** |  | [optional] 
 **Txhash** | **string** |  | [optional] 
 **Height** | **string** |  | [optional] 
 **Tx** | [**StdTx**](StdTx.md) |  | [optional] 
