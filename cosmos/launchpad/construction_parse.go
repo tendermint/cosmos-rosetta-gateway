@@ -42,7 +42,7 @@ func (l Launchpad) ConstructionParse(ctx context.Context, request *types.Constru
 	}
 
 	return &types.ConstructionParseResponse{
-		Operations: toOperations(stdTx.Value.Msg),
+		Operations: toOperations(stdTx.Value.Msg, false),
 		Signers:    signers,
 		Metadata:   metadata,
 	}, nil
