@@ -11,6 +11,7 @@ const (
 
 // TransferTxData represents a Tx that sends value.
 type TransferTxData struct {
-	From  types.AccAddress
-	To    types.AccAddress
+	From   types.AccAddress
+	To     types.AccAddress
+	Amount types.Coin
 }

@@ -60,8 +60,11 @@ func TestGetSenderByOperations(t *testing.T) {
 			},
 			Type: OperationTransfer,
 			Amount: &types.Amount{
-				Value:    "12345",
-				Currency: nil,
+				Value: "12345",
+				Currency: &types.Currency{
+					Symbol:   "stake",
+					Decimals: 0,
+				},
 				Metadata: nil,
 			},
 		},
@@ -71,8 +74,11 @@ func TestGetSenderByOperations(t *testing.T) {
 			},
 			Type: OperationTransfer,
 			Amount: &types.Amount{
-				Value:    "-12345",
-				Currency: nil,
+				Value: "-12345",
+				Currency: &types.Currency{
+					Symbol:   "stake",
+					Decimals: 0,
+				},
 				Metadata: nil,
 			},
 		},
@@ -87,4 +93,5 @@ func TestGetSenderByOperations(t *testing.T) {
 
 	require.Equal(t, expectedFrom, transferData.From)
 	require.Equal(t, expectedTo, transferData.To)
+	require.Equal(t, types2.NewCoin("stake", types2.NewInt(12345)), transferData.Amount)
 }

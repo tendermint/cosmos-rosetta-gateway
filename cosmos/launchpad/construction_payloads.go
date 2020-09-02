@@ -2,6 +2,8 @@ package launchpad
 
 import (
 	"context"
+	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/cosmos/cosmos-sdk/x/bank"
@@ -31,7 +33,8 @@ func (l Launchpad) ConstructionPayloads(ctx context.Context, req *types.Construc
 }
 
 // getFromAndToAddressFromOperations extracts the from and to addresses from a list of operations.
-// last is to.
+// We assume that it comes formated in the correct way. And that the balance of the sender is the same
+// as the receiver operations.
 func getFromAndToAddressFromOperations(ops []*types.Operation) (*TransferTxData, error) {
 	var (
 		transferData = &TransferTxData{}
@@ -49,6 +52,13 @@ func getFromAndToAddressFromOperations(ops []*types.Operation) (*TransferTxData,
 			if err != nil {
 				return nil, err
 			}
+
+			amount, err := strconv.ParseInt(op.Amount.Value, 10, 64)
+			if err != nil {
+				return nil, fmt.Errorf("invalid amount")
+			}
+
+			transferData.Amount = cosmostypes.NewCoin(op.Amount.Currency.Symbol, cosmostypes.NewInt(amount))
 		}
 	}
 
