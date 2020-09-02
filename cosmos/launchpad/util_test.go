@@ -8,6 +8,8 @@ import (
 	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 )
 
+const gentxacc = "cosmos1gycrqtmzdec4jkfnf329gjfkf4v5zees2q69xnznv429wemtd3cysv692fc5v66rwd3yxvs9u3zsg"
+
 func gentx(signed bool) cosmosclient.StdTx {
 	tx := cosmosclient.StdTx{
 		Value: cosmosclient.StdTxValue{

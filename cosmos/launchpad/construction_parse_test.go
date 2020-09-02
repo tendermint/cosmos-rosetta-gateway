@@ -102,7 +102,7 @@ func TestLaunchpad_ConstructionParse(t *testing.T) {
 					"memo": "m",
 				},
 				Signers: []string{
-					"cosmos1gycrqtmzdec4jkfnf329gjfkf4v5zees2q69xnznv429wemtd3cysv692fc5v66rwd3yxvs9u3zsg",
+					gentxacc,
 				},
 			},
 			nil,
