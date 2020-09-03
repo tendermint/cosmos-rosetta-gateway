@@ -26,11 +26,13 @@ func New() *cobra.Command {
 
 func runHandler(*cobra.Command, []string) error {
 	cosmoslpc := cosmoslaunchpadclient.NewAPIClient(&cosmoslaunchpadclient.Configuration{
-		Host:   "localhost:1317",
+		Host: "localhost:1317",
+		//Host:   "iovnscli-rest-api.iov-mainnet-2.iov.one",
 		Scheme: "http",
 	})
 	tendermintlpc := tendermintlaunchpadclient.NewAPIClient(&tendermintlaunchpadclient.Configuration{
-		Host:   "localhost:26657",
+		Host: "localhost:26657",
+		//Host:   "rpc-private-iov-mainnet-2.iov.one",
 		Scheme: "http",
 	})
 

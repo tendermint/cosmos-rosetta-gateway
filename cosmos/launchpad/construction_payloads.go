@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+
 	"github.com/cosmos/cosmos-sdk/x/bank"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -19,15 +21,19 @@ func (l Launchpad) ConstructionPayloads(ctx context.Context, req *types.Construc
 	}
 
 	if req.Operations[0].Type != OperationTransfer || req.Operations[1].Type != OperationTransfer {
-		return nil, ErrInvalidOperation
+		return nil, rosetta.WrapError(ErrInvalidOperation, "the operations are not Transfer")
 	}
 
 	transferData, err := getFromAndToAddressFromOperations(req.Operations)
 	if err != nil {
-		return nil, ErrInvalidOperation
+		return nil, rosetta.WrapError(ErrInvalidOperation, err.Error())
 	}
 
-	bank.NewMsgSend(transferData.From, transferData.To, nil)
+	msg := bank.NewMsgSend(transferData.From, transferData.To, cosmostypes.NewCoins(transferData.Amount))
+	err = msg.ValidateBasic()
+	if err = msg.ValidateBasic(); err != nil {
+		return nil, rosetta.WrapError(ErrInvalidTransaction, err.Error())
+	}
 
 	return nil, nil
 }
