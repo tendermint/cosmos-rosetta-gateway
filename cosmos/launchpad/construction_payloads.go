@@ -31,7 +31,6 @@ func (l Launchpad) ConstructionPayloads(ctx context.Context, req *types.Construc
 	}
 
 	msg := bank.NewMsgSend(transferData.From, transferData.To, cosmostypes.NewCoins(transferData.Amount))
-	err = msg.ValidateBasic()
 	if err = msg.ValidateBasic(); err != nil {
 		return nil, rosetta.WrapError(ErrInvalidTransaction, err.Error())
 	}
