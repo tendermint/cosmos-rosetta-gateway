@@ -26,6 +26,7 @@ func TestPayloadsEndpoint_Errors(t *testing.T) {
 					},
 				},
 			},
+			expectedErr: ErrInvalidOperation,
 		},
 		{
 			name: "Two operations not equal to transfer",
@@ -39,6 +40,7 @@ func TestPayloadsEndpoint_Errors(t *testing.T) {
 					},
 				},
 			},
+			expectedErr: rosetta.WrapError(ErrInvalidOperation, "the operations are not Transfer"),
 		},
 	}
 
@@ -47,7 +49,7 @@ func TestPayloadsEndpoint_Errors(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, rosetta.NetworkProperties{})
 			_, err := adapter.ConstructionPayloads(context.Background(), tt.req)
-			require.Equal(t, err, ErrInvalidOperation)
+			require.Equal(t, err, tt.expectedErr)
 		})
 	}
 }
