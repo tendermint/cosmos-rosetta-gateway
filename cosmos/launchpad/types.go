@@ -6,6 +6,6 @@ const (
 
 	OperationTransfer = "Transfer"
 
-	OptionAddress = "Address"
-	OptionGas     = "Gas"
+	OptionAddress = "address"
+	OptionGas     = "gas"
 )
