@@ -8,4 +8,5 @@ var (
 	ErrUnsupportedCurve   = rosetta.NewError(3, "unsupported curve, expected secp256k1")
 	ErrInvalidOperation   = rosetta.NewError(4, "invalid operation")
 	ErrInvalidTransaction = rosetta.NewError(5, "invalid transaction")
+	ErrInvalidRequest     = rosetta.NewError(6, "invalid request")
 )

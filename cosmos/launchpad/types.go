@@ -1,6 +1,8 @@
 package launchpad
 
-import "github.com/cosmos/cosmos-sdk/types"
+import (
+	"github.com/cosmos/cosmos-sdk/types"
+)
 
 const (
 	StatusReverted = "Reverted"
@@ -15,3 +17,4 @@ type TransferTxData struct {
 	To     types.AccAddress
 	Amount types.Coin
 }
+
