@@ -3,6 +3,10 @@ package launchpad
 import (
 	"context"
 	"strconv"
+	"strings"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/pkg/errors"
 
 	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
@@ -104,4 +108,18 @@ func toOperations(msg []cosmosclient.Msg) (operations []*types.Operation) {
 		)
 	}
 	return
+}
+
+func getFromAddressFromOperations(ops []*types.Operation) (sdk.Address, error) {
+	var (
+		fromAddress sdk.Address
+		err         error
+	)
+	for _, op := range ops {
+		if strings.HasPrefix(op.Amount.Value, "-") {
+			fromAddress, err = sdk.AccAddressFromBech32(op.Account.Address)
+			return fromAddress, err
+		}
+	}
+	return nil, errors.New("unable to fetch from address")
 }
