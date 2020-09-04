@@ -90,6 +90,7 @@ func TestGetSenderByOperations(t *testing.T) {
 	require.NoError(t, err)
 
 	expectedFrom, err := types2.AccAddressFromBech32(ops[1].Account.Address)
+	require.NoError(t, err)
 	expectedTo, err := types2.AccAddressFromBech32(ops[0].Account.Address)
 	require.NoError(t, err)
 
