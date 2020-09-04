@@ -9,7 +9,6 @@ import (
 )
 
 type CosmosAPI struct {
-	Auth         CosmosAuthAPI
 	Bank         CosmosBankAPI
 	Tendermint   CosmosTendermintAPI
 	Transactions CosmosTransactionsAPI
@@ -21,10 +20,6 @@ type CosmosTransactionsAPI interface {
 
 type CosmosBankAPI interface {
 	BankBalancesAddressGet(ctx context.Context, address string) (cosmosclient.InlineResponse2004, *http.Response, error)
-}
-
-type CosmosAuthAPI interface {
-	AuthAccountsAddressGet(ctx context.Context, address string) (cosmosclient.InlineResponse2005, *http.Response, error)
 }
 
 type CosmosTendermintAPI interface {
