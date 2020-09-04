@@ -8,9 +8,9 @@ import (
 
 const (
 	// Metadata Keys
-	ChainIdKey    = "chain_id"
-	SequenceKey   = "sequence"
-	AccountNumber = "account_number"
+	ChainIdKey       = "chain_id"
+	SequenceKey      = "sequence"
+	AccountNumberKey = "account_number"
 )
 
 type PayloadReqMetadata struct {
@@ -35,7 +35,7 @@ func GetMetadataFromPayloadReq(req *types.ConstructionPayloadsRequest) (*Payload
 		return nil, fmt.Errorf("invalid sequence value")
 	}
 
-	accountNum, ok := req.Metadata[AccountNumber]
+	accountNum, ok := req.Metadata[AccountNumberKey]
 	if !ok {
 		return nil, fmt.Errorf("account_number metadata was not provided")
 	}
