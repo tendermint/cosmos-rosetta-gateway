@@ -2244,6 +2244,7 @@ components:
             key: key
           - value: value
             key: key
+        code: 0
         tx:
           value:
             msg:
@@ -2283,6 +2284,8 @@ components:
         txhash: D085138D913993919295FF4B0A9107F1F2CDE0D37A87CE0644E217CBF3B49656
         height: "368"
       properties:
+        code:
+          type: integer
         txhash:
           example: D085138D913993919295FF4B0A9107F1F2CDE0D37A87CE0644E217CBF3B49656
           type: string
@@ -2311,6 +2314,7 @@ components:
               key: key
             - value: value
               key: key
+          code: 0
           tx:
             value:
               msg:
@@ -2358,6 +2362,7 @@ components:
               key: key
             - value: value
               key: key
+          code: 0
           tx:
             value:
               msg:
