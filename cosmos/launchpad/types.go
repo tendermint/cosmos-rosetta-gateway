@@ -6,8 +6,10 @@ const (
 
 	OperationTransfer = "Transfer"
 
-	OptionAddress        = "Address"
-	OptionsAccountNumber = "AccountNumber"
-	OptionsSequence      = "Sequence"
-	OptionsChainId       = "Chain-Id"
+	OptionAddress = "address"
+	OptionGas     = "gas"
+
+	OptionsAccountNumber = "account_number"
+	OptionsSequence      = "sequence"
+	OptionsChainId       = "chain_id"
 )

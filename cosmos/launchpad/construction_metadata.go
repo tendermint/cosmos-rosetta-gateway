@@ -7,10 +7,12 @@ import (
 )
 
 func (l Launchpad) ConstructionMetadata(ctx context.Context, r *types.ConstructionMetadataRequest) (*types.ConstructionMetadataResponse, *types.Error) {
-	// validate network identifier
+	if r.NetworkIdentifier == nil {
+		return nil, ErrInvalidRequest
+	}
 
 	if r.Options == nil {
-		return nil, ErrInterpreting
+		return nil, ErrInvalidRequest
 	}
 
 	addr := r.Options[OptionAddress]
@@ -20,6 +22,7 @@ func (l Launchpad) ConstructionMetadata(ctx context.Context, r *types.Constructi
 		return nil, ErrInvalidAddress
 	}
 
+	// TODO: Check if suggested fee can be added
 	res := &types.ConstructionMetadataResponse{
 		Metadata: map[string]interface{}{
 			OptionsAccountNumber: accRes.Value.AccountNumber,
