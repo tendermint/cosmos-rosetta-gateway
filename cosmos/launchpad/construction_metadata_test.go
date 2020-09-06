@@ -20,6 +20,10 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 		},
 	}
 
+	networkIdentifier := types.NetworkIdentifier{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+	}
 	feeMultiplier := float64(200000)
 	options := map[string]interface{}{
 		OptionAddress: "cosmos12qqzw4tqu32anlcx0a3hupvgdhaf4cc8j9wfyd",
@@ -33,7 +37,8 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 	}
 	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, properties)
 	metaResp, err := adapter.ConstructionMetadata(context.Background(), &types.ConstructionMetadataRequest{
-		Options: options,
+		NetworkIdentifier: &networkIdentifier,
+		Options:           options,
 	})
 
 	require.Nil(t, err)
