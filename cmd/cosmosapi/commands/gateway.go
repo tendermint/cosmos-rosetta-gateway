@@ -35,6 +35,7 @@ func runHandler(*cobra.Command, []string) error {
 	})
 
 	cosmoslp := launchpad.CosmosAPI{
+		Auth:         cosmoslpc.AuthApi,
 		Bank:         cosmoslpc.BankApi,
 		Tendermint:   cosmoslpc.TendermintRPCApi,
 		Transactions: cosmoslpc.TransactionsApi,
