@@ -12,17 +12,17 @@ func (l Launchpad) ConstructionPreprocess(ctx context.Context, r *types.Construc
 		return nil, ErrInterpreting
 	}
 
-	address, err := getFromAddressFromOperations(operations)
+	txData, err := getTransferTxDataFromOperations(operations)
 	if err != nil {
 		return nil, ErrInvalidAddress
 	}
-	if address == nil {
+	if txData.From == nil {
 		return nil, ErrInvalidAddress
 	}
 
 	var res = &types.ConstructionPreprocessResponse{
 		Options: map[string]interface{}{
-			OptionAddress: address.String(),
+			OptionAddress: txData.From.String(),
 			OptionGas:     r.SuggestedFeeMultiplier,
 			// TODO: Check if memo is needed
 		},
