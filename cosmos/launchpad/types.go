@@ -2,7 +2,10 @@ package launchpad
 
 const (
 	StatusReverted = "Reverted"
-	StatusSuccess = "Success"
+	StatusSuccess  = "Success"
 
 	OperationTransfer = "Transfer"
+
+	OptionAddress = "address"
+	OptionGas     = "gas"
 )

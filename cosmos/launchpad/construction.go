@@ -26,10 +26,6 @@ func (l Launchpad) ConstructionPayloads(context.Context, *types.ConstructionPayl
 	panic("unimplemented")
 }
 
-func (l Launchpad) ConstructionPreprocess(context.Context, *types.ConstructionPreprocessRequest) (*types.ConstructionPreprocessResponse, *types.Error) {
-	panic("unimplemented")
-}
-
 func (l Launchpad) ConstructionSubmit(context.Context, *types.ConstructionSubmitRequest) (*types.TransactionIdentifierResponse, *types.Error) {
 	panic("unimplemented")
 }
