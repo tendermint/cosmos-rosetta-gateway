@@ -1,5 +1,9 @@
 package launchpad
 
+import (
+	"github.com/cosmos/cosmos-sdk/types"
+)
+
 const (
 	StatusReverted = "Reverted"
 	StatusSuccess  = "Success"
@@ -13,3 +17,11 @@ const (
 	OptionsSequence      = "sequence"
 	OptionsChainId       = "chain_id"
 )
+
+// TransferTxData represents a Tx that sends value.
+type TransferTxData struct {
+	From   types.AccAddress
+	To     types.AccAddress
+	Amount types.Coin
+}
+

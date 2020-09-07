@@ -3,6 +3,7 @@
 package commands
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/spf13/cobra"
@@ -14,6 +15,13 @@ import (
 	"github.com/tendermint/cosmos-rosetta-gateway/service"
 )
 
+const (
+	FlagCosmosRpc     = "cosmos-rpc"
+	FlagTendermintRpc = "tendermint-rpc"
+	FlagBlockchain    = "blockchain"
+	FlagNetwork       = "network"
+)
+
 func New() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "crg",
@@ -21,16 +29,42 @@ func New() *cobra.Command {
 		RunE:  runHandler,
 	}
 
+	c.Flags().String(FlagCosmosRpc, "localhost:1317", "the cosmos rpc")
+	c.Flags().String(FlagTendermintRpc, "localhost:26657", "the tendermint rpc")
+
+	c.Flags().String(FlagBlockchain, "blockchain", "the name of the blockchain (e.g. Bitcoin)")
+	c.Flags().String(FlagNetwork, "network", "the name of the network (e.g. mainnet)")
+
 	return c
 }
 
-func runHandler(*cobra.Command, []string) error {
+func runHandler(cmd *cobra.Command, args []string) error {
+	cosmosRpc, err := cmd.Flags().GetString(FlagCosmosRpc)
+	if err != nil {
+		return fmt.Errorf("error with cosmos-rpc address")
+	}
+
+	tendermintRpc, err := cmd.Flags().GetString(FlagTendermintRpc)
+	if err != nil {
+		return fmt.Errorf("error with tendermint-rpc address")
+	}
+
+	blockchain, err := cmd.Flags().GetString(FlagBlockchain)
+	if err != nil {
+		return fmt.Errorf("error with blockchain name")
+	}
+
+	network, err := cmd.Flags().GetString(FlagNetwork)
+	if err != nil {
+		return fmt.Errorf("error with network name")
+	}
+
 	cosmoslpc := cosmoslaunchpadclient.NewAPIClient(&cosmoslaunchpadclient.Configuration{
-		Host:   "localhost:1317",
+		Host:   cosmosRpc,
 		Scheme: "http",
 	})
 	tendermintlpc := tendermintlaunchpadclient.NewAPIClient(&tendermintlaunchpadclient.Configuration{
-		Host:   "localhost:26657",
+		Host:   tendermintRpc,
 		Scheme: "http",
 	})
 
@@ -45,8 +79,8 @@ func runHandler(*cobra.Command, []string) error {
 	}
 
 	properties := rosetta.NetworkProperties{
-		Blockchain:          "Test",
-		Network:             "Test",
+		Blockchain:          blockchain,
+		Network:             network,
 		SupportedOperations: []string{launchpad.OperationTransfer},
 	}
 
