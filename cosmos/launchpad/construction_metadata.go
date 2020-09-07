@@ -7,11 +7,7 @@ import (
 )
 
 func (l Launchpad) ConstructionMetadata(ctx context.Context, r *types.ConstructionMetadataRequest) (*types.ConstructionMetadataResponse, *types.Error) {
-	if r.NetworkIdentifier == nil {
-		return nil, ErrInvalidRequest
-	}
-
-	if r.Options == nil {
+	if len(r.Options) == 0 {
 		return nil, ErrInvalidRequest
 	}
 
@@ -19,7 +15,7 @@ func (l Launchpad) ConstructionMetadata(ctx context.Context, r *types.Constructi
 	addrString := addr.(string)
 	accRes, _, err := l.cosmos.Auth.AuthAccountsAddressGet(ctx, addrString)
 	if err != nil {
-		return nil, ErrInvalidAddress
+		return nil, ErrInterpreting
 	}
 
 	// TODO: Check if suggested fee can be added

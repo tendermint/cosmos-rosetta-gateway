@@ -7,5 +7,4 @@ var (
 	ErrNodeConnection   = rosetta.NewError(1, "error getting data from node")
 	ErrUnsupportedCurve = rosetta.NewError(2, "unsupported curve, expected secp256k1")
 	ErrInvalidRequest   = rosetta.NewError(3, "invalid request")
-	ErrInvalidAddress   = rosetta.NewError(4, "Unable to fetch address info")
 )
