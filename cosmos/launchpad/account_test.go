@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/antihax/optional"
+
 	openapi "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 
 	mocks2 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"

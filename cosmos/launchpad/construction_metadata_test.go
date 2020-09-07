@@ -46,9 +46,9 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 	}
 
 	expMetadata := map[string]interface{}{
-		OptionsAccountNumber: "0",
-		OptionsSequence:      "1",
-		OptionsChainId:       "TheNetwork",
+		AccountNumberKey: "0",
+		SequenceKey:      "1",
+		ChainIdKey:       "TheNetwork",
 	}
 	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{Auth: m}, properties)
 	metaResp, err := adapter.ConstructionMetadata(context.Background(), &types.ConstructionMetadataRequest{

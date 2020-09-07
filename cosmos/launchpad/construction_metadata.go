@@ -11,7 +11,10 @@ func (l Launchpad) ConstructionMetadata(ctx context.Context, r *types.Constructi
 		return nil, ErrInvalidRequest
 	}
 
-	addr := r.Options[OptionAddress]
+	addr, ok := r.Options[OptionAddress]
+	if !ok {
+		return nil, ErrInvalidAddress
+	}
 	addrString := addr.(string)
 	accRes, _, err := l.cosmos.Auth.AuthAccountsAddressGet(ctx, addrString)
 	if err != nil {
@@ -21,9 +24,9 @@ func (l Launchpad) ConstructionMetadata(ctx context.Context, r *types.Constructi
 	// TODO: Check if suggested fee can be added
 	res := &types.ConstructionMetadataResponse{
 		Metadata: map[string]interface{}{
-			OptionsAccountNumber: accRes.Value.AccountNumber,
-			OptionsSequence:      accRes.Value.Sequence,
-			OptionsChainId:       r.NetworkIdentifier.Network,
+			AccountNumberKey: accRes.Value.AccountNumber,
+			SequenceKey:      accRes.Value.Sequence,
+			ChainIdKey:       r.NetworkIdentifier.Network,
 		},
 	}
 

@@ -12,10 +12,6 @@ const (
 
 	OptionAddress = "address"
 	OptionGas     = "gas"
-
-	OptionsAccountNumber = "account_number"
-	OptionsSequence      = "sequence"
-	OptionsChainId       = "chain_id"
 )
 
 // TransferTxData represents a Tx that sends value.
@@ -24,4 +20,3 @@ type TransferTxData struct {
 	To     types.AccAddress
 	Amount types.Coin
 }
-
