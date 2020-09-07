@@ -2,8 +2,11 @@ package launchpad
 
 import (
 	"context"
+	"fmt"
 	"strconv"
+	"strings"
 
+	cosmostypes "github.com/cosmos/cosmos-sdk/types"
 	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 
@@ -25,6 +28,7 @@ func (l Launchpad) getTxByHash(ctx context.Context, hash string) (*types.Transac
 
 	return tx, nil
 }
+
 func toBlockIdentifier(result tendermintclient.BlockComplete) (*types.BlockIdentifier, error) {
 	if result.BlockId.Hash == "" {
 		return nil, nil
@@ -111,3 +115,35 @@ func toOperations(msg []cosmosclient.Msg, hasError bool) (operations []*types.Op
 	return
 }
 
+// getTransferTxDataFromOperations extracts the from and to addresses from a list of operations.
+// We assume that it comes formated in the correct way. And that the balance of the sender is the same
+// as the receiver operations.
+func getTransferTxDataFromOperations(ops []*types.Operation) (*TransferTxData, error) {
+	var (
+		transferData = &TransferTxData{}
+		err          error
+	)
+
+	for _, op := range ops {
+		if strings.HasPrefix(op.Amount.Value, "-") {
+			transferData.From, err = cosmostypes.AccAddressFromBech32(op.Account.Address)
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			transferData.To, err = cosmostypes.AccAddressFromBech32(op.Account.Address)
+			if err != nil {
+				return nil, err
+			}
+
+			amount, err := strconv.ParseInt(op.Amount.Value, 10, 64)
+			if err != nil {
+				return nil, fmt.Errorf("invalid amount")
+			}
+
+			transferData.Amount = cosmostypes.NewCoin(op.Amount.Currency.Symbol, cosmostypes.NewInt(amount))
+		}
+	}
+
+	return transferData, nil
+}

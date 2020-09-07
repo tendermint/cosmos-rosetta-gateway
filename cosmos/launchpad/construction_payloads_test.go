@@ -87,7 +87,7 @@ func TestGetSenderByOperations(t *testing.T) {
 		},
 	}
 
-	transferData, err := getFromAndToAddressFromOperations(ops)
+	transferData, err := getTransferTxDataFromOperations(ops)
 	require.NoError(t, err)
 
 	expectedFrom, err := types2.AccAddressFromBech32(ops[1].Account.Address)
@@ -115,7 +115,7 @@ func TestLaunchpad_ConstructionPayloads(t *testing.T) {
 				Amount: &types.Amount{
 					Value: "-5619726348293826415",
 					Currency: &types.Currency{
-						Symbol:   "atom",
+						Symbol:   "atom", // TODO: Panic when bad symbol.
 						Decimals: 18,
 					},
 				},
