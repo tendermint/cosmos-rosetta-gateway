@@ -3379,10 +3379,10 @@ components:
           denom: stake
         - amount: "50"
           denom: stake
-        height: 0
+        height: height
       properties:
         height:
-          type: integer
+          type: string
         result:
           items:
             $ref: '#/components/schemas/Coin'

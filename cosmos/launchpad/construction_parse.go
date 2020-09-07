@@ -23,11 +23,11 @@ func (l Launchpad) ConstructionParse(ctx context.Context, request *types.Constru
 	rawTx, err := hex.DecodeString(request.Transaction)
 	if err != nil {
 		if rawTx, err = base64.StdEncoding.DecodeString(request.Transaction); err != nil {
-			return nil, ErrTxMalformed
+			return nil, ErrInvalidTransaction
 		}
 	}
 	if err := json.Unmarshal(rawTx, &stdTx); err != nil {
-		return nil, ErrTxUnmarshal
+		return nil, ErrInvalidTransaction
 	}
 
 	var signers []string

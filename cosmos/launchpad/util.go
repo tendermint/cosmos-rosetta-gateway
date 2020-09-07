@@ -110,3 +110,4 @@ func toOperations(msg []cosmosclient.Msg, hasError bool) (operations []*types.Op
 	}
 	return
 }
+

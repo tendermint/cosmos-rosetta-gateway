@@ -26,7 +26,7 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 	m.
 		On("BankBalancesAddressGet", mock.Anything, "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na").
 		Return(cosmosclient.InlineResponse2004{
-			Height: 12345,
+			Height: "12345",
 			Result: []cosmosclient.Coin{
 				{Denom: "stake", Amount: "400"},
 				{Denom: "token", Amount: "600"},
