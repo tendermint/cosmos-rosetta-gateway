@@ -3,9 +3,6 @@ package launchpad
 import (
 	"context"
 	"encoding/hex"
-	"fmt"
-	"strconv"
-	"strings"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	cosmostypes "github.com/cosmos/cosmos-sdk/types"
@@ -25,7 +22,7 @@ func (l Launchpad) ConstructionPayloads(ctx context.Context, req *types.Construc
 		return nil, rosetta.WrapError(ErrInvalidOperation, "the operations are not Transfer")
 	}
 
-	transferData, err := getFromAndToAddressFromOperations(req.Operations)
+	transferData, err := getTransferTxDataFromOperations(req.Operations)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrInvalidOperation, err.Error())
 	}
@@ -55,37 +52,4 @@ func (l Launchpad) ConstructionPayloads(ctx context.Context, req *types.Construc
 			},
 		},
 	}, nil
-}
-
-// getFromAndToAddressFromOperations extracts the from and to addresses from a list of operations.
-// We assume that it comes formated in the correct way. And that the balance of the sender is the same
-// as the receiver operations.
-func getFromAndToAddressFromOperations(ops []*types.Operation) (*TransferTxData, error) {
-	var (
-		transferData = &TransferTxData{}
-		err          error
-	)
-
-	for _, op := range ops {
-		if strings.HasPrefix(op.Amount.Value, "-") {
-			transferData.From, err = cosmostypes.AccAddressFromBech32(op.Account.Address)
-			if err != nil {
-				return nil, err
-			}
-		} else {
-			transferData.To, err = cosmostypes.AccAddressFromBech32(op.Account.Address)
-			if err != nil {
-				return nil, err
-			}
-
-			amount, err := strconv.ParseInt(op.Amount.Value, 10, 64)
-			if err != nil {
-				return nil, fmt.Errorf("invalid amount")
-			}
-
-			transferData.Amount = cosmostypes.NewCoin(op.Amount.Currency.Symbol, cosmostypes.NewInt(amount))
-		}
-	}
-
-	return transferData, nil
 }

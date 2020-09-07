@@ -9,7 +9,5 @@ var (
 	ErrInvalidOperation   = rosetta.NewError(4, "invalid operation")
 	ErrInvalidTransaction = rosetta.NewError(5, "invalid transaction")
 	ErrInvalidRequest     = rosetta.NewError(6, "invalid request")
-	ErrUnsupportedOperation = rosetta.NewError(3, "unsupported operation")
-	ErrInvalidAddress       = rosetta.NewError(4, "invalid address")
-	ErrInvalidOperations    = rosetta.NewError(5, "invalid operations")
+	ErrInvalidAddress     = rosetta.NewError(7, "invalid address")
 )

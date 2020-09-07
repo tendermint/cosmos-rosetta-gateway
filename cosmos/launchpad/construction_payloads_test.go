@@ -87,7 +87,7 @@ func TestGetSenderByOperations(t *testing.T) {
 		},
 	}
 
-	transferData, err := getFromAndToAddressFromOperations(ops)
+	transferData, err := getTransferTxDataFromOperations(ops)
 	require.NoError(t, err)
 
 	expectedFrom, err := types2.AccAddressFromBech32(ops[1].Account.Address)
