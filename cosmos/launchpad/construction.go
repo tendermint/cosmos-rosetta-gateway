@@ -10,10 +10,6 @@ func (l Launchpad) ConstructionCombine(context.Context, *types.ConstructionCombi
 	panic("unimplemented")
 }
 
-func (l Launchpad) ConstructionHash(context.Context, *types.ConstructionHashRequest) (*types.TransactionIdentifierResponse, *types.Error) {
-	panic("unimplemented")
-}
-
 func (l Launchpad) ConstructionMetadata(context.Context, *types.ConstructionMetadataRequest) (*types.ConstructionMetadataResponse, *types.Error) {
 	panic("unimplemented")
 }
