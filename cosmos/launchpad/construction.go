@@ -14,10 +14,6 @@ func (l Launchpad) ConstructionHash(context.Context, *types.ConstructionHashRequ
 	panic("unimplemented")
 }
 
-func (l Launchpad) ConstructionParse(context.Context, *types.ConstructionParseRequest) (*types.ConstructionParseResponse, *types.Error) {
-	panic("unimplemented")
-}
-
 func (l Launchpad) ConstructionSubmit(context.Context, *types.ConstructionSubmitRequest) (*types.TransactionIdentifierResponse, *types.Error) {
 	panic("unimplemented")
 }

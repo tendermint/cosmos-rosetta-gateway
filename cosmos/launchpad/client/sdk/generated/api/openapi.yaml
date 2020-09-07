@@ -2266,13 +2266,6 @@ components:
                   denom: stake
                 to_address: to_address
                 from_address: from_address
-            signature:
-              account_number: "0"
-              sequence: "0"
-              signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
-              pub_key:
-                type: tendermint/PubKeySecp256k1
-                value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
             fee:
               amount:
               - amount: "50"
@@ -2281,6 +2274,19 @@ components:
                 denom: stake
               gas: gas
             memo: memo
+            signatures:
+            - account_number: "0"
+              sequence: "0"
+              signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
+              pub_key:
+                type: tendermint/PubKeySecp256k1
+                value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
+            - account_number: "0"
+              sequence: "0"
+              signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
+              pub_key:
+                type: tendermint/PubKeySecp256k1
+                value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
         txhash: D085138D913993919295FF4B0A9107F1F2CDE0D37A87CE0644E217CBF3B49656
         height: "368"
       properties:
@@ -2336,13 +2342,6 @@ components:
                     denom: stake
                   to_address: to_address
                   from_address: from_address
-              signature:
-                account_number: "0"
-                sequence: "0"
-                signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
-                pub_key:
-                  type: tendermint/PubKeySecp256k1
-                  value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
               fee:
                 amount:
                 - amount: "50"
@@ -2351,6 +2350,19 @@ components:
                   denom: stake
                 gas: gas
               memo: memo
+              signatures:
+              - account_number: "0"
+                sequence: "0"
+                signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
+                pub_key:
+                  type: tendermint/PubKeySecp256k1
+                  value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
+              - account_number: "0"
+                sequence: "0"
+                signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
+                pub_key:
+                  type: tendermint/PubKeySecp256k1
+                  value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
           txhash: D085138D913993919295FF4B0A9107F1F2CDE0D37A87CE0644E217CBF3B49656
           height: "368"
         - result:
@@ -2384,13 +2396,6 @@ components:
                     denom: stake
                   to_address: to_address
                   from_address: from_address
-              signature:
-                account_number: "0"
-                sequence: "0"
-                signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
-                pub_key:
-                  type: tendermint/PubKeySecp256k1
-                  value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
               fee:
                 amount:
                 - amount: "50"
@@ -2399,6 +2404,19 @@ components:
                   denom: stake
                 gas: gas
               memo: memo
+              signatures:
+              - account_number: "0"
+                sequence: "0"
+                signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
+                pub_key:
+                  type: tendermint/PubKeySecp256k1
+                  value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
+              - account_number: "0"
+                sequence: "0"
+                signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
+                pub_key:
+                  type: tendermint/PubKeySecp256k1
+                  value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
           txhash: D085138D913993919295FF4B0A9107F1F2CDE0D37A87CE0644E217CBF3B49656
           height: "368"
       properties:
@@ -2444,13 +2462,6 @@ components:
                 denom: stake
               to_address: to_address
               from_address: from_address
-          signature:
-            account_number: "0"
-            sequence: "0"
-            signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
-            pub_key:
-              type: tendermint/PubKeySecp256k1
-              value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
           fee:
             amount:
             - amount: "50"
@@ -2459,6 +2470,19 @@ components:
               denom: stake
             gas: gas
           memo: memo
+          signatures:
+          - account_number: "0"
+            sequence: "0"
+            signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
+            pub_key:
+              type: tendermint/PubKeySecp256k1
+              value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
+          - account_number: "0"
+            sequence: "0"
+            signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
+            pub_key:
+              type: tendermint/PubKeySecp256k1
+              value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
       properties:
         value:
           $ref: '#/components/schemas/StdTx_value'
@@ -3705,7 +3729,7 @@ components:
           items:
             $ref: '#/components/schemas/Coin'
           type: array
-    StdTx_value_signature_pub_key:
+    StdTx_value_pub_key:
       example:
         type: tendermint/PubKeySecp256k1
         value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
@@ -3716,7 +3740,7 @@ components:
         value:
           example: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
           type: string
-    StdTx_value_signature:
+    StdTx_value_signatures:
       example:
         account_number: "0"
         sequence: "0"
@@ -3729,7 +3753,7 @@ components:
           example: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
           type: string
         pub_key:
-          $ref: '#/components/schemas/StdTx_value_signature_pub_key'
+          $ref: '#/components/schemas/StdTx_value_pub_key'
         account_number:
           example: "0"
           type: string
@@ -3757,13 +3781,6 @@ components:
               denom: stake
             to_address: to_address
             from_address: from_address
-        signature:
-          account_number: "0"
-          sequence: "0"
-          signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
-          pub_key:
-            type: tendermint/PubKeySecp256k1
-            value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
         fee:
           amount:
           - amount: "50"
@@ -3772,6 +3789,19 @@ components:
             denom: stake
           gas: gas
         memo: memo
+        signatures:
+        - account_number: "0"
+          sequence: "0"
+          signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
+          pub_key:
+            type: tendermint/PubKeySecp256k1
+            value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
+        - account_number: "0"
+          sequence: "0"
+          signature: MEUCIQD02fsDPra8MtbRsyB1w7bqTM55Wu138zQbFcWx4+CFyAIge5WNPfKIuvzBZ69MyqHsqD8S1IwiEp+iUb6VSdtlpgY=
+          pub_key:
+            type: tendermint/PubKeySecp256k1
+            value: Avz04VhtKJh8ACCVzlI8aTosGy0ikFXKIVHQ3jKMrosH
       properties:
         msg:
           items:
@@ -3781,8 +3811,10 @@ components:
           $ref: '#/components/schemas/StdTx_value_fee'
         memo:
           type: string
-        signature:
-          $ref: '#/components/schemas/StdTx_value_signature'
+        signatures:
+          items:
+            $ref: '#/components/schemas/StdTx_value_signatures'
+          type: array
     BlockID_parts:
       example:
         total: 0.0

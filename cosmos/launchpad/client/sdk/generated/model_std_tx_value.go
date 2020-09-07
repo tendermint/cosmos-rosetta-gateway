@@ -13,5 +13,5 @@ type StdTxValue struct {
 	Msg []Msg `json:"msg,omitempty"`
 	Fee StdTxValueFee `json:"fee,omitempty"`
 	Memo string `json:"memo,omitempty"`
-	Signature StdTxValueSignature `json:"signature,omitempty"`
+	Signatures []StdTxValueSignatures `json:"signatures,omitempty"`
 }
