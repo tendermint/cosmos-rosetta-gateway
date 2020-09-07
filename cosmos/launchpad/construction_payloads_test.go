@@ -115,7 +115,7 @@ func TestLaunchpad_ConstructionPayloads(t *testing.T) {
 				Amount: &types.Amount{
 					Value: "-5619726348293826415",
 					Currency: &types.Currency{
-						Symbol:   "atom",
+						Symbol:   "atom", // TODO: Panic when bad symbol.
 						Decimals: 18,
 					},
 				},
