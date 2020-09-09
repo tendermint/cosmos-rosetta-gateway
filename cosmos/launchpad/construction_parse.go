@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
+
 	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 )
 
