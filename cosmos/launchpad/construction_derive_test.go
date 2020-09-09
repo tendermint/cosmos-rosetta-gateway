@@ -7,6 +7,7 @@ import (
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/require"
+
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 

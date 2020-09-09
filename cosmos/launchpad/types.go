@@ -20,4 +20,3 @@ type TransferTxData struct {
 	To     types.AccAddress
 	Amount types.Coin
 }
-

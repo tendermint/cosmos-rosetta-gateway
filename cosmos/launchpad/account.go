@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/antihax/optional"
+
 	openapi "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 
 	"github.com/coinbase/rosetta-sdk-go/types"

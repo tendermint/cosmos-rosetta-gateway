@@ -6,13 +6,14 @@ import (
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/require"
+
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_ConstructionParse(t *testing.T) {
 	var (
 		operations = []*types.Operation{
-			&types.Operation{
+			{
 				OperationIdentifier: &types.OperationIdentifier{},
 				Type:                "Transfer",
 				Status:              "Success",
@@ -26,7 +27,7 @@ func TestLaunchpad_ConstructionParse(t *testing.T) {
 					},
 				},
 			},
-			&types.Operation{
+			{
 				OperationIdentifier: &types.OperationIdentifier{
 					Index: 1,
 				},
