@@ -10,6 +10,3 @@ func (l Launchpad) ConstructionCombine(context.Context, *types.ConstructionCombi
 	panic("unimplemented")
 }
 
-func (l Launchpad) ConstructionSubmit(context.Context, *types.ConstructionSubmitRequest) (*types.TransactionIdentifierResponse, *types.Error) {
-	panic("unimplemented")
-}
