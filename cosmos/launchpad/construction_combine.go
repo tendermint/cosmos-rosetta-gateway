@@ -20,7 +20,7 @@ func (l Launchpad) ConstructionCombine(ctx context.Context, r *types.Constructio
 
 	codec := simapp.MakeCodec()
 	var stdTx auth.StdTx
-	err = codec.UnmarshalJSON(bz, &stdTx)
+	err = codec.UnmarshalBinaryLengthPrefixed(bz, &stdTx)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrInvalidTransaction, "error unmarshalling tx")
 	}
