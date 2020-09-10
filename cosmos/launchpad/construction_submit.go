@@ -3,8 +3,9 @@ package launchpad
 import (
 	"context"
 	"encoding/base64"
-	"encoding/hex"
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/simapp"
+	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 
@@ -17,17 +18,23 @@ func (l Launchpad) ConstructionSubmit(ctx context.Context, req *types.Constructi
 		return nil, rosetta.WrapError(ErrInvalidTransaction, "error decoding tx")
 	}
 
-	bzHexString := hex.EncodeToString(bz)
-	fmt.Printf("%s", bzHexString)
-
-	resp, _, err := l.tendermint.Tx.BroadcastTxAsync(ctx, bzHexString)
+	var stdTx cosmosclient.StdTxValue
+	cdc := simapp.MakeCodec()
+	err = cdc.UnmarshalJSON(bz, &stdTx)
+	txBroadcast := cosmosclient.InlineObject{
+		Tx: cosmosclient.StdTx{
+			Value: stdTx,
+		},
+		Mode: "async",
+	}
+	resp, _, err := l.cosmos.Transactions.TxsPost(ctx, txBroadcast)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrNodeConnection, fmt.Sprintf("error broadcasting tx: %s", err))
 	}
 
 	return &types.TransactionIdentifierResponse{
 		TransactionIdentifier: &types.TransactionIdentifier{
-			Hash: resp.Result.Hash,
+			Hash: resp.Hash,
 		},
 	}, nil
 }
