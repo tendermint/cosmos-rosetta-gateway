@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
+	cosmostypes "github.com/cosmos/cosmos-sdk/types"
 
 	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 )
@@ -24,6 +25,11 @@ func (l Launchpad) ConstructionParse(ctx context.Context, request *types.Constru
 		ChainId       string             `json:"chain_id"`
 		Sequence      string             `json:"sequence"`
 		AccountNumber string             `json:"account_number"`
+		Signatures    []struct {
+			PubKey struct {
+				Value string `json:"value"`
+			} `json:"pub_key"`
+		} `json:"signatures"`
 	}
 
 	rawTx, err := hex.DecodeString(request.Transaction)
@@ -45,6 +51,12 @@ func (l Launchpad) ConstructionParse(ctx context.Context, request *types.Constru
 		return nil, ErrInvalidTransaction
 	}
 
+	var signers []string
+	for _, sig := range stdTx.Signatures {
+		addr := cosmostypes.AccAddress(sig.PubKey.Value)
+		signers = append(signers, addr.String())
+	}
+
 	metadata := map[string]interface{}{
 		ChainIdKey:       stdTx.ChainId,
 		SequenceKey:      sequence,
@@ -56,6 +68,7 @@ func (l Launchpad) ConstructionParse(ctx context.Context, request *types.Constru
 
 	return &types.ConstructionParseResponse{
 		Operations: toOperations(stdTx.Msgs, false),
+		Signers:    signers,
 		Metadata:   metadata,
 	}, nil
 }
