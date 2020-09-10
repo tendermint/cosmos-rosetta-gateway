@@ -17,6 +17,7 @@ type CosmosAPI struct {
 
 type CosmosTransactionsAPI interface {
 	TxsHashGet(ctx context.Context, hash string) (cosmosclient.TxQuery, *http.Response, error)
+	TxsPost(ctx context.Context, txBroadcast cosmosclient.InlineObject) (cosmosclient.BroadcastTxCommitResult, *http.Response, error)
 }
 
 type CosmosBankAPI interface {
@@ -33,6 +34,7 @@ type CosmosTendermintAPI interface {
 
 type TendermintAPI struct {
 	Info TendermintInfoAPI
+	Tx   TendermintTxAPI
 }
 
 type TendermintInfoAPI interface {
@@ -42,4 +44,8 @@ type TendermintInfoAPI interface {
 	BlockByHash(ctx context.Context, hash string) (tendermintclient.BlockResponse, *http.Response, error)
 	TxSearch(ctx context.Context, query string, localVarOptionals *tendermintclient.TxSearchOpts) (tendermintclient.TxSearchResponse, *http.Response, error)
 	Tx(ctx context.Context, hash string, localVarOptionals *tendermintclient.TxOpts) (tendermintclient.TxResponse, *http.Response, error)
+}
+
+type TendermintTxAPI interface {
+	BroadcastTxAsync(ctx context.Context, tx string) (tendermintclient.BroadcastTxResponse, *http.Response, error)
 }

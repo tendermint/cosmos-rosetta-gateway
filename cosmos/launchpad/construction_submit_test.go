@@ -3,6 +3,7 @@ package launchpad
 import (
 	"context"
 	"encoding/base64"
+	"encoding/hex"
 	"fmt"
 	"io/ioutil"
 	"testing"
@@ -15,9 +16,7 @@ import (
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
-func TestLaunchpad_ConstructionHash(t *testing.T) {
-	expectedHash := "6f22ea7620ebcb5078d244f06e88dd26906ba1685135bfc34f83fefdd653198a"
-
+func TestLaunchpad_ConstructionSubmit(t *testing.T) {
 	bz, err := ioutil.ReadFile("./testdata/test-with-signature-delete.json")
 	require.NoError(t, err)
 
@@ -32,14 +31,16 @@ func TestLaunchpad_ConstructionHash(t *testing.T) {
 	txBytes, err := cdc.MarshalBinaryLengthPrefixed(stdTx)
 	require.NoError(t, err)
 
+	toString := hex.EncodeToString(txBytes)
+	fmt.Printf("\n%s\n", toString)
+
 	// base64 encode the encoded tx bytes
 	txBytesBase64 := base64.StdEncoding.EncodeToString(txBytes)
-	fmt.Printf("\n%s\n", txBytesBase64)
 
-	resp, err2 := adapter.ConstructionHash(context.Background(), &types.ConstructionHashRequest{
+	resp, err2 := adapter.ConstructionSubmit(context.Background(), &types.ConstructionSubmitRequest{
 		SignedTransaction: txBytesBase64,
 	})
+	fmt.Printf("%v\n", resp)
 
 	require.Nil(t, err2)
-	require.Equal(t, expectedHash, resp.TransactionIdentifier.Hash)
 }
