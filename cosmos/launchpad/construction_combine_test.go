@@ -2,17 +2,23 @@ package launchpad
 
 import (
 	"context"
-	"encoding/base64"
-	"github.com/coinbase/rosetta-sdk-go/types"
-	"github.com/cosmos/cosmos-sdk/simapp"
-	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/stretchr/testify/require"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+	"encoding/hex"
 	"io/ioutil"
 	"testing"
+
+	"github.com/coinbase/rosetta-sdk-go/types"
+	"github.com/cosmos/cosmos-sdk/simapp"
+	cosmostypes "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/x/auth"
+	"github.com/stretchr/testify/require"
+
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_ConstructionCombine(t *testing.T) {
+	pubKey, err := cosmostypes.GetPubKeyFromBech32("accpub", "cosmospub1addwnpepq2ngu5spnhp4qyt6zzlvdex5zncn5rrqscw6m9c6tn6hc4za4jyf60z3mtr")
+	require.NoError(t, err)
+
 	properties := rosetta.NetworkProperties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
@@ -21,43 +27,41 @@ func TestLaunchpad_ConstructionCombine(t *testing.T) {
 			"Reward",
 		},
 	}
-	bz, err := ioutil.ReadFile("./testdata/signed-tx.json")
-	require.NoError(t, err)
 
+	bz, err := ioutil.ReadFile("./testdata/unsigned-tx.json")
+	require.NoError(t, err)
 	var stdTx auth.StdTx
-	cdc := simapp.MakeCodec()
-	err = cdc.UnmarshalJSON(bz, &stdTx)
+	codec := simapp.MakeCodec()
+	err = codec.UnmarshalJSON(bz, &stdTx)
+	require.NoError(t, err)
+	txBytes, err := codec.MarshalBinaryLengthPrefixed(stdTx)
 	require.NoError(t, err)
 
-	// re-encode it via the Amino wire protocol
-	txBytes, err := cdc.MarshalBinaryLengthPrefixed(stdTx)
-	require.NoError(t, err)
-
-	// base64 encode the encoded tx bytes
-	txBytesBase64 := base64.StdEncoding.EncodeToString(txBytes)
-	var signBytes []byte
-	for _, sign := range stdTx.Signatures {
-		signBytes = append(signBytes[:], sign.Bytes()...)
-	}
-	t.Log(txBytesBase64)
+	txHex := hex.EncodeToString(txBytes)
 	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, properties)
 	var combineRes, combineErr = adapter.ConstructionCombine(context.Background(), &types.ConstructionCombineRequest{
-		UnsignedTransaction: txBytesBase64,
+		UnsignedTransaction: txHex,
 		Signatures: []*types.Signature{{
 			SigningPayload: &types.SigningPayload{
 				Address: "cosmos1qrv8g4hwt4z6ds8mednhhgx907wug9d6y8n9jy",
-				Bytes:   []byte("KlPOI6frSRdjVHgiBIIpHI2PAQQnCCMSTWgonJQbECRATe8Yf7gqRgAVeLcPiVUbp2oSq2P7pp51f0iCtiA47Q==")},
+				Bytes:   txBytes,
+			},
 			PublicKey: &types.PublicKey{
 				CurveType: types.Secp256k1,
-				Bytes:     []byte("AjWp/hwbxozAbAXZNxP0NXDiAy/9k8FfHr1hbVbunnUV"),
+				Bytes:     pubKey.Bytes(),
 			},
 			SignatureType: types.Ecdsa,
-			Bytes:         signBytes,
+			// uses random bytes as signing is out of scope for rosetta
+			Bytes: txBytes,
 		},
 		}})
 	require.Nil(t, combineErr)
 	require.NotNil(t, combineRes)
-	t.Log(combineRes.SignedTransaction)
-	err = cdc.UnmarshalJSON(bz, &stdTx)
-	t.Log(stdTx.Signatures)
+
+	bz, err = hex.DecodeString(combineRes.SignedTransaction)
+	require.NoError(t, err)
+	var signedStdTx auth.StdTx
+	err = codec.UnmarshalBinaryLengthPrefixed(bz, &signedStdTx)
+	require.NoError(t, err)
+	require.Equal(t, stdTx.GetSigners(), signedStdTx.GetSigners())
 }
