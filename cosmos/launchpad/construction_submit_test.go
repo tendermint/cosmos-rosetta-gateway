@@ -2,7 +2,6 @@ package launchpad
 
 import (
 	"context"
-	"encoding/base64"
 	"encoding/hex"
 	"fmt"
 	"io/ioutil"
@@ -34,11 +33,8 @@ func TestLaunchpad_ConstructionSubmit(t *testing.T) {
 	toString := hex.EncodeToString(txBytes)
 	fmt.Printf("\n%s\n", toString)
 
-	// base64 encode the encoded tx bytes
-	txBytesBase64 := base64.StdEncoding.EncodeToString(txBytes)
-
 	resp, err2 := adapter.ConstructionSubmit(context.Background(), &types.ConstructionSubmitRequest{
-		SignedTransaction: txBytesBase64,
+		SignedTransaction: toString,
 	})
 	fmt.Printf("%v\n", resp)
 
