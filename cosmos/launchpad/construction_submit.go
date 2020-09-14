@@ -30,7 +30,7 @@ func (l Launchpad) ConstructionSubmit(ctx context.Context, req *types.Constructi
 
 	txBroadcast := cosmosclient.InlineObject{
 		Tx:   mapStdTxToApiStdTx(stdTx),
-		Mode: "async",
+		Mode: "block",
 	}
 
 	res, _, err := l.cosmos.Transactions.TxsPost(ctx, txBroadcast)
@@ -41,6 +41,9 @@ func (l Launchpad) ConstructionSubmit(ctx context.Context, req *types.Constructi
 	return &types.TransactionIdentifierResponse{
 		TransactionIdentifier: &types.TransactionIdentifier{
 			Hash: res.Txhash,
+		},
+		Metadata: map[string]interface{}{
+			"log": res.RawLog,
 		},
 	}, nil
 }

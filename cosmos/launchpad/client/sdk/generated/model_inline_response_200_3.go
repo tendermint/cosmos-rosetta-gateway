@@ -11,6 +11,11 @@ package openapi
 
 // InlineResponse2003 struct for InlineResponse2003
 type InlineResponse2003 struct {
-	Height string `json:"height,omitempty"`
-	Txhash string `json:"txhash,omitempty"`
+	Height    string  `json:"height,omitempty"`
+	Txhash    string  `json:"txhash,omitempty"`
+	Codespace string  `json:"codespace,omitempty"`
+	Code      float32 `json:"code,omitempty"`
+	RawLog    string  `json:"raw_log,omitempty"`
+	GasWanted string  `json:"gas_wanted,omitempty"`
+	GasUsed   string  `json:"gas_used,omitempty"`
 }

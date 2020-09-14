@@ -3356,12 +3356,27 @@ components:
       type: object
     inline_response_200_3:
       example:
+        codespace: codespace
+        code: 0.8008281904610115
+        gas_used: gas_used
+        gas_wanted: gas_wanted
+        raw_log: raw_log
         height: height
         txhash: txhash
       properties:
         height:
           type: string
         txhash:
+          type: string
+        codespace:
+          type: string
+        code:
+          type: number
+        raw_log:
+          type: string
+        gas_wanted:
+          type: string
+        gas_used:
           type: string
     inline_object_1:
       properties:
