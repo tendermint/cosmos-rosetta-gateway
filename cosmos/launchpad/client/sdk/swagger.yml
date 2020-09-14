@@ -313,7 +313,12 @@ paths:
         200:
           description: Tx broadcasting result
           schema:
-            $ref: "#/definitions/BroadcastTxCommitResult"
+            type: object
+            properties:
+              height:
+                type: string
+              txhash:
+                type: string
         500:
           description: Internal Server Error
   /txs/encode:

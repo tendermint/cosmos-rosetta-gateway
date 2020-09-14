@@ -30,17 +30,17 @@ func (l Launchpad) ConstructionSubmit(ctx context.Context, req *types.Constructi
 
 	txBroadcast := cosmosclient.InlineObject{
 		Tx:   mapStdTxToApiStdTx(stdTx),
-		Mode: "block",
+		Mode: "async",
 	}
 
-	resp, _, err := l.cosmos.Transactions.TxsPost(ctx, txBroadcast)
+	res, _, err := l.cosmos.Transactions.TxsPost(ctx, txBroadcast)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrNodeConnection, fmt.Sprintf("error broadcasting tx: %s", err))
 	}
-
+	fmt.Printf("this is res %v", res)
 	return &types.TransactionIdentifierResponse{
 		TransactionIdentifier: &types.TransactionIdentifier{
-			Hash: resp.Hash,
+			Hash: res.Txhash,
 		},
 	}, nil
 }

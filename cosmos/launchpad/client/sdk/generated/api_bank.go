@@ -44,7 +44,7 @@ func (a *BankApiService) BankAccountsAddressTransfersPost(ctx _context.Context, 
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/bank/accounts/{address}/transfers"
-	localVarPath = strings.Replace(localVarPath, "{"+"address"+"}", _neturl.QueryEscape(parameterToString(address, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"address"+"}", _neturl.QueryEscape(parameterToString(address, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -109,21 +109,21 @@ func (a *BankApiService) BankAccountsAddressTransfersPost(ctx _context.Context, 
 BankBalancesAddressGet Get the account balances
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param address Account address in bech32 format
-@return InlineResponse2004
+@return InlineResponse2005
 */
-func (a *BankApiService) BankBalancesAddressGet(ctx _context.Context, address string) (InlineResponse2004, *_nethttp.Response, error) {
+func (a *BankApiService) BankBalancesAddressGet(ctx _context.Context, address string) (InlineResponse2005, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  InlineResponse2004
+		localVarReturnValue  InlineResponse2005
 	)
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/bank/balances/{address}"
-	localVarPath = strings.Replace(localVarPath, "{"+"address"+"}", _neturl.QueryEscape(parameterToString(address, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"address"+"}", _neturl.QueryEscape(parameterToString(address, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}

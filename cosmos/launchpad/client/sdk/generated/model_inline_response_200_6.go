@@ -8,12 +8,9 @@
  */
 
 package openapi
+
 // InlineResponse2006 struct for InlineResponse2006
 type InlineResponse2006 struct {
-	LooseTokens string `json:"loose_tokens,omitempty"`
-	BondedTokens string `json:"bonded_tokens,omitempty"`
-	InflationLastTime string `json:"inflation_last_time,omitempty"`
-	Inflation string `json:"inflation,omitempty"`
-	DateLastCommissionReset string `json:"date_last_commission_reset,omitempty"`
-	PrevBondedShares string `json:"prev_bonded_shares,omitempty"`
+	Type  string                  `json:"type,omitempty"`
+	Value InlineResponse2006Value `json:"value,omitempty"`
 }

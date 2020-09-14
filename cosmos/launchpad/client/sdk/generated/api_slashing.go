@@ -28,16 +28,16 @@ type SlashingApiService service
 /*
 SlashingParametersGet Get the current slashing parameters
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return InlineResponse2008
+@return InlineResponse2009
 */
-func (a *SlashingApiService) SlashingParametersGet(ctx _context.Context) (InlineResponse2008, *_nethttp.Response, error) {
+func (a *SlashingApiService) SlashingParametersGet(ctx _context.Context) (InlineResponse2009, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  InlineResponse2008
+		localVarReturnValue  InlineResponse2009
 	)
 
 	// create path and map variables
@@ -198,7 +198,7 @@ func (a *SlashingApiService) SlashingValidatorsValidatorAddrUnjailPost(ctx _cont
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/slashing/validators/{validatorAddr}/unjail"
-	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}

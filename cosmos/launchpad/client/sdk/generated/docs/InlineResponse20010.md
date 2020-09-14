@@ -1,11 +1,11 @@
-# InlineResponse2006
+# InlineResponse20010
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Type** | **string** |  | [optional] 
-**Value** | [**InlineResponse2006Value**](inline_response_200_6_value.md) |  | [optional] 
+**MinDeposit** | [**[]Coin**](Coin.md) |  | [optional] 
+**MaxDepositPeriod** | **string** |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

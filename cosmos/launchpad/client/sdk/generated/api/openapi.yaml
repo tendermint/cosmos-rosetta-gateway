@@ -256,7 +256,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BroadcastTxCommitResult'
+                $ref: '#/components/schemas/inline_response_200_3'
           description: Tx broadcasting result
         "500":
           content: {}
@@ -285,7 +285,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_3'
+                $ref: '#/components/schemas/inline_response_200_4'
           description: The tx was successfully decoded and re-encoded
         "400":
           content: {}
@@ -345,7 +345,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                $ref: '#/components/schemas/inline_response_200_5'
           description: Account balances
         "500":
           content: {}
@@ -410,7 +410,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_5'
+                $ref: '#/components/schemas/inline_response_200_6'
           description: Account information on the blockchain
         "500":
           content: {}
@@ -913,7 +913,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_6'
+                $ref: '#/components/schemas/inline_response_200_7'
           description: OK
         "500":
           content: {}
@@ -928,7 +928,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_7'
+                $ref: '#/components/schemas/inline_response_200_8'
           description: OK
         "500":
           content: {}
@@ -1017,7 +1017,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_8'
+                $ref: '#/components/schemas/inline_response_200_9'
           description: OK
         "500":
           content: {}
@@ -1475,7 +1475,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_9'
+                $ref: '#/components/schemas/inline_response_200_10'
           description: OK
         "400":
           content: {}
@@ -3354,12 +3354,21 @@ components:
           example: block
           type: string
       type: object
+    inline_response_200_3:
+      example:
+        height: height
+        txhash: txhash
+      properties:
+        height:
+          type: string
+        txhash:
+          type: string
     inline_object_1:
       properties:
         tx:
           $ref: '#/components/schemas/StdTx'
       type: object
-    inline_response_200_3:
+    inline_response_200_4:
       example:
         tx: The base64-encoded Amino-serialized bytes for the tx
       properties:
@@ -3372,7 +3381,7 @@ components:
           example: SvBiXe4KPqijYZoKFFHEzJ8c2HPAfv2EFUcIhx0yPagwEhTy0vPA+GGhCEslKXa4Af0uB+mfShoMCgVzdGFrZRIDMTAwEgQQwJoM
           type: string
       type: object
-    inline_response_200_4:
+    inline_response_200_5:
       example:
         result:
         - amount: "50"
@@ -3396,7 +3405,7 @@ components:
             $ref: '#/components/schemas/Coin'
           type: array
       type: object
-    inline_response_200_5_value:
+    inline_response_200_6_value:
       example:
         public_key:
           type: type
@@ -3422,7 +3431,7 @@ components:
           $ref: '#/components/schemas/PublicKey'
         sequence:
           type: string
-    inline_response_200_5:
+    inline_response_200_6:
       example:
         type: type
         value:
@@ -3441,7 +3450,7 @@ components:
         type:
           type: string
         value:
-          $ref: '#/components/schemas/inline_response_200_5_value'
+          $ref: '#/components/schemas/inline_response_200_6_value'
     inline_object_4:
       properties:
         base_req:
@@ -3493,7 +3502,7 @@ components:
           example: "100"
           type: string
       type: object
-    inline_response_200_6:
+    inline_response_200_7:
       example:
         loose_tokens: loose_tokens
         prev_bonded_shares: prev_bonded_shares
@@ -3514,7 +3523,7 @@ components:
           type: string
         prev_bonded_shares:
           type: string
-    inline_response_200_7:
+    inline_response_200_8:
       example:
         inflation_rate_change: inflation_rate_change
         max_validators: 0
@@ -3543,7 +3552,7 @@ components:
         base_req:
           $ref: '#/components/schemas/StdTx'
       type: object
-    inline_response_200_8:
+    inline_response_200_9:
       example:
         min_signed_per_window: min_signed_per_window
         slash_fraction_downtime: slash_fraction_downtime
@@ -3633,7 +3642,7 @@ components:
           example: "yes"
           type: string
       type: object
-    inline_response_200_9:
+    inline_response_200_10:
       example:
         max_deposit_period: "86400000000000"
         min_deposit:

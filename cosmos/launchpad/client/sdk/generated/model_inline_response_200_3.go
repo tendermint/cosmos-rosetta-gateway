@@ -8,7 +8,9 @@
  */
 
 package openapi
+
 // InlineResponse2003 struct for InlineResponse2003
 type InlineResponse2003 struct {
-	Tx string `json:"tx,omitempty"`
+	Height string `json:"height,omitempty"`
+	Txhash string `json:"txhash,omitempty"`
 }

@@ -9,7 +9,8 @@
 
 package openapi
 
-// InlineResponse2004 struct for InlineResponse2004
-type InlineResponse2004 struct {
-	Tx string `json:"tx,omitempty"`
+// InlineResponse20010 struct for InlineResponse20010
+type InlineResponse20010 struct {
+	MinDeposit       []Coin `json:"min_deposit,omitempty"`
+	MaxDepositPeriod string `json:"max_deposit_period,omitempty"`
 }

@@ -11,11 +11,11 @@ package openapi
 
 import (
 	_context "context"
+	"github.com/antihax/optional"
 	_ioutil "io/ioutil"
 	_nethttp "net/http"
 	_neturl "net/url"
 	"strings"
-	"github.com/antihax/optional"
 )
 
 // Linger please
@@ -30,16 +30,16 @@ type GovernanceApiService service
 GovParametersDepositGet Query governance deposit parameters
 Query governance deposit parameters. The max_deposit_period units are in nanoseconds.
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return InlineResponse2009
+@return InlineResponse20010
 */
-func (a *GovernanceApiService) GovParametersDepositGet(ctx _context.Context) (InlineResponse2009, *_nethttp.Response, error) {
+func (a *GovernanceApiService) GovParametersDepositGet(ctx _context.Context) (InlineResponse20010, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  InlineResponse2009
+		localVarReturnValue  InlineResponse20010
 	)
 
 	// create path and map variables
@@ -253,9 +253,9 @@ func (a *GovernanceApiService) GovParametersVotingGet(ctx _context.Context) (map
 
 // GovProposalsGetOpts Optional parameters for the method 'GovProposalsGet'
 type GovProposalsGetOpts struct {
-    Voter optional.String
-    Depositor optional.String
-    Status optional.String
+	Voter     optional.String
+	Depositor optional.String
+	Status    optional.String
 }
 
 /*
@@ -522,9 +522,9 @@ func (a *GovernanceApiService) GovProposalsProposalIdDepositsDepositorGet(ctx _c
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/gov/proposals/{proposalId}/deposits/{depositor}"
-	localVarPath = strings.Replace(localVarPath, "{"+"proposalId"+"}", _neturl.QueryEscape(parameterToString(proposalId, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"proposalId"+"}", _neturl.QueryEscape(parameterToString(proposalId, "")), -1)
 
-	localVarPath = strings.Replace(localVarPath, "{"+"depositor"+"}", _neturl.QueryEscape(parameterToString(depositor, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"depositor"+"}", _neturl.QueryEscape(parameterToString(depositor, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -602,7 +602,7 @@ func (a *GovernanceApiService) GovProposalsProposalIdDepositsGet(ctx _context.Co
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/gov/proposals/{proposalId}/deposits"
-	localVarPath = strings.Replace(localVarPath, "{"+"proposalId"+"}", _neturl.QueryEscape(parameterToString(proposalId, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"proposalId"+"}", _neturl.QueryEscape(parameterToString(proposalId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -681,7 +681,7 @@ func (a *GovernanceApiService) GovProposalsProposalIdDepositsPost(ctx _context.C
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/gov/proposals/{proposalId}/deposits"
-	localVarPath = strings.Replace(localVarPath, "{"+"proposalId"+"}", _neturl.QueryEscape(parameterToString(proposalId, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"proposalId"+"}", _neturl.QueryEscape(parameterToString(proposalId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -761,7 +761,7 @@ func (a *GovernanceApiService) GovProposalsProposalIdGet(ctx _context.Context, p
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/gov/proposals/{proposalId}"
-	localVarPath = strings.Replace(localVarPath, "{"+"proposalId"+"}", _neturl.QueryEscape(parameterToString(proposalId, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"proposalId"+"}", _neturl.QueryEscape(parameterToString(proposalId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -839,7 +839,7 @@ func (a *GovernanceApiService) GovProposalsProposalIdProposerGet(ctx _context.Co
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/gov/proposals/{proposalId}/proposer"
-	localVarPath = strings.Replace(localVarPath, "{"+"proposalId"+"}", _neturl.QueryEscape(parameterToString(proposalId, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"proposalId"+"}", _neturl.QueryEscape(parameterToString(proposalId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -917,7 +917,7 @@ func (a *GovernanceApiService) GovProposalsProposalIdTallyGet(ctx _context.Conte
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/gov/proposals/{proposalId}/tally"
-	localVarPath = strings.Replace(localVarPath, "{"+"proposalId"+"}", _neturl.QueryEscape(parameterToString(proposalId, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"proposalId"+"}", _neturl.QueryEscape(parameterToString(proposalId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -995,7 +995,7 @@ func (a *GovernanceApiService) GovProposalsProposalIdVotesGet(ctx _context.Conte
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/gov/proposals/{proposalId}/votes"
-	localVarPath = strings.Replace(localVarPath, "{"+"proposalId"+"}", _neturl.QueryEscape(parameterToString(proposalId, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"proposalId"+"}", _neturl.QueryEscape(parameterToString(proposalId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -1074,7 +1074,7 @@ func (a *GovernanceApiService) GovProposalsProposalIdVotesPost(ctx _context.Cont
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/gov/proposals/{proposalId}/votes"
-	localVarPath = strings.Replace(localVarPath, "{"+"proposalId"+"}", _neturl.QueryEscape(parameterToString(proposalId, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"proposalId"+"}", _neturl.QueryEscape(parameterToString(proposalId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -1155,9 +1155,9 @@ func (a *GovernanceApiService) GovProposalsProposalIdVotesVoterGet(ctx _context.
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/gov/proposals/{proposalId}/votes/{voter}"
-	localVarPath = strings.Replace(localVarPath, "{"+"proposalId"+"}", _neturl.QueryEscape(parameterToString(proposalId, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"proposalId"+"}", _neturl.QueryEscape(parameterToString(proposalId, "")), -1)
 
-	localVarPath = strings.Replace(localVarPath, "{"+"voter"+"}", _neturl.QueryEscape(parameterToString(voter, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"voter"+"}", _neturl.QueryEscape(parameterToString(voter, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}

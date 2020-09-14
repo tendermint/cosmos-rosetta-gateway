@@ -2,6 +2,7 @@ package launchpad
 
 import (
 	"encoding/hex"
+	"github.com/cosmos/cosmos-sdk/x/auth"
 	"io/ioutil"
 	"testing"
 
@@ -58,4 +59,18 @@ func TestLaunchpad_ConstructionSubmit(t *testing.T) {
 	//require.Nil(t, err2)
 	//require.NotNil(t, resp)
 	//require.Equal(t, expectedHash, resp.TransactionIdentifier.Hash)
+}
+
+func TestTx(t *testing.T) {
+	bz, err := ioutil.ReadFile("./testdata/unsigned-tx.json")
+	require.NoError(t, err)
+	var stdTx auth.StdTx
+	codec := simapp.MakeCodec()
+	err = codec.UnmarshalJSON(bz, &stdTx)
+	require.NoError(t, err)
+	txBytes, err := codec.MarshalBinaryLengthPrefixed(stdTx)
+	require.NoError(t, err)
+
+	txHex := hex.EncodeToString(txBytes)
+	t.Log(txHex)
 }

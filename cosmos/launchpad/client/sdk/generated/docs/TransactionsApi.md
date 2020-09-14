@@ -48,7 +48,7 @@ No authorization required
 
 ## TxsEncodePost
 
-> InlineResponse2003 TxsEncodePost(ctx, tx)
+> InlineResponse2004 TxsEncodePost(ctx, tx)
 
 Encode a transaction to the Amino wire format
 
@@ -64,7 +64,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**InlineResponse2003**](inline_response_200_3.md)
+[**InlineResponse2004**](inline_response_200_4.md)
 
 ### Authorization
 
@@ -164,7 +164,7 @@ No authorization required
 
 ## TxsPost
 
-> BroadcastTxCommitResult TxsPost(ctx, txBroadcast)
+> InlineResponse2003 TxsPost(ctx, txBroadcast)
 
 Broadcast a signed tx
 
@@ -180,7 +180,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**BroadcastTxCommitResult**](BroadcastTxCommitResult.md)
+[**InlineResponse2003**](inline_response_200_3.md)
 
 ### Authorization
 

@@ -11,11 +11,11 @@ package openapi
 
 import (
 	_context "context"
+	"github.com/antihax/optional"
 	_ioutil "io/ioutil"
 	_nethttp "net/http"
 	_neturl "net/url"
 	"strings"
-	"github.com/antihax/optional"
 )
 
 // Linger please
@@ -44,7 +44,7 @@ func (a *StakingApiService) StakingDelegatorsDelegatorAddrDelegationsGet(ctx _co
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/staking/delegators/{delegatorAddr}/delegations"
-	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -105,7 +105,7 @@ func (a *StakingApiService) StakingDelegatorsDelegatorAddrDelegationsGet(ctx _co
 
 // StakingDelegatorsDelegatorAddrDelegationsPostOpts Optional parameters for the method 'StakingDelegatorsDelegatorAddrDelegationsPost'
 type StakingDelegatorsDelegatorAddrDelegationsPostOpts struct {
-    Delegation optional.Interface
+	Delegation optional.Interface
 }
 
 /*
@@ -113,7 +113,7 @@ StakingDelegatorsDelegatorAddrDelegationsPost Submit delegation
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param delegatorAddr Bech32 AccAddress of Delegator
  * @param optional nil or *StakingDelegatorsDelegatorAddrDelegationsPostOpts - Optional Parameters:
- * @param "Delegation" (optional.Interface of InlineObject4) - 
+ * @param "Delegation" (optional.Interface of InlineObject4) -
 @return BroadcastTxCommitResult
 */
 func (a *StakingApiService) StakingDelegatorsDelegatorAddrDelegationsPost(ctx _context.Context, delegatorAddr string, localVarOptionals *StakingDelegatorsDelegatorAddrDelegationsPostOpts) (BroadcastTxCommitResult, *_nethttp.Response, error) {
@@ -128,7 +128,7 @@ func (a *StakingApiService) StakingDelegatorsDelegatorAddrDelegationsPost(ctx _c
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/staking/delegators/{delegatorAddr}/delegations"
-	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -215,9 +215,9 @@ func (a *StakingApiService) StakingDelegatorsDelegatorAddrDelegationsValidatorAd
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/staking/delegators/{delegatorAddr}/delegations/{validatorAddr}"
-	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")), -1)
 
-	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -278,7 +278,7 @@ func (a *StakingApiService) StakingDelegatorsDelegatorAddrDelegationsValidatorAd
 
 // StakingDelegatorsDelegatorAddrRedelegationsPostOpts Optional parameters for the method 'StakingDelegatorsDelegatorAddrRedelegationsPost'
 type StakingDelegatorsDelegatorAddrRedelegationsPostOpts struct {
-    Delegation optional.Interface
+	Delegation optional.Interface
 }
 
 /*
@@ -286,7 +286,7 @@ StakingDelegatorsDelegatorAddrRedelegationsPost Submit a redelegation
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param delegatorAddr Bech32 AccAddress of Delegator
  * @param optional nil or *StakingDelegatorsDelegatorAddrRedelegationsPostOpts - Optional Parameters:
- * @param "Delegation" (optional.Interface of InlineObject6) - 
+ * @param "Delegation" (optional.Interface of InlineObject6) -
 @return StdTx
 */
 func (a *StakingApiService) StakingDelegatorsDelegatorAddrRedelegationsPost(ctx _context.Context, delegatorAddr string, localVarOptionals *StakingDelegatorsDelegatorAddrRedelegationsPostOpts) (StdTx, *_nethttp.Response, error) {
@@ -301,7 +301,7 @@ func (a *StakingApiService) StakingDelegatorsDelegatorAddrRedelegationsPost(ctx 
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/staking/delegators/{delegatorAddr}/redelegations"
-	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -387,7 +387,7 @@ func (a *StakingApiService) StakingDelegatorsDelegatorAddrUnbondingDelegationsGe
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/staking/delegators/{delegatorAddr}/unbonding_delegations"
-	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -448,7 +448,7 @@ func (a *StakingApiService) StakingDelegatorsDelegatorAddrUnbondingDelegationsGe
 
 // StakingDelegatorsDelegatorAddrUnbondingDelegationsPostOpts Optional parameters for the method 'StakingDelegatorsDelegatorAddrUnbondingDelegationsPost'
 type StakingDelegatorsDelegatorAddrUnbondingDelegationsPostOpts struct {
-    Delegation optional.Interface
+	Delegation optional.Interface
 }
 
 /*
@@ -456,7 +456,7 @@ StakingDelegatorsDelegatorAddrUnbondingDelegationsPost Submit an unbonding deleg
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param delegatorAddr Bech32 AccAddress of Delegator
  * @param optional nil or *StakingDelegatorsDelegatorAddrUnbondingDelegationsPostOpts - Optional Parameters:
- * @param "Delegation" (optional.Interface of InlineObject5) - 
+ * @param "Delegation" (optional.Interface of InlineObject5) -
 @return BroadcastTxCommitResult
 */
 func (a *StakingApiService) StakingDelegatorsDelegatorAddrUnbondingDelegationsPost(ctx _context.Context, delegatorAddr string, localVarOptionals *StakingDelegatorsDelegatorAddrUnbondingDelegationsPostOpts) (BroadcastTxCommitResult, *_nethttp.Response, error) {
@@ -471,7 +471,7 @@ func (a *StakingApiService) StakingDelegatorsDelegatorAddrUnbondingDelegationsPo
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/staking/delegators/{delegatorAddr}/unbonding_delegations"
-	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -558,9 +558,9 @@ func (a *StakingApiService) StakingDelegatorsDelegatorAddrUnbondingDelegationsVa
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/staking/delegators/{delegatorAddr}/unbonding_delegations/{validatorAddr}"
-	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")), -1)
 
-	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -637,7 +637,7 @@ func (a *StakingApiService) StakingDelegatorsDelegatorAddrValidatorsGet(ctx _con
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/staking/delegators/{delegatorAddr}/validators"
-	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -715,9 +715,9 @@ func (a *StakingApiService) StakingDelegatorsDelegatorAddrValidatorsValidatorAdd
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/staking/delegators/{delegatorAddr}/validators/{validatorAddr}"
-	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"delegatorAddr"+"}", _neturl.QueryEscape(parameterToString(delegatorAddr, "")), -1)
 
-	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -779,16 +779,16 @@ func (a *StakingApiService) StakingDelegatorsDelegatorAddrValidatorsValidatorAdd
 /*
 StakingParametersGet Get the current staking parameter values
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return InlineResponse2007
+@return InlineResponse2008
 */
-func (a *StakingApiService) StakingParametersGet(ctx _context.Context) (InlineResponse2007, *_nethttp.Response, error) {
+func (a *StakingApiService) StakingParametersGet(ctx _context.Context) (InlineResponse2008, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  InlineResponse2007
+		localVarReturnValue  InlineResponse2008
 	)
 
 	// create path and map variables
@@ -853,16 +853,16 @@ func (a *StakingApiService) StakingParametersGet(ctx _context.Context) (InlineRe
 /*
 StakingPoolGet Get the current state of the staking pool
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return InlineResponse2006
+@return InlineResponse2007
 */
-func (a *StakingApiService) StakingPoolGet(ctx _context.Context) (InlineResponse2006, *_nethttp.Response, error) {
+func (a *StakingApiService) StakingPoolGet(ctx _context.Context) (InlineResponse2007, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  InlineResponse2006
+		localVarReturnValue  InlineResponse2007
 	)
 
 	// create path and map variables
@@ -926,9 +926,9 @@ func (a *StakingApiService) StakingPoolGet(ctx _context.Context) (InlineResponse
 
 // StakingRedelegationsGetOpts Optional parameters for the method 'StakingRedelegationsGet'
 type StakingRedelegationsGetOpts struct {
-    Delegator optional.String
-    ValidatorFrom optional.String
-    ValidatorTo optional.String
+	Delegator     optional.String
+	ValidatorFrom optional.String
+	ValidatorTo   optional.String
 }
 
 /*
@@ -1020,9 +1020,9 @@ func (a *StakingApiService) StakingRedelegationsGet(ctx _context.Context, localV
 
 // StakingValidatorsGetOpts Optional parameters for the method 'StakingValidatorsGet'
 type StakingValidatorsGetOpts struct {
-    Status optional.String
-    Page optional.Int32
-    Limit optional.Int32
+	Status optional.String
+	Page   optional.Int32
+	Limit  optional.Int32
 }
 
 /*
@@ -1130,7 +1130,7 @@ func (a *StakingApiService) StakingValidatorsValidatorAddrDelegationsGet(ctx _co
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/staking/validators/{validatorAddr}/delegations"
-	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -1207,7 +1207,7 @@ func (a *StakingApiService) StakingValidatorsValidatorAddrGet(ctx _context.Conte
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/staking/validators/{validatorAddr}"
-	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -1284,7 +1284,7 @@ func (a *StakingApiService) StakingValidatorsValidatorAddrUnbondingDelegationsGe
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/staking/validators/{validatorAddr}/unbonding_delegations"
-	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")) , -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"validatorAddr"+"}", _neturl.QueryEscape(parameterToString(validatorAddr, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
