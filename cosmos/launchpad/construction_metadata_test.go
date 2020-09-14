@@ -32,10 +32,13 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 	m.
 		On("AuthAccountsAddressGet", mock.Anything, "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na").
 		Return(cosmosclient.InlineResponse2005{
-			Value: cosmosclient.InlineResponse2005Value{
-				AccountNumber: "0",
-				Address:       "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na",
-				Sequence:      "1",
+			Height: "12",
+			Result: cosmosclient.InlineResponse2005Result{
+				Value: cosmosclient.InlineResponse2005ResultValue{
+					AccountNumber: 0,
+					Address:       "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na",
+					Sequence:      1,
+				},
 			},
 		}, nil, nil).Once()
 
@@ -46,8 +49,8 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 	}
 
 	expMetadata := map[string]interface{}{
-		AccountNumberKey: "0",
-		SequenceKey:      "1",
+		AccountNumberKey: float32(0),
+		SequenceKey:      float32(1),
 		ChainIdKey:       "TheNetwork",
 	}
 	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{Auth: m}, properties)
