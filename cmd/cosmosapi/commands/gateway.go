@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
+
 	"github.com/spf13/cobra"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad"
@@ -67,6 +69,7 @@ func runHandler(cmd *cobra.Command, args []string) error {
 		Host:   tendermintRpc,
 		Scheme: "http",
 	})
+	altClient := altsdk.NewClient("http://" + cosmosRpc)
 
 	cosmoslp := launchpad.CosmosAPI{
 		Auth:         cosmoslpc.AuthApi,
@@ -88,7 +91,7 @@ func runHandler(cmd *cobra.Command, args []string) error {
 	h, err := service.New(
 		service.Network{
 			Properties: properties,
-			Adapter:    launchpad.NewLaunchpad(tendermintlp, cosmoslp, properties),
+			Adapter:    launchpad.NewLaunchpad(tendermintlp, cosmoslp, altClient, properties),
 		},
 	) // TODO: maybe create some constructor for specific adapters or Factory.
 	if err != nil {

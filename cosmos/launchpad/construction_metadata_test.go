@@ -2,6 +2,7 @@ package launchpad
 
 import (
 	"context"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 	"testing"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -50,7 +51,7 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 		SequenceKey:      "1",
 		ChainIdKey:       "TheNetwork",
 	}
-	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{Auth: m}, properties)
+	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{Auth: m}, altsdk.NewClient(""), properties)
 	metaResp, err := adapter.ConstructionMetadata(context.Background(), &types.ConstructionMetadataRequest{
 		NetworkIdentifier: &networkIdentifier,
 		Options:           options,

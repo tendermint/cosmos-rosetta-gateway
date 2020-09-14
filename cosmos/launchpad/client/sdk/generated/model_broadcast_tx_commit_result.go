@@ -8,11 +8,10 @@
  */
 
 package openapi
-
 // BroadcastTxCommitResult struct for BroadcastTxCommitResult
 type BroadcastTxCommitResult struct {
-	CheckTx   CheckTxResult   `json:"check_tx,omitempty"`
+	CheckTx CheckTxResult `json:"check_tx,omitempty"`
 	DeliverTx DeliverTxResult `json:"deliver_tx,omitempty"`
-	Hash      string          `json:"hash,omitempty"`
-	Height    string          `json:"height,omitempty"`
+	Hash string `json:"hash,omitempty"`
+	Height int32 `json:"height,omitempty"`
 }

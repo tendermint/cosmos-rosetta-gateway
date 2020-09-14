@@ -6,13 +6,10 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/cosmos/cosmos-sdk/x/bank"
-
-	"github.com/cosmos/cosmos-sdk/simapp"
-	sdk "github.com/cosmos/cosmos-sdk/x/auth/types"
-	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
-
 	"github.com/coinbase/rosetta-sdk-go/types"
+	sdk "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/cosmos/cosmos-sdk/x/bank"
+	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
@@ -23,24 +20,14 @@ func (l Launchpad) ConstructionSubmit(ctx context.Context, req *types.Constructi
 		return nil, rosetta.WrapError(ErrInvalidTransaction, "error decoding tx")
 	}
 
-	cdc := simapp.MakeCodec()
-
-	var stdTx sdk.StdTx
-	err = cdc.UnmarshalBinaryLengthPrefixed(bz, &stdTx)
-
-	txBroadcast := cosmosclient.InlineObject{
-		Tx:   mapStdTxToApiStdTx(stdTx),
-		Mode: "block",
-	}
-
-	resp, _, err := l.cosmos.Transactions.TxsPost(ctx, txBroadcast)
+	err = l.altCosmos.Broadcast(bz)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrNodeConnection, fmt.Sprintf("error broadcasting tx: %s", err))
 	}
 
 	return &types.TransactionIdentifierResponse{
 		TransactionIdentifier: &types.TransactionIdentifier{
-			Hash: resp.Hash,
+			Hash: "",
 		},
 	}, nil
 }

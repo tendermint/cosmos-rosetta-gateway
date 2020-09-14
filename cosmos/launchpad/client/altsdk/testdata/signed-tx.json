@@ -1,5 +1,6 @@
 {
-  "tx" : {
+  "type": "cosmos-sdk/StdTx",
+  "value": {
     "msg": [
       {
         "type": "cosmos-sdk/MsgSend",
@@ -25,10 +26,9 @@
           "type": "tendermint/PubKeySecp256k1",
           "value": "A5yW9jTAHiq66qNlcZm4Jix4Ef28qfXvT7xk9eRsITsc"
         },
-        "signature": "JjFWEfWlXhIfZIbSY008k0xcpLv9JtUtFNrmW+niFKIWCFhIpmSDIBm3w69H2MqQKNbLzFcSSNFZko81Q22ZVg=="
+        "signature": "O8cMhBR7IpRVdJgJ7uh0E+qKp/3gQ1YNAh5HibV2qq8jc5k8sVO6/faXdysyC4q+qeYdnN3TOBLJRb5h7+0bGA=="
       }
     ],
     "memo": ""
-  },
-  "mode": "block"
+  }
 }

@@ -5,8 +5,9 @@ import (
 	"io/ioutil"
 	"testing"
 
+	"github.com/cosmos/cosmos-sdk/x/auth/client/rest"
+
 	"github.com/cosmos/cosmos-sdk/simapp"
-	sdk "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -16,13 +17,14 @@ func TestLaunchpad_ConstructionSubmit(t *testing.T) {
 
 	cdc := simapp.MakeCodec()
 
-	var stdTx sdk.StdTx
+	var stdTx rest.BroadcastReq
 	err = cdc.UnmarshalJSON(bz, &stdTx)
 	require.NoError(t, err)
 
 	// re-encode it via the Amino wire protocol
-	txBytes, err := cdc.MarshalBinaryLengthPrefixed(stdTx)
+	txBytes, err := cdc.MarshalJSON(stdTx)
 	require.NoError(t, err)
+	t.Logf("%s\n", txBytes)
 
 	toString := hex.EncodeToString(txBytes)
 	t.Logf("%s\n", toString)
