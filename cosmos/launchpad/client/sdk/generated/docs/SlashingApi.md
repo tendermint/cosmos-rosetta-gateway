@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 ## SlashingParametersGet
 
-> InlineResponse2008 SlashingParametersGet(ctx, )
+> InlineResponse2009 SlashingParametersGet(ctx, )
 
 Get the current slashing parameters
 
@@ -22,7 +22,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**InlineResponse2008**](inline_response_200_8.md)
+[**InlineResponse2009**](inline_response_200_9.md)
 
 ### Authorization
 

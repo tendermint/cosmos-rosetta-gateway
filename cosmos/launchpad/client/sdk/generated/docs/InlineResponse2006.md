@@ -4,12 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**LooseTokens** | **string** |  | [optional] 
-**BondedTokens** | **string** |  | [optional] 
-**InflationLastTime** | **string** |  | [optional] 
-**Inflation** | **string** |  | [optional] 
-**DateLastCommissionReset** | **string** |  | [optional] 
-**PrevBondedShares** | **string** |  | [optional] 
+**Height** | **string** |  | [optional] 
+**Result** | [**InlineResponse2006Result**](inline_response_200_6_result.md) |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

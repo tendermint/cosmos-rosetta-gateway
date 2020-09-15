@@ -2,6 +2,7 @@ package launchpad
 
 import (
 	"context"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 	"testing"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -53,7 +54,7 @@ func TestLaunchpad_ConstructionParse(t *testing.T) {
 				"Reward",
 			},
 		}
-		adapter = NewLaunchpad(TendermintAPI{}, CosmosAPI{}, properties)
+		adapter = NewLaunchpad(TendermintAPI{}, CosmosAPI{},altsdk.NewClient(""),  properties)
 	)
 
 	cases := []struct {
