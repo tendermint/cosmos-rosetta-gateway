@@ -5,6 +5,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
+
 	"github.com/antihax/optional"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/mock"
@@ -23,7 +25,7 @@ func TestLaunchpad_NetworkList(t *testing.T) {
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, properties)
+	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, altsdk.NewClient(""), properties)
 
 	list, err := adapter.NetworkList(context.Background(), nil)
 	require.Nil(t, err)
@@ -55,7 +57,7 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{Tendermint: m}, properties)
+	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{Tendermint: m}, altsdk.NewClient(""), properties)
 
 	options, err := adapter.NetworkOptions(context.Background(), nil)
 	require.Nil(t, err)
@@ -156,7 +158,7 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{Info: m}, CosmosAPI{}, properties)
+	adapter := NewLaunchpad(TendermintAPI{Info: m}, CosmosAPI{}, altsdk.NewClient(""), properties)
 
 	status, adapterErr := adapter.NetworkStatus(context.Background(), nil)
 	require.Nil(t, adapterErr)

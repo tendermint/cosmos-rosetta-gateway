@@ -5,6 +5,8 @@ import (
 	"encoding/hex"
 	"testing"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
+
 	"github.com/coinbase/rosetta-sdk-go/types"
 	types2 "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
@@ -48,7 +50,7 @@ func TestPayloadsEndpoint_Errors(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, rosetta.NetworkProperties{})
+			adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, altsdk.NewClient(""), rosetta.NetworkProperties{})
 			_, err := adapter.ConstructionPayloads(context.Background(), tt.req)
 			require.Equal(t, err, tt.expectedErr)
 		})
@@ -101,7 +103,7 @@ func TestGetSenderByOperations(t *testing.T) {
 }
 
 func TestLaunchpad_ConstructionPayloads(t *testing.T) {
-	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, rosetta.NetworkProperties{})
+	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, altsdk.NewClient(""), rosetta.NetworkProperties{})
 
 	senderAddr := "cosmos1khy4gsp06srvu3u65uyhrax7tnj2atez9ewh38"
 	req := &types.ConstructionPayloadsRequest{
