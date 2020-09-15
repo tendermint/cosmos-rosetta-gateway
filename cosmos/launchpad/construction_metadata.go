@@ -3,6 +3,8 @@ package launchpad
 import (
 	"context"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
 
@@ -18,7 +20,7 @@ func (l Launchpad) ConstructionMetadata(ctx context.Context, r *types.Constructi
 	addrString := addr.(string)
 	accRes, _, err := l.cosmos.Auth.AuthAccountsAddressGet(ctx, addrString)
 	if err != nil {
-		return nil, ErrInterpreting
+		return nil, rosetta.WrapError(ErrInterpreting, err.Error())
 	}
 
 	// TODO: Check if suggested fee can be added
