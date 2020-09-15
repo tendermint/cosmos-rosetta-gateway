@@ -3,6 +3,7 @@ package launchpad
 import (
 	"context"
 	"encoding/hex"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 	"testing"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -24,7 +25,7 @@ func TestLaunchpad_ConstructionDerive(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, properties)
+	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, altsdk.NewClient(""), properties)
 	deriveResp, deriveErr := adapter.ConstructionDerive(context.Background(), &types.ConstructionDeriveRequest{
 		PublicKey: &types.PublicKey{
 			Bytes:     data,

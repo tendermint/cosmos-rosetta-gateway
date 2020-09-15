@@ -10,6 +10,11 @@
 package openapi
 // InlineResponse2009 struct for InlineResponse2009
 type InlineResponse2009 struct {
-	MinDeposit []Coin `json:"min_deposit,omitempty"`
-	MaxDepositPeriod string `json:"max_deposit_period,omitempty"`
+	MaxEvidenceAge string `json:"max_evidence_age,omitempty"`
+	SignedBlocksWindow string `json:"signed_blocks_window,omitempty"`
+	MinSignedPerWindow string `json:"min_signed_per_window,omitempty"`
+	DoubleSignUnbondDuration string `json:"double_sign_unbond_duration,omitempty"`
+	DowntimeUnbondDuration string `json:"downtime_unbond_duration,omitempty"`
+	SlashFractionDoubleSign string `json:"slash_fraction_double_sign,omitempty"`
+	SlashFractionDowntime string `json:"slash_fraction_downtime,omitempty"`
 }

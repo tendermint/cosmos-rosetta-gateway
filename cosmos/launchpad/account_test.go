@@ -2,6 +2,7 @@ package launchpad
 
 import (
 	"context"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 	"testing"
 
 	"github.com/antihax/optional"
@@ -26,7 +27,7 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 
 	m.
 		On("BankBalancesAddressGet", mock.Anything, "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na").
-		Return(cosmosclient.InlineResponse2004{
+		Return(cosmosclient.InlineResponse2005{
 			Height: "12345",
 			Result: []cosmosclient.Coin{
 				{Denom: "stake", Amount: "400"},
@@ -54,7 +55,7 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{Info: mt}, CosmosAPI{Bank: m}, properties)
+	adapter := NewLaunchpad(TendermintAPI{Info: mt}, CosmosAPI{Bank: m}, altsdk.NewClient(""), properties)
 
 	res, err := adapter.AccountBalance(context.Background(), &types.AccountBalanceRequest{
 		AccountIdentifier: &types.AccountIdentifier{
