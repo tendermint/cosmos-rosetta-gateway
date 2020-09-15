@@ -2,9 +2,10 @@ package launchpad
 
 import (
 	"context"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 	"testing"
 	"time"
+
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 
 	"github.com/antihax/optional"
 	"github.com/coinbase/rosetta-sdk-go/types"

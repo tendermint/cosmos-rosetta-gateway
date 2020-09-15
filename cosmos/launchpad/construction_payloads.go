@@ -3,6 +3,7 @@ package launchpad
 import (
 	"context"
 	"encoding/hex"
+
 	"github.com/cosmos/cosmos-sdk/simapp"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -44,6 +45,9 @@ func (l Launchpad) ConstructionPayloads(ctx context.Context, req *types.Construc
 	)
 	codec := simapp.MakeCodec()
 	txBytes, err := codec.MarshalBinaryLengthPrefixed(tx)
+	if err != nil {
+		return nil, rosetta.WrapError(ErrInvalidRequest, err.Error())
+	}
 
 	return &types.ConstructionPayloadsResponse{
 		UnsignedTransaction: hex.EncodeToString(txBytes),
