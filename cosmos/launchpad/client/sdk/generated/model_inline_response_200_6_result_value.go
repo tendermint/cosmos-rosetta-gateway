@@ -10,9 +10,9 @@
 package openapi
 // InlineResponse2006ResultValue struct for InlineResponse2006ResultValue
 type InlineResponse2006ResultValue struct {
-	AccountNumber float32 `json:"account_number,omitempty"`
+	AccountNumber string `json:"account_number,omitempty"`
 	Address string `json:"address,omitempty"`
 	Coins []Coin `json:"coins,omitempty"`
-	PublicKey string `json:"public_key,omitempty"`
-	Sequence float32 `json:"sequence,omitempty"`
+	PublicKey PublicKey `json:"public_key,omitempty"`
+	Sequence string `json:"sequence,omitempty"`
 }

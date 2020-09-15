@@ -491,7 +491,7 @@ paths:
                     type: object
                     properties:
                       account_number:
-                        type: number
+                        type: string
                       address:
                         type: string
                       coins:
@@ -499,9 +499,9 @@ paths:
                         items:
                           $ref: "#/definitions/Coin"
                       public_key:
-                        type: string
+                        $ref: "#/definitions/PublicKey"
                       sequence:
-                        type: number
+                        type: string
         500:
           description: Server internel error
   /staking/delegators/{delegatorAddr}/delegations:

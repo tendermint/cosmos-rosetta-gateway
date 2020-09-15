@@ -3,12 +3,17 @@ package launchpad
 import (
 	"context"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
-
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
+
+type BroadcastReq struct {
+	Tx   json.RawMessage `json:"tx"`
+	Mode string          `json:"mode"`
+}
 
 func (l Launchpad) ConstructionSubmit(ctx context.Context, req *types.ConstructionSubmitRequest) (*types.TransactionIdentifierResponse, *types.Error) {
 	bz, err := hex.DecodeString(req.SignedTransaction)
@@ -16,7 +21,20 @@ func (l Launchpad) ConstructionSubmit(ctx context.Context, req *types.Constructi
 		return nil, rosetta.WrapError(ErrInvalidTransaction, "error decoding tx")
 	}
 
-	resp, err := l.altCosmos.Broadcast(bz)
+	var test map[string]json.RawMessage
+	err = json.Unmarshal(bz, &test)
+
+	bReq := BroadcastReq{
+		Tx:   test["value"],
+		Mode: "block",
+	}
+
+	bytes, err := json.Marshal(bReq)
+	if err != nil {
+		return nil, rosetta.WrapError(ErrInvalidTransaction, "error decoding tx")
+	}
+
+	resp, err := l.altCosmos.Broadcast(bytes)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrNodeConnection, fmt.Sprintf("error broadcasting tx: %s", err))
 	}

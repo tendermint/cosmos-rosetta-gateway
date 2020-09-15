@@ -2,6 +2,7 @@ package launchpad
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
@@ -30,23 +31,31 @@ func GetMetadataFromPayloadReq(req *types.ConstructionPayloadsRequest) (*Payload
 	if !ok {
 		return nil, fmt.Errorf("sequence metadata was not provided")
 	}
-	seqF64, ok := sequence.(float64)
+	seqStr, ok := sequence.(string)
 	if !ok {
 		return nil, fmt.Errorf("invalid sequence value")
+	}
+	seqNum, err := strconv.Atoi(seqStr)
+	if err != nil {
+		return nil, fmt.Errorf("error converting sequence num to int")
 	}
 
 	accountNum, ok := req.Metadata[AccountNumberKey]
 	if !ok {
 		return nil, fmt.Errorf("account_number metadata was not provided")
 	}
-	accF64, ok := accountNum.(float64)
+	accStr, ok := accountNum.(string)
 	if !ok {
 		return nil, fmt.Errorf("invalid account_number value")
+	}
+	accNum, err := strconv.Atoi(accStr)
+	if err != nil {
+		return nil, fmt.Errorf("error converting account num to int")
 	}
 
 	return &PayloadReqMetadata{
 		ChainId:       chainId,
-		Sequence:      uint64(seqF64),
-		AccountNumber: uint64(accF64),
+		Sequence:      uint64(seqNum),
+		AccountNumber: uint64(accNum),
 	}, nil
 }

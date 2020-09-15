@@ -44,7 +44,7 @@ func (l Launchpad) ConstructionPayloads(ctx context.Context, req *types.Construc
 		metadata.ChainId, metadata.AccountNumber, metadata.Sequence, tx.Fee, tx.Msgs, tx.Memo,
 	)
 	codec := simapp.MakeCodec()
-	txBytes, err := codec.MarshalBinaryLengthPrefixed(tx)
+	txBytes, err := codec.MarshalJSON(tx)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrInvalidRequest, err.Error())
 	}
@@ -55,7 +55,7 @@ func (l Launchpad) ConstructionPayloads(ctx context.Context, req *types.Construc
 			{
 				Address:       transferData.From.String(),
 				Bytes:         signBytes,
-				SignatureType: "ed25519",
+				SignatureType: "secp256k1",
 			},
 		},
 	}, nil
