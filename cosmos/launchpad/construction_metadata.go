@@ -23,12 +23,18 @@ func (l Launchpad) ConstructionMetadata(ctx context.Context, r *types.Constructi
 		return nil, rosetta.WrapError(ErrInterpreting, err.Error())
 	}
 
+	gas, ok := r.Options[GasKey]
+	if !ok {
+		return nil, rosetta.WrapError(ErrInvalidAddress, "gas not set")
+	}
+
 	// TODO: Check if suggested fee can be added
 	res := &types.ConstructionMetadataResponse{
 		Metadata: map[string]interface{}{
 			AccountNumberKey: accRes.Result.Value.AccountNumber,
 			SequenceKey:      accRes.Result.Value.Sequence,
 			ChainIdKey:       r.NetworkIdentifier.Network,
+			GasKey:           gas,
 		},
 	}
 

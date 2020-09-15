@@ -12,12 +12,14 @@ const (
 	ChainIdKey       = "chain_id"
 	SequenceKey      = "sequence"
 	AccountNumberKey = "account_number"
+	GasKey           = "gas"
 )
 
 type PayloadReqMetadata struct {
 	ChainId       string
 	Sequence      uint64
 	AccountNumber uint64
+	Gas           uint64
 }
 
 // GetMetadataFromPayloadReq obtains the metadata from the request to /construction/payloads endpoint.
@@ -53,9 +55,19 @@ func GetMetadataFromPayloadReq(req *types.ConstructionPayloadsRequest) (*Payload
 		return nil, fmt.Errorf("error converting account num to int")
 	}
 
+	gasNum, ok := req.Metadata[GasKey]
+	if !ok {
+		return nil, fmt.Errorf("gas metadata was not provided")
+	}
+	gasF64, ok := gasNum.(float64)
+	if !ok {
+		return nil, fmt.Errorf("invalid gas value")
+	}
+
 	return &PayloadReqMetadata{
 		ChainId:       chainId,
 		Sequence:      uint64(seqNum),
 		AccountNumber: uint64(accNum),
+		Gas:           uint64(gasF64),
 	}, nil
 }

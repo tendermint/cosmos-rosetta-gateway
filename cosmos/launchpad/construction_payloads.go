@@ -39,7 +39,9 @@ func (l Launchpad) ConstructionPayloads(ctx context.Context, req *types.Construc
 		return nil, rosetta.WrapError(ErrInvalidRequest, err.Error())
 	}
 
-	tx := auth.NewStdTx([]cosmostypes.Msg{msg}, auth.StdFee{}, nil, "TODO memo") // TODO fees and memo.
+	tx := auth.NewStdTx([]cosmostypes.Msg{msg}, auth.StdFee{
+		Gas: metadata.Gas,
+	}, nil, "TODO memo") // TODO fees and memo.
 	signBytes := auth.StdSignBytes(
 		metadata.ChainId, metadata.AccountNumber, metadata.Sequence, tx.Fee, tx.Msgs, tx.Memo,
 	)
