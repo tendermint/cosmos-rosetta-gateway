@@ -9,7 +9,7 @@ const (
 )
 
 type Client interface {
-	Broadcast(request []byte) error
+	Broadcast(request []byte) (*BroadcastResp, error)
 }
 
 type client struct {

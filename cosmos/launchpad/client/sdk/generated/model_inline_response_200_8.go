@@ -10,11 +10,11 @@
 package openapi
 // InlineResponse2008 struct for InlineResponse2008
 type InlineResponse2008 struct {
-	MaxEvidenceAge string `json:"max_evidence_age,omitempty"`
-	SignedBlocksWindow string `json:"signed_blocks_window,omitempty"`
-	MinSignedPerWindow string `json:"min_signed_per_window,omitempty"`
-	DoubleSignUnbondDuration string `json:"double_sign_unbond_duration,omitempty"`
-	DowntimeUnbondDuration string `json:"downtime_unbond_duration,omitempty"`
-	SlashFractionDoubleSign string `json:"slash_fraction_double_sign,omitempty"`
-	SlashFractionDowntime string `json:"slash_fraction_downtime,omitempty"`
+	InflationRateChange string `json:"inflation_rate_change,omitempty"`
+	InflationMax string `json:"inflation_max,omitempty"`
+	InflationMin string `json:"inflation_min,omitempty"`
+	GoalBonded string `json:"goal_bonded,omitempty"`
+	UnbondingTime string `json:"unbonding_time,omitempty"`
+	MaxValidators int32 `json:"max_validators,omitempty"`
+	BondDenom string `json:"bond_denom,omitempty"`
 }

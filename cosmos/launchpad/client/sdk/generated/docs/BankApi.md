@@ -44,7 +44,7 @@ No authorization required
 
 ## BankBalancesAddressGet
 
-> InlineResponse2004 BankBalancesAddressGet(ctx, address)
+> InlineResponse2005 BankBalancesAddressGet(ctx, address)
 
 Get the account balances
 
@@ -58,7 +58,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**InlineResponse2004**](inline_response_200_4.md)
+[**InlineResponse2005**](inline_response_200_5.md)
 
 ### Authorization
 

@@ -109,16 +109,16 @@ TxsEncodePost Encode a transaction to the Amino wire format
 Encode a transaction (signed or not) from JSON to base64-encoded Amino serialized bytes
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param tx
-@return InlineResponse2003
+@return InlineResponse2004
 */
-func (a *TransactionsApiService) TxsEncodePost(ctx _context.Context, tx InlineObject1) (InlineResponse2003, *_nethttp.Response, error) {
+func (a *TransactionsApiService) TxsEncodePost(ctx _context.Context, tx InlineObject1) (InlineResponse2004, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  InlineResponse2003
+		localVarReturnValue  InlineResponse2004
 	)
 
 	// create path and map variables
@@ -375,16 +375,16 @@ TxsPost Broadcast a signed tx
 Broadcast a signed tx to a full node
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param txBroadcast
-@return BroadcastTxCommitResult
+@return InlineResponse2003
 */
-func (a *TransactionsApiService) TxsPost(ctx _context.Context, txBroadcast InlineObject) (BroadcastTxCommitResult, *_nethttp.Response, error) {
+func (a *TransactionsApiService) TxsPost(ctx _context.Context, txBroadcast InlineObject) (InlineResponse2003, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  BroadcastTxCommitResult
+		localVarReturnValue  InlineResponse2003
 	)
 
 	// create path and map variables

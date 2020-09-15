@@ -2,33 +2,35 @@ package altsdk
 
 import (
 	"bytes"
-	"fmt"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
-
-	"github.com/cosmos/cosmos-sdk/x/auth/types"
 )
 
-type BroadcastRequest struct {
-	Tx   types.StdTx `json:"tx"`
-	Mode string      `json:"mode"`
+type BroadcastResp struct {
+	TxHash string `json:"txhash"`
+	RawLog string `json:"raw_log"`
 }
 
 // Broadcast the specified tx.
-func (c client) Broadcast(req []byte) error {
+func (c client) Broadcast(req []byte) (*BroadcastResp, error) {
 	b := bytes.NewBuffer(req)
 	post, err := http.Post(c.buildEndpoint(BroadcastEndpoint), "", b)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer post.Body.Close()
 
 	resp, err := ioutil.ReadAll(post.Body)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	fmt.Printf("%s", resp)
+	r := &BroadcastResp{}
+	err = json.Unmarshal(resp, r)
+	if err != nil {
+		return nil, err
+	}
 
-	return nil
+	return r, nil
 }

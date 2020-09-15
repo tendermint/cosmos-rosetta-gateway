@@ -10,6 +10,5 @@
 package openapi
 // InlineResponse2004 struct for InlineResponse2004
 type InlineResponse2004 struct {
-	Height string `json:"height,omitempty"`
-	Result []Coin `json:"result,omitempty"`
+	Tx string `json:"tx,omitempty"`
 }
