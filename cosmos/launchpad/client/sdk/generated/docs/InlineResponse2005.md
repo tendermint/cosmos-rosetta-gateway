@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Type** | **string** |  | [optional] 
-**Value** | [**InlineResponse2005Value**](inline_response_200_5_value.md) |  | [optional] 
+**Height** | **string** |  | [optional] 
+**Result** | [**InlineResponse2005Result**](inline_response_200_5_result.md) |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

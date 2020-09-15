@@ -2,7 +2,6 @@ package launchpad
 
 import (
 	"context"
-
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
 
@@ -24,8 +23,8 @@ func (l Launchpad) ConstructionMetadata(ctx context.Context, r *types.Constructi
 	// TODO: Check if suggested fee can be added
 	res := &types.ConstructionMetadataResponse{
 		Metadata: map[string]interface{}{
-			AccountNumberKey: accRes.Value.AccountNumber,
-			SequenceKey:      accRes.Value.Sequence,
+			AccountNumberKey: accRes.Result.Value.AccountNumber,
+			SequenceKey:      accRes.Result.Value.Sequence,
 			ChainIdKey:       r.NetworkIdentifier.Network,
 		},
 	}
