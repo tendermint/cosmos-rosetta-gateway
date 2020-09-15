@@ -32,10 +32,10 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 	m := &mocks.CosmosAuthAPI{}
 	m.
 		On("AuthAccountsAddressGet", mock.Anything, "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na").
-		Return(cosmosclient.InlineResponse2005{
+		Return(cosmosclient.InlineResponse2006{
 			Height: "12",
-			Result: cosmosclient.InlineResponse2005Result{
-				Value: cosmosclient.InlineResponse2005ResultValue{
+			Result: cosmosclient.InlineResponse2006Result{
+				Value: cosmosclient.InlineResponse2006ResultValue{
 					AccountNumber: 0,
 					Address:       "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na",
 					Sequence:      1,

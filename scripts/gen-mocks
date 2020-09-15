@@ -7,4 +7,4 @@ rm -rf cosmos/launchpad/client/altsdk/mocks/
 cd cosmos/launchpad && \
     mockery --name ^Tendermint.*?API --output client/tendermint/mocks && \
     mockery --name ^Cosmos.*?API --output client/sdk/mocks && \
-    mockery --output client/altsdk/mocks
+    mockery --output client/altsdk/mocks --all
