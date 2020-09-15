@@ -480,23 +480,28 @@ paths:
           schema:
             type: object
             properties:
-              type:
+              height:
                 type: string
-              value:
+              result:
                 type: object
                 properties:
-                  account_number:
+                  type:
                     type: string
-                  address:
-                    type: string
-                  coins:
-                    type: array
-                    items:
-                      $ref: "#/definitions/Coin"
-                  public_key:
-                    $ref: "#/definitions/PublicKey"
-                  sequence:
-                    type: string
+                  value:
+                    type: object
+                    properties:
+                      account_number:
+                        type: number
+                      address:
+                        type: string
+                      coins:
+                        type: array
+                        items:
+                          $ref: "#/definitions/Coin"
+                      public_key:
+                        type: string
+                      sequence:
+                        type: number
         500:
           description: Server internel error
   /staking/delegators/{delegatorAddr}/delegations:
