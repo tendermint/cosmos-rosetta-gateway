@@ -72,10 +72,9 @@ func runHandler(cmd *cobra.Command, args []string) error {
 	altClient := altsdk.NewClient("http://" + cosmosRpc)
 
 	cosmoslp := launchpad.CosmosAPI{
-		Auth:         cosmoslpc.AuthApi,
-		Bank:         cosmoslpc.BankApi,
-		Tendermint:   cosmoslpc.TendermintRPCApi,
-		Transactions: cosmoslpc.TransactionsApi,
+		Auth:       cosmoslpc.AuthApi,
+		Bank:       cosmoslpc.BankApi,
+		Tendermint: cosmoslpc.TendermintRPCApi,
 	}
 	tendermintlp := launchpad.TendermintAPI{
 		Info: tendermintlpc.InfoApi,
