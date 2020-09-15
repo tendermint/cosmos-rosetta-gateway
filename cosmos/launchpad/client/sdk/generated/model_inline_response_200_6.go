@@ -10,6 +10,6 @@
 package openapi
 // InlineResponse2006 struct for InlineResponse2006
 type InlineResponse2006 struct {
-	Type string `json:"type,omitempty"`
-	Value InlineResponse2006Value `json:"value,omitempty"`
+	Height string `json:"height,omitempty"`
+	Result InlineResponse2006Result `json:"result,omitempty"`
 }
