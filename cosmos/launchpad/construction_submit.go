@@ -24,6 +24,9 @@ func (l Launchpad) ConstructionSubmit(ctx context.Context, req *types.Constructi
 
 	var test map[string]json.RawMessage
 	err = json.Unmarshal(bz, &test)
+	if err != nil {
+		return nil, rosetta.WrapError(ErrInvalidTransaction, "error unmarshaling tx")
+	}
 
 	bReq := BroadcastReq{
 		Tx:   test["value"],
