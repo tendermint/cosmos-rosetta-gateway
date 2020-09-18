@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
+
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 

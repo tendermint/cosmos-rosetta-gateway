@@ -19,7 +19,6 @@ type CosmosTransactionsAPI interface {
 	TxsHashGet(ctx context.Context, hash string) (cosmosclient.TxQuery, *http.Response, error)
 	TxsPost(ctx context.Context, txBroadcast cosmosclient.InlineObject) (cosmosclient.BroadcastTxCommitResult, *http.Response, error)
 }
-
 type CosmosBankAPI interface {
 	BankBalancesAddressGet(ctx context.Context, address string) (cosmosclient.InlineResponse2005, *http.Response, error)
 }

@@ -36,7 +36,7 @@ func TestLaunchpad_ConstructionCombine(t *testing.T) {
 	codec := simapp.MakeCodec()
 	err = codec.UnmarshalJSON(bz, &stdTx)
 	require.NoError(t, err)
-	txBytes, err := codec.MarshalBinaryLengthPrefixed(stdTx)
+	txBytes, err := codec.MarshalJSON(stdTx)
 	require.NoError(t, err)
 
 	txHex := hex.EncodeToString(txBytes)
@@ -63,7 +63,7 @@ func TestLaunchpad_ConstructionCombine(t *testing.T) {
 	bz, err = hex.DecodeString(combineRes.SignedTransaction)
 	require.NoError(t, err)
 	var signedStdTx auth.StdTx
-	err = codec.UnmarshalBinaryLengthPrefixed(bz, &signedStdTx)
+	err = codec.UnmarshalJSON(bz, &signedStdTx)
 	require.NoError(t, err)
 	require.Equal(t, stdTx.GetSigners(), signedStdTx.GetSigners())
 }
