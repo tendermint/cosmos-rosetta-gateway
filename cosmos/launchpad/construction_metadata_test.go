@@ -2,8 +2,9 @@ package launchpad
 
 import (
 	"context"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 	"testing"
+
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/google/go-cmp/cmp"
@@ -36,9 +37,9 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 			Height: "12",
 			Result: cosmosclient.InlineResponse2006Result{
 				Value: cosmosclient.InlineResponse2006ResultValue{
-					AccountNumber: 0,
+					AccountNumber: "0",
 					Address:       "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na",
-					Sequence:      1,
+					Sequence:      "1",
 				},
 			},
 		}, nil, nil).Once()
@@ -50,9 +51,10 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 	}
 
 	expMetadata := map[string]interface{}{
-		AccountNumberKey: float32(0),
-		SequenceKey:      float32(1),
+		AccountNumberKey: "0",
+		SequenceKey:      "1",
 		ChainIdKey:       "TheNetwork",
+		OptionGas:        &feeMultiplier,
 	}
 	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{Auth: m}, altsdk.NewClient(""), properties)
 	metaResp, err := adapter.ConstructionMetadata(context.Background(), &types.ConstructionMetadataRequest{

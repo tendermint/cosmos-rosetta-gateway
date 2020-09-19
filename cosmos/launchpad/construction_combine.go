@@ -3,6 +3,7 @@ package launchpad
 import (
 	"context"
 	"encoding/hex"
+	"fmt"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/cosmos/cosmos-sdk/simapp"
@@ -22,9 +23,9 @@ func (l Launchpad) ConstructionCombine(ctx context.Context, r *types.Constructio
 
 	codec := simapp.MakeCodec()
 	var stdTx auth.StdTx
-	err = codec.UnmarshalBinaryLengthPrefixed(bz, &stdTx)
+	err = codec.UnmarshalJSON(bz, &stdTx)
 	if err != nil {
-		return nil, rosetta.WrapError(ErrInvalidTransaction, "unable to unmarshal tx")
+		return nil, rosetta.WrapError(ErrInvalidTransaction, fmt.Sprintf("unable to unmarshal tx: %s", err.Error()))
 	}
 	var pk crypto.PubKey
 	var sigs []auth.StdSignature
@@ -47,7 +48,7 @@ func (l Launchpad) ConstructionCombine(ctx context.Context, r *types.Constructio
 	}
 
 	stdTx.Signatures = sigs
-	txBytes, err := codec.MarshalBinaryLengthPrefixed(stdTx)
+	txBytes, err := codec.MarshalJSON(stdTx)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrInvalidTransaction, "unable to marshal signed tx")
 	}
