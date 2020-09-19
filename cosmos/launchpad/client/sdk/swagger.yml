@@ -455,11 +455,6 @@ paths:
                         type: string
         500:
           description: Server internel error
-
-
-
-
-
 definitions:
   CheckTxResult:
     type: object
@@ -785,40 +780,13 @@ definitions:
             $ref: "#/definitions/BlockID"
       block:
         $ref: "#/definitions/Block"
-
-  BaseReq:
+  PublicKey:
     type: object
     properties:
-      from:
+      type:
         type: string
-        example: "cosmos1g9ahr6xhht5rmqven628nklxluzyv8z9jqjcmc"
-        description: Sender address or Keybase name to generate a transaction
-      memo:
+      value:
         type: string
-        example: "Sent via Cosmos Voyager 🚀"
-      chain_id:
-        type: string
-        example: "Cosmos-Hub"
-      account_number:
-        type: string
-        example: "0"
-      sequence:
-        type: string
-        example: "1"
-      gas:
-        type: string
-        example: "200000"
-      gas_adjustment:
-        type: string
-        example: "1.2"
-      fees:
-        type: array
-        items:
-          $ref: "#/definitions/Coin"
-      simulate:
-        type: boolean
-        example: false
-        description: Estimate gas for a transaction (cannot be used in conjunction with generate_only)
   TendermintValidator:
     type: object
     properties:
@@ -833,15 +801,3 @@ definitions:
       proposer_priority:
         type: string
         example: "1000"
-
-  Delegation:
-    type: object
-    properties:
-      delegator_address:
-        type: string
-      validator_address:
-        type: string
-      shares:
-        type: string
-      balance:
-        $ref: "#/definitions/Coin"

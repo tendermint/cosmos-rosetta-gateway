@@ -78,35 +78,18 @@ All URIs are relative to *https://rpc.cosmos.network*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*ABCIApi* | [**AbciInfo**](docs/ABCIApi.md#abciinfo) | **Get** /abci_info | Get some info about the application.
-*ABCIApi* | [**AbciQuery**](docs/ABCIApi.md#abciquery) | **Get** /abci_query | Query the application for some information.
 *InfoApi* | [**Block**](docs/InfoApi.md#block) | **Get** /block | Get block at a specified height
 *InfoApi* | [**BlockByHash**](docs/InfoApi.md#blockbyhash) | **Get** /block_by_hash | Get block by hash
-*InfoApi* | [**BlockResults**](docs/InfoApi.md#blockresults) | **Get** /block_results | Get block results at a specified height
-*InfoApi* | [**Blockchain**](docs/InfoApi.md#blockchain) | **Get** /blockchain | Get block headers for minHeight &lt;&#x3D; height &lt;&#x3D; maxHeight.
-*InfoApi* | [**BroadcastEvidence**](docs/InfoApi.md#broadcastevidence) | **Get** /broadcast_evidence | Broadcast evidence of the misbehavior.
-*InfoApi* | [**Commit**](docs/InfoApi.md#commit) | **Get** /commit | Get commit results at a specified height
-*InfoApi* | [**ConsensusParams**](docs/InfoApi.md#consensusparams) | **Get** /consensus_params | Get consensus parameters
-*InfoApi* | [**ConsensusState**](docs/InfoApi.md#consensusstate) | **Get** /consensus_state | Get consensus state
-*InfoApi* | [**DumpConsensusState**](docs/InfoApi.md#dumpconsensusstate) | **Get** /dump_consensus_state | Get consensus state
-*InfoApi* | [**Genesis**](docs/InfoApi.md#genesis) | **Get** /genesis | Get Genesis
-*InfoApi* | [**Health**](docs/InfoApi.md#health) | **Get** /health | Node heartbeat
 *InfoApi* | [**NetInfo**](docs/InfoApi.md#netinfo) | **Get** /net_info | Network informations
 *InfoApi* | [**NumUnconfirmedTxs**](docs/InfoApi.md#numunconfirmedtxs) | **Get** /num_unconfirmed_txs | Get data about unconfirmed transactions
 *InfoApi* | [**Status**](docs/InfoApi.md#status) | **Get** /status | Node Status
 *InfoApi* | [**Tx**](docs/InfoApi.md#tx) | **Get** /tx | Get transactions by hash
 *InfoApi* | [**TxSearch**](docs/InfoApi.md#txsearch) | **Get** /tx_search | Search for transactions
 *InfoApi* | [**UnconfirmedTxs**](docs/InfoApi.md#unconfirmedtxs) | **Get** /unconfirmed_txs | Get the list of unconfirmed transactions
-*InfoApi* | [**Validators**](docs/InfoApi.md#validators) | **Get** /validators | Get validator set at a specified height
 *TxApi* | [**BroadcastTxAsync**](docs/TxApi.md#broadcasttxasync) | **Get** /broadcast_tx_async | Returns right away, with no response. Does not wait for CheckTx nor DeliverTx results.
 *TxApi* | [**BroadcastTxCommit**](docs/TxApi.md#broadcasttxcommit) | **Get** /broadcast_tx_commit | Returns with the responses from CheckTx and DeliverTx.
 *TxApi* | [**BroadcastTxSync**](docs/TxApi.md#broadcasttxsync) | **Get** /broadcast_tx_sync | Returns with the response from CheckTx. Does not wait for DeliverTx result.
 *TxApi* | [**CheckTx**](docs/TxApi.md#checktx) | **Get** /check_tx | Checks the transaction without executing it.
-*UnsafeApi* | [**DialPeers**](docs/UnsafeApi.md#dialpeers) | **Post** /dial_peers | Add Peers/Persistent Peers (unsafe)
-*UnsafeApi* | [**DialSeeds**](docs/UnsafeApi.md#dialseeds) | **Post** /dial_seeds | Dial Seeds (Unsafe)
-*WebsocketApi* | [**Subscribe**](docs/WebsocketApi.md#subscribe) | **Get** /subscribe | Subscribe for events via WebSocket.
-*WebsocketApi* | [**Unsubscribe**](docs/WebsocketApi.md#unsubscribe) | **Get** /unsubscribe | Unsubscribe from event on Websocket
-*WebsocketApi* | [**UnsubscribeAll**](docs/WebsocketApi.md#unsubscribeall) | **Get** /unsubscribe_all | Unsubscribe from all events via WebSocket
 
 
 ## Documentation For Models

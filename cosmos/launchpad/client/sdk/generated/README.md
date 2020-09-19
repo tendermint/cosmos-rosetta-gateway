@@ -49,7 +49,6 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
- - [BaseReq](docs/BaseReq.md)
  - [Block](docs/Block.md)
  - [BlockHeader](docs/BlockHeader.md)
  - [BlockHeaderVersion](docs/BlockHeaderVersion.md)
@@ -62,7 +61,6 @@ Class | Method | HTTP request | Description
  - [BroadcastTxCommitResult](docs/BroadcastTxCommitResult.md)
  - [CheckTxResult](docs/CheckTxResult.md)
  - [Coin](docs/Coin.md)
- - [Delegation](docs/Delegation.md)
  - [DeliverTxResult](docs/DeliverTxResult.md)
  - [InlineObject](docs/InlineObject.md)
  - [InlineObject1](docs/InlineObject1.md)
@@ -84,6 +82,7 @@ Class | Method | HTTP request | Description
  - [Msg](docs/Msg.md)
  - [MsgValue](docs/MsgValue.md)
  - [PaginatedQueryTxs](docs/PaginatedQueryTxs.md)
+ - [PublicKey](docs/PublicKey.md)
  - [StdTx](docs/StdTx.md)
  - [StdTxValue](docs/StdTxValue.md)
  - [StdTxValueFee](docs/StdTxValueFee.md)

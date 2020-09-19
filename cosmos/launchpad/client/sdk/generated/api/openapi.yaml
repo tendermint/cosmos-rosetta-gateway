@@ -1018,39 +1018,15 @@ components:
         block:
           $ref: '#/components/schemas/Block'
       type: object
-    BaseReq:
+    PublicKey:
+      example:
+        type: type
+        value: value
       properties:
-        from:
-          description: Sender address or Keybase name to generate a transaction
-          example: cosmos1g9ahr6xhht5rmqven628nklxluzyv8z9jqjcmc
+        type:
           type: string
-        memo:
-          example: Sent via Cosmos Voyager 🚀
+        value:
           type: string
-        chain_id:
-          example: Cosmos-Hub
-          type: string
-        account_number:
-          example: "0"
-          type: string
-        sequence:
-          example: "1"
-          type: string
-        gas:
-          example: "200000"
-          type: string
-        gas_adjustment:
-          example: "1.2"
-          type: string
-        fees:
-          items:
-            $ref: '#/components/schemas/Coin'
-          type: array
-        simulate:
-          description: Estimate gas for a transaction (cannot be used in conjunction
-            with generate_only)
-          example: false
-          type: boolean
       type: object
     TendermintValidator:
       example:
@@ -1072,17 +1048,6 @@ components:
         proposer_priority:
           example: "1000"
           type: string
-      type: object
-    Delegation:
-      properties:
-        delegator_address:
-          type: string
-        validator_address:
-          type: string
-        shares:
-          type: string
-        balance:
-          $ref: '#/components/schemas/Coin'
       type: object
     inline_response_200_application_version:
       example:
