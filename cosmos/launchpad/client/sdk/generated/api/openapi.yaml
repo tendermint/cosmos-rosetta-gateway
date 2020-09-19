@@ -3151,6 +3151,9 @@ components:
           type: array
       type: object
     PublicKey:
+      example:
+        type: type
+        value: value
       properties:
         type:
           type: string
@@ -3419,9 +3422,11 @@ components:
       type: object
     inline_response_200_6_result_value:
       example:
-        public_key: public_key
-        account_number: 0.8008281904610115
-        sequence: 6.027456183070403
+        public_key:
+          type: type
+          value: value
+        account_number: account_number
+        sequence: sequence
         address: address
         coins:
         - amount: "50"
@@ -3430,7 +3435,7 @@ components:
           denom: stake
       properties:
         account_number:
-          type: number
+          type: string
         address:
           type: string
         coins:
@@ -3438,16 +3443,18 @@ components:
             $ref: '#/components/schemas/Coin'
           type: array
         public_key:
-          type: string
+          $ref: '#/components/schemas/PublicKey'
         sequence:
-          type: number
+          type: string
     inline_response_200_6_result:
       example:
         type: type
         value:
-          public_key: public_key
-          account_number: 0.8008281904610115
-          sequence: 6.027456183070403
+          public_key:
+            type: type
+            value: value
+          account_number: account_number
+          sequence: sequence
           address: address
           coins:
           - amount: "50"
@@ -3464,9 +3471,11 @@ components:
         result:
           type: type
           value:
-            public_key: public_key
-            account_number: 0.8008281904610115
-            sequence: 6.027456183070403
+            public_key:
+              type: type
+              value: value
+            account_number: account_number
+            sequence: sequence
             address: address
             coins:
             - amount: "50"
