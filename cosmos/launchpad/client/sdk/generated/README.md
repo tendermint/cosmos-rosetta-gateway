@@ -33,59 +33,7 @@ All URIs are relative to *https://stargate.cosmos.network*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *AuthApi* | [**AuthAccountsAddressGet**](docs/AuthApi.md#authaccountsaddressget) | **Get** /auth/accounts/{address} | Get the account information on blockchain
-*BankApi* | [**BankAccountsAddressTransfersPost**](docs/BankApi.md#bankaccountsaddresstransferspost) | **Post** /bank/accounts/{address}/transfers | Send coins from one account to another
 *BankApi* | [**BankBalancesAddressGet**](docs/BankApi.md#bankbalancesaddressget) | **Get** /bank/balances/{address} | Get the account balances
-*DistributionApi* | [**DistributionCommunityPoolGet**](docs/DistributionApi.md#distributioncommunitypoolget) | **Get** /distribution/community_pool | Community pool parameters
-*DistributionApi* | [**DistributionDelegatorsDelegatorAddrRewardsGet**](docs/DistributionApi.md#distributiondelegatorsdelegatoraddrrewardsget) | **Get** /distribution/delegators/{delegatorAddr}/rewards | Get the total rewards balance from all delegations
-*DistributionApi* | [**DistributionDelegatorsDelegatorAddrRewardsPost**](docs/DistributionApi.md#distributiondelegatorsdelegatoraddrrewardspost) | **Post** /distribution/delegators/{delegatorAddr}/rewards | Withdraw all the delegator&#39;s delegation rewards
-*DistributionApi* | [**DistributionDelegatorsDelegatorAddrRewardsValidatorAddrGet**](docs/DistributionApi.md#distributiondelegatorsdelegatoraddrrewardsvalidatoraddrget) | **Get** /distribution/delegators/{delegatorAddr}/rewards/{validatorAddr} | Query a delegation reward
-*DistributionApi* | [**DistributionDelegatorsDelegatorAddrRewardsValidatorAddrPost**](docs/DistributionApi.md#distributiondelegatorsdelegatoraddrrewardsvalidatoraddrpost) | **Post** /distribution/delegators/{delegatorAddr}/rewards/{validatorAddr} | Withdraw a delegation reward
-*DistributionApi* | [**DistributionDelegatorsDelegatorAddrWithdrawAddressGet**](docs/DistributionApi.md#distributiondelegatorsdelegatoraddrwithdrawaddressget) | **Get** /distribution/delegators/{delegatorAddr}/withdraw_address | Get the rewards withdrawal address
-*DistributionApi* | [**DistributionDelegatorsDelegatorAddrWithdrawAddressPost**](docs/DistributionApi.md#distributiondelegatorsdelegatoraddrwithdrawaddresspost) | **Post** /distribution/delegators/{delegatorAddr}/withdraw_address | Replace the rewards withdrawal address
-*DistributionApi* | [**DistributionParametersGet**](docs/DistributionApi.md#distributionparametersget) | **Get** /distribution/parameters | Fee distribution parameters
-*DistributionApi* | [**DistributionValidatorsValidatorAddrGet**](docs/DistributionApi.md#distributionvalidatorsvalidatoraddrget) | **Get** /distribution/validators/{validatorAddr} | Validator distribution information
-*DistributionApi* | [**DistributionValidatorsValidatorAddrOutstandingRewardsGet**](docs/DistributionApi.md#distributionvalidatorsvalidatoraddroutstandingrewardsget) | **Get** /distribution/validators/{validatorAddr}/outstanding_rewards | Fee distribution outstanding rewards of a single validator
-*DistributionApi* | [**DistributionValidatorsValidatorAddrRewardsGet**](docs/DistributionApi.md#distributionvalidatorsvalidatoraddrrewardsget) | **Get** /distribution/validators/{validatorAddr}/rewards | Commission and self-delegation rewards of a single validator
-*DistributionApi* | [**DistributionValidatorsValidatorAddrRewardsPost**](docs/DistributionApi.md#distributionvalidatorsvalidatoraddrrewardspost) | **Post** /distribution/validators/{validatorAddr}/rewards | Withdraw the validator&#39;s rewards
-*GovernanceApi* | [**GovParametersDepositGet**](docs/GovernanceApi.md#govparametersdepositget) | **Get** /gov/parameters/deposit | Query governance deposit parameters
-*GovernanceApi* | [**GovParametersTallyingGet**](docs/GovernanceApi.md#govparameterstallyingget) | **Get** /gov/parameters/tallying | Query governance tally parameters
-*GovernanceApi* | [**GovParametersVotingGet**](docs/GovernanceApi.md#govparametersvotingget) | **Get** /gov/parameters/voting | Query governance voting parameters
-*GovernanceApi* | [**GovProposalsGet**](docs/GovernanceApi.md#govproposalsget) | **Get** /gov/proposals | Query proposals
-*GovernanceApi* | [**GovProposalsParamChangePost**](docs/GovernanceApi.md#govproposalsparamchangepost) | **Post** /gov/proposals/param_change | Generate a parameter change proposal transaction
-*GovernanceApi* | [**GovProposalsPost**](docs/GovernanceApi.md#govproposalspost) | **Post** /gov/proposals | Submit a proposal
-*GovernanceApi* | [**GovProposalsProposalIdDepositsDepositorGet**](docs/GovernanceApi.md#govproposalsproposaliddepositsdepositorget) | **Get** /gov/proposals/{proposalId}/deposits/{depositor} | Query deposit
-*GovernanceApi* | [**GovProposalsProposalIdDepositsGet**](docs/GovernanceApi.md#govproposalsproposaliddepositsget) | **Get** /gov/proposals/{proposalId}/deposits | Query deposits
-*GovernanceApi* | [**GovProposalsProposalIdDepositsPost**](docs/GovernanceApi.md#govproposalsproposaliddepositspost) | **Post** /gov/proposals/{proposalId}/deposits | Deposit tokens to a proposal
-*GovernanceApi* | [**GovProposalsProposalIdGet**](docs/GovernanceApi.md#govproposalsproposalidget) | **Get** /gov/proposals/{proposalId} | Query a proposal
-*GovernanceApi* | [**GovProposalsProposalIdProposerGet**](docs/GovernanceApi.md#govproposalsproposalidproposerget) | **Get** /gov/proposals/{proposalId}/proposer | Query proposer
-*GovernanceApi* | [**GovProposalsProposalIdTallyGet**](docs/GovernanceApi.md#govproposalsproposalidtallyget) | **Get** /gov/proposals/{proposalId}/tally | Get a proposal&#39;s tally result at the current time
-*GovernanceApi* | [**GovProposalsProposalIdVotesGet**](docs/GovernanceApi.md#govproposalsproposalidvotesget) | **Get** /gov/proposals/{proposalId}/votes | Query voters
-*GovernanceApi* | [**GovProposalsProposalIdVotesPost**](docs/GovernanceApi.md#govproposalsproposalidvotespost) | **Post** /gov/proposals/{proposalId}/votes | Vote a proposal
-*GovernanceApi* | [**GovProposalsProposalIdVotesVoterGet**](docs/GovernanceApi.md#govproposalsproposalidvotesvoterget) | **Get** /gov/proposals/{proposalId}/votes/{voter} | Query vote
-*MintApi* | [**MintingAnnualProvisionsGet**](docs/MintApi.md#mintingannualprovisionsget) | **Get** /minting/annual-provisions | Current minting annual provisions value
-*MintApi* | [**MintingInflationGet**](docs/MintApi.md#mintinginflationget) | **Get** /minting/inflation | Current minting inflation value
-*MintApi* | [**MintingParametersGet**](docs/MintApi.md#mintingparametersget) | **Get** /minting/parameters | Minting module parameters
-*SlashingApi* | [**SlashingParametersGet**](docs/SlashingApi.md#slashingparametersget) | **Get** /slashing/parameters | Get the current slashing parameters
-*SlashingApi* | [**SlashingSigningInfosGet**](docs/SlashingApi.md#slashingsigninginfosget) | **Get** /slashing/signing_infos | Get sign info of given all validators
-*SlashingApi* | [**SlashingValidatorsValidatorAddrUnjailPost**](docs/SlashingApi.md#slashingvalidatorsvalidatoraddrunjailpost) | **Post** /slashing/validators/{validatorAddr}/unjail | Unjail a jailed validator
-*StakingApi* | [**StakingDelegatorsDelegatorAddrDelegationsGet**](docs/StakingApi.md#stakingdelegatorsdelegatoraddrdelegationsget) | **Get** /staking/delegators/{delegatorAddr}/delegations | Get all delegations from a delegator
-*StakingApi* | [**StakingDelegatorsDelegatorAddrDelegationsPost**](docs/StakingApi.md#stakingdelegatorsdelegatoraddrdelegationspost) | **Post** /staking/delegators/{delegatorAddr}/delegations | Submit delegation
-*StakingApi* | [**StakingDelegatorsDelegatorAddrDelegationsValidatorAddrGet**](docs/StakingApi.md#stakingdelegatorsdelegatoraddrdelegationsvalidatoraddrget) | **Get** /staking/delegators/{delegatorAddr}/delegations/{validatorAddr} | Query the current delegation between a delegator and a validator
-*StakingApi* | [**StakingDelegatorsDelegatorAddrRedelegationsPost**](docs/StakingApi.md#stakingdelegatorsdelegatoraddrredelegationspost) | **Post** /staking/delegators/{delegatorAddr}/redelegations | Submit a redelegation
-*StakingApi* | [**StakingDelegatorsDelegatorAddrUnbondingDelegationsGet**](docs/StakingApi.md#stakingdelegatorsdelegatoraddrunbondingdelegationsget) | **Get** /staking/delegators/{delegatorAddr}/unbonding_delegations | Get all unbonding delegations from a delegator
-*StakingApi* | [**StakingDelegatorsDelegatorAddrUnbondingDelegationsPost**](docs/StakingApi.md#stakingdelegatorsdelegatoraddrunbondingdelegationspost) | **Post** /staking/delegators/{delegatorAddr}/unbonding_delegations | Submit an unbonding delegation
-*StakingApi* | [**StakingDelegatorsDelegatorAddrUnbondingDelegationsValidatorAddrGet**](docs/StakingApi.md#stakingdelegatorsdelegatoraddrunbondingdelegationsvalidatoraddrget) | **Get** /staking/delegators/{delegatorAddr}/unbonding_delegations/{validatorAddr} | Query all unbonding delegations between a delegator and a validator
-*StakingApi* | [**StakingDelegatorsDelegatorAddrValidatorsGet**](docs/StakingApi.md#stakingdelegatorsdelegatoraddrvalidatorsget) | **Get** /staking/delegators/{delegatorAddr}/validators | Query all validators that a delegator is bonded to
-*StakingApi* | [**StakingDelegatorsDelegatorAddrValidatorsValidatorAddrGet**](docs/StakingApi.md#stakingdelegatorsdelegatoraddrvalidatorsvalidatoraddrget) | **Get** /staking/delegators/{delegatorAddr}/validators/{validatorAddr} | Query a validator that a delegator is bonded to
-*StakingApi* | [**StakingParametersGet**](docs/StakingApi.md#stakingparametersget) | **Get** /staking/parameters | Get the current staking parameter values
-*StakingApi* | [**StakingPoolGet**](docs/StakingApi.md#stakingpoolget) | **Get** /staking/pool | Get the current state of the staking pool
-*StakingApi* | [**StakingRedelegationsGet**](docs/StakingApi.md#stakingredelegationsget) | **Get** /staking/redelegations | Get all redelegations (filter by query params)
-*StakingApi* | [**StakingValidatorsGet**](docs/StakingApi.md#stakingvalidatorsget) | **Get** /staking/validators | Get all validator candidates. By default it returns only the bonded validators.
-*StakingApi* | [**StakingValidatorsValidatorAddrDelegationsGet**](docs/StakingApi.md#stakingvalidatorsvalidatoraddrdelegationsget) | **Get** /staking/validators/{validatorAddr}/delegations | Get all delegations from a validator
-*StakingApi* | [**StakingValidatorsValidatorAddrGet**](docs/StakingApi.md#stakingvalidatorsvalidatoraddrget) | **Get** /staking/validators/{validatorAddr} | Query the information from a single validator
-*StakingApi* | [**StakingValidatorsValidatorAddrUnbondingDelegationsGet**](docs/StakingApi.md#stakingvalidatorsvalidatoraddrunbondingdelegationsget) | **Get** /staking/validators/{validatorAddr}/unbonding_delegations | Get all unbonding delegations from a validator
-*SupplyApi* | [**SupplyTotalDenominationGet**](docs/SupplyApi.md#supplytotaldenominationget) | **Get** /supply/total/{denomination} | Total supply of a single coin denomination
-*SupplyApi* | [**SupplyTotalGet**](docs/SupplyApi.md#supplytotalget) | **Get** /supply/total | Total supply of coins in the chain
 *TendermintRPCApi* | [**BlocksHeightGet**](docs/TendermintRPCApi.md#blocksheightget) | **Get** /blocks/{height} | Get a block at a certain height
 *TendermintRPCApi* | [**BlocksLatestGet**](docs/TendermintRPCApi.md#blockslatestget) | **Get** /blocks/latest | Get the latest block
 *TendermintRPCApi* | [**NodeInfoGet**](docs/TendermintRPCApi.md#nodeinfoget) | **Get** /node_info | The properties of the connected node
@@ -101,7 +49,6 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
- - [BaseReq](docs/BaseReq.md)
  - [Block](docs/Block.md)
  - [BlockHeader](docs/BlockHeader.md)
  - [BlockHeaderVersion](docs/BlockHeaderVersion.md)
@@ -114,30 +61,12 @@ Class | Method | HTTP request | Description
  - [BroadcastTxCommitResult](docs/BroadcastTxCommitResult.md)
  - [CheckTxResult](docs/CheckTxResult.md)
  - [Coin](docs/Coin.md)
- - [Delegation](docs/Delegation.md)
- - [DelegationDelegatorReward](docs/DelegationDelegatorReward.md)
- - [DelegatorTotalRewards](docs/DelegatorTotalRewards.md)
  - [DeliverTxResult](docs/DeliverTxResult.md)
- - [Deposit](docs/Deposit.md)
  - [InlineObject](docs/InlineObject.md)
  - [InlineObject1](docs/InlineObject1.md)
- - [InlineObject10](docs/InlineObject10.md)
- - [InlineObject11](docs/InlineObject11.md)
- - [InlineObject12](docs/InlineObject12.md)
- - [InlineObject13](docs/InlineObject13.md)
- - [InlineObject14](docs/InlineObject14.md)
- - [InlineObject15](docs/InlineObject15.md)
  - [InlineObject2](docs/InlineObject2.md)
- - [InlineObject3](docs/InlineObject3.md)
- - [InlineObject4](docs/InlineObject4.md)
- - [InlineObject5](docs/InlineObject5.md)
- - [InlineObject6](docs/InlineObject6.md)
- - [InlineObject7](docs/InlineObject7.md)
- - [InlineObject8](docs/InlineObject8.md)
- - [InlineObject9](docs/InlineObject9.md)
  - [InlineResponse200](docs/InlineResponse200.md)
  - [InlineResponse2001](docs/InlineResponse2001.md)
- - [InlineResponse20010](docs/InlineResponse20010.md)
  - [InlineResponse2002](docs/InlineResponse2002.md)
  - [InlineResponse2003](docs/InlineResponse2003.md)
  - [InlineResponse2004](docs/InlineResponse2004.md)
@@ -145,9 +74,6 @@ Class | Method | HTTP request | Description
  - [InlineResponse2006](docs/InlineResponse2006.md)
  - [InlineResponse2006Result](docs/InlineResponse2006Result.md)
  - [InlineResponse2006ResultValue](docs/InlineResponse2006ResultValue.md)
- - [InlineResponse2007](docs/InlineResponse2007.md)
- - [InlineResponse2008](docs/InlineResponse2008.md)
- - [InlineResponse2009](docs/InlineResponse2009.md)
  - [InlineResponse200ApplicationVersion](docs/InlineResponse200ApplicationVersion.md)
  - [InlineResponse200NodeInfo](docs/InlineResponse200NodeInfo.md)
  - [InlineResponse200NodeInfoOther](docs/InlineResponse200NodeInfoOther.md)
@@ -156,31 +82,15 @@ Class | Method | HTTP request | Description
  - [Msg](docs/Msg.md)
  - [MsgValue](docs/MsgValue.md)
  - [PaginatedQueryTxs](docs/PaginatedQueryTxs.md)
- - [ParamChange](docs/ParamChange.md)
- - [Proposer](docs/Proposer.md)
  - [PublicKey](docs/PublicKey.md)
- - [Redelegation](docs/Redelegation.md)
- - [RedelegationEntry](docs/RedelegationEntry.md)
- - [SigningInfo](docs/SigningInfo.md)
  - [StdTx](docs/StdTx.md)
  - [StdTxValue](docs/StdTxValue.md)
  - [StdTxValueFee](docs/StdTxValueFee.md)
  - [StdTxValuePubKey](docs/StdTxValuePubKey.md)
  - [StdTxValueSignatures](docs/StdTxValueSignatures.md)
- - [Supply](docs/Supply.md)
- - [TallyResult](docs/TallyResult.md)
  - [TendermintValidator](docs/TendermintValidator.md)
- - [TextProposal](docs/TextProposal.md)
  - [TxQuery](docs/TxQuery.md)
  - [TxQueryResult](docs/TxQueryResult.md)
- - [UnbondingDelegation](docs/UnbondingDelegation.md)
- - [UnbondingDelegationPair](docs/UnbondingDelegationPair.md)
- - [UnbondingEntries](docs/UnbondingEntries.md)
- - [Validator](docs/Validator.md)
- - [ValidatorCommission](docs/ValidatorCommission.md)
- - [ValidatorDescription](docs/ValidatorDescription.md)
- - [ValidatorDistInfo](docs/ValidatorDistInfo.md)
- - [Vote](docs/Vote.md)
 
 
 ## Documentation For Authorization
