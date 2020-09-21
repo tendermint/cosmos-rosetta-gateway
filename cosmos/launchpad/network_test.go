@@ -5,6 +5,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint/mocks"
+
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
@@ -92,6 +94,8 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 	m := &tendermintmocks.TendermintInfoAPI{}
 	defer m.AssertExpectations(t)
 
+	mt := &mocks.TendermintClient{}
+
 	var blockOpts *tendermintclient.BlockOpts
 	ti, err := time.Parse(time.RFC3339, "2019-04-22T17:01:51Z")
 	require.NoError(t, err)
@@ -131,20 +135,18 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 		}, nil, nil).
 		Once()
 
-	m.
+	mt.
 		On("NetInfo", mock.Anything).
-		Return(tendermintclient.NetInfoResponse{
-			Result: tendermintclient.NetInfo{
-				Peers: []tendermintclient.Peer{
-					{
-						NodeInfo: tendermintclient.NodeInfo{
-							Id: "1",
-						},
+		Return(alttendermint.NetInfoResponse{
+			Peers: []alttendermint.Peer{
+				{
+					NodeInfo: alttendermint.NodeInfo{
+						Id: "1",
 					},
-					{
-						NodeInfo: tendermintclient.NodeInfo{
-							Id: "2",
-						},
+				},
+				{
+					NodeInfo: alttendermint.NodeInfo{
+						Id: "2",
 					},
 				},
 			},
@@ -160,7 +162,13 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{Info: m}, CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(
+		TendermintAPI{Info: m},
+		CosmosAPI{},
+		altsdk.NewClient(""),
+		mt,
+		properties,
+	)
 
 	status, adapterErr := adapter.NetworkStatus(context.Background(), nil)
 	require.Nil(t, adapterErr)
