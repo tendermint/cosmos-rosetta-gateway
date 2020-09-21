@@ -13,6 +13,27 @@ type TendermintClient struct {
 	mock.Mock
 }
 
+// Block provides a mock function with given fields: height
+func (_m *TendermintClient) Block(height uint64) (alttendermint.BlockResponse, error) {
+	ret := _m.Called(height)
+
+	var r0 alttendermint.BlockResponse
+	if rf, ok := ret.Get(0).(func(uint64) alttendermint.BlockResponse); ok {
+		r0 = rf(height)
+	} else {
+		r0 = ret.Get(0).(alttendermint.BlockResponse)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(uint64) error); ok {
+		r1 = rf(height)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // NetInfo provides a mock function with given fields:
 func (_m *TendermintClient) NetInfo() (alttendermint.NetInfoResponse, error) {
 	ret := _m.Called()

@@ -2,6 +2,7 @@ package alttendermint
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 )
@@ -25,7 +26,7 @@ type BlockHeader struct {
 }
 
 func (c Client) Block(height uint64) (BlockResponse, error) {
-	resp, err := http.Get(c.getEndpoint("block"))
+	resp, err := http.Get(c.getEndpoint(fmt.Sprintf("block?height=%d", height)))
 	if err != nil {
 		return BlockResponse{}, err
 	}
