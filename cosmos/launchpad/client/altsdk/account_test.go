@@ -14,7 +14,6 @@ func TestAuthAccountClient(t *testing.T) {
 	bz, err := ioutil.ReadFile("testdata/account.json")
 	require.NoError(t, err)
 
-	t.Log(bz)
 	s := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		writer.Write(bz)
 	}))
