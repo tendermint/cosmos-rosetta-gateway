@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 
 	"github.com/antihax/optional"
@@ -56,7 +58,7 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{Info: mt}, CosmosAPI{Bank: m}, altsdk.NewClient(""), properties)
+	adapter := NewLaunchpad(TendermintAPI{Info: mt}, CosmosAPI{Bank: m}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
 
 	res, err := adapter.AccountBalance(context.Background(), &types.AccountBalanceRequest{
 		AccountIdentifier: &types.AccountIdentifier{

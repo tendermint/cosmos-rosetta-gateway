@@ -39,7 +39,6 @@ type TendermintAPI struct {
 }
 
 type TendermintInfoAPI interface {
-	NetInfo(ctx context.Context) (tendermintclient.NetInfoResponse, *http.Response, error)
 	Block(ctx context.Context, localVarOptionals *tendermintclient.BlockOpts) (tendermintclient.BlockResponse, *http.Response, error)
 	UnconfirmedTxs(ctx context.Context, localVarOptionals *tendermintclient.UnconfirmedTxsOpts) (tendermintclient.UnconfirmedTransactionsResponse, *http.Response, error)
 	BlockByHash(ctx context.Context, hash string) (tendermintclient.BlockResponse, *http.Response, error)
@@ -53,5 +52,5 @@ type TendermintTxAPI interface {
 
 // New Interfaces.
 type TendermintClient interface {
-	NetInfo() (*alttendermint.NetInfoResponse, error)
+	NetInfo() (alttendermint.NetInfoResponse, error)
 }

@@ -19,29 +19,29 @@ type NodeInfo struct {
 	Id string `json:"id,omitempty"`
 }
 
-func (c Client) NetInfo() (*NetInfoResponse, error) {
+func (c Client) NetInfo() (NetInfoResponse, error) {
 	resp, err := http.Get(c.getEndpoint("net_info"))
 	if err != nil {
-		return nil, err
+		return NetInfoResponse{}, err
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return NetInfoResponse{}, err
 	}
 
 	var jsonResp map[string]json.RawMessage
 	err = json.Unmarshal(body, &jsonResp)
 	if err != nil {
-		return nil, err
+		return NetInfoResponse{}, err
 	}
 
 	var netInfoResp NetInfoResponse
 	err = json.Unmarshal(jsonResp["result"], &netInfoResp)
 	if err != nil {
-		return nil, err
+		return NetInfoResponse{}, err
 	}
 
-	return &netInfoResp, nil
+	return netInfoResp, nil
 }

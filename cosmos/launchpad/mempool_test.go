@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -33,7 +35,7 @@ func TestLaunchpad_Mempool(t *testing.T) {
 			},
 		}, nil, nil)
 
-	adapter := NewLaunchpad(TendermintAPI{Info: m}, CosmosAPI{}, altsdk.NewClient(""), rosetta.NetworkProperties{})
+	adapter := NewLaunchpad(TendermintAPI{Info: m}, CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""), rosetta.NetworkProperties{})
 
 	mempool, err := adapter.Mempool(context.Background(), &types.NetworkRequest{})
 	require.Nil(t, err)
@@ -59,7 +61,7 @@ func TestLaunchpad_MempoolTransaction(t *testing.T) {
 		},
 			nil, nil)
 
-	adapter := NewLaunchpad(TendermintAPI{Info: m}, CosmosAPI{}, altsdk.NewClient(""), rosetta.NetworkProperties{})
+	adapter := NewLaunchpad(TendermintAPI{Info: m}, CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""),rosetta.NetworkProperties{})
 	res, err := adapter.MempoolTransaction(context.Background(), &types.MempoolTransactionRequest{
 		TransactionIdentifier: &types.TransactionIdentifier{Hash: "ABCTHEHASH"},
 	})
