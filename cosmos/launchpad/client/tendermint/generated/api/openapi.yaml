@@ -242,250 +242,6 @@ paths:
       summary: Checks the transaction without executing it.
       tags:
       - Tx
-  /subscribe:
-    get:
-      description: |
-        To tell which events you want, you need to provide a query. query is a
-        string, which has a form: "condition AND condition ..." (no OR at the
-        moment). condition has a form: "key operation operand". key is a string with
-        a restricted set of possible symbols ( \t\n\r\\()"'=>< are not allowed).
-        operation can be "=", "<", "<=", ">", ">=", "CONTAINS" AND "EXISTS". operand
-        can be a string (escaped with single quotes), number, date or time.
-
-        Examples:
-              tm.event = 'NewBlock'               # new blocks
-              tm.event = 'CompleteProposal'       # node got a complete proposal
-              tm.event = 'Tx' AND tx.hash = 'XYZ' # single transaction
-              tm.event = 'Tx' AND tx.height = 5   # all txs of the fifth block
-              tx.height = 5                       # all txs of the fifth block
-
-        Tendermint provides a few predefined keys: tm.event, tx.hash and tx.height.
-        Note for transactions, you can define additional keys by providing events with
-        DeliverTx response.
-
-        import (
-            abci "github.com/tendermint/tendermint/abci/types"
-            "github.com/tendermint/tendermint/libs/pubsub/query"
-        )
-
-        abci.ResponseDeliverTx{
-          Events: []abci.Event{
-              {
-                  Type: "rewards.withdraw",
-                  Attributes: kv.Pairs{
-                      kv.Pair{Key: []byte("address"), Value: []byte("AddrA")},
-                      kv.Pair{Key: []byte("source"), Value: []byte("SrcX")},
-                      kv.Pair{Key: []byte("amount"), Value: []byte("...")},
-                      kv.Pair{Key: []byte("balance"), Value: []byte("...")},
-                  },
-              },
-              {
-                  Type: "rewards.withdraw",
-                  Attributes: kv.Pairs{
-                      kv.Pair{Key: []byte("address"), Value: []byte("AddrB")},
-                      kv.Pair{Key: []byte("source"), Value: []byte("SrcY")},
-                      kv.Pair{Key: []byte("amount"), Value: []byte("...")},
-                      kv.Pair{Key: []byte("balance"), Value: []byte("...")},
-                  },
-              },
-              {
-                  Type: "transfer",
-                  Attributes: kv.Pairs{
-                      kv.Pair{Key: []byte("sender"), Value: []byte("AddrC")},
-                      kv.Pair{Key: []byte("recipient"), Value: []byte("AddrD")},
-                      kv.Pair{Key: []byte("amount"), Value: []byte("...")},
-                  },
-              },
-          },
-        }
-
-        All events are indexed by a composite key of the form {eventType}.{evenAttrKey}.
-        In the above examples, the following keys would be indexed:
-           - rewards.withdraw.address
-           - rewards.withdraw.source
-           - rewards.withdraw.amount
-           - rewards.withdraw.balance
-           - transfer.sender
-           - transfer.recipient
-           - transfer.amount
-
-        Multiple event types with duplicate keys are allowed and are meant to
-        categorize unique and distinct events. In the above example, all events
-        indexed under the key `rewards.withdraw.address` will have the following
-        values stored and queryable:
-
-           - AddrA
-           - AddrB
-
-        To create a query for txs where address AddrA withdrew rewards:
-        query.MustParse("tm.event = 'Tx' AND rewards.withdraw.address = 'AddrA'")
-
-        To create a query for txs where address AddrA withdrew rewards from source Y:
-        query.MustParse("tm.event = 'Tx' AND rewards.withdraw.address = 'AddrA' AND rewards.withdraw.source = 'Y'")
-
-        To create a query for txs where AddrA transferred funds:
-        query.MustParse("tm.event = 'Tx' AND transfer.sender = 'AddrA'")
-
-        The following queries would return no results:
-        query.MustParse("tm.event = 'Tx' AND transfer.sender = 'AddrZ'")
-        query.MustParse("tm.event = 'Tx' AND rewards.withdraw.address = 'AddrZ'")
-        query.MustParse("tm.event = 'Tx' AND rewards.withdraw.source = 'W'")
-
-        See list of all possible events here
-        https://godoc.org/github.com/tendermint/tendermint/types#pkg-constants
-
-        For complete query syntax, check out
-        https://godoc.org/github.com/tendermint/tendermint/libs/pubsub/query.
-
-        ```go
-        import rpchttp "github.com/tendermint/rpc/client/http"
-        import "github.com/tendermint/tendermint/types"
-
-        client := rpchttp.New("tcp:0.0.0.0:26657", "/websocket")
-        err := client.Start()
-        if err != nil {
-          handle error
-        }
-        defer client.Stop()
-        ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
-        defer cancel()
-        query := "tm.event = 'Tx' AND tx.height = 3"
-        txs, err := client.Subscribe(ctx, "test-client", query)
-        if err != nil {
-          handle error
-        }
-
-        go func() {
-         for e := range txs {
-           fmt.Println("got ", e.Data.(types.EventDataTx))
-           }
-        }()
-        ```
-
-        NOTE: if you're not reading events fast enough, Tendermint might
-        terminate the subscription.
-      operationId: subscribe
-      parameters:
-      - description: |
-          query is a string, which has a form: "condition AND condition ..." (no OR at the
-          moment). condition has a form: "key operation operand". key is a string with
-          a restricted set of possible symbols ( \t\n\r\\()"'=>< are not allowed).
-          operation can be "=", "<", "<=", ">", ">=", "CONTAINS". operand can be a
-          string (escaped with single quotes), number, date or time.
-        explode: true
-        in: query
-        name: query
-        required: true
-        schema:
-          example: tm.event = 'Tx' AND tx.height = 5
-          type: string
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EmptyResponse'
-          description: empty answer
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: empty error
-      summary: Subscribe for events via WebSocket.
-      tags:
-      - Websocket
-  /unsubscribe:
-    get:
-      description: |
-        ```go
-        client := rpchttp.New("tcp:0.0.0.0:26657", "/websocket")
-        err := client.Start()
-        if err != nil {
-           handle error
-        }
-        defer client.Stop()
-        query := "tm.event = 'Tx' AND tx.height = 3"
-        err = client.Unsubscribe(context.Background(), "test-client", query)
-        if err != nil {
-           handle error
-        }
-        ```
-      operationId: unsubscribe
-      parameters:
-      - description: |
-          query is a string, which has a form: "condition AND condition ..." (no OR at the
-          moment). condition has a form: "key operation operand". key is a string with
-          a restricted set of possible symbols ( \t\n\r\\()"'=>< are not allowed).
-          operation can be "=", "<", "<=", ">", ">=", "CONTAINS". operand can be a
-          string (escaped with single quotes), number, date or time.
-        explode: true
-        in: query
-        name: query
-        required: true
-        schema:
-          example: tm.event = 'Tx' AND tx.height = 5
-          type: string
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EmptyResponse'
-          description: Answer
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Error
-      summary: Unsubscribe from event on Websocket
-      tags:
-      - Websocket
-  /unsubscribe_all:
-    get:
-      description: |
-        Unsubscribe from all events via WebSocket
-      operationId: unsubscribe_all
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EmptyResponse'
-          description: empty answer
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: empty error
-      summary: Unsubscribe from all events via WebSocket
-      tags:
-      - Websocket
-  /health:
-    get:
-      description: |
-        Get node health. Returns empty result (200 OK) on success, no response - in case of an error.
-      operationId: health
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EmptyResponse'
-          description: Gets Node Health
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: empty error
-      summary: Node heartbeat
-      tags:
-      - Info
   /status:
     get:
       description: |
@@ -526,103 +282,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
           description: empty error
       summary: Network informations
-      tags:
-      - Info
-  /dial_seeds:
-    post:
-      description: |
-        Dial a peer, this route in under unsafe, and has to manually enabled to use
-      operationId: dial_seeds
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/dialSeedsPost'
-        description: string of possible peers
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/dialResp'
-          description: Dialing seeds in progress. See /net_info for details
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: empty error
-      summary: Dial Seeds (Unsafe)
-      tags:
-      - unsafe
-  /dial_peers:
-    post:
-      description: |
-        Set a persistent peer, this route in under unsafe, and has to manually enabled to use
-      operationId: dial_peers
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/dialPeersPost'
-        description: string of possible peers, bool argument if they should be added
-          as persistent
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/dialResp'
-          description: Dialing seeds in progress. See /net_info for details
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: empty error
-      summary: Add Peers/Persistent Peers (unsafe)
-      tags:
-      - unsafe
-  /blockchain:
-    get:
-      description: |
-        Get Blockchain info.
-      operationId: blockchain
-      parameters:
-      - description: Minimum block height to return
-        explode: true
-        in: query
-        name: minHeight
-        required: false
-        schema:
-          example: 1
-          type: number
-        style: form
-      - description: Maximum block height to return
-        explode: true
-        in: query
-        name: maxHeight
-        required: false
-        schema:
-          example: 2
-          type: number
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BlockchainResponse'
-          description: Block headers, returned in descending order (highest first).
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Error
-      summary: Get block headers for minHeight <= height <= maxHeight.
       tags:
       - Info
   /block:
@@ -687,231 +346,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: Get block by hash
-      tags:
-      - Info
-  /block_results:
-    get:
-      description: |
-        Get block_results.
-      operationId: block_results
-      parameters:
-      - description: height to return. If no height is provided, it will fetch informations
-          regarding the latest block.
-        explode: true
-        in: query
-        name: height
-        required: false
-        schema:
-          default: 0
-          example: 1
-          type: number
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BlockResultsResponse'
-          description: Block results.
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Error
-      summary: Get block results at a specified height
-      tags:
-      - Info
-  /commit:
-    get:
-      description: |
-        Get Commit.
-      operationId: commit
-      parameters:
-      - description: height to return. If no height is provided, it will fetch commit
-          informations regarding the latest block.
-        explode: true
-        in: query
-        name: height
-        required: false
-        schema:
-          default: 0
-          example: 1
-          type: number
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CommitResponse'
-          description: |
-            Commit results.
-
-            canonical switches from false to true for block H once block H+1 has been committed. Until then it's subjective and only reflects what this node has seen so far.
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Error
-      summary: Get commit results at a specified height
-      tags:
-      - Info
-  /validators:
-    get:
-      description: |
-        Get Validators. Validators are sorted by voting power.
-      operationId: validators
-      parameters:
-      - description: height to return. If no height is provided, it will fetch validator
-          set which corresponds to the latest block.
-        explode: true
-        in: query
-        name: height
-        required: false
-        schema:
-          default: 0
-          example: 1
-          type: number
-        style: form
-      - description: Page number (1-based)
-        explode: true
-        in: query
-        name: page
-        required: false
-        schema:
-          default: 1
-          example: 1
-          type: number
-        style: form
-      - description: 'Number of entries per page (max: 100)'
-        explode: true
-        in: query
-        name: per_page
-        required: false
-        schema:
-          default: 30
-          example: 30
-          type: number
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidatorsResponse'
-          description: Commit results.
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Error
-      summary: Get validator set at a specified height
-      tags:
-      - Info
-  /genesis:
-    get:
-      description: |
-        Get genesis.
-      operationId: genesis
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenesisResponse'
-          description: Genesis results.
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Error
-      summary: Get Genesis
-      tags:
-      - Info
-  /dump_consensus_state:
-    get:
-      description: |
-        Get consensus state.
-
-        Not safe to call from inside the ABCI application during a block execution.
-      operationId: dump_consensus_state
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DumpConsensusResponse'
-          description: |
-            Complete consensus state.
-
-            See https://pkg.go.dev/github.com/tendermint/tendermint/types?tab=doc#Vote.String for Vote string description.
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Error
-      summary: Get consensus state
-      tags:
-      - Info
-  /consensus_state:
-    get:
-      description: |
-        Get consensus state.
-
-        Not safe to call from inside the ABCI application during a block execution.
-      operationId: consensus_state
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ConsensusStateResponse'
-          description: consensus state results.
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Error
-      summary: Get consensus state
-      tags:
-      - Info
-  /consensus_params:
-    get:
-      description: |
-        Get consensus parameters.
-      operationId: consensus_params
-      parameters:
-      - description: height to return. If no height is provided, it will fetch commit
-          informations regarding the latest block.
-        explode: true
-        in: query
-        name: height
-        required: false
-        schema:
-          default: 0
-          example: 1
-          type: number
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ConsensusParamsResponse'
-          description: consensus parameters results.
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Error
-      summary: Get consensus parameters
       tags:
       - Info
   /unconfirmed_txs:
@@ -1080,118 +514,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: Get transactions by hash
-      tags:
-      - Info
-  /abci_info:
-    get:
-      description: |
-        Get some info about the application.
-      operationId: abci_info
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ABCIInfoResponse'
-          description: Get some info about the application.
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Error
-      summary: Get some info about the application.
-      tags:
-      - ABCI
-  /abci_query:
-    get:
-      description: |
-        Query the application for some information.
-      operationId: abci_query
-      parameters:
-      - description: Path to the data ("/a/b/c")
-        explode: true
-        in: query
-        name: path
-        required: true
-        schema:
-          example: /a/b/c
-          type: string
-        style: form
-      - description: Data
-        explode: true
-        in: query
-        name: data
-        required: true
-        schema:
-          example: IHAVENOIDEA
-          type: string
-        style: form
-      - description: Height (0 means latest)
-        explode: true
-        in: query
-        name: height
-        required: false
-        schema:
-          default: 0
-          example: 1
-          type: number
-        style: form
-      - description: Include proofs of the transactions inclusion in the block
-        explode: true
-        in: query
-        name: prove
-        required: false
-        schema:
-          default: false
-          example: true
-          type: boolean
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ABCIQueryResponse'
-          description: Response of the submitted query
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Error
-      summary: Query the application for some information.
-      tags:
-      - ABCI
-  /broadcast_evidence:
-    get:
-      description: |
-        Broadcast evidence of the misbehavior.
-      operationId: broadcast_evidence
-      parameters:
-      - description: JSON evidence
-        explode: true
-        in: query
-        name: evidence
-        required: true
-        schema:
-          example: JSON_EVIDENCE_encoded
-          type: string
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BroadcastEvidenceResponse'
-          description: Broadcast evidence of the misbehavior.
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Error
-      summary: Broadcast evidence of the misbehavior.
       tags:
       - Info
 components:
@@ -1614,97 +936,6 @@ components:
           type: string
       type: object
     BlockResultsResponse:
-      example:
-        result:
-          txs_results:
-          - code: "0"
-            codespace: ibc
-            data: data
-            log: not enough gas
-            gas_used: "100"
-            gas_wanted: "100"
-            events:
-            - attributes:
-              - value: Q29zbW9zaGkgTmV0b3dva28=
-                key: Y3JlYXRvcg==
-              - value: Q29zbW9zaGkgTmV0b3dva28=
-                key: Y3JlYXRvcg==
-              type: app
-            - attributes:
-              - value: Q29zbW9zaGkgTmV0b3dva28=
-                key: Y3JlYXRvcg==
-              - value: Q29zbW9zaGkgTmV0b3dva28=
-                key: Y3JlYXRvcg==
-              type: app
-            info: info
-          - code: "0"
-            codespace: ibc
-            data: data
-            log: not enough gas
-            gas_used: "100"
-            gas_wanted: "100"
-            events:
-            - attributes:
-              - value: Q29zbW9zaGkgTmV0b3dva28=
-                key: Y3JlYXRvcg==
-              - value: Q29zbW9zaGkgTmV0b3dva28=
-                key: Y3JlYXRvcg==
-              type: app
-            - attributes:
-              - value: Q29zbW9zaGkgTmV0b3dva28=
-                key: Y3JlYXRvcg==
-              - value: Q29zbW9zaGkgTmV0b3dva28=
-                key: Y3JlYXRvcg==
-              type: app
-            info: info
-          begin_block_events:
-          - attributes:
-            - value: Q29zbW9zaGkgTmV0b3dva28=
-              key: Y3JlYXRvcg==
-            - value: Q29zbW9zaGkgTmV0b3dva28=
-              key: Y3JlYXRvcg==
-            type: app
-          - attributes:
-            - value: Q29zbW9zaGkgTmV0b3dva28=
-              key: Y3JlYXRvcg==
-            - value: Q29zbW9zaGkgTmV0b3dva28=
-              key: Y3JlYXRvcg==
-            type: app
-          validator_updates:
-          - power: "300"
-            pub_key:
-              type: tendermint/PubKeyEd25519
-              value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-          - power: "300"
-            pub_key:
-              type: tendermint/PubKeyEd25519
-              value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-          end_block:
-          - attributes:
-            - value: Q29zbW9zaGkgTmV0b3dva28=
-              key: Y3JlYXRvcg==
-            - value: Q29zbW9zaGkgTmV0b3dva28=
-              key: Y3JlYXRvcg==
-            type: app
-          - attributes:
-            - value: Q29zbW9zaGkgTmV0b3dva28=
-              key: Y3JlYXRvcg==
-            - value: Q29zbW9zaGkgTmV0b3dva28=
-              key: Y3JlYXRvcg==
-            type: app
-          consensus_param_updates:
-            evidence:
-              max_age: "100000"
-            validator:
-              pub_key_types:
-              - ed25519
-            block:
-              time_iota_ms: "1000"
-              max_bytes: "22020096"
-              max_gas: "1000"
-          height: "12"
-        id: 0
-        jsonrpc: "2.0"
       properties:
         jsonrpc:
           example: "2.0"
@@ -1720,50 +951,6 @@ components:
       - result
       type: object
     CommitResponse:
-      example:
-        result:
-          signed_header:
-            commit:
-              round: 0
-              block_id:
-                parts:
-                  total: 1
-                  hash: 38D4B26B5B725C4F13571EFE022C030390E4C33C8CF6F88EDD142EA769642DBD
-                hash: 112BC173FD838FB68EB43476816CD7B4C6661B6884A9E357B417EE957E1CF8F7
-              signatures:
-              - signature: 14jaTQXYRt8kbLKEhdHq7AXycrFImiLuZx50uOjs2+Zv+2i7RTG/jnObD07Jo2ubZ8xd7bNBJMqkgtkd0oQHAw==
-                validator_address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-                block_id_flag: 2
-                timestamp: 2019-04-22T17:01:58.376629719Z
-              - signature: 14jaTQXYRt8kbLKEhdHq7AXycrFImiLuZx50uOjs2+Zv+2i7RTG/jnObD07Jo2ubZ8xd7bNBJMqkgtkd0oQHAw==
-                validator_address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-                block_id_flag: 2
-                timestamp: 2019-04-22T17:01:58.376629719Z
-              height: "1311801"
-            header:
-              validators_hash: D658BFD100CA8025CFD3BECFE86194322731D387286FBD26E059115FD5F2BCA0
-              chain_id: cosmoshub-2
-              consensus_hash: 0F2908883A105C793B74495EB7D6DF2EEA479ED7FC9349206A65CB0F9987A0B8
-              proposer_address: D540AB022088612AC74B287D076DBFBC4A377A2E
-              next_validators_hash: D658BFD100CA8025CFD3BECFE86194322731D387286FBD26E059115FD5F2BCA0
-              version:
-                app: "0"
-                block: "10"
-              data_hash: 970886F99E77ED0D60DA8FCE0447C2676E59F2F77302B0C4AA10E1D02F18EF73
-              last_results_hash: last_results_hash
-              last_block_id:
-                parts:
-                  total: 1
-                  hash: CB02DCAA7FB46BF874052EC2273FD0B1F2CF2E1593298D9781E60FE9C3DB8638
-                hash: D82C2734BB0E76C772A10994B210EF9D11505D1B98CB189D9CF7F9A5488672A5
-              evidence_hash: evidence_hash
-              app_hash: 223BF64D4A01074DC523A80E76B9BBC786C791FB0A1893AC5B14866356FCFD6C
-              time: 2019-04-22T17:01:51.701356223Z
-              height: "12"
-              last_commit_hash: 21B9BC845AD2CB2C4193CDD17BFC506F1EBE5A7402E84AD96E64171287A34812
-          canonical: true
-        id: 0
-        jsonrpc: "2.0"
       properties:
         jsonrpc:
           example: "2.0"
@@ -1779,26 +966,6 @@ components:
       - result
       type: object
     ValidatorsResponse:
-      example:
-        result:
-          total: 25
-          validators:
-          - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-            proposer_priority: "13769415"
-            pub_key:
-              type: tendermint/PubKeyEd25519
-              value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-            voting_power: "250353"
-          - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-            proposer_priority: "13769415"
-            pub_key:
-              type: tendermint/PubKeyEd25519
-              value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-            voting_power: "250353"
-          count: 1
-          block_height: "55"
-        id: 0
-        jsonrpc: "2.0"
       properties:
         jsonrpc:
           example: "2.0"
@@ -1814,38 +981,6 @@ components:
       - result
       type: object
     GenesisResponse:
-      example:
-        result:
-          genesis:
-            app_state: '{}'
-            genesis_time: 2019-04-22T17:00:00Z
-            chain_id: cosmoshub-2
-            validators:
-            - address: B00A6323737F321EB0B8D59C6FD497A14B60938A
-              name: Certus One
-              power: "9328525"
-              pub_key:
-                type: tendermint/PubKeyEd25519
-                value: cOQZvh/h9ZioSeUMZB/1Vy1Xo5x2sjrVjlE/qHnYifM=
-            - address: B00A6323737F321EB0B8D59C6FD497A14B60938A
-              name: Certus One
-              power: "9328525"
-              pub_key:
-                type: tendermint/PubKeyEd25519
-                value: cOQZvh/h9ZioSeUMZB/1Vy1Xo5x2sjrVjlE/qHnYifM=
-            consensus_params:
-              evidence:
-                max_age: "100000"
-              validator:
-                pub_key_types:
-                - ed25519
-              block:
-                time_iota_ms: "1000"
-                max_bytes: "22020096"
-                max_gas: "1000"
-            app_hash: app_hash
-        id: 0
-        jsonrpc: "2.0"
       properties:
         jsonrpc:
           example: "2.0"
@@ -1861,137 +996,6 @@ components:
       - result
       type: object
     DumpConsensusResponse:
-      example:
-        result:
-          peers:
-          - peer_state:
-              stats:
-                block_parts: "4786"
-                votes: "1159558"
-              round_state:
-                proposal: false
-                last_commit: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-                catchup_commit_round: -1
-                last_commit_round: 0
-                catchup_commit: ____________________________________________________________________________________________________
-                proposal_pol: ____________________________________________________________________________________________________
-                precommits: ____________________________________________________________________________________________________
-                prevotes: ___________________x________________________________________________________________________________
-                start_time: 2019-08-05T11:28:49.21730864Z
-                proposal_block_parts_header:
-                  total: 0
-                  hash: hash
-                round: "0"
-                step: 3
-                proposal_pol_round: -1
-                height: "1311801"
-            node_address: 357f6a6c1d27414579a8185060aa8adf9815c43c@68.183.41.207:26656
-          - peer_state:
-              stats:
-                block_parts: "4786"
-                votes: "1159558"
-              round_state:
-                proposal: false
-                last_commit: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-                catchup_commit_round: -1
-                last_commit_round: 0
-                catchup_commit: ____________________________________________________________________________________________________
-                proposal_pol: ____________________________________________________________________________________________________
-                precommits: ____________________________________________________________________________________________________
-                prevotes: ___________________x________________________________________________________________________________
-                start_time: 2019-08-05T11:28:49.21730864Z
-                proposal_block_parts_header:
-                  total: 0
-                  hash: hash
-                round: "0"
-                step: 3
-                proposal_pol_round: -1
-                height: "1311801"
-            node_address: 357f6a6c1d27414579a8185060aa8adf9815c43c@68.183.41.207:26656
-          round_state:
-            locked_round: -1
-            last_commit:
-              votes_bit_array: BA{100:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}
-                170220253/170220253 = 1.00
-              peer_maj_23s: '{}'
-              votes:
-              - Vote{0:000001E443FD 1311800/00/2(Precommit) 3071ADB27D1A 77EE1B6B6847
-                @ 2019-08-05T11:28:43.810128139Z}
-            validators:
-              validators:
-              - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-                proposer_priority: -11896414
-                pub_key:
-                  type: tendermint/PubKeyEd25519
-                  value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-                voting_power: "239727"
-              - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-                proposer_priority: -11896414
-                pub_key:
-                  type: tendermint/PubKeyEd25519
-                  value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-                voting_power: "239727"
-              proposer:
-                address: 708FDDCE121CDADA502F2B0252FEF13FDAA31E50
-                proposer_priority: -88886833
-                pub_key:
-                  type: tendermint/PubKeyEd25519
-                  value: VNMNfw7mrQBSpEvCtA9ykOe6BoR00RM9b/a9v3vXZhY=
-                voting_power: "295360"
-            commit_time: 2019-08-05T11:28:44.064658805Z
-            commit_round: -1
-            triggered_timeout_precommit: false
-            last_validators:
-              validators:
-              - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-                proposer_priority: -12136141
-                pub_key:
-                  type: tendermint/PubKeyEd25519
-                  value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-                voting_power: "239727"
-              - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-                proposer_priority: -12136141
-                pub_key:
-                  type: tendermint/PubKeyEd25519
-                  value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-                voting_power: "239727"
-              proposer:
-                address: B00A6323737F321EB0B8D59C6FD497A14B60938A
-                proposer_priority: -79515145
-                pub_key:
-                  type: tendermint/PubKeyEd25519
-                  value: cOQZvh/h9ZioSeUMZB/1Vy1Xo5x2sjrVjlE/qHnYifM=
-                voting_power: "8590153"
-            start_time: 2019-08-05T11:28:49.064658805Z
-            round: 0
-            valid_round: -1
-            step: 3
-            votes:
-            - prevotes:
-              - nil-Vote
-              - Vote{19:46A3F8B8393B 1311801/00/1(Prevote) 000000000000 64CE682305CB
-                @ 2019-08-05T11:28:47.374703444Z}
-              prevotes_bit_array: BA{100:___________________x________________________________________________________________________________}
-                209706/170220253 = 0.00
-              round: "0"
-              precommits_bit_array: BA{100:____________________________________________________________________________________________________}
-                0/170220253 = 0.00
-              precommits:
-              - nil-Vote
-            - prevotes:
-              - nil-Vote
-              - Vote{19:46A3F8B8393B 1311801/00/1(Prevote) 000000000000 64CE682305CB
-                @ 2019-08-05T11:28:47.374703444Z}
-              prevotes_bit_array: BA{100:___________________x________________________________________________________________________________}
-                209706/170220253 = 0.00
-              round: "0"
-              precommits_bit_array: BA{100:____________________________________________________________________________________________________}
-                0/170220253 = 0.00
-              precommits:
-              - nil-Vote
-            height: "1311801"
-        id: 0
-        jsonrpc: "2.0"
       properties:
         jsonrpc:
           example: "2.0"
@@ -2007,46 +1011,6 @@ components:
       - result
       type: object
     ConsensusStateResponse:
-      example:
-        result:
-          round_state:
-            proposal_block_hash: 634ADAF1F402663BEC2ABC340ECE8B4B45AA906FA603272ACC5F5EED3097E009
-            start_time: 2019-08-01T11:52:38.962730289Z
-            locked_block_hash: 634ADAF1F402663BEC2ABC340ECE8B4B45AA906FA603272ACC5F5EED3097E009
-            proposer:
-              address: D540AB022088612AC74B287D076DBFBC4A377A2E
-              index: "0"
-            valid_block_hash: 634ADAF1F402663BEC2ABC340ECE8B4B45AA906FA603272ACC5F5EED3097E009
-            height_vote_set:
-            - prevotes:
-              - Vote{0:000001E443FD 1262197/00/1(Prevote) 634ADAF1F402 7BB974E1BA40
-                @ 2019-08-01T11:52:35.513572509Z}
-              - nil-Vote
-              prevotes_bit_array: BA{100:xxxxxxxxxxxxxxxxx_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}
-                169753436/170151262 = 1.00
-              round: "0"
-              precommits_bit_array: BA{100:xxxxxx_xxxxx_xxxx_x_xxx_xx_xx_xx__x_x_x__xxxxxxxxxxxxxx_xxxx_xx_xxxxxx_xxxxxxxx_xxxx_xxx_x_xxxx__xxx}
-                118726247/170151262 = 0.70
-              precommits:
-              - Vote{5:18C78D135C9D 1262197/00/2(Precommit) 634ADAF1F402 8B5EFFFEABCD
-                @ 2019-08-01T11:52:36.25600005Z}
-              - nil-Vote
-            - prevotes:
-              - Vote{0:000001E443FD 1262197/00/1(Prevote) 634ADAF1F402 7BB974E1BA40
-                @ 2019-08-01T11:52:35.513572509Z}
-              - nil-Vote
-              prevotes_bit_array: BA{100:xxxxxxxxxxxxxxxxx_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}
-                169753436/170151262 = 1.00
-              round: "0"
-              precommits_bit_array: BA{100:xxxxxx_xxxxx_xxxx_x_xxx_xx_xx_xx__x_x_x__xxxxxxxxxxxxxx_xxxx_xx_xxxxxx_xxxxxxxx_xxxx_xxx_x_xxxx__xxx}
-                118726247/170151262 = 0.70
-              precommits:
-              - Vote{5:18C78D135C9D 1262197/00/2(Precommit) 634ADAF1F402 8B5EFFFEABCD
-                @ 2019-08-01T11:52:36.25600005Z}
-              - nil-Vote
-            height/round/step: 1262197/0/8
-        id: 0
-        jsonrpc: "2.0"
       properties:
         jsonrpc:
           example: "2.0"
@@ -2062,21 +1026,6 @@ components:
       - result
       type: object
     ConsensusParamsResponse:
-      example:
-        result:
-          consensus_params:
-            evidence:
-              max_age: "100000"
-            validator:
-              pub_key_types:
-              - ed25519
-            block:
-              time_iota_ms: "1000"
-              max_bytes: "22020096"
-              max_gas: "1000"
-          block_height: "1313448"
-        id: 0
-        jsonrpc: "2.0"
       properties:
         jsonrpc:
           example: "2.0"
@@ -2251,14 +1200,6 @@ components:
       - result
       type: object
     ABCIInfoResponse:
-      example:
-        result:
-          response:
-            data: '{"size":0}'
-            app_version: "1314126"
-            version: 0.16.1
-        id: 0
-        jsonrpc: "2.0"
       properties:
         jsonrpc:
           example: "2.0"
@@ -2273,19 +1214,6 @@ components:
       - jsonrpc
       type: object
     ABCIQueryResponse:
-      example:
-        result:
-          response:
-            code: "0"
-            log: exists
-            index: -1
-            proof: 010114FED0DAD959F36091AD761C922ABA3CBF1D8349990101020103011406AA2262E2F448242DF2C2607C3CDC705313EE3B0001149D16177BC71E445476174622EA559715C293740C
-            value: "61626364"
-            key: "61626364"
-            height: "0"
-        id: 0
-        error: error
-        jsonrpc: "2.0"
       properties:
         error:
           type: string
@@ -2304,11 +1232,6 @@ components:
       - result
       type: object
     BroadcastEvidenceResponse:
-      example:
-        result: result
-        id: 0
-        error: error
-        jsonrpc: "2.0"
       properties:
         error:
           type: string
@@ -2450,8 +1373,6 @@ components:
           type: array
       type: object
     dialResp:
-      example:
-        Log: Dialing seeds in progress. See /net_info for details
       properties:
         Log:
           example: Dialing seeds in progress. See /net_info for details
@@ -2496,9 +1417,6 @@ components:
       - hash
       - total
     BlockHeader_version:
-      example:
-        app: "0"
-        block: "10"
       properties:
         block:
           example: "10"
@@ -2566,27 +1484,6 @@ components:
           type: array
           x-nullable: false
     BlockResultsResponse_result_txs_results:
-      example:
-        code: "0"
-        codespace: ibc
-        data: data
-        log: not enough gas
-        gas_used: "100"
-        gas_wanted: "100"
-        events:
-        - attributes:
-          - value: Q29zbW9zaGkgTmV0b3dva28=
-            key: Y3JlYXRvcg==
-          - value: Q29zbW9zaGkgTmV0b3dva28=
-            key: Y3JlYXRvcg==
-          type: app
-        - attributes:
-          - value: Q29zbW9zaGkgTmV0b3dva28=
-            key: Y3JlYXRvcg==
-          - value: Q29zbW9zaGkgTmV0b3dva28=
-            key: Y3JlYXRvcg==
-          type: app
-        info: info
       properties:
         code:
           example: "0"
@@ -2613,9 +1510,6 @@ components:
           example: ibc
           type: string
     BlockResultsResponse_result_pub_key:
-      example:
-        type: tendermint/PubKeyEd25519
-        value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
       properties:
         type:
           example: tendermint/PubKeyEd25519
@@ -2627,11 +1521,6 @@ components:
       - type
       - value
     BlockResultsResponse_result_validator_updates:
-      example:
-        power: "300"
-        pub_key:
-          type: tendermint/PubKeyEd25519
-          value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
       properties:
         pub_key:
           $ref: '#/components/schemas/BlockResultsResponse_result_pub_key'
@@ -2639,10 +1528,6 @@ components:
           example: "300"
           type: string
     BlockResultsResponse_result_consensus_param_updates_block:
-      example:
-        time_iota_ms: "1000"
-        max_bytes: "22020096"
-        max_gas: "1000"
       properties:
         max_bytes:
           example: "22020096"
@@ -2658,8 +1543,6 @@ components:
       - max_gas
       - time_iota_ms
     BlockResultsResponse_result_consensus_param_updates_evidence:
-      example:
-        max_age: "100000"
       properties:
         max_age:
           example: "100000"
@@ -2667,9 +1550,6 @@ components:
       required:
       - max_age
     BlockResultsResponse_result_consensus_param_updates_validator:
-      example:
-        pub_key_types:
-        - ed25519
       properties:
         pub_key_types:
           example:
@@ -2680,16 +1560,6 @@ components:
       required:
       - pub_key_types
     BlockResultsResponse_result_consensus_param_updates:
-      example:
-        evidence:
-          max_age: "100000"
-        validator:
-          pub_key_types:
-          - ed25519
-        block:
-          time_iota_ms: "1000"
-          max_bytes: "22020096"
-          max_gas: "1000"
       properties:
         block:
           $ref: '#/components/schemas/BlockResultsResponse_result_consensus_param_updates_block'
@@ -2702,94 +1572,6 @@ components:
       - evidence
       - validator
     BlockResultsResponse_result:
-      example:
-        txs_results:
-        - code: "0"
-          codespace: ibc
-          data: data
-          log: not enough gas
-          gas_used: "100"
-          gas_wanted: "100"
-          events:
-          - attributes:
-            - value: Q29zbW9zaGkgTmV0b3dva28=
-              key: Y3JlYXRvcg==
-            - value: Q29zbW9zaGkgTmV0b3dva28=
-              key: Y3JlYXRvcg==
-            type: app
-          - attributes:
-            - value: Q29zbW9zaGkgTmV0b3dva28=
-              key: Y3JlYXRvcg==
-            - value: Q29zbW9zaGkgTmV0b3dva28=
-              key: Y3JlYXRvcg==
-            type: app
-          info: info
-        - code: "0"
-          codespace: ibc
-          data: data
-          log: not enough gas
-          gas_used: "100"
-          gas_wanted: "100"
-          events:
-          - attributes:
-            - value: Q29zbW9zaGkgTmV0b3dva28=
-              key: Y3JlYXRvcg==
-            - value: Q29zbW9zaGkgTmV0b3dva28=
-              key: Y3JlYXRvcg==
-            type: app
-          - attributes:
-            - value: Q29zbW9zaGkgTmV0b3dva28=
-              key: Y3JlYXRvcg==
-            - value: Q29zbW9zaGkgTmV0b3dva28=
-              key: Y3JlYXRvcg==
-            type: app
-          info: info
-        begin_block_events:
-        - attributes:
-          - value: Q29zbW9zaGkgTmV0b3dva28=
-            key: Y3JlYXRvcg==
-          - value: Q29zbW9zaGkgTmV0b3dva28=
-            key: Y3JlYXRvcg==
-          type: app
-        - attributes:
-          - value: Q29zbW9zaGkgTmV0b3dva28=
-            key: Y3JlYXRvcg==
-          - value: Q29zbW9zaGkgTmV0b3dva28=
-            key: Y3JlYXRvcg==
-          type: app
-        validator_updates:
-        - power: "300"
-          pub_key:
-            type: tendermint/PubKeyEd25519
-            value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-        - power: "300"
-          pub_key:
-            type: tendermint/PubKeyEd25519
-            value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-        end_block:
-        - attributes:
-          - value: Q29zbW9zaGkgTmV0b3dva28=
-            key: Y3JlYXRvcg==
-          - value: Q29zbW9zaGkgTmV0b3dva28=
-            key: Y3JlYXRvcg==
-          type: app
-        - attributes:
-          - value: Q29zbW9zaGkgTmV0b3dva28=
-            key: Y3JlYXRvcg==
-          - value: Q29zbW9zaGkgTmV0b3dva28=
-            key: Y3JlYXRvcg==
-          type: app
-        consensus_param_updates:
-          evidence:
-            max_age: "100000"
-          validator:
-            pub_key_types:
-            - ed25519
-          block:
-            time_iota_ms: "1000"
-            max_bytes: "22020096"
-            max_gas: "1000"
-        height: "12"
       properties:
         height:
           example: "12"
@@ -2819,9 +1601,6 @@ components:
       required:
       - height
     CommitResponse_result_signed_header_header_last_block_id_parts:
-      example:
-        total: 1
-        hash: CB02DCAA7FB46BF874052EC2273FD0B1F2CF2E1593298D9781E60FE9C3DB8638
       properties:
         total:
           example: 1
@@ -2833,11 +1612,6 @@ components:
       - hash
       - total
     CommitResponse_result_signed_header_header_last_block_id:
-      example:
-        parts:
-          total: 1
-          hash: CB02DCAA7FB46BF874052EC2273FD0B1F2CF2E1593298D9781E60FE9C3DB8638
-        hash: D82C2734BB0E76C772A10994B210EF9D11505D1B98CB189D9CF7F9A5488672A5
       properties:
         hash:
           example: D82C2734BB0E76C772A10994B210EF9D11505D1B98CB189D9CF7F9A5488672A5
@@ -2848,27 +1622,6 @@ components:
       - hash
       - parts
     CommitResponse_result_signed_header_header:
-      example:
-        validators_hash: D658BFD100CA8025CFD3BECFE86194322731D387286FBD26E059115FD5F2BCA0
-        chain_id: cosmoshub-2
-        consensus_hash: 0F2908883A105C793B74495EB7D6DF2EEA479ED7FC9349206A65CB0F9987A0B8
-        proposer_address: D540AB022088612AC74B287D076DBFBC4A377A2E
-        next_validators_hash: D658BFD100CA8025CFD3BECFE86194322731D387286FBD26E059115FD5F2BCA0
-        version:
-          app: "0"
-          block: "10"
-        data_hash: 970886F99E77ED0D60DA8FCE0447C2676E59F2F77302B0C4AA10E1D02F18EF73
-        last_results_hash: last_results_hash
-        last_block_id:
-          parts:
-            total: 1
-            hash: CB02DCAA7FB46BF874052EC2273FD0B1F2CF2E1593298D9781E60FE9C3DB8638
-          hash: D82C2734BB0E76C772A10994B210EF9D11505D1B98CB189D9CF7F9A5488672A5
-        evidence_hash: evidence_hash
-        app_hash: 223BF64D4A01074DC523A80E76B9BBC786C791FB0A1893AC5B14866356FCFD6C
-        time: 2019-04-22T17:01:51.701356223Z
-        height: "12"
-        last_commit_hash: 21B9BC845AD2CB2C4193CDD17BFC506F1EBE5A7402E84AD96E64171287A34812
       properties:
         version:
           $ref: '#/components/schemas/BlockHeader_version'
@@ -2924,9 +1677,6 @@ components:
       - validators_hash
       - version
     CommitResponse_result_signed_header_commit_block_id_parts:
-      example:
-        total: 1
-        hash: 38D4B26B5B725C4F13571EFE022C030390E4C33C8CF6F88EDD142EA769642DBD
       properties:
         total:
           example: 1
@@ -2938,11 +1688,6 @@ components:
       - hash
       - total
     CommitResponse_result_signed_header_commit_block_id:
-      example:
-        parts:
-          total: 1
-          hash: 38D4B26B5B725C4F13571EFE022C030390E4C33C8CF6F88EDD142EA769642DBD
-        hash: 112BC173FD838FB68EB43476816CD7B4C6661B6884A9E357B417EE957E1CF8F7
       properties:
         hash:
           example: 112BC173FD838FB68EB43476816CD7B4C6661B6884A9E357B417EE957E1CF8F7
@@ -2953,11 +1698,6 @@ components:
       - hash
       - parts
     CommitResponse_result_signed_header_commit_signatures:
-      example:
-        signature: 14jaTQXYRt8kbLKEhdHq7AXycrFImiLuZx50uOjs2+Zv+2i7RTG/jnObD07Jo2ubZ8xd7bNBJMqkgtkd0oQHAw==
-        validator_address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-        block_id_flag: 2
-        timestamp: 2019-04-22T17:01:58.376629719Z
       properties:
         block_id_flag:
           example: 2
@@ -2972,23 +1712,6 @@ components:
           example: 14jaTQXYRt8kbLKEhdHq7AXycrFImiLuZx50uOjs2+Zv+2i7RTG/jnObD07Jo2ubZ8xd7bNBJMqkgtkd0oQHAw==
           type: string
     CommitResponse_result_signed_header_commit:
-      example:
-        round: 0
-        block_id:
-          parts:
-            total: 1
-            hash: 38D4B26B5B725C4F13571EFE022C030390E4C33C8CF6F88EDD142EA769642DBD
-          hash: 112BC173FD838FB68EB43476816CD7B4C6661B6884A9E357B417EE957E1CF8F7
-        signatures:
-        - signature: 14jaTQXYRt8kbLKEhdHq7AXycrFImiLuZx50uOjs2+Zv+2i7RTG/jnObD07Jo2ubZ8xd7bNBJMqkgtkd0oQHAw==
-          validator_address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-          block_id_flag: 2
-          timestamp: 2019-04-22T17:01:58.376629719Z
-        - signature: 14jaTQXYRt8kbLKEhdHq7AXycrFImiLuZx50uOjs2+Zv+2i7RTG/jnObD07Jo2ubZ8xd7bNBJMqkgtkd0oQHAw==
-          validator_address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-          block_id_flag: 2
-          timestamp: 2019-04-22T17:01:58.376629719Z
-        height: "1311801"
       properties:
         height:
           example: "1311801"
@@ -3008,45 +1731,6 @@ components:
       - round
       - signatures
     CommitResponse_result_signed_header:
-      example:
-        commit:
-          round: 0
-          block_id:
-            parts:
-              total: 1
-              hash: 38D4B26B5B725C4F13571EFE022C030390E4C33C8CF6F88EDD142EA769642DBD
-            hash: 112BC173FD838FB68EB43476816CD7B4C6661B6884A9E357B417EE957E1CF8F7
-          signatures:
-          - signature: 14jaTQXYRt8kbLKEhdHq7AXycrFImiLuZx50uOjs2+Zv+2i7RTG/jnObD07Jo2ubZ8xd7bNBJMqkgtkd0oQHAw==
-            validator_address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-            block_id_flag: 2
-            timestamp: 2019-04-22T17:01:58.376629719Z
-          - signature: 14jaTQXYRt8kbLKEhdHq7AXycrFImiLuZx50uOjs2+Zv+2i7RTG/jnObD07Jo2ubZ8xd7bNBJMqkgtkd0oQHAw==
-            validator_address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-            block_id_flag: 2
-            timestamp: 2019-04-22T17:01:58.376629719Z
-          height: "1311801"
-        header:
-          validators_hash: D658BFD100CA8025CFD3BECFE86194322731D387286FBD26E059115FD5F2BCA0
-          chain_id: cosmoshub-2
-          consensus_hash: 0F2908883A105C793B74495EB7D6DF2EEA479ED7FC9349206A65CB0F9987A0B8
-          proposer_address: D540AB022088612AC74B287D076DBFBC4A377A2E
-          next_validators_hash: D658BFD100CA8025CFD3BECFE86194322731D387286FBD26E059115FD5F2BCA0
-          version:
-            app: "0"
-            block: "10"
-          data_hash: 970886F99E77ED0D60DA8FCE0447C2676E59F2F77302B0C4AA10E1D02F18EF73
-          last_results_hash: last_results_hash
-          last_block_id:
-            parts:
-              total: 1
-              hash: CB02DCAA7FB46BF874052EC2273FD0B1F2CF2E1593298D9781E60FE9C3DB8638
-            hash: D82C2734BB0E76C772A10994B210EF9D11505D1B98CB189D9CF7F9A5488672A5
-          evidence_hash: evidence_hash
-          app_hash: 223BF64D4A01074DC523A80E76B9BBC786C791FB0A1893AC5B14866356FCFD6C
-          time: 2019-04-22T17:01:51.701356223Z
-          height: "12"
-          last_commit_hash: 21B9BC845AD2CB2C4193CDD17BFC506F1EBE5A7402E84AD96E64171287A34812
       properties:
         header:
           $ref: '#/components/schemas/CommitResponse_result_signed_header_header'
@@ -3056,47 +1740,6 @@ components:
       - commit
       - header
     CommitResponse_result:
-      example:
-        signed_header:
-          commit:
-            round: 0
-            block_id:
-              parts:
-                total: 1
-                hash: 38D4B26B5B725C4F13571EFE022C030390E4C33C8CF6F88EDD142EA769642DBD
-              hash: 112BC173FD838FB68EB43476816CD7B4C6661B6884A9E357B417EE957E1CF8F7
-            signatures:
-            - signature: 14jaTQXYRt8kbLKEhdHq7AXycrFImiLuZx50uOjs2+Zv+2i7RTG/jnObD07Jo2ubZ8xd7bNBJMqkgtkd0oQHAw==
-              validator_address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-              block_id_flag: 2
-              timestamp: 2019-04-22T17:01:58.376629719Z
-            - signature: 14jaTQXYRt8kbLKEhdHq7AXycrFImiLuZx50uOjs2+Zv+2i7RTG/jnObD07Jo2ubZ8xd7bNBJMqkgtkd0oQHAw==
-              validator_address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-              block_id_flag: 2
-              timestamp: 2019-04-22T17:01:58.376629719Z
-            height: "1311801"
-          header:
-            validators_hash: D658BFD100CA8025CFD3BECFE86194322731D387286FBD26E059115FD5F2BCA0
-            chain_id: cosmoshub-2
-            consensus_hash: 0F2908883A105C793B74495EB7D6DF2EEA479ED7FC9349206A65CB0F9987A0B8
-            proposer_address: D540AB022088612AC74B287D076DBFBC4A377A2E
-            next_validators_hash: D658BFD100CA8025CFD3BECFE86194322731D387286FBD26E059115FD5F2BCA0
-            version:
-              app: "0"
-              block: "10"
-            data_hash: 970886F99E77ED0D60DA8FCE0447C2676E59F2F77302B0C4AA10E1D02F18EF73
-            last_results_hash: last_results_hash
-            last_block_id:
-              parts:
-                total: 1
-                hash: CB02DCAA7FB46BF874052EC2273FD0B1F2CF2E1593298D9781E60FE9C3DB8638
-              hash: D82C2734BB0E76C772A10994B210EF9D11505D1B98CB189D9CF7F9A5488672A5
-            evidence_hash: evidence_hash
-            app_hash: 223BF64D4A01074DC523A80E76B9BBC786C791FB0A1893AC5B14866356FCFD6C
-            time: 2019-04-22T17:01:51.701356223Z
-            height: "12"
-            last_commit_hash: 21B9BC845AD2CB2C4193CDD17BFC506F1EBE5A7402E84AD96E64171287A34812
-        canonical: true
       properties:
         signed_header:
           $ref: '#/components/schemas/CommitResponse_result_signed_header'
@@ -3107,13 +1750,6 @@ components:
       - canonical
       - signed_header
     ValidatorsResponse_result_validators:
-      example:
-        address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-        proposer_priority: "13769415"
-        pub_key:
-          type: tendermint/PubKeyEd25519
-          value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-        voting_power: "250353"
       properties:
         address:
           example: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
@@ -3127,23 +1763,6 @@ components:
           example: "13769415"
           type: string
     ValidatorsResponse_result:
-      example:
-        total: 25
-        validators:
-        - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-          proposer_priority: "13769415"
-          pub_key:
-            type: tendermint/PubKeyEd25519
-            value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-          voting_power: "250353"
-        - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-          proposer_priority: "13769415"
-          pub_key:
-            type: tendermint/PubKeyEd25519
-            value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-          voting_power: "250353"
-        count: 1
-        block_height: "55"
       properties:
         block_height:
           example: "55"
@@ -3162,9 +1781,6 @@ components:
       - block_height
       - validators
     GenesisResponse_result_genesis_pub_key:
-      example:
-        type: tendermint/PubKeyEd25519
-        value: cOQZvh/h9ZioSeUMZB/1Vy1Xo5x2sjrVjlE/qHnYifM=
       properties:
         type:
           example: tendermint/PubKeyEd25519
@@ -3176,13 +1792,6 @@ components:
       - type
       - value
     GenesisResponse_result_genesis_validators:
-      example:
-        address: B00A6323737F321EB0B8D59C6FD497A14B60938A
-        name: Certus One
-        power: "9328525"
-        pub_key:
-          type: tendermint/PubKeyEd25519
-          value: cOQZvh/h9ZioSeUMZB/1Vy1Xo5x2sjrVjlE/qHnYifM=
       properties:
         address:
           example: B00A6323737F321EB0B8D59C6FD497A14B60938A
@@ -3196,34 +1805,6 @@ components:
           example: Certus One
           type: string
     GenesisResponse_result_genesis:
-      example:
-        app_state: '{}'
-        genesis_time: 2019-04-22T17:00:00Z
-        chain_id: cosmoshub-2
-        validators:
-        - address: B00A6323737F321EB0B8D59C6FD497A14B60938A
-          name: Certus One
-          power: "9328525"
-          pub_key:
-            type: tendermint/PubKeyEd25519
-            value: cOQZvh/h9ZioSeUMZB/1Vy1Xo5x2sjrVjlE/qHnYifM=
-        - address: B00A6323737F321EB0B8D59C6FD497A14B60938A
-          name: Certus One
-          power: "9328525"
-          pub_key:
-            type: tendermint/PubKeyEd25519
-            value: cOQZvh/h9ZioSeUMZB/1Vy1Xo5x2sjrVjlE/qHnYifM=
-        consensus_params:
-          evidence:
-            max_age: "100000"
-          validator:
-            pub_key_types:
-            - ed25519
-          block:
-            time_iota_ms: "1000"
-            max_bytes: "22020096"
-            max_gas: "1000"
-        app_hash: app_hash
       properties:
         genesis_time:
           example: 2019-04-22T17:00:00Z
@@ -3249,48 +1830,12 @@ components:
       - genesis_time
       - validators
     GenesisResponse_result:
-      example:
-        genesis:
-          app_state: '{}'
-          genesis_time: 2019-04-22T17:00:00Z
-          chain_id: cosmoshub-2
-          validators:
-          - address: B00A6323737F321EB0B8D59C6FD497A14B60938A
-            name: Certus One
-            power: "9328525"
-            pub_key:
-              type: tendermint/PubKeyEd25519
-              value: cOQZvh/h9ZioSeUMZB/1Vy1Xo5x2sjrVjlE/qHnYifM=
-          - address: B00A6323737F321EB0B8D59C6FD497A14B60938A
-            name: Certus One
-            power: "9328525"
-            pub_key:
-              type: tendermint/PubKeyEd25519
-              value: cOQZvh/h9ZioSeUMZB/1Vy1Xo5x2sjrVjlE/qHnYifM=
-          consensus_params:
-            evidence:
-              max_age: "100000"
-            validator:
-              pub_key_types:
-              - ed25519
-            block:
-              time_iota_ms: "1000"
-              max_bytes: "22020096"
-              max_gas: "1000"
-          app_hash: app_hash
       properties:
         genesis:
           $ref: '#/components/schemas/GenesisResponse_result_genesis'
       required:
       - genesis
     DumpConsensusResponse_result_round_state_validators_validators:
-      example:
-        address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-        proposer_priority: -11896414
-        pub_key:
-          type: tendermint/PubKeyEd25519
-          value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-        voting_power: "239727"
       properties:
         address:
           example: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
@@ -3304,9 +1849,6 @@ components:
           example: -11896414
           type: string
     DumpConsensusResponse_result_round_state_validators_proposer_pub_key:
-      example:
-        type: tendermint/PubKeyEd25519
-        value: VNMNfw7mrQBSpEvCtA9ykOe6BoR00RM9b/a9v3vXZhY=
       properties:
         type:
           example: tendermint/PubKeyEd25519
@@ -3318,13 +1860,6 @@ components:
       - type
       - value
     DumpConsensusResponse_result_round_state_validators_proposer:
-      example:
-        address: 708FDDCE121CDADA502F2B0252FEF13FDAA31E50
-        proposer_priority: -88886833
-        pub_key:
-          type: tendermint/PubKeyEd25519
-          value: VNMNfw7mrQBSpEvCtA9ykOe6BoR00RM9b/a9v3vXZhY=
-        voting_power: "295360"
       properties:
         address:
           example: 708FDDCE121CDADA502F2B0252FEF13FDAA31E50
@@ -3343,27 +1878,6 @@ components:
       - pub_key
       - voting_power
     DumpConsensusResponse_result_round_state_validators:
-      example:
-        validators:
-        - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-          proposer_priority: -11896414
-          pub_key:
-            type: tendermint/PubKeyEd25519
-            value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-          voting_power: "239727"
-        - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-          proposer_priority: -11896414
-          pub_key:
-            type: tendermint/PubKeyEd25519
-            value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-          voting_power: "239727"
-        proposer:
-          address: 708FDDCE121CDADA502F2B0252FEF13FDAA31E50
-          proposer_priority: -88886833
-          pub_key:
-            type: tendermint/PubKeyEd25519
-            value: VNMNfw7mrQBSpEvCtA9ykOe6BoR00RM9b/a9v3vXZhY=
-          voting_power: "295360"
       properties:
         validators:
           items:
@@ -3375,17 +1889,6 @@ components:
       - proposer
       - validators
     DumpConsensusResponse_result_round_state_votes:
-      example:
-        prevotes:
-        - nil-Vote
-        - Vote{19:46A3F8B8393B 1311801/00/1(Prevote) 000000000000 64CE682305CB @ 2019-08-05T11:28:47.374703444Z}
-        prevotes_bit_array: BA{100:___________________x________________________________________________________________________________}
-          209706/170220253 = 0.00
-        round: "0"
-        precommits_bit_array: BA{100:____________________________________________________________________________________________________}
-          0/170220253 = 0.00
-        precommits:
-        - nil-Vote
       properties:
         round:
           example: "0"
@@ -3415,13 +1918,6 @@ components:
             0/170220253 = 0.00
           type: string
     DumpConsensusResponse_result_round_state_last_commit:
-      example:
-        votes_bit_array: BA{100:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}
-          170220253/170220253 = 1.00
-        peer_maj_23s: '{}'
-        votes:
-        - Vote{0:000001E443FD 1311800/00/2(Precommit) 3071ADB27D1A 77EE1B6B6847 @
-          2019-08-05T11:28:43.810128139Z}
       properties:
         votes:
           example:
@@ -3442,13 +1938,6 @@ components:
       - votes
       - votes_bit_array
     DumpConsensusResponse_result_round_state_last_validators_validators:
-      example:
-        address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-        proposer_priority: -12136141
-        pub_key:
-          type: tendermint/PubKeyEd25519
-          value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-        voting_power: "239727"
       properties:
         address:
           example: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
@@ -3462,13 +1951,6 @@ components:
           example: -12136141
           type: string
     DumpConsensusResponse_result_round_state_last_validators_proposer:
-      example:
-        address: B00A6323737F321EB0B8D59C6FD497A14B60938A
-        proposer_priority: -79515145
-        pub_key:
-          type: tendermint/PubKeyEd25519
-          value: cOQZvh/h9ZioSeUMZB/1Vy1Xo5x2sjrVjlE/qHnYifM=
-        voting_power: "8590153"
       properties:
         address:
           example: B00A6323737F321EB0B8D59C6FD497A14B60938A
@@ -3487,27 +1969,6 @@ components:
       - pub_key
       - voting_power
     DumpConsensusResponse_result_round_state_last_validators:
-      example:
-        validators:
-        - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-          proposer_priority: -12136141
-          pub_key:
-            type: tendermint/PubKeyEd25519
-            value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-          voting_power: "239727"
-        - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-          proposer_priority: -12136141
-          pub_key:
-            type: tendermint/PubKeyEd25519
-            value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-          voting_power: "239727"
-        proposer:
-          address: B00A6323737F321EB0B8D59C6FD497A14B60938A
-          proposer_priority: -79515145
-          pub_key:
-            type: tendermint/PubKeyEd25519
-            value: cOQZvh/h9ZioSeUMZB/1Vy1Xo5x2sjrVjlE/qHnYifM=
-          voting_power: "8590153"
       properties:
         validators:
           items:
@@ -3519,88 +1980,6 @@ components:
       - proposer
       - validators
     DumpConsensusResponse_result_round_state:
-      example:
-        locked_round: -1
-        last_commit:
-          votes_bit_array: BA{100:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}
-            170220253/170220253 = 1.00
-          peer_maj_23s: '{}'
-          votes:
-          - Vote{0:000001E443FD 1311800/00/2(Precommit) 3071ADB27D1A 77EE1B6B6847
-            @ 2019-08-05T11:28:43.810128139Z}
-        validators:
-          validators:
-          - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-            proposer_priority: -11896414
-            pub_key:
-              type: tendermint/PubKeyEd25519
-              value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-            voting_power: "239727"
-          - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-            proposer_priority: -11896414
-            pub_key:
-              type: tendermint/PubKeyEd25519
-              value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-            voting_power: "239727"
-          proposer:
-            address: 708FDDCE121CDADA502F2B0252FEF13FDAA31E50
-            proposer_priority: -88886833
-            pub_key:
-              type: tendermint/PubKeyEd25519
-              value: VNMNfw7mrQBSpEvCtA9ykOe6BoR00RM9b/a9v3vXZhY=
-            voting_power: "295360"
-        commit_time: 2019-08-05T11:28:44.064658805Z
-        commit_round: -1
-        triggered_timeout_precommit: false
-        last_validators:
-          validators:
-          - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-            proposer_priority: -12136141
-            pub_key:
-              type: tendermint/PubKeyEd25519
-              value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-            voting_power: "239727"
-          - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-            proposer_priority: -12136141
-            pub_key:
-              type: tendermint/PubKeyEd25519
-              value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-            voting_power: "239727"
-          proposer:
-            address: B00A6323737F321EB0B8D59C6FD497A14B60938A
-            proposer_priority: -79515145
-            pub_key:
-              type: tendermint/PubKeyEd25519
-              value: cOQZvh/h9ZioSeUMZB/1Vy1Xo5x2sjrVjlE/qHnYifM=
-            voting_power: "8590153"
-        start_time: 2019-08-05T11:28:49.064658805Z
-        round: 0
-        valid_round: -1
-        step: 3
-        votes:
-        - prevotes:
-          - nil-Vote
-          - Vote{19:46A3F8B8393B 1311801/00/1(Prevote) 000000000000 64CE682305CB @
-            2019-08-05T11:28:47.374703444Z}
-          prevotes_bit_array: BA{100:___________________x________________________________________________________________________________}
-            209706/170220253 = 0.00
-          round: "0"
-          precommits_bit_array: BA{100:____________________________________________________________________________________________________}
-            0/170220253 = 0.00
-          precommits:
-          - nil-Vote
-        - prevotes:
-          - nil-Vote
-          - Vote{19:46A3F8B8393B 1311801/00/1(Prevote) 000000000000 64CE682305CB @
-            2019-08-05T11:28:47.374703444Z}
-          prevotes_bit_array: BA{100:___________________x________________________________________________________________________________}
-            209706/170220253 = 0.00
-          round: "0"
-          precommits_bit_array: BA{100:____________________________________________________________________________________________________}
-            0/170220253 = 0.00
-          precommits:
-          - nil-Vote
-        height: "1311801"
       properties:
         height:
           example: "1311801"
@@ -3661,9 +2040,6 @@ components:
       - validators
       - votes
     DumpConsensusResponse_result_peer_state_round_state_proposal_block_parts_header:
-      example:
-        total: 0
-        hash: hash
       properties:
         total:
           example: 0
@@ -3674,23 +2050,6 @@ components:
       - hash
       - total
     DumpConsensusResponse_result_peer_state_round_state:
-      example:
-        proposal: false
-        last_commit: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-        catchup_commit_round: -1
-        last_commit_round: 0
-        catchup_commit: ____________________________________________________________________________________________________
-        proposal_pol: ____________________________________________________________________________________________________
-        precommits: ____________________________________________________________________________________________________
-        prevotes: ___________________x________________________________________________________________________________
-        start_time: 2019-08-05T11:28:49.21730864Z
-        proposal_block_parts_header:
-          total: 0
-          hash: hash
-        round: "0"
-        step: 3
-        proposal_pol_round: -1
-        height: "1311801"
       properties:
         height:
           example: "1311801"
@@ -3758,9 +2117,6 @@ components:
       - start_time
       - step
     DumpConsensusResponse_result_peer_state_stats:
-      example:
-        block_parts: "4786"
-        votes: "1159558"
       properties:
         votes:
           example: "1159558"
@@ -3772,27 +2128,6 @@ components:
       - block_parts
       - votes
     DumpConsensusResponse_result_peer_state:
-      example:
-        stats:
-          block_parts: "4786"
-          votes: "1159558"
-        round_state:
-          proposal: false
-          last_commit: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-          catchup_commit_round: -1
-          last_commit_round: 0
-          catchup_commit: ____________________________________________________________________________________________________
-          proposal_pol: ____________________________________________________________________________________________________
-          precommits: ____________________________________________________________________________________________________
-          prevotes: ___________________x________________________________________________________________________________
-          start_time: 2019-08-05T11:28:49.21730864Z
-          proposal_block_parts_header:
-            total: 0
-            hash: hash
-          round: "0"
-          step: 3
-          proposal_pol_round: -1
-          height: "1311801"
       properties:
         round_state:
           $ref: '#/components/schemas/DumpConsensusResponse_result_peer_state_round_state'
@@ -3802,29 +2137,6 @@ components:
       - round_state
       - stats
     DumpConsensusResponse_result_peers:
-      example:
-        peer_state:
-          stats:
-            block_parts: "4786"
-            votes: "1159558"
-          round_state:
-            proposal: false
-            last_commit: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-            catchup_commit_round: -1
-            last_commit_round: 0
-            catchup_commit: ____________________________________________________________________________________________________
-            proposal_pol: ____________________________________________________________________________________________________
-            precommits: ____________________________________________________________________________________________________
-            prevotes: ___________________x________________________________________________________________________________
-            start_time: 2019-08-05T11:28:49.21730864Z
-            proposal_block_parts_header:
-              total: 0
-              hash: hash
-            round: "0"
-            step: 3
-            proposal_pol_round: -1
-            height: "1311801"
-        node_address: 357f6a6c1d27414579a8185060aa8adf9815c43c@68.183.41.207:26656
       properties:
         node_address:
           example: 357f6a6c1d27414579a8185060aa8adf9815c43c@68.183.41.207:26656
@@ -3832,134 +2144,6 @@ components:
         peer_state:
           $ref: '#/components/schemas/DumpConsensusResponse_result_peer_state'
     DumpConsensusResponse_result:
-      example:
-        peers:
-        - peer_state:
-            stats:
-              block_parts: "4786"
-              votes: "1159558"
-            round_state:
-              proposal: false
-              last_commit: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-              catchup_commit_round: -1
-              last_commit_round: 0
-              catchup_commit: ____________________________________________________________________________________________________
-              proposal_pol: ____________________________________________________________________________________________________
-              precommits: ____________________________________________________________________________________________________
-              prevotes: ___________________x________________________________________________________________________________
-              start_time: 2019-08-05T11:28:49.21730864Z
-              proposal_block_parts_header:
-                total: 0
-                hash: hash
-              round: "0"
-              step: 3
-              proposal_pol_round: -1
-              height: "1311801"
-          node_address: 357f6a6c1d27414579a8185060aa8adf9815c43c@68.183.41.207:26656
-        - peer_state:
-            stats:
-              block_parts: "4786"
-              votes: "1159558"
-            round_state:
-              proposal: false
-              last_commit: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-              catchup_commit_round: -1
-              last_commit_round: 0
-              catchup_commit: ____________________________________________________________________________________________________
-              proposal_pol: ____________________________________________________________________________________________________
-              precommits: ____________________________________________________________________________________________________
-              prevotes: ___________________x________________________________________________________________________________
-              start_time: 2019-08-05T11:28:49.21730864Z
-              proposal_block_parts_header:
-                total: 0
-                hash: hash
-              round: "0"
-              step: 3
-              proposal_pol_round: -1
-              height: "1311801"
-          node_address: 357f6a6c1d27414579a8185060aa8adf9815c43c@68.183.41.207:26656
-        round_state:
-          locked_round: -1
-          last_commit:
-            votes_bit_array: BA{100:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}
-              170220253/170220253 = 1.00
-            peer_maj_23s: '{}'
-            votes:
-            - Vote{0:000001E443FD 1311800/00/2(Precommit) 3071ADB27D1A 77EE1B6B6847
-              @ 2019-08-05T11:28:43.810128139Z}
-          validators:
-            validators:
-            - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-              proposer_priority: -11896414
-              pub_key:
-                type: tendermint/PubKeyEd25519
-                value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-              voting_power: "239727"
-            - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-              proposer_priority: -11896414
-              pub_key:
-                type: tendermint/PubKeyEd25519
-                value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-              voting_power: "239727"
-            proposer:
-              address: 708FDDCE121CDADA502F2B0252FEF13FDAA31E50
-              proposer_priority: -88886833
-              pub_key:
-                type: tendermint/PubKeyEd25519
-                value: VNMNfw7mrQBSpEvCtA9ykOe6BoR00RM9b/a9v3vXZhY=
-              voting_power: "295360"
-          commit_time: 2019-08-05T11:28:44.064658805Z
-          commit_round: -1
-          triggered_timeout_precommit: false
-          last_validators:
-            validators:
-            - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-              proposer_priority: -12136141
-              pub_key:
-                type: tendermint/PubKeyEd25519
-                value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-              voting_power: "239727"
-            - address: 000001E443FD237E4B616E2FA69DF4EE3D49A94F
-              proposer_priority: -12136141
-              pub_key:
-                type: tendermint/PubKeyEd25519
-                value: 9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM=
-              voting_power: "239727"
-            proposer:
-              address: B00A6323737F321EB0B8D59C6FD497A14B60938A
-              proposer_priority: -79515145
-              pub_key:
-                type: tendermint/PubKeyEd25519
-                value: cOQZvh/h9ZioSeUMZB/1Vy1Xo5x2sjrVjlE/qHnYifM=
-              voting_power: "8590153"
-          start_time: 2019-08-05T11:28:49.064658805Z
-          round: 0
-          valid_round: -1
-          step: 3
-          votes:
-          - prevotes:
-            - nil-Vote
-            - Vote{19:46A3F8B8393B 1311801/00/1(Prevote) 000000000000 64CE682305CB
-              @ 2019-08-05T11:28:47.374703444Z}
-            prevotes_bit_array: BA{100:___________________x________________________________________________________________________________}
-              209706/170220253 = 0.00
-            round: "0"
-            precommits_bit_array: BA{100:____________________________________________________________________________________________________}
-              0/170220253 = 0.00
-            precommits:
-            - nil-Vote
-          - prevotes:
-            - nil-Vote
-            - Vote{19:46A3F8B8393B 1311801/00/1(Prevote) 000000000000 64CE682305CB
-              @ 2019-08-05T11:28:47.374703444Z}
-            prevotes_bit_array: BA{100:___________________x________________________________________________________________________________}
-              209706/170220253 = 0.00
-            round: "0"
-            precommits_bit_array: BA{100:____________________________________________________________________________________________________}
-              0/170220253 = 0.00
-            precommits:
-            - nil-Vote
-          height: "1311801"
       properties:
         round_state:
           $ref: '#/components/schemas/DumpConsensusResponse_result_round_state'
@@ -3971,19 +2155,6 @@ components:
       - peers
       - round_state
     ConsensusStateResponse_result_round_state_height_vote_set:
-      example:
-        prevotes:
-        - Vote{0:000001E443FD 1262197/00/1(Prevote) 634ADAF1F402 7BB974E1BA40 @ 2019-08-01T11:52:35.513572509Z}
-        - nil-Vote
-        prevotes_bit_array: BA{100:xxxxxxxxxxxxxxxxx_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}
-          169753436/170151262 = 1.00
-        round: "0"
-        precommits_bit_array: BA{100:xxxxxx_xxxxx_xxxx_x_xxx_xx_xx_xx__x_x_x__xxxxxxxxxxxxxx_xxxx_xx_xxxxxx_xxxxxxxx_xxxx_xxx_x_xxxx__xxx}
-          118726247/170151262 = 0.70
-        precommits:
-        - Vote{5:18C78D135C9D 1262197/00/2(Precommit) 634ADAF1F402 8B5EFFFEABCD @
-          2019-08-01T11:52:36.25600005Z}
-        - nil-Vote
       properties:
         round:
           example: "0"
@@ -4013,9 +2184,6 @@ components:
             118726247/170151262 = 0.70
           type: string
     ConsensusStateResponse_result_round_state_proposer:
-      example:
-        address: D540AB022088612AC74B287D076DBFBC4A377A2E
-        index: "0"
       properties:
         address:
           example: D540AB022088612AC74B287D076DBFBC4A377A2E
@@ -4024,42 +2192,6 @@ components:
           example: "0"
           type: string
     ConsensusStateResponse_result_round_state:
-      example:
-        proposal_block_hash: 634ADAF1F402663BEC2ABC340ECE8B4B45AA906FA603272ACC5F5EED3097E009
-        start_time: 2019-08-01T11:52:38.962730289Z
-        locked_block_hash: 634ADAF1F402663BEC2ABC340ECE8B4B45AA906FA603272ACC5F5EED3097E009
-        proposer:
-          address: D540AB022088612AC74B287D076DBFBC4A377A2E
-          index: "0"
-        valid_block_hash: 634ADAF1F402663BEC2ABC340ECE8B4B45AA906FA603272ACC5F5EED3097E009
-        height_vote_set:
-        - prevotes:
-          - Vote{0:000001E443FD 1262197/00/1(Prevote) 634ADAF1F402 7BB974E1BA40 @
-            2019-08-01T11:52:35.513572509Z}
-          - nil-Vote
-          prevotes_bit_array: BA{100:xxxxxxxxxxxxxxxxx_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}
-            169753436/170151262 = 1.00
-          round: "0"
-          precommits_bit_array: BA{100:xxxxxx_xxxxx_xxxx_x_xxx_xx_xx_xx__x_x_x__xxxxxxxxxxxxxx_xxxx_xx_xxxxxx_xxxxxxxx_xxxx_xxx_x_xxxx__xxx}
-            118726247/170151262 = 0.70
-          precommits:
-          - Vote{5:18C78D135C9D 1262197/00/2(Precommit) 634ADAF1F402 8B5EFFFEABCD
-            @ 2019-08-01T11:52:36.25600005Z}
-          - nil-Vote
-        - prevotes:
-          - Vote{0:000001E443FD 1262197/00/1(Prevote) 634ADAF1F402 7BB974E1BA40 @
-            2019-08-01T11:52:35.513572509Z}
-          - nil-Vote
-          prevotes_bit_array: BA{100:xxxxxxxxxxxxxxxxx_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}
-            169753436/170151262 = 1.00
-          round: "0"
-          precommits_bit_array: BA{100:xxxxxx_xxxxx_xxxx_x_xxx_xx_xx_xx__x_x_x__xxxxxxxxxxxxxx_xxxx_xx_xxxxxx_xxxxxxxx_xxxx_xxx_x_xxxx__xxx}
-            118726247/170151262 = 0.70
-          precommits:
-          - Vote{5:18C78D135C9D 1262197/00/2(Precommit) 634ADAF1F402 8B5EFFFEABCD
-            @ 2019-08-01T11:52:36.25600005Z}
-          - nil-Vote
-        height/round/step: 1262197/0/8
       properties:
         height/round/step:
           example: 1262197/0/8
@@ -4091,61 +2223,12 @@ components:
       - start_time
       - valid_block_hash
     ConsensusStateResponse_result:
-      example:
-        round_state:
-          proposal_block_hash: 634ADAF1F402663BEC2ABC340ECE8B4B45AA906FA603272ACC5F5EED3097E009
-          start_time: 2019-08-01T11:52:38.962730289Z
-          locked_block_hash: 634ADAF1F402663BEC2ABC340ECE8B4B45AA906FA603272ACC5F5EED3097E009
-          proposer:
-            address: D540AB022088612AC74B287D076DBFBC4A377A2E
-            index: "0"
-          valid_block_hash: 634ADAF1F402663BEC2ABC340ECE8B4B45AA906FA603272ACC5F5EED3097E009
-          height_vote_set:
-          - prevotes:
-            - Vote{0:000001E443FD 1262197/00/1(Prevote) 634ADAF1F402 7BB974E1BA40
-              @ 2019-08-01T11:52:35.513572509Z}
-            - nil-Vote
-            prevotes_bit_array: BA{100:xxxxxxxxxxxxxxxxx_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}
-              169753436/170151262 = 1.00
-            round: "0"
-            precommits_bit_array: BA{100:xxxxxx_xxxxx_xxxx_x_xxx_xx_xx_xx__x_x_x__xxxxxxxxxxxxxx_xxxx_xx_xxxxxx_xxxxxxxx_xxxx_xxx_x_xxxx__xxx}
-              118726247/170151262 = 0.70
-            precommits:
-            - Vote{5:18C78D135C9D 1262197/00/2(Precommit) 634ADAF1F402 8B5EFFFEABCD
-              @ 2019-08-01T11:52:36.25600005Z}
-            - nil-Vote
-          - prevotes:
-            - Vote{0:000001E443FD 1262197/00/1(Prevote) 634ADAF1F402 7BB974E1BA40
-              @ 2019-08-01T11:52:35.513572509Z}
-            - nil-Vote
-            prevotes_bit_array: BA{100:xxxxxxxxxxxxxxxxx_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}
-              169753436/170151262 = 1.00
-            round: "0"
-            precommits_bit_array: BA{100:xxxxxx_xxxxx_xxxx_x_xxx_xx_xx_xx__x_x_x__xxxxxxxxxxxxxx_xxxx_xx_xxxxxx_xxxxxxxx_xxxx_xxx_x_xxxx__xxx}
-              118726247/170151262 = 0.70
-            precommits:
-            - Vote{5:18C78D135C9D 1262197/00/2(Precommit) 634ADAF1F402 8B5EFFFEABCD
-              @ 2019-08-01T11:52:36.25600005Z}
-            - nil-Vote
-          height/round/step: 1262197/0/8
       properties:
         round_state:
           $ref: '#/components/schemas/ConsensusStateResponse_result_round_state'
       required:
       - round_state
     ConsensusParamsResponse_result:
-      example:
-        consensus_params:
-          evidence:
-            max_age: "100000"
-          validator:
-            pub_key_types:
-            - ed25519
-          block:
-            time_iota_ms: "1000"
-            max_bytes: "22020096"
-            max_gas: "1000"
-        block_height: "1313448"
       properties:
         block_height:
           example: "1313448"
@@ -4508,10 +2591,6 @@ components:
       - tx
       - tx_result
     ABCIInfoResponse_result_response:
-      example:
-        data: '{"size":0}'
-        app_version: "1314126"
-        version: 0.16.1
       properties:
         data:
           example: '{"size":0}'
@@ -4527,25 +2606,12 @@ components:
       - data
       - version
     ABCIInfoResponse_result:
-      example:
-        response:
-          data: '{"size":0}'
-          app_version: "1314126"
-          version: 0.16.1
       properties:
         response:
           $ref: '#/components/schemas/ABCIInfoResponse_result_response'
       required:
       - response
     ABCIQueryResponse_result_response:
-      example:
-        code: "0"
-        log: exists
-        index: -1
-        proof: 010114FED0DAD959F36091AD761C922ABA3CBF1D8349990101020103011406AA2262E2F448242DF2C2607C3CDC705313EE3B0001149D16177BC71E445476174622EA559715C293740C
-        value: "61626364"
-        key: "61626364"
-        height: "0"
       properties:
         log:
           example: exists
@@ -4577,15 +2643,6 @@ components:
       - proof
       - value
     ABCIQueryResponse_result:
-      example:
-        response:
-          code: "0"
-          log: exists
-          index: -1
-          proof: 010114FED0DAD959F36091AD761C922ABA3CBF1D8349990101020103011406AA2262E2F448242DF2C2607C3CDC705313EE3B0001149D16177BC71E445476174622EA559715C293740C
-          value: "61626364"
-          key: "61626364"
-          height: "0"
       properties:
         response:
           $ref: '#/components/schemas/ABCIQueryResponse_result_response'

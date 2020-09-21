@@ -52,18 +52,6 @@ type APIClient struct {
 
 	BankApi *BankApiService
 
-	DistributionApi *DistributionApiService
-
-	GovernanceApi *GovernanceApiService
-
-	MintApi *MintApiService
-
-	SlashingApi *SlashingApiService
-
-	StakingApi *StakingApiService
-
-	SupplyApi *SupplyApiService
-
 	TendermintRPCApi *TendermintRPCApiService
 
 	TransactionsApi *TransactionsApiService
@@ -87,12 +75,6 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	// API Services
 	c.AuthApi = (*AuthApiService)(&c.common)
 	c.BankApi = (*BankApiService)(&c.common)
-	c.DistributionApi = (*DistributionApiService)(&c.common)
-	c.GovernanceApi = (*GovernanceApiService)(&c.common)
-	c.MintApi = (*MintApiService)(&c.common)
-	c.SlashingApi = (*SlashingApiService)(&c.common)
-	c.StakingApi = (*StakingApiService)(&c.common)
-	c.SupplyApi = (*SupplyApiService)(&c.common)
 	c.TendermintRPCApi = (*TendermintRPCApiService)(&c.common)
 	c.TransactionsApi = (*TransactionsApiService)(&c.common)
 
@@ -184,13 +166,12 @@ func parameterToJson(obj interface{}) (string, error) {
 	return string(jsonBuf), err
 }
 
-
 // callAPI do the request.
 func (c *APIClient) callAPI(request *http.Request) (*http.Response, error) {
 	if c.cfg.Debug {
-	        dump, err := httputil.DumpRequestOut(request, true)
+		dump, err := httputil.DumpRequestOut(request, true)
 		if err != nil {
-		        return nil, err
+			return nil, err
 		}
 		log.Printf("\n%s\n", string(dump))
 	}

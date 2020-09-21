@@ -8,8 +8,9 @@
  */
 
 package openapi
+
 // PublicKey struct for PublicKey
 type PublicKey struct {
-	Type string `json:"type,omitempty"`
+	Type  string `json:"type,omitempty"`
 	Value string `json:"value,omitempty"`
 }
