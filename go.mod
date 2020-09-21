@@ -8,7 +8,6 @@ require (
 	github.com/cosmos/cosmos-sdk v0.39.1
 	github.com/google/go-cmp v0.4.0
 	github.com/pkg/errors v0.9.1
-	github.com/spf13/cobra v1.0.0
 	github.com/stretchr/testify v1.6.1
 	github.com/tendermint/tendermint v0.33.8
 	github.com/vektra/mockery/v2 v2.2.1
