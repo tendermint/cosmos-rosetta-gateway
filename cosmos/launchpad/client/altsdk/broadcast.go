@@ -13,9 +13,9 @@ type BroadcastResp struct {
 }
 
 // Broadcast the specified tx.
-func (c client) Broadcast(req []byte) (*BroadcastResp, error) {
+func (c Client) Broadcast(req []byte) (*BroadcastResp, error) {
 	b := bytes.NewBuffer(req)
-	post, err := http.Post(c.buildEndpoint(BroadcastEndpoint), "", b)
+	post, err := http.Post(c.getEndpoint(BroadcastEndpoint), "", b)
 	if err != nil {
 		return nil, err
 	}

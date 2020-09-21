@@ -8,21 +8,17 @@ const (
 	BroadcastEndpoint = "/txs"
 )
 
-type Client interface {
-	Broadcast(request []byte) (*BroadcastResp, error)
-}
-
-type client struct {
+type Client struct {
 	endpoint string
 }
 
 // NewClient returns the client to call Cosmos RPC.
-func NewClient(endpoint string) Client {
-	return &client{
+func NewClient(endpoint string) *Client {
+	return &Client{
 		endpoint: endpoint,
 	}
 }
 
-func (c client) buildEndpoint(path string) string {
+func (c Client) getEndpoint(path string) string {
 	return fmt.Sprintf("%s%s", c.endpoint, path)
 }
