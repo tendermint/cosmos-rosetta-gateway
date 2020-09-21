@@ -48,3 +48,8 @@ type TendermintInfoAPI interface {
 type TendermintTxAPI interface {
 	BroadcastTxAsync(ctx context.Context, tx string) (tendermintclient.BroadcastTxResponse, *http.Response, error)
 }
+
+// New Interfaces.
+type TendermintClient interface {
+	NetInfo() (tendermintclient.NetInfoResponse, error)
+}
