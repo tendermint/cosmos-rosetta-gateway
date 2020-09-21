@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+
 	"github.com/antihax/optional"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"golang.org/x/sync/errgroup"
@@ -54,7 +56,7 @@ func (l Launchpad) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (
 	var (
 		latestBlock  tendermintclient.BlockResponse
 		genesisBlock tendermintclient.BlockResponse
-		netInfo      tendermintclient.NetInfoResponse
+		netInfo      *alttendermint.NetInfoResponse
 	)
 
 	g, ctx := errgroup.WithContext(ctx)
@@ -69,7 +71,7 @@ func (l Launchpad) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (
 		return
 	})
 	g.Go(func() (err error) {
-		netInfo, _, err = l.tendermint.Info.NetInfo(ctx)
+		netInfo, err = l.altTendermint.NetInfo()
 		return
 	})
 	if err := g.Wait(); err != nil {
@@ -77,7 +79,7 @@ func (l Launchpad) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (
 	}
 
 	var peers []*types.Peer
-	for _, p := range netInfo.Result.Peers {
+	for _, p := range netInfo.Peers {
 		peers = append(peers, &types.Peer{
 			PeerID: p.NodeInfo.Id,
 		})

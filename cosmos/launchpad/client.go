@@ -4,6 +4,8 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+
 	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 )
@@ -51,5 +53,5 @@ type TendermintTxAPI interface {
 
 // New Interfaces.
 type TendermintClient interface {
-	NetInfo() (tendermintclient.NetInfoResponse, error)
+	NetInfo() (*alttendermint.NetInfoResponse, error)
 }
