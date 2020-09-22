@@ -3,14 +3,9 @@
 cosmos=cosmos/launchpad/client/sdk/generated
 cosmosyml=cosmos/launchpad/client/sdk/swagger.yml
 
-tendermint=cosmos/launchpad/client/tendermint/generated
-tendermintyml=cosmos/launchpad/client/tendermint/openapi.yml
-
 mkdir -p $cosmos
-mkdir -p $tendermint
 
 # https://openapi-generator.tech/
 openapi-generator generate -g go -i $cosmosyml -o $cosmos
-openapi-generator generate -g go -i $tendermintyml -o $tendermint
 
-rm $cosmos/go.mod $cosmos/go.sum $tendermint/go.mod $tendermint/go.sum
+rm $cosmos/go.mod $cosmos/go.sum
