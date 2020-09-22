@@ -46,8 +46,6 @@ func runHandler() error {
 	altTenderClient := alttendermint.NewClient(fmt.Sprintf("http://%s", *flagTendermintRPC))
 
 	cosmoslp := launchpad.CosmosAPI{
-		Auth:       cosmoslpc.AuthApi,
-		Bank:       cosmoslpc.BankApi,
 		Tendermint: cosmoslpc.TendermintRPCApi,
 	}
 	tendermintlp := launchpad.TendermintAPI{

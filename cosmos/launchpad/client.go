@@ -2,6 +2,7 @@ package launchpad
 
 import (
 	"context"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk/types"
 	"net/http"
 
@@ -23,6 +24,7 @@ type CosmosTransactionsAPI interface {
 
 type SdkClient interface {
 	GetAuthAccount(ctx context.Context, address string) (types.AccountResponse, error)
+	Broadcast(req []byte) (*altsdk.BroadcastResp, error)
 }
 
 type CosmosTendermintAPI interface {
