@@ -1,6 +1,8 @@
 package alttendermint
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Client struct {
 	endpoint string
