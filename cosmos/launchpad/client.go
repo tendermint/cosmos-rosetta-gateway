@@ -35,17 +35,11 @@ type CosmosTendermintAPI interface {
 
 type TendermintAPI struct {
 	Info TendermintInfoAPI
-	Tx   TendermintTxAPI
 }
 
 type TendermintInfoAPI interface {
-	UnconfirmedTxs(ctx context.Context, localVarOptionals *tendermintclient.UnconfirmedTxsOpts) (tendermintclient.UnconfirmedTransactionsResponse, *http.Response, error)
 	TxSearch(ctx context.Context, query string, localVarOptionals *tendermintclient.TxSearchOpts) (tendermintclient.TxSearchResponse, *http.Response, error)
 	Tx(ctx context.Context, hash string, localVarOptionals *tendermintclient.TxOpts) (tendermintclient.TxResponse, *http.Response, error)
-}
-
-type TendermintTxAPI interface {
-	BroadcastTxAsync(ctx context.Context, tx string) (tendermintclient.BroadcastTxResponse, *http.Response, error)
 }
 
 // New Interfaces.

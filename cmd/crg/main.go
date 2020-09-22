@@ -52,7 +52,6 @@ func runHandler() error {
 	}
 	tendermintlp := launchpad.TendermintAPI{
 		Info: tendermintlpc.InfoApi,
-		Tx:   tendermintlpc.TxApi,
 	}
 
 	properties := rosetta.NetworkProperties{
