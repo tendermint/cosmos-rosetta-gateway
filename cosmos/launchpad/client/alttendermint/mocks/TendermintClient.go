@@ -34,6 +34,27 @@ func (_m *TendermintClient) Block(height uint64) (alttendermint.BlockResponse, e
 	return r0, r1
 }
 
+// BlockByHash provides a mock function with given fields: hash
+func (_m *TendermintClient) BlockByHash(hash string) (alttendermint.BlockResponse, error) {
+	ret := _m.Called(hash)
+
+	var r0 alttendermint.BlockResponse
+	if rf, ok := ret.Get(0).(func(string) alttendermint.BlockResponse); ok {
+		r0 = rf(hash)
+	} else {
+		r0 = ret.Get(0).(alttendermint.BlockResponse)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(hash)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // NetInfo provides a mock function with given fields:
 func (_m *TendermintClient) NetInfo() (alttendermint.NetInfoResponse, error) {
 	ret := _m.Called()
