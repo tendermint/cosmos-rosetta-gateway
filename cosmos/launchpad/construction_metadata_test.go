@@ -2,19 +2,19 @@ package launchpad
 
 import (
 	"context"
+	sdktypes "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
 	"testing"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk/mocks"
-	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
@@ -35,13 +35,13 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 	m := &mocks.SdkClient{}
 	m.
 		On("GetAuthAccount", mock.Anything, "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na").
-		Return(cosmosclient.InlineResponse2006{
-			Height: "12",
-			Result: cosmosclient.InlineResponse2006Result{
-				Value: cosmosclient.InlineResponse2006ResultValue{
-					AccountNumber: "0",
+		Return(sdktypes.AccountResponse{
+			Height: 12,
+			Result: sdktypes.Response{
+				Value: sdktypes.BaseAccount{
+					AccountNumber: 0,
 					Address:       "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na",
-					Sequence:      "1",
+					Sequence:      1,
 				},
 			},
 		}, nil, nil).Once()
@@ -58,7 +58,7 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 		ChainIdKey:       "TheNetwork",
 		OptionGas:        &feeMultiplier,
 	}
-	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(TendermintAPI{}, sdk.NewClient(""), alttendermint.NewClient(""), properties)
 	metaResp, err := adapter.ConstructionMetadata(context.Background(), &types.ConstructionMetadataRequest{
 		NetworkIdentifier: &networkIdentifier,
 		Options:           options,

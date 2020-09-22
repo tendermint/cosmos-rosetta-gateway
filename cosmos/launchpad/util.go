@@ -3,14 +3,14 @@ package launchpad
 import (
 	"context"
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/x/bank"
 	"strconv"
 	"strings"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
 
-	cosmostypes "github.com/cosmos/cosmos-sdk/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -31,7 +31,7 @@ func HexPrefix(hex string) string {
 
 // getTxByHash calls
 func (l Launchpad) getTxByHash(ctx context.Context, hash string) (*types.Transaction, *types.Error) {
-	txQuery, _, err := l.cosmos.Transactions.TxsHashGet(ctx, hash)
+	txQuery, err := l.altCosmos.GetTx(ctx, hash)
 	if err != nil {
 		return nil, ErrNodeConnection
 	}
@@ -55,7 +55,7 @@ func toBlockIdentifier(result alttendermint.BlockResponse) (*types.BlockIdentifi
 	}, nil
 }
 
-func toTransactions(txs []cosmosclient.TxQuery) (transactions []*types.Transaction, err error) {
+func toTransactions(txs []sdk.TxResponse) (transactions []*types.Transaction, err error) {
 	for _, tx := range txs {
 		transactions = append(transactions, cosmosTxToRosettaTx(tx))
 	}
@@ -75,24 +75,25 @@ func tendermintTxToRosettaTx(res tendermintclient.TxResponseResult) *types.Trans
 
 // cosmosTxToRosettaTx converts a Cosmos api TxQuery to a Transaction
 // in the type expected by Rosetta.
-func cosmosTxToRosettaTx(tx cosmosclient.TxQuery) *types.Transaction {
+func cosmosTxToRosettaTx(tx sdk.TxResponse) *types.Transaction {
 	hasError := tx.Code > 0
 	return &types.Transaction{
 		TransactionIdentifier: &types.TransactionIdentifier{
-			Hash: tx.Txhash,
+			Hash: tx.TxHash,
 		},
-		Operations: toOperations(tx.Tx.Value.Msg, hasError),
+		Operations: toOperations(tx.Tx.GetMsgs(), hasError),
 	}
 }
 
-func toOperations(msg []cosmosclient.Msg, hasError bool) (operations []*types.Operation) {
+func toOperations(msg []sdk.Msg, hasError bool) (operations []*types.Operation) {
 	for i, msg := range msg {
-		if msg.Type != typeMsgSend {
+		newMsg, ok := msg.(bank.MsgSend)
+		if !ok {
 			continue
 		}
-		fromAddress := msg.Value.FromAddress
-		toAddress := msg.Value.ToAddress
-		amounts := msg.Value.Amount
+		fromAddress := newMsg.FromAddress
+		toAddress := newMsg.ToAddress
+		amounts := newMsg.Amount
 		if len(amounts) == 0 {
 			continue
 		}
@@ -120,8 +121,8 @@ func toOperations(msg []cosmosclient.Msg, hasError bool) (operations []*types.Op
 			}
 		}
 		operations = append(operations,
-			sendOp(fromAddress, "-"+coin.Amount, i),
-			sendOp(toAddress, coin.Amount, i+1),
+			sendOp(fromAddress.String(), "-"+coin.Amount.String(), i),
+			sendOp(toAddress.String(), coin.Amount.String(), i+1),
 		)
 	}
 	return
@@ -138,12 +139,12 @@ func getTransferTxDataFromOperations(ops []*types.Operation) (*TransferTxData, e
 
 	for _, op := range ops {
 		if strings.HasPrefix(op.Amount.Value, "-") {
-			transferData.From, err = cosmostypes.AccAddressFromBech32(op.Account.Address)
+			transferData.From, err = sdk.AccAddressFromBech32(op.Account.Address)
 			if err != nil {
 				return nil, err
 			}
 		} else {
-			transferData.To, err = cosmostypes.AccAddressFromBech32(op.Account.Address)
+			transferData.To, err = sdk.AccAddressFromBech32(op.Account.Address)
 			if err != nil {
 				return nil, err
 			}
@@ -153,7 +154,7 @@ func getTransferTxDataFromOperations(ops []*types.Operation) (*TransferTxData, e
 				return nil, fmt.Errorf("invalid amount")
 			}
 
-			transferData.Amount = cosmostypes.NewCoin(op.Amount.Currency.Symbol, cosmostypes.NewInt(amount))
+			transferData.Amount = sdk.NewCoin(op.Amount.Currency.Symbol, sdk.NewInt(amount))
 		}
 	}
 

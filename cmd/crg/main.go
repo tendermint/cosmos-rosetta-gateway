@@ -10,8 +10,7 @@ import (
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
-	cosmoslaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
 	tendermintlaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 	"github.com/tendermint/cosmos-rosetta-gateway/service"
@@ -34,20 +33,13 @@ func main() {
 }
 
 func runHandler() error {
-	cosmoslpc := cosmoslaunchpadclient.NewAPIClient(&cosmoslaunchpadclient.Configuration{
-		Host:   *flagAppRPC,
-		Scheme: "http",
-	})
 	tendermintlpc := tendermintlaunchpadclient.NewAPIClient(&tendermintlaunchpadclient.Configuration{
 		Host:   *flagTendermintRPC,
 		Scheme: "http",
 	})
-	altClient := altsdk.NewClient(fmt.Sprintf("http://%s", *flagAppRPC))
+	altClient := sdk.NewClient(fmt.Sprintf("http://%s", *flagAppRPC))
 	altTenderClient := alttendermint.NewClient(fmt.Sprintf("http://%s", *flagTendermintRPC))
 
-	cosmoslp := launchpad.CosmosAPI{
-		Tendermint: cosmoslpc.TendermintRPCApi,
-	}
 	tendermintlp := launchpad.TendermintAPI{
 		Info: tendermintlpc.InfoApi,
 	}
@@ -63,7 +55,6 @@ func runHandler() error {
 			Properties: properties,
 			Adapter: launchpad.NewLaunchpad(
 				tendermintlp,
-				cosmoslp,
 				altClient,
 				altTenderClient,
 				properties,

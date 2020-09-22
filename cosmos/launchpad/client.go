@@ -2,33 +2,21 @@ package launchpad
 
 import (
 	"context"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk/types"
+	"github.com/cosmos/cosmos-sdk/client/rpc"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
 	"net/http"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
 
-	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 )
 
-type CosmosAPI struct {
-	Tendermint   CosmosTendermintAPI
-	Transactions CosmosTransactionsAPI
-}
-
-type CosmosTransactionsAPI interface {
-	TxsHashGet(ctx context.Context, hash string) (cosmosclient.TxQuery, *http.Response, error)
-	TxsPost(ctx context.Context, txBroadcast cosmosclient.InlineObject) (cosmosclient.BroadcastTxCommitResult, *http.Response, error)
-}
-
 type SdkClient interface {
 	GetAuthAccount(ctx context.Context, address string) (types.AccountResponse, error)
-	Broadcast(req []byte) (*altsdk.BroadcastResp, error)
-}
-
-type CosmosTendermintAPI interface {
-	NodeInfoGet(ctx context.Context) (cosmosclient.InlineResponse200, *http.Response, error)
+	GetTx(ctx context.Context, hash string) (sdk.TxResponse, error)
+	PostTx(ctx context.Context, bytes []byte) (sdk.TxResponse, error)
+	GetNodeInfo(ctx context.Context) (rpc.NodeInfoResponse, error)
 }
 
 type TendermintAPI struct {

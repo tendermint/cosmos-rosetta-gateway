@@ -2,6 +2,7 @@ package launchpad
 
 import (
 	"context"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"testing"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
@@ -14,8 +15,8 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk/mocks"
-	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
+	sdktypes "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
@@ -24,17 +25,22 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 	mt := &mocks2.TendermintInfoAPI{}
 	ma := &mocks3.TendermintClient{}
 	defer m.AssertExpectations(t)
-
 	m.
-		On("BankBalancesAddressGet", mock.Anything, "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na").
-		Return(cosmosclient.InlineResponse2005{
-			Height: "12345",
-			Result: []cosmosclient.Coin{
-				{Denom: "stake", Amount: "400"},
-				{Denom: "token", Amount: "600"},
+		On("GetAuthAccount", mock.Anything, "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na").
+		Return(sdktypes.AccountResponse{
+			Height: 12,
+			Result: sdktypes.Response{
+				Value: sdktypes.BaseAccount{
+					AccountNumber: 0,
+					Coins: []sdk.Coin{
+						{Denom: "stake", Amount: sdk.NewInt(400)},
+						{Denom: "token", Amount: sdk.NewInt(600)},
+					},
+					Address:  "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na",
+					Sequence: 1,
+				},
 			},
-		}, nil, nil).
-		Once()
+		}, nil, nil).Once()
 
 	blockHash := "ABCDEFG"
 	ma.
@@ -51,7 +57,7 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{Info: mt}, CosmosAPI{}, m, ma, properties)
+	adapter := NewLaunchpad(TendermintAPI{Info: mt}, m, ma, properties)
 
 	res, err := adapter.AccountBalance(context.Background(), &types.AccountBalanceRequest{
 		AccountIdentifier: &types.AccountIdentifier{

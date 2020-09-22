@@ -23,7 +23,7 @@ func (l Launchpad) NetworkList(context.Context, *types.MetadataRequest) (*types.
 }
 
 func (l Launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) (*types.NetworkOptionsResponse, *types.Error) {
-	resp, _, err := l.cosmos.Tendermint.NodeInfoGet(ctx)
+	resp, err := l.altCosmos.GetNodeInfo(ctx)
 	if err != nil {
 		return nil, ErrNodeConnection
 	}
@@ -31,7 +31,7 @@ func (l Launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) 
 	return &types.NetworkOptionsResponse{
 		Version: &types.Version{
 			RosettaVersion: "1.2.5",
-			NodeVersion:    resp.NodeInfo.Version,
+			NodeVersion:    resp.Version,
 		},
 		Allow: &types.Allow{
 			OperationStatuses: []*types.OperationStatus{
