@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+
 	cosmostypes "github.com/cosmos/cosmos-sdk/types"
 
 	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
@@ -39,7 +41,7 @@ func (l Launchpad) getTxByHash(ctx context.Context, hash string) (*types.Transac
 	return tx, nil
 }
 
-func toBlockIdentifier(result tendermintclient.BlockComplete) (*types.BlockIdentifier, error) {
+func toBlockIdentifier(result alttendermint.BlockResponse) (*types.BlockIdentifier, error) {
 	if result.BlockId.Hash == "" {
 		return nil, nil
 	}

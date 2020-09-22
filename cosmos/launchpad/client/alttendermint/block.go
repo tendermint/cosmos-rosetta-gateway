@@ -21,6 +21,7 @@ type Block struct {
 }
 
 type BlockHeader struct {
+	LastBlockId BlockId `json:"last_block_id"`
 	Height string `json:"height"`
 	Time   string `json:"time"`
 }

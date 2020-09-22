@@ -41,7 +41,6 @@ type TendermintAPI struct {
 type TendermintInfoAPI interface {
 	Block(ctx context.Context, localVarOptionals *tendermintclient.BlockOpts) (tendermintclient.BlockResponse, *http.Response, error)
 	UnconfirmedTxs(ctx context.Context, localVarOptionals *tendermintclient.UnconfirmedTxsOpts) (tendermintclient.UnconfirmedTransactionsResponse, *http.Response, error)
-	BlockByHash(ctx context.Context, hash string) (tendermintclient.BlockResponse, *http.Response, error)
 	TxSearch(ctx context.Context, query string, localVarOptionals *tendermintclient.TxSearchOpts) (tendermintclient.TxSearchResponse, *http.Response, error)
 	Tx(ctx context.Context, hash string, localVarOptionals *tendermintclient.TxOpts) (tendermintclient.TxResponse, *http.Response, error)
 }
