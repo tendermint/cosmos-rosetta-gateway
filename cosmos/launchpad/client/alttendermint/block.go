@@ -51,3 +51,30 @@ func (c Client) Block(height uint64) (BlockResponse, error) {
 
 	return blockResponse, nil
 }
+
+func (c Client) BlockByHash(hash string) (BlockResponse, error) {
+	resp, err := http.Get(c.getEndpoint(fmt.Sprintf("block_by_hash?hash=%s", hash)))
+	if err != nil {
+		return BlockResponse{}, err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return BlockResponse{}, err
+	}
+
+	var jsonResp map[string]json.RawMessage
+	err = json.Unmarshal(body, &jsonResp)
+	if err != nil {
+		return BlockResponse{}, err
+	}
+
+	var blockResponse BlockResponse
+	err = json.Unmarshal(jsonResp["result"], &blockResponse)
+	if err != nil {
+		return BlockResponse{}, err
+	}
+
+	return blockResponse, nil
+}

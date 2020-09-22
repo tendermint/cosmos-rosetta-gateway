@@ -26,7 +26,7 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 			Height: optional.NewFloat32(float32(*r.BlockIdentifier.Index)),
 		})
 	} else {
-		blockResp, _, err = l.tendermint.Info.BlockByHash(ctx, String(*r.BlockIdentifier.Hash))
+		blockResp, _, err = l.tendermint.Info.BlockByHash(ctx, HexPrefix(*r.BlockIdentifier.Hash))
 	}
 	if err != nil {
 		return nil, ErrNodeConnection

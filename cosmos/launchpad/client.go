@@ -54,4 +54,5 @@ type TendermintTxAPI interface {
 type TendermintClient interface {
 	NetInfo() (alttendermint.NetInfoResponse, error)
 	Block(height uint64) (alttendermint.BlockResponse, error)
+	BlockByHash(hash string) (alttendermint.BlockResponse, error)
 }
