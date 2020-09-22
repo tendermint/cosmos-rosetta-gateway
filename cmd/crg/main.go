@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad"
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
@@ -38,7 +38,7 @@ func runHandler() error {
 		Scheme: "http",
 	})
 	altClient := altsdk.NewClient(fmt.Sprintf("http://%s", *flagAppRPC))
-	altTenderClient := alttendermint.NewClient(fmt.Sprintf("http://%s", *flagTendermintRPC))
+	altTenderClient := tendermint.NewClient(fmt.Sprintf("http://%s", *flagTendermintRPC))
 
 	cosmoslp := launchpad.CosmosAPI{
 		Auth:       cosmoslpc.AuthApi,

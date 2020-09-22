@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint/mocks"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 
@@ -32,15 +32,15 @@ func TestLaunchpad_Block(t *testing.T) {
 
 	ma.
 		On("Block", uint64(1)).
-		Return(alttendermint.BlockResponse{
-			BlockId: alttendermint.BlockId{
+		Return(tendermint.BlockResponse{
+			BlockId: tendermint.BlockId{
 				Hash: "11",
 			},
-			Block: alttendermint.Block{
-				Header: alttendermint.BlockHeader{
+			Block: tendermint.Block{
+				Header: tendermint.BlockHeader{
 					Height: "2",
 					Time:   ti.Format(time.RFC3339),
-					LastBlockId: alttendermint.BlockId{
+					LastBlockId: tendermint.BlockId{
 						Hash: "12",
 					},
 				},
@@ -50,8 +50,8 @@ func TestLaunchpad_Block(t *testing.T) {
 
 	ma.
 		On("TxSearch", `tx.height=2`).
-		Return(alttendermint.TxSearchResponse{
-			Txs: []alttendermint.TxSearchResponseResultTxs{
+		Return(tendermint.TxSearchResponse{
+			Txs: []tendermint.TxSearchResponseResultTxs{
 				{
 					Hash: "3",
 				},
@@ -279,7 +279,7 @@ func TestLaunchpad_BlockTransaction(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(CosmosAPI{Transactions: mc}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(CosmosAPI{Transactions: mc}, altsdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	tx, txErr := adapter.BlockTransaction(context.Background(), &types.BlockTransactionRequest{
 		TransactionIdentifier: &types.TransactionIdentifier{
@@ -369,7 +369,7 @@ func TestLaunchpad_BlockTransactionWithError(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(CosmosAPI{Transactions: mc}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(CosmosAPI{Transactions: mc}, altsdk.NewClient(""), tendermint.NewClient(""), properties)
 	tx, txErr := adapter.BlockTransaction(context.Background(), &types.BlockTransactionRequest{
 		TransactionIdentifier: &types.TransactionIdentifier{
 			Hash: "1",

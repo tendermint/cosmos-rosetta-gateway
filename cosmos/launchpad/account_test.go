@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
-	mocks3 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint/mocks"
+	mocks3 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 
@@ -39,11 +39,11 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 	blockHash := "ABCDEFG"
 	ma.
 		On("Block", uint64(12345)).
-		Return(alttendermint.BlockResponse{
-			BlockId: alttendermint.BlockId{
+		Return(tendermint.BlockResponse{
+			BlockId: tendermint.BlockId{
 				Hash: blockHash,
 			},
-			Block: alttendermint.Block{},
+			Block: tendermint.Block{},
 		}, nil, nil)
 
 	properties := rosetta.NetworkProperties{

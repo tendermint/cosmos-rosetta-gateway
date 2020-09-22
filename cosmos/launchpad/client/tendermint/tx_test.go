@@ -1,4 +1,4 @@
-package alttendermint
+package tendermint
 
 import (
 	"io/ioutil"
@@ -9,8 +9,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestClient_NetInfo(t *testing.T) {
-	fileData, err := ioutil.ReadFile("testdata/net_info.json")
+func TestClient_Tx(t *testing.T) {
+	fileData, err := ioutil.ReadFile("testdata/tx.json")
 	require.NoError(t, err)
 
 	s := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
@@ -22,10 +22,8 @@ func TestClient_NetInfo(t *testing.T) {
 
 	client := NewClient(s.URL)
 
-	resp, err := client.NetInfo()
+	resp, err := client.Tx("0xF38E833151DFD041BE7CD8906C2C46CAA2FF2945D766CEFEEB4BC3C43F0AFEDF")
 	require.NoError(t, err)
 
-	require.Equal(t, "2", resp.NPeers)
-	require.Equal(t, resp.Peers[0].NodeInfo.Id, "2b1df5de9b6d8cae633ee7b13468ce8443de56ee")
-	require.Equal(t, resp.Peers[1].NodeInfo.Id, "c75553feba01261ab03d931962e0ba88570f7d96")
+	require.Equal(t, "F38E833151DFD041BE7CD8906C2C46CAA2FF2945D766CEFEEB4BC3C43F0AFEDF", resp.Hash)
 }

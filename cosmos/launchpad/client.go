@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
 	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 )
@@ -33,10 +33,10 @@ type CosmosTendermintAPI interface {
 }
 
 type TendermintClient interface {
-	NetInfo() (alttendermint.NetInfoResponse, error)
-	Block(height uint64) (alttendermint.BlockResponse, error)
-	BlockByHash(hash string) (alttendermint.BlockResponse, error)
-	UnconfirmedTxs() (alttendermint.UnconfirmedTxsResponse, error)
-	Tx(hash string) (alttendermint.TxResponse, error)
-	TxSearch(query string) (alttendermint.TxSearchResponse, error)
+	NetInfo() (tendermint.NetInfoResponse, error)
+	Block(height uint64) (tendermint.BlockResponse, error)
+	BlockByHash(hash string) (tendermint.BlockResponse, error)
+	UnconfirmedTxs() (tendermint.UnconfirmedTxsResponse, error)
+	Tx(hash string) (tendermint.TxResponse, error)
+	TxSearch(query string) (tendermint.TxSearchResponse, error)
 }

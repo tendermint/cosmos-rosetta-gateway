@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	alttendermint "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+	alttendermint "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
 	mock "github.com/stretchr/testify/mock"
 )

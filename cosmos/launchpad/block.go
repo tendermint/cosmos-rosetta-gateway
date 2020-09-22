@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"golang.org/x/sync/errgroup"
@@ -16,7 +16,7 @@ import (
 
 func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.BlockResponse, *types.Error) {
 	var (
-		blockResp alttendermint.BlockResponse
+		blockResp tendermint.BlockResponse
 		err       error
 	)
 

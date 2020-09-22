@@ -1,4 +1,4 @@
-package alttendermint
+package tendermint
 
 import (
 	"encoding/json"

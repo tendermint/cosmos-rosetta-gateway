@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	mocks3 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint/mocks"
+	mocks3 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 
@@ -22,7 +22,7 @@ func TestLaunchpad_Mempool(t *testing.T) {
 
 	m.
 		On("UnconfirmedTxs").
-		Return(alttendermint.UnconfirmedTxsResponse{
+		Return(tendermint.UnconfirmedTxsResponse{
 			Txs: []string{
 				"1QEoKBapCl0l5qD4CiRkNGFiMDdlYi1jZGUxLTRjZmQtOWI3OS04MzYzNjFmN2RjNTcSFKeCHRQzgA2HavcLTcf4xdScUjrtGghtYW5vbGV0ZSIRdXNlckBtYW5vbGV0ZS5jb20SBBDAmgwaagom61rphyECU9fDYFDAP5TWDimv6z0BdK6oyV\nzv3iCb9fUWAAb4AoYSQCbvAfmO+aqF5WZ1M67XLZbV7OI3Sq8sbnV58tx5gf3nW/C/89pTTNmWmBskrOzmbmNEmBPQl1biuXAsUCwyMfE=",
 			},
@@ -46,7 +46,7 @@ func TestLaunchpad_MempoolTransaction(t *testing.T) {
 
 	ma.
 		On("Tx", "ABCTHEHASH").
-		Return(alttendermint.TxResponse{
+		Return(tendermint.TxResponse{
 			Hash: "ABCTHEHASH",
 		},
 			nil, nil)
