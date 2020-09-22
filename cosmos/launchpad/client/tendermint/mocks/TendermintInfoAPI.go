@@ -16,36 +16,6 @@ type TendermintInfoAPI struct {
 	mock.Mock
 }
 
-// Tx provides a mock function with given fields: ctx, hash, localVarOptionals
-func (_m *TendermintInfoAPI) Tx(ctx context.Context, hash string, localVarOptionals *openapi.TxOpts) (openapi.TxResponse, *http.Response, error) {
-	ret := _m.Called(ctx, hash, localVarOptionals)
-
-	var r0 openapi.TxResponse
-	if rf, ok := ret.Get(0).(func(context.Context, string, *openapi.TxOpts) openapi.TxResponse); ok {
-		r0 = rf(ctx, hash, localVarOptionals)
-	} else {
-		r0 = ret.Get(0).(openapi.TxResponse)
-	}
-
-	var r1 *http.Response
-	if rf, ok := ret.Get(1).(func(context.Context, string, *openapi.TxOpts) *http.Response); ok {
-		r1 = rf(ctx, hash, localVarOptionals)
-	} else {
-		if ret.Get(1) != nil {
-			r1 = ret.Get(1).(*http.Response)
-		}
-	}
-
-	var r2 error
-	if rf, ok := ret.Get(2).(func(context.Context, string, *openapi.TxOpts) error); ok {
-		r2 = rf(ctx, hash, localVarOptionals)
-	} else {
-		r2 = ret.Error(2)
-	}
-
-	return r0, r1, r2
-}
-
 // TxSearch provides a mock function with given fields: ctx, query, localVarOptionals
 func (_m *TendermintInfoAPI) TxSearch(ctx context.Context, query string, localVarOptionals *openapi.TxSearchOpts) (openapi.TxSearchResponse, *http.Response, error) {
 	ret := _m.Called(ctx, query, localVarOptionals)
