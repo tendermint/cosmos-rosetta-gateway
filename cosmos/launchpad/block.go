@@ -22,9 +22,9 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 
 	// retrieve the block first.
 	if r.BlockIdentifier.Index != nil {
-		blockResp, err = l.altTendermint.Block(uint64(*r.BlockIdentifier.Index))
+		blockResp, err = l.tendermint.Block(uint64(*r.BlockIdentifier.Index))
 	} else {
-		blockResp, err = l.altTendermint.BlockByHash(HexPrefix(*r.BlockIdentifier.Hash))
+		blockResp, err = l.tendermint.BlockByHash(HexPrefix(*r.BlockIdentifier.Hash))
 	}
 	if err != nil {
 		return nil, ErrNodeConnection
@@ -36,7 +36,7 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 		m   sync.Mutex
 	)
 	txsquery := fmt.Sprintf(`tx.height=%s`, blockResp.Block.Header.Height)
-	txsResp, err := l.altTendermint.TxSearch(txsquery)
+	txsResp, err := l.tendermint.TxSearch(txsquery)
 	if err != nil {
 		return nil, ErrNodeConnection
 	}

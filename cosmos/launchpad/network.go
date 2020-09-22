@@ -58,15 +58,15 @@ func (l Launchpad) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (
 
 	g, _ := errgroup.WithContext(ctx)
 	g.Go(func() (err error) {
-		latestBlock, err = l.altTendermint.Block(0)
+		latestBlock, err = l.tendermint.Block(0)
 		return
 	})
 	g.Go(func() (err error) {
-		genesisBlock, err = l.altTendermint.Block(1)
+		genesisBlock, err = l.tendermint.Block(1)
 		return
 	})
 	g.Go(func() (err error) {
-		netInfo, err = l.altTendermint.NetInfo()
+		netInfo, err = l.tendermint.NetInfo()
 		return
 	})
 	if err := g.Wait(); err != nil {

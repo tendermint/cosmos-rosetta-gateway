@@ -11,7 +11,7 @@ import (
 )
 
 func (l Launchpad) Mempool(ctx context.Context, request *types.NetworkRequest) (*types.MempoolResponse, *types.Error) {
-	txs, err := l.altTendermint.UnconfirmedTxs()
+	txs, err := l.tendermint.UnconfirmedTxs()
 	if err != nil {
 		return nil, ErrNodeConnection
 	}
@@ -33,7 +33,7 @@ func (l Launchpad) Mempool(ctx context.Context, request *types.NetworkRequest) (
 }
 
 func (l Launchpad) MempoolTransaction(ctx context.Context, request *types.MempoolTransactionRequest) (*types.MempoolTransactionResponse, *types.Error) {
-	res, err := l.altTendermint.Tx(request.TransactionIdentifier.Hash)
+	res, err := l.tendermint.Tx(request.TransactionIdentifier.Hash)
 	if err != nil {
 		return nil, ErrNodeConnection
 	}
