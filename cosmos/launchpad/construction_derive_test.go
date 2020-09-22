@@ -5,6 +5,8 @@ import (
 	"encoding/hex"
 	"testing"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -26,7 +28,7 @@ func TestLaunchpad_ConstructionDerive(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, altsdk.NewClient(""), properties)
+	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
 	deriveResp, deriveErr := adapter.ConstructionDerive(context.Background(), &types.ConstructionDeriveRequest{
 		PublicKey: &types.PublicKey{
 			Bytes:     data,

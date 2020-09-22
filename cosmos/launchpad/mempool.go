@@ -11,13 +11,13 @@ import (
 )
 
 func (l Launchpad) Mempool(ctx context.Context, request *types.NetworkRequest) (*types.MempoolResponse, *types.Error) {
-	txs, _, err := l.tendermint.Info.UnconfirmedTxs(ctx, nil)
+	txs, err := l.altTendermint.UnconfirmedTxs()
 	if err != nil {
 		return nil, ErrNodeConnection
 	}
 
 	var txsResp []*types.TransactionIdentifier
-	for _, tx := range txs.Result.Txs {
+	for _, tx := range txs.Txs {
 		decodeString, err := base64.StdEncoding.DecodeString(tx)
 		if err != nil {
 			return nil, ErrInterpreting

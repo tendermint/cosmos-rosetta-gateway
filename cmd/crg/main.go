@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad"
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 	cosmoslaunchpadclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
@@ -41,6 +43,7 @@ func runHandler() error {
 		Scheme: "http",
 	})
 	altClient := altsdk.NewClient(fmt.Sprintf("http://%s", *flagAppRPC))
+	altTenderClient := alttendermint.NewClient(fmt.Sprintf("http://%s", *flagTendermintRPC))
 
 	cosmoslp := launchpad.CosmosAPI{
 		Auth:       cosmoslpc.AuthApi,
@@ -49,7 +52,6 @@ func runHandler() error {
 	}
 	tendermintlp := launchpad.TendermintAPI{
 		Info: tendermintlpc.InfoApi,
-		Tx:   tendermintlpc.TxApi,
 	}
 
 	properties := rosetta.NetworkProperties{
@@ -61,7 +63,13 @@ func runHandler() error {
 	h, err := service.New(
 		service.Network{
 			Properties: properties,
-			Adapter:    launchpad.NewLaunchpad(tendermintlp, cosmoslp, altClient, properties),
+			Adapter: launchpad.NewLaunchpad(
+				tendermintlp,
+				cosmoslp,
+				altClient,
+				altTenderClient,
+				properties,
+			),
 		},
 	)
 	// TODO: maybe create some constructor for specific adapters or Factory.
