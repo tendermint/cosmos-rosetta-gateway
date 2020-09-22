@@ -7,11 +7,8 @@ import (
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
 
-	"github.com/antihax/optional"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"golang.org/x/sync/errgroup"
-
-	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 )
 
 func (l Launchpad) NetworkList(context.Context, *types.MetadataRequest) (*types.NetworkListResponse, *types.Error) {
@@ -54,20 +51,18 @@ func (l Launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) 
 
 func (l Launchpad) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (*types.NetworkStatusResponse, *types.Error) {
 	var (
-		latestBlock  tendermintclient.BlockResponse
-		genesisBlock tendermintclient.BlockResponse
+		latestBlock  alttendermint.BlockResponse
+		genesisBlock alttendermint.BlockResponse
 		netInfo      alttendermint.NetInfoResponse
 	)
 
 	g, ctx := errgroup.WithContext(ctx)
 	g.Go(func() (err error) {
-		latestBlock, _, err = l.tendermint.Info.Block(ctx, nil)
+		latestBlock, err = l.altTendermint.Block(0)
 		return
 	})
 	g.Go(func() (err error) {
-		genesisBlock, _, err = l.tendermint.Info.Block(ctx, &tendermintclient.BlockOpts{
-			Height: optional.NewFloat32(1),
-		})
+		genesisBlock, err = l.altTendermint.Block(1)
 		return
 	})
 	g.Go(func() (err error) {
@@ -85,12 +80,12 @@ func (l Launchpad) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (
 		})
 	}
 
-	height, err := strconv.ParseUint(latestBlock.Result.Block.Header.Height, 10, 64)
+	height, err := strconv.ParseUint(latestBlock.Block.Header.Height, 10, 64)
 	if err != nil {
 		return nil, ErrInterpreting
 	}
 
-	t, err := time.Parse(time.RFC3339Nano, latestBlock.Result.Block.Header.Time)
+	t, err := time.Parse(time.RFC3339Nano, latestBlock.Block.Header.Time)
 	if err != nil {
 		return nil, ErrInterpreting
 	}
@@ -98,12 +93,12 @@ func (l Launchpad) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (
 	return &types.NetworkStatusResponse{
 		CurrentBlockIdentifier: &types.BlockIdentifier{
 			Index: int64(height),
-			Hash:  latestBlock.Result.BlockId.Hash,
+			Hash:  latestBlock.BlockId.Hash,
 		},
 		CurrentBlockTimestamp: t.UnixNano() / 1000000,
 		GenesisBlockIdentifier: &types.BlockIdentifier{
 			Index: 1,
-			Hash:  genesisBlock.Result.BlockId.Hash,
+			Hash:  genesisBlock.BlockId.Hash,
 		},
 		Peers: peers,
 	}, nil

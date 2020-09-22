@@ -11,14 +11,12 @@ import (
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 
-	"github.com/antihax/optional"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
 	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 	cosmosmocks "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
-	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 	tendermintmocks "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
@@ -96,41 +94,34 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 
 	mt := &mocks.TendermintClient{}
 
-	var blockOpts *tendermintclient.BlockOpts
 	ti, err := time.Parse(time.RFC3339, "2019-04-22T17:01:51Z")
 	require.NoError(t, err)
 
-	m.
-		On("Block", mock.Anything, blockOpts).
-		Return(tendermintclient.BlockResponse{
-			Result: tendermintclient.BlockComplete{
-				Block: tendermintclient.Block{
-					Header: tendermintclient.BlockHeader{
-						Time:   ti.Format(time.RFC3339),
-						Height: "2",
-					},
+	mt.
+		On("Block", uint64(0)).
+		Return(alttendermint.BlockResponse{
+			Block: alttendermint.Block{
+				Header: alttendermint.BlockHeader{
+					Time:   ti.Format(time.RFC3339),
+					Height: "2",
 				},
-				BlockId: tendermintclient.BlockId{
-					Hash: "3",
-				},
+			},
+			BlockId: alttendermint.BlockId{
+				Hash: "3",
 			},
 		}, nil, nil).
 		Once()
 
-	m.
-		On("Block", mock.Anything, &tendermintclient.BlockOpts{
-			Height: optional.NewFloat32(1),
-		}).
-		Return(tendermintclient.BlockResponse{
-			Result: tendermintclient.BlockComplete{
-				Block: tendermintclient.Block{
-					Header: tendermintclient.BlockHeader{
-						Height: "1",
-					},
+	mt.
+		On("Block", uint64(1)).
+		Return(alttendermint.BlockResponse{
+			Block: alttendermint.Block{
+				Header: alttendermint.BlockHeader{
+					Height: "1",
 				},
-				BlockId: tendermintclient.BlockId{
-					Hash: "4",
-				},
+			},
+			BlockId: alttendermint.BlockId{
+				Hash: "4",
 			},
 		}, nil, nil).
 		Once()
