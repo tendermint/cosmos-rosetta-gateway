@@ -38,7 +38,7 @@ func runHandler() error {
 		Scheme: "http",
 	})
 	altClient := altsdk.NewClient(fmt.Sprintf("http://%s", *flagAppRPC))
-	altTenderClient := tendermint.NewClient(fmt.Sprintf("http://%s", *flagTendermintRPC))
+	tendermintClient := tendermint.NewClient(fmt.Sprintf("http://%s", *flagTendermintRPC))
 
 	cosmoslp := launchpad.CosmosAPI{
 		Auth:       cosmoslpc.AuthApi,
@@ -57,7 +57,7 @@ func runHandler() error {
 			Adapter: launchpad.NewLaunchpad(
 				cosmoslp,
 				altClient,
-				altTenderClient,
+				tendermintClient,
 				properties,
 			),
 		},
