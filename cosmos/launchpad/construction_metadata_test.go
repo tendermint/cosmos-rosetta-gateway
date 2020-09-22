@@ -11,8 +11,8 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk/mocks"
 	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
@@ -30,9 +30,9 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 		Network:    "TheNetwork",
 	}
 
-	m := &mocks.CosmosAuthAPI{}
+	m := &mocks.SdkClient{}
 	m.
-		On("AuthAccountsAddressGet", mock.Anything, "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na").
+		On("GetAuthAccount", mock.Anything, "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na").
 		Return(cosmosclient.InlineResponse2006{
 			Height: "12",
 			Result: cosmosclient.InlineResponse2006Result{

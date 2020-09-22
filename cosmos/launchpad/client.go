@@ -2,6 +2,7 @@ package launchpad
 
 import (
 	"context"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk/types"
 	"net/http"
 
 	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
@@ -9,8 +10,6 @@ import (
 )
 
 type CosmosAPI struct {
-	Auth         CosmosAuthAPI
-	Bank         CosmosBankAPI
 	Tendermint   CosmosTendermintAPI
 	Transactions CosmosTransactionsAPI
 }
@@ -19,12 +18,9 @@ type CosmosTransactionsAPI interface {
 	TxsHashGet(ctx context.Context, hash string) (cosmosclient.TxQuery, *http.Response, error)
 	TxsPost(ctx context.Context, txBroadcast cosmosclient.InlineObject) (cosmosclient.BroadcastTxCommitResult, *http.Response, error)
 }
-type CosmosBankAPI interface {
-	BankBalancesAddressGet(ctx context.Context, address string) (cosmosclient.InlineResponse2005, *http.Response, error)
-}
 
-type CosmosAuthAPI interface {
-	AuthAccountsAddressGet(ctx context.Context, address string) (cosmosclient.InlineResponse2006, *http.Response, error)
+type SdkClient interface {
+	GetAuthAccount(ctx context.Context, address string) (types.AccountResponse, error)
 }
 
 type CosmosTendermintAPI interface {

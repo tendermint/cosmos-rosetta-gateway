@@ -9,12 +9,12 @@ type Launchpad struct {
 	cosmos     CosmosAPI
 	tendermint TendermintAPI
 
-	altCosmos *altsdk.Client
+	altCosmos altsdk.Client
 
 	properties rosetta.NetworkProperties
 }
 
-func NewLaunchpad(tendermint TendermintAPI, cosmos CosmosAPI, altCosmos *altsdk.Client, properties rosetta.NetworkProperties) rosetta.Adapter {
+func NewLaunchpad(tendermint TendermintAPI, cosmos CosmosAPI, altCosmos altsdk.Client, properties rosetta.NetworkProperties) rosetta.Adapter {
 	return &Launchpad{
 		tendermint: tendermint,
 		cosmos:     cosmos,
