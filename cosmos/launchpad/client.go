@@ -39,7 +39,6 @@ type TendermintAPI struct {
 
 type TendermintInfoAPI interface {
 	TxSearch(ctx context.Context, query string, localVarOptionals *tendermintclient.TxSearchOpts) (tendermintclient.TxSearchResponse, *http.Response, error)
-	Tx(ctx context.Context, hash string, localVarOptionals *tendermintclient.TxOpts) (tendermintclient.TxResponse, *http.Response, error)
 }
 
 // New Interfaces.
