@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"testing"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -40,7 +42,7 @@ func TestLaunchpad_ConstructionCombine(t *testing.T) {
 	require.NoError(t, err)
 
 	txHex := hex.EncodeToString(txBytes)
-	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, altsdk.NewClient(""), properties)
+	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
 	var combineRes, combineErr = adapter.ConstructionCombine(context.Background(), &types.ConstructionCombineRequest{
 		UnsignedTransaction: txHex,
 		Signatures: []*types.Signature{{

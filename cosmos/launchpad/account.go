@@ -2,10 +2,8 @@ package launchpad
 
 import (
 	"context"
-	"github.com/antihax/optional"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	openapi "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
@@ -17,9 +15,10 @@ func (l Launchpad) AccountBalance(ctx context.Context, request *types.AccountBal
 		return nil, ErrNodeConnection
 	}
 
-	block, _, err := l.tendermint.Info.Block(ctx, &openapi.BlockOpts{
-		Height: optional.NewFloat32(float32(resp.Height)),
-	})
+	block, err := l.altTendermint.Block(uint64(resp.Height))
+	if err != nil {
+		return nil, ErrNodeConnection
+	}
 	if err != nil {
 		return nil, ErrNodeConnection
 	}
@@ -27,7 +26,7 @@ func (l Launchpad) AccountBalance(ctx context.Context, request *types.AccountBal
 	return &types.AccountBalanceResponse{
 		BlockIdentifier: &types.BlockIdentifier{
 			Index: resp.Height,
-			Hash:  block.Result.BlockId.Hash,
+			Hash:  block.BlockId.Hash,
 		},
 		Balances: convertCoinsToRosettaBalances(resp.Result.Value.Coins),
 	}, nil

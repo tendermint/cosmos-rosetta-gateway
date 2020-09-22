@@ -6,27 +6,25 @@ import (
 	"sync"
 	"time"
 
-	"github.com/antihax/optional"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"golang.org/x/sync/errgroup"
 
 	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
-	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 )
 
 func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.BlockResponse, *types.Error) {
 	var (
-		blockResp tendermintclient.BlockResponse
+		blockResp alttendermint.BlockResponse
 		err       error
 	)
 
 	// retrieve the block first.
 	if r.BlockIdentifier.Index != nil {
-		blockResp, _, err = l.tendermint.Info.Block(ctx, &tendermintclient.BlockOpts{
-			Height: optional.NewFloat32(float32(*r.BlockIdentifier.Index)),
-		})
+		blockResp, err = l.altTendermint.Block(uint64(*r.BlockIdentifier.Index))
 	} else {
-		blockResp, _, err = l.tendermint.Info.BlockByHash(ctx, String(*r.BlockIdentifier.Hash))
+		blockResp, err = l.altTendermint.BlockByHash(HexPrefix(*r.BlockIdentifier.Hash))
 	}
 	if err != nil {
 		return nil, ErrNodeConnection
@@ -37,7 +35,7 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 		txs []cosmosclient.TxQuery
 		m   sync.Mutex
 	)
-	txsquery := fmt.Sprintf(`"tx.height=%s"`, blockResp.Result.Block.Header.Height)
+	txsquery := fmt.Sprintf(`"tx.height=%s"`, blockResp.Block.Header.Height)
 	txsResp, _, err := l.tendermint.Info.TxSearch(ctx, txsquery, nil)
 	if err != nil {
 		return nil, ErrNodeConnection
@@ -66,22 +64,22 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 		return nil, ErrInterpreting
 	}
 
-	block, err := toBlockIdentifier(blockResp.Result)
+	block, err := toBlockIdentifier(blockResp)
 	if err != nil {
 		return nil, ErrInterpreting
 	}
 
-	timestamp, err := time.Parse(time.RFC3339Nano, blockResp.Result.Block.Header.Time)
+	timestamp, err := time.Parse(time.RFC3339Nano, blockResp.Block.Header.Time)
 	if err != nil {
 		return nil, ErrInterpreting
 	}
 
 	parentBlockId := block // If it does not have parent block it is the same as block 1.
-	hasParentBlock := blockResp.Result.Block.Header.LastBlockId.Hash != ""
+	hasParentBlock := blockResp.Block.Header.LastBlockId.Hash != ""
 	if hasParentBlock {
 		parentBlockId = &types.BlockIdentifier{
 			Index: block.Index - 1,
-			Hash:  blockResp.Result.Block.Header.LastBlockId.Hash,
+			Hash:  blockResp.Block.Header.LastBlockId.Hash,
 		}
 	}
 

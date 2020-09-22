@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -62,7 +64,7 @@ func TestLaunchpad_ConstructionPreprocess(t *testing.T) {
 		OptionGas:     &feeMultiplier,
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, altsdk.NewClient(""), properties)
+	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
 	deriveResp, deriveErr := adapter.ConstructionPreprocess(context.Background(), &types.ConstructionPreprocessRequest{
 		Operations:             ops,
 		SuggestedFeeMultiplier: &feeMultiplier,

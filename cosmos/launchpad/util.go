@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+
 	cosmostypes "github.com/cosmos/cosmos-sdk/types"
 
 	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
@@ -19,8 +21,8 @@ const (
 	zerox       = "0x"
 )
 
-// String ensures that string representation of hex starts with 0x.
-func String(hex string) string {
+// HexPrefix ensures that string representation of hex starts with 0x.
+func HexPrefix(hex string) string {
 	if !strings.HasPrefix(hex, zerox) {
 		return zerox + hex
 	}
@@ -39,7 +41,7 @@ func (l Launchpad) getTxByHash(ctx context.Context, hash string) (*types.Transac
 	return tx, nil
 }
 
-func toBlockIdentifier(result tendermintclient.BlockComplete) (*types.BlockIdentifier, error) {
+func toBlockIdentifier(result alttendermint.BlockResponse) (*types.BlockIdentifier, error) {
 	if result.BlockId.Hash == "" {
 		return nil, nil
 	}

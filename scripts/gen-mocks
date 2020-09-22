@@ -8,3 +8,4 @@ cd cosmos/launchpad && \
     mockery --name ^Tendermint.*?API --output client/tendermint/mocks && \
     mockery --name ^Cosmos.*?API --output client/sdk/mocks && \
     mockery --name SdkClient --output client/altsdk/mocks
+    mockery --name TendermintClient --output client/alttendermint/mocks
