@@ -17,7 +17,6 @@ import (
 
 	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 	cosmosmocks "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
-	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 	tendermintmocks "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
@@ -52,18 +51,15 @@ func TestLaunchpad_Block(t *testing.T) {
 		}, nil, nil).
 		Once()
 
-	var opts *tendermintclient.TxSearchOpts
-	mt.
-		On("TxSearch", mock.Anything, `"tx.height=2"`, opts).
-		Return(tendermintclient.TxSearchResponse{
-			Result: tendermintclient.TxSearchResponseResult{
-				Txs: []tendermintclient.TxSearchResponseResultTxs{
-					{
-						Hash: "3",
-					},
-					{
-						Hash: "4",
-					},
+	ma.
+		On("TxSearch", `tx.height=2`).
+		Return(alttendermint.TxSearchResponse{
+			Txs: []alttendermint.TxSearchResponseResultTxs{
+				{
+					Hash: "3",
+				},
+				{
+					Hash: "4",
 				},
 			},
 		}, nil, nil).

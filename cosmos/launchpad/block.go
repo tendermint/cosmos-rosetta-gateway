@@ -35,13 +35,13 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 		txs []cosmosclient.TxQuery
 		m   sync.Mutex
 	)
-	txsquery := fmt.Sprintf(`"tx.height=%s"`, blockResp.Block.Header.Height)
-	txsResp, _, err := l.tendermint.Info.TxSearch(ctx, txsquery, nil)
+	txsquery := fmt.Sprintf(`tx.height=%s`, blockResp.Block.Header.Height)
+	txsResp, err := l.altTendermint.TxSearch(txsquery)
 	if err != nil {
 		return nil, ErrNodeConnection
 	}
 	g, ctx := errgroup.WithContext(ctx)
-	for _, txshort := range txsResp.Result.Txs {
+	for _, txshort := range txsResp.Txs {
 		hash := txshort.Hash
 		g.Go(func() error {
 			tx, _, err := l.cosmos.Transactions.TxsHashGet(ctx, hash)

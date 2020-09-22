@@ -97,6 +97,27 @@ func (_m *TendermintClient) Tx(hash string) (alttendermint.TxResponse, error) {
 	return r0, r1
 }
 
+// TxSearch provides a mock function with given fields: query
+func (_m *TendermintClient) TxSearch(query string) (alttendermint.TxSearchResponse, error) {
+	ret := _m.Called(query)
+
+	var r0 alttendermint.TxSearchResponse
+	if rf, ok := ret.Get(0).(func(string) alttendermint.TxSearchResponse); ok {
+		r0 = rf(query)
+	} else {
+		r0 = ret.Get(0).(alttendermint.TxSearchResponse)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(query)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // UnconfirmedTxs provides a mock function with given fields:
 func (_m *TendermintClient) UnconfirmedTxs() (alttendermint.UnconfirmedTxsResponse, error) {
 	ret := _m.Called()
