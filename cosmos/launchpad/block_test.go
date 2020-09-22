@@ -17,17 +17,14 @@ import (
 
 	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 	cosmosmocks "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
-	tendermintmocks "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_Block(t *testing.T) {
 	var (
-		mt = &tendermintmocks.TendermintInfoAPI{}
 		mc = &cosmosmocks.CosmosTransactionsAPI{}
 		ma = &mocks.TendermintClient{}
 	)
-	defer mt.AssertExpectations(t)
 	defer mc.AssertExpectations(t)
 
 	ti, err := time.Parse(time.RFC3339, "2019-04-22T17:01:51Z")
@@ -125,7 +122,7 @@ func TestLaunchpad_Block(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{Info: mt}, CosmosAPI{Transactions: mc}, altsdk.NewClient(""), ma, properties)
+	adapter := NewLaunchpad(CosmosAPI{Transactions: mc}, altsdk.NewClient(""), ma, properties)
 
 	var h int64 = 1
 	block, blockErr := adapter.Block(context.Background(), &types.BlockRequest{
@@ -282,7 +279,7 @@ func TestLaunchpad_BlockTransaction(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{Transactions: mc}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(CosmosAPI{Transactions: mc}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
 
 	tx, txErr := adapter.BlockTransaction(context.Background(), &types.BlockTransactionRequest{
 		TransactionIdentifier: &types.TransactionIdentifier{
@@ -372,7 +369,7 @@ func TestLaunchpad_BlockTransactionWithError(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{Transactions: mc}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(CosmosAPI{Transactions: mc}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
 	tx, txErr := adapter.BlockTransaction(context.Background(), &types.BlockTransactionRequest{
 		TransactionIdentifier: &types.TransactionIdentifier{
 			Hash: "1",

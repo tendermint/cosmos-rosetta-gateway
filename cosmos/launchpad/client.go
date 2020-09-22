@@ -7,7 +7,6 @@ import (
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
 
 	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
-	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 )
 
 type CosmosAPI struct {
@@ -33,15 +32,6 @@ type CosmosTendermintAPI interface {
 	NodeInfoGet(ctx context.Context) (cosmosclient.InlineResponse200, *http.Response, error)
 }
 
-type TendermintAPI struct {
-	Info TendermintInfoAPI
-}
-
-type TendermintInfoAPI interface {
-	TxSearch(ctx context.Context, query string, localVarOptionals *tendermintclient.TxSearchOpts) (tendermintclient.TxSearchResponse, *http.Response, error)
-}
-
-// New Interfaces.
 type TendermintClient interface {
 	NetInfo() (alttendermint.NetInfoResponse, error)
 	Block(height uint64) (alttendermint.BlockResponse, error)

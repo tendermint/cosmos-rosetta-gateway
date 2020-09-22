@@ -64,7 +64,7 @@ func TestLaunchpad_ConstructionPreprocess(t *testing.T) {
 		OptionGas:     &feeMultiplier,
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
 	deriveResp, deriveErr := adapter.ConstructionPreprocess(context.Background(), &types.ConstructionPreprocessRequest{
 		Operations:             ops,
 		SuggestedFeeMultiplier: &feeMultiplier,

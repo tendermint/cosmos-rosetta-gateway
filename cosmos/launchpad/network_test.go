@@ -17,7 +17,6 @@ import (
 
 	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 	cosmosmocks "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
-	tendermintmocks "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
@@ -27,7 +26,7 @@ func TestLaunchpad_NetworkList(t *testing.T) {
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
 
 	list, err := adapter.NetworkList(context.Background(), nil)
 	require.Nil(t, err)
@@ -59,7 +58,7 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{Tendermint: m}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(CosmosAPI{Tendermint: m}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
 
 	options, err := adapter.NetworkOptions(context.Background(), nil)
 	require.Nil(t, err)
@@ -89,10 +88,8 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 }
 
 func TestLaunchpad_NetworkStatus(t *testing.T) {
-	m := &tendermintmocks.TendermintInfoAPI{}
-	defer m.AssertExpectations(t)
-
 	mt := &mocks.TendermintClient{}
+	defer mt.AssertExpectations(t)
 
 	ti, err := time.Parse(time.RFC3339, "2019-04-22T17:01:51Z")
 	require.NoError(t, err)
@@ -154,7 +151,6 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 	}
 
 	adapter := NewLaunchpad(
-		TendermintAPI{Info: m},
 		CosmosAPI{},
 		altsdk.NewClient(""),
 		mt,

@@ -24,7 +24,7 @@ func TestLaunchpad_ConstructionParse(t *testing.T) {
 				"Reward",
 			},
 		}
-		adapter = NewLaunchpad(TendermintAPI{}, CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
+		adapter = NewLaunchpad(CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
 	)
 
 	cases := []struct {

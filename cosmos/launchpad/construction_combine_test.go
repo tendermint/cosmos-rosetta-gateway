@@ -42,7 +42,7 @@ func TestLaunchpad_ConstructionCombine(t *testing.T) {
 	require.NoError(t, err)
 
 	txHex := hex.EncodeToString(txBytes)
-	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
 	var combineRes, combineErr = adapter.ConstructionCombine(context.Background(), &types.ConstructionCombineRequest{
 		UnsignedTransaction: txHex,
 		Signatures: []*types.Signature{{

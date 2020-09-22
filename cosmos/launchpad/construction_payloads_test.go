@@ -51,7 +51,7 @@ func TestPayloadsEndpoint_Errors(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""), rosetta.NetworkProperties{})
+			adapter := NewLaunchpad(CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""), rosetta.NetworkProperties{})
 			_, err := adapter.ConstructionPayloads(context.Background(), tt.req)
 			require.Equal(t, err, tt.expectedErr)
 		})
@@ -104,7 +104,7 @@ func TestGetSenderByOperations(t *testing.T) {
 }
 
 func TestLaunchpad_ConstructionPayloads(t *testing.T) {
-	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""), rosetta.NetworkProperties{})
+	adapter := NewLaunchpad(CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""), rosetta.NetworkProperties{})
 
 	feeMultiplier := float64(200000)
 	senderAddr := "cosmos1khy4gsp06srvu3u65uyhrax7tnj2atez9ewh38"

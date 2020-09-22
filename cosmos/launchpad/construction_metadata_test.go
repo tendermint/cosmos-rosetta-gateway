@@ -58,7 +58,7 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 		ChainIdKey:       "TheNetwork",
 		OptionGas:        &feeMultiplier,
 	}
-	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{Auth: m}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(CosmosAPI{Auth: m}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
 	metaResp, err := adapter.ConstructionMetadata(context.Background(), &types.ConstructionMetadataRequest{
 		NetworkIdentifier: &networkIdentifier,
 		Options:           options,
