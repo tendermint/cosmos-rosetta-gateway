@@ -13,8 +13,6 @@ import (
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/require"
 
-	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
@@ -43,20 +41,17 @@ func TestLaunchpad_Mempool(t *testing.T) {
 }
 
 func TestLaunchpad_MempoolTransaction(t *testing.T) {
-	m := &mocks.TendermintInfoAPI{}
-	defer m.AssertExpectations(t)
+	ma := &mocks3.TendermintClient{}
+	defer ma.AssertExpectations(t)
 
-	var opt *tendermintclient.TxOpts
-	m.
-		On("Tx", context.Background(), "ABCTHEHASH", opt).
-		Return(tendermintclient.TxResponse{
-			Result: tendermintclient.TxResponseResult{
-				Hash: "ABCTHEHASH",
-			},
+	ma.
+		On("Tx", "ABCTHEHASH").
+		Return(alttendermint.TxResponse{
+			Hash: "ABCTHEHASH",
 		},
 			nil, nil)
 
-	adapter := NewLaunchpad(TendermintAPI{Info: m}, CosmosAPI{}, altsdk.NewClient(""), alttendermint.NewClient(""), rosetta.NetworkProperties{})
+	adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{}, altsdk.NewClient(""), ma, rosetta.NetworkProperties{})
 	res, err := adapter.MempoolTransaction(context.Background(), &types.MempoolTransactionRequest{
 		TransactionIdentifier: &types.TransactionIdentifier{Hash: "ABCTHEHASH"},
 	})

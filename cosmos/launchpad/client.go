@@ -48,4 +48,5 @@ type TendermintClient interface {
 	Block(height uint64) (alttendermint.BlockResponse, error)
 	BlockByHash(hash string) (alttendermint.BlockResponse, error)
 	UnconfirmedTxs() (alttendermint.UnconfirmedTxsResponse, error)
+	Tx(hash string) (alttendermint.TxResponse, error)
 }

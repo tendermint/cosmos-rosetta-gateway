@@ -76,6 +76,27 @@ func (_m *TendermintClient) NetInfo() (alttendermint.NetInfoResponse, error) {
 	return r0, r1
 }
 
+// Tx provides a mock function with given fields: hash
+func (_m *TendermintClient) Tx(hash string) (alttendermint.TxResponse, error) {
+	ret := _m.Called(hash)
+
+	var r0 alttendermint.TxResponse
+	if rf, ok := ret.Get(0).(func(string) alttendermint.TxResponse); ok {
+		r0 = rf(hash)
+	} else {
+		r0 = ret.Get(0).(alttendermint.TxResponse)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(hash)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // UnconfirmedTxs provides a mock function with given fields:
 func (_m *TendermintClient) UnconfirmedTxs() (alttendermint.UnconfirmedTxsResponse, error) {
 	ret := _m.Called()
