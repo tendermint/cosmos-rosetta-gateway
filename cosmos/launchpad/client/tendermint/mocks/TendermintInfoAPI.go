@@ -16,66 +16,6 @@ type TendermintInfoAPI struct {
 	mock.Mock
 }
 
-// Block provides a mock function with given fields: ctx, localVarOptionals
-func (_m *TendermintInfoAPI) Block(ctx context.Context, localVarOptionals *openapi.BlockOpts) (openapi.BlockResponse, *http.Response, error) {
-	ret := _m.Called(ctx, localVarOptionals)
-
-	var r0 openapi.BlockResponse
-	if rf, ok := ret.Get(0).(func(context.Context, *openapi.BlockOpts) openapi.BlockResponse); ok {
-		r0 = rf(ctx, localVarOptionals)
-	} else {
-		r0 = ret.Get(0).(openapi.BlockResponse)
-	}
-
-	var r1 *http.Response
-	if rf, ok := ret.Get(1).(func(context.Context, *openapi.BlockOpts) *http.Response); ok {
-		r1 = rf(ctx, localVarOptionals)
-	} else {
-		if ret.Get(1) != nil {
-			r1 = ret.Get(1).(*http.Response)
-		}
-	}
-
-	var r2 error
-	if rf, ok := ret.Get(2).(func(context.Context, *openapi.BlockOpts) error); ok {
-		r2 = rf(ctx, localVarOptionals)
-	} else {
-		r2 = ret.Error(2)
-	}
-
-	return r0, r1, r2
-}
-
-// BlockByHash provides a mock function with given fields: ctx, hash
-func (_m *TendermintInfoAPI) BlockByHash(ctx context.Context, hash string) (openapi.BlockResponse, *http.Response, error) {
-	ret := _m.Called(ctx, hash)
-
-	var r0 openapi.BlockResponse
-	if rf, ok := ret.Get(0).(func(context.Context, string) openapi.BlockResponse); ok {
-		r0 = rf(ctx, hash)
-	} else {
-		r0 = ret.Get(0).(openapi.BlockResponse)
-	}
-
-	var r1 *http.Response
-	if rf, ok := ret.Get(1).(func(context.Context, string) *http.Response); ok {
-		r1 = rf(ctx, hash)
-	} else {
-		if ret.Get(1) != nil {
-			r1 = ret.Get(1).(*http.Response)
-		}
-	}
-
-	var r2 error
-	if rf, ok := ret.Get(2).(func(context.Context, string) error); ok {
-		r2 = rf(ctx, hash)
-	} else {
-		r2 = ret.Error(2)
-	}
-
-	return r0, r1, r2
-}
-
 // Tx provides a mock function with given fields: ctx, hash, localVarOptionals
 func (_m *TendermintInfoAPI) Tx(ctx context.Context, hash string, localVarOptionals *openapi.TxOpts) (openapi.TxResponse, *http.Response, error) {
 	ret := _m.Called(ctx, hash, localVarOptionals)
