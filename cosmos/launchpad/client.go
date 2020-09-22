@@ -48,4 +48,5 @@ type TendermintClient interface {
 	BlockByHash(hash string) (alttendermint.BlockResponse, error)
 	UnconfirmedTxs() (alttendermint.UnconfirmedTxsResponse, error)
 	Tx(hash string) (alttendermint.TxResponse, error)
+	TxSearch(query string) (alttendermint.TxSearchResponse, error)
 }
