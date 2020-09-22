@@ -56,7 +56,7 @@ func (l Launchpad) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (
 		netInfo      alttendermint.NetInfoResponse
 	)
 
-	g, ctx := errgroup.WithContext(ctx)
+	g, _ := errgroup.WithContext(ctx)
 	g.Go(func() (err error) {
 		latestBlock, err = l.altTendermint.Block(0)
 		return

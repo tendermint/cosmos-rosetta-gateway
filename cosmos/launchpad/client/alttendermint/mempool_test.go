@@ -14,7 +14,8 @@ func TestClient_UnconfirmedTxs(t *testing.T) {
 	require.NoError(t, err)
 
 	s := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		writer.Write(fileData)
+		_, err2 := writer.Write(fileData)
+		require.NoError(t, err2)
 	}))
 	defer s.Close()
 
