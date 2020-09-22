@@ -44,7 +44,7 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 
 	blockHash := "ABCDEFG"
 	ma.
-		On("Block", uint64(12345)).
+		On("Block", uint64(12)).
 		Return(alttendermint.BlockResponse{
 			BlockId: alttendermint.BlockId{
 				Hash: blockHash,
@@ -67,7 +67,7 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 	require.Nil(t, err)
 	require.Len(t, res.Balances, 2)
 	require.Equal(t, res.BlockIdentifier.Hash, blockHash)
-	require.Equal(t, res.BlockIdentifier.Index, int64(12345))
+	require.Equal(t, res.BlockIdentifier.Index, int64(12))
 
 	// NewCoins sorts the coins by name.
 	require.Equal(t, "400", res.Balances[0].Value)
