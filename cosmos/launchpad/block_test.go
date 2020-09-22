@@ -5,11 +5,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint/mocks"
+
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 
-	"github.com/antihax/optional"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
@@ -25,6 +26,7 @@ func TestLaunchpad_Block(t *testing.T) {
 	var (
 		mt = &tendermintmocks.TendermintInfoAPI{}
 		mc = &cosmosmocks.CosmosTransactionsAPI{}
+		ma = &mocks.TendermintClient{}
 	)
 	defer mt.AssertExpectations(t)
 	defer mc.AssertExpectations(t)
@@ -32,22 +34,18 @@ func TestLaunchpad_Block(t *testing.T) {
 	ti, err := time.Parse(time.RFC3339, "2019-04-22T17:01:51Z")
 	require.NoError(t, err)
 
-	mt.
-		On("Block", mock.Anything, &tendermintclient.BlockOpts{
-			Height: optional.NewFloat32(float32(1)),
-		}).
-		Return(tendermintclient.BlockResponse{
-			Result: tendermintclient.BlockComplete{
-				BlockId: tendermintclient.BlockId{
-					Hash: "11",
-				},
-				Block: tendermintclient.Block{
-					Header: tendermintclient.BlockHeader{
-						Height: "2",
-						Time:   ti.Format(time.RFC3339),
-						LastBlockId: tendermintclient.BlockId{
-							Hash: "12",
-						},
+	ma.
+		On("Block", uint64(1)).
+		Return(alttendermint.BlockResponse{
+			BlockId: alttendermint.BlockId{
+				Hash: "11",
+			},
+			Block: alttendermint.Block{
+				Header: alttendermint.BlockHeader{
+					Height: "2",
+					Time:   ti.Format(time.RFC3339),
+					LastBlockId: alttendermint.BlockId{
+						Hash: "12",
 					},
 				},
 			},
@@ -131,7 +129,7 @@ func TestLaunchpad_Block(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{Info: mt}, CosmosAPI{Transactions: mc}, altsdk.NewClient(""), alttendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(TendermintAPI{Info: mt}, CosmosAPI{Transactions: mc}, altsdk.NewClient(""), ma, properties)
 
 	var h int64 = 1
 	block, blockErr := adapter.Block(context.Background(), &types.BlockRequest{
