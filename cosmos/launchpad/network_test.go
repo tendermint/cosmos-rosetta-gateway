@@ -36,6 +36,19 @@ func TestLaunchpad_NetworkList(t *testing.T) {
 	require.Equal(t, list.NetworkIdentifiers[0].Blockchain, "TheBlockchain")
 }
 
+func TestLaunchpad_NetworkList_FailsOfflineMode(t *testing.T) {
+	properties := rosetta.NetworkProperties{
+		Blockchain:  "TheBlockchain",
+		Network:     "TheNetwork",
+		OfflineMode: true,
+	}
+
+	adapter := NewLaunchpad(CosmosAPI{}, altsdk.NewClient(""), tendermint.NewClient(""), properties)
+
+	_, err := adapter.NetworkList(context.Background(), nil)
+	require.Equal(t, err, ErrEndpointDisabledOfflineMode)
+}
+
 func TestLaunchpad_NetworkOptions(t *testing.T) {
 	m := &cosmosmocks.CosmosTendermintAPI{}
 	defer m.AssertExpectations(t)
@@ -85,6 +98,23 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 			},
 		},
 	}, options)
+}
+
+func TestLaunchpad_NetworkOptions_FailsOfflineMode(t *testing.T) {
+	properties := rosetta.NetworkProperties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+		SupportedOperations: []string{
+			"Transfer",
+			"Reward",
+		},
+		OfflineMode: true,
+	}
+
+	adapter := NewLaunchpad(CosmosAPI{}, altsdk.NewClient(""), tendermint.NewClient(""), properties)
+
+	_, err := adapter.NetworkOptions(context.Background(), nil)
+	require.Equal(t, err, ErrEndpointDisabledOfflineMode)
 }
 
 func TestLaunchpad_NetworkStatus(t *testing.T) {
@@ -180,4 +210,27 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 			},
 		},
 	}, status)
+}
+
+func TestLaunchpad_NetworkStatus_FailsOfflineMode(t *testing.T) {
+	properties := rosetta.NetworkProperties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+		SupportedOperations: []string{
+			"Transfer",
+			"Reward",
+		},
+		OfflineMode: true,
+	}
+
+	adapter := NewLaunchpad(
+		CosmosAPI{},
+		altsdk.NewClient(""),
+		tendermint.NewClient(""),
+		properties,
+	)
+
+	_, adapterErr := adapter.NetworkStatus(context.Background(), nil)
+	require.Equal(t, ErrEndpointDisabledOfflineMode, adapterErr)
+
 }
