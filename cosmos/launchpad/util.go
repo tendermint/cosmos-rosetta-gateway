@@ -29,7 +29,7 @@ func HexPrefix(hex string) string {
 
 // getTxByHash calls
 func (l Launchpad) getTxByHash(ctx context.Context, hash string) (*types.Transaction, *types.Error) {
-	txQuery, err := l.altCosmos.GetTx(ctx, hash)
+	txQuery, err := l.cosmos.GetTx(ctx, hash)
 	if err != nil {
 		return nil, ErrNodeConnection
 	}

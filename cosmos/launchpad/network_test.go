@@ -56,7 +56,7 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad( m, tendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(m, tendermint.NewClient(""), properties)
 
 	options, err := adapter.NetworkOptions(context.Background(), nil)
 	require.Nil(t, err)

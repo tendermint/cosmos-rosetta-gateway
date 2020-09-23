@@ -4,10 +4,6 @@ import (
 	"fmt"
 )
 
-const (
-	BroadcastEndpoint = "/txs"
-)
-
 type Client struct {
 	endpoint string
 }

@@ -36,8 +36,6 @@ func runHandler() error {
 	altClient := sdk.NewClient(fmt.Sprintf("http://%s", *flagAppRPC))
 	tendermintClient := tendermint.NewClient(fmt.Sprintf("http://%s", *flagTendermintRPC))
 
-
-
 	properties := rosetta.NetworkProperties{
 		Blockchain:          *flagBlockchain,
 		Network:             *flagNetworkID,

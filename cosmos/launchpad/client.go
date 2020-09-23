@@ -7,7 +7,6 @@ import (
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
-
 )
 
 type SdkClient interface {

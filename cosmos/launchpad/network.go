@@ -23,7 +23,7 @@ func (l Launchpad) NetworkList(context.Context, *types.MetadataRequest) (*types.
 }
 
 func (l Launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) (*types.NetworkOptionsResponse, *types.Error) {
-	resp, err := l.altCosmos.GetNodeInfo(ctx)
+	resp, err := l.cosmos.GetNodeInfo(ctx)
 	if err != nil {
 		return nil, ErrNodeConnection
 	}

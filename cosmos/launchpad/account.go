@@ -10,17 +10,12 @@ import (
 
 func (l Launchpad) AccountBalance(ctx context.Context, request *types.AccountBalanceRequest) (
 	*types.AccountBalanceResponse, *types.Error) {
-	resp, err := l.altCosmos.GetAuthAccount(ctx, request.AccountIdentifier.Address)
+	resp, err := l.cosmos.GetAuthAccount(ctx, request.AccountIdentifier.Address)
 	if err != nil {
 		return nil, ErrNodeConnection
 	}
 
 	block, err := l.tendermint.Block(uint64(resp.Height))
-	if err != nil {
-		return nil, ErrNodeConnection
-	}
-
-	block, err := l.tendermint.Block(uint64(height))
 	if err != nil {
 		return nil, ErrNodeConnection
 	}

@@ -43,7 +43,7 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 	for _, txshort := range txsResp.Txs {
 		hash := txshort.Hash
 		g.Go(func() error {
-			tx, err := l.altCosmos.GetTx(ctx, hash)
+			tx, err := l.cosmos.GetTx(ctx, hash)
 			if err != nil {
 				return err
 			}
