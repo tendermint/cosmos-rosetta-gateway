@@ -237,7 +237,27 @@ func TestLaunchpad_Block(t *testing.T) {
 			},
 		},
 	}, block)
+}
 
+func TestLaunchpad_Block_DoesNotWorkOfflineMode(t *testing.T) {
+	properties := rosetta.NetworkProperties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+		SupportedOperations: []string{
+			OperationTransfer,
+		},
+		OfflineMode: true,
+	}
+
+	adapter := NewLaunchpad(CosmosAPI{}, altsdk.NewClient(""), tendermint.NewClient(""), properties)
+
+	var height int64 = 1
+	_, err := adapter.Block(context.Background(), &types.BlockRequest{
+		BlockIdentifier: &types.PartialBlockIdentifier{
+			Index: &height,
+		},
+	})
+	require.Equal(t, err, ErrEndpointDisabledOfflineMode)
 }
 
 func TestLaunchpad_BlockTransaction(t *testing.T) {

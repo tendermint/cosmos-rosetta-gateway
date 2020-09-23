@@ -15,6 +15,10 @@ import (
 )
 
 func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.BlockResponse, *types.Error) {
+	if l.properties.OfflineMode {
+		return nil, ErrEndpointDisabledOfflineMode
+	}
+
 	var (
 		blockResp tendermint.BlockResponse
 		err       error
@@ -94,6 +98,10 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 }
 
 func (l Launchpad) BlockTransaction(ctx context.Context, r *types.BlockTransactionRequest) (*types.BlockTransactionResponse, *types.Error) {
+	if l.properties.OfflineMode {
+		return nil, ErrEndpointDisabledOfflineMode
+	}
+
 	tx, err := l.getTxByHash(ctx, r.TransactionIdentifier.Hash)
 	if err != nil {
 		return nil, err
