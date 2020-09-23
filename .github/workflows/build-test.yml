@@ -103,6 +103,7 @@ jobs:
 
       - name: fire up starport
         timeout-minutes: 5
+        continue-on-error: true
         run: |
           chmod +x starport
           ./starport app github.com/faddat/clay
