@@ -17,6 +17,10 @@ type BroadcastReq struct {
 }
 
 func (l Launchpad) ConstructionSubmit(ctx context.Context, req *types.ConstructionSubmitRequest) (*types.TransactionIdentifierResponse, *types.Error) {
+	if l.properties.OfflineMode {
+		return nil, ErrEndpointDisabledOfflineMode
+	}
+
 	bz, err := hex.DecodeString(req.SignedTransaction)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrInvalidTransaction, "error decoding tx")

@@ -2,12 +2,14 @@ package launchpad
 
 import (
 	"context"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"testing"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdk2 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
-	mocks3 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
+	mocks2 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/mock"
@@ -20,7 +22,7 @@ import (
 
 func TestLaunchpad_AccountBalance(t *testing.T) {
 	m := &mocks.SdkClient{}
-	ma := &mocks3.TendermintClient{}
+	ma := &mocks2.TendermintClient{}
 	defer m.AssertExpectations(t)
 	defer ma.AssertExpectations(t)
 
@@ -73,4 +75,21 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 	require.Equal(t, "stake", res.Balances[0].Currency.Symbol)
 	require.Equal(t, "600", res.Balances[1].Value)
 	require.Equal(t, "token", res.Balances[1].Currency.Symbol)
+}
+
+func TestLaunchpad_AccountBalanceDoesNotWorkOfflineMode(t *testing.T) {
+	properties := rosetta.NetworkProperties{
+		Blockchain:  "TheBlockchain",
+		Network:     "TheNetwork",
+		OfflineMode: true,
+	}
+
+	adapter := NewLaunchpad(sdk2.NewClient(""), tendermint.NewClient(""), properties)
+	_, err := adapter.AccountBalance(context.Background(), &types.AccountBalanceRequest{
+		AccountIdentifier: &types.AccountIdentifier{
+			Address: "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na",
+		},
+	})
+
+	require.Equal(t, err, ErrEndpointDisabledOfflineMode)
 }

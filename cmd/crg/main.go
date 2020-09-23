@@ -20,6 +20,7 @@ var (
 	flagTendermintRPC = flag.String("tendermint-rpc", "localhost:26657", "Tendermint's RPC endpoint.")
 	flagBlockchain    = flag.String("blockchain", "app", "Application's name (e.g. Cosmos Hub)")
 	flagNetworkID     = flag.String("network", "network", "Network's identifier (e.g. cosmos-hub-3, testnet-1, etc)")
+	flagOfflineMode   = flag.Bool("offline", false, "Flag that forces the rosetta service to run in offline mode, some endpoints won't work.")
 )
 
 func main() {
@@ -40,6 +41,7 @@ func runHandler() error {
 		Blockchain:          *flagBlockchain,
 		Network:             *flagNetworkID,
 		SupportedOperations: []string{launchpad.OperationTransfer},
+		OfflineMode:         *flagOfflineMode,
 	}
 
 	h, err := service.New(

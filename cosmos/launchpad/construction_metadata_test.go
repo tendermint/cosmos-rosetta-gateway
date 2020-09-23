@@ -2,8 +2,10 @@ package launchpad
 
 import (
 	"context"
-	sdktypes "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
 	"testing"
+
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
+	sdktypes "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
@@ -67,4 +69,28 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 	if diff := cmp.Diff(metaResp.Metadata, expMetadata); diff != "" {
 		t.Errorf("Metadata mismatch %s", diff)
 	}
+}
+
+func TestLaunchpad_ConstructionMetadata_FailsOfflineMode(t *testing.T) {
+	properties := rosetta.NetworkProperties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+		SupportedOperations: []string{
+			"Transfer",
+		},
+		OfflineMode: true,
+	}
+
+	feeMultiplier := float64(200000)
+	options := map[string]interface{}{
+		OptionAddress: "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na",
+		OptionGas:     &feeMultiplier,
+	}
+
+	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	_, err := adapter.ConstructionMetadata(context.Background(), &types.ConstructionMetadataRequest{
+		Options: options,
+	})
+
+	require.Equal(t, ErrEndpointDisabledOfflineMode, err)
 }
