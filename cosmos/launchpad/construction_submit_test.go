@@ -2,6 +2,13 @@ package launchpad
 
 import (
 	"encoding/hex"
+	"github.com/coinbase/rosetta-sdk-go/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/stretchr/testify/mock"
+	clientsdk "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 	"io/ioutil"
 	"testing"
 
@@ -12,8 +19,7 @@ import (
 )
 
 func TestLaunchpad_ConstructionSubmit(t *testing.T) {
-	t.SkipNow() // TODO bring back.
-	bz, err := ioutil.ReadFile("./testdata/test-with-signature-delete.json")
+	bz, err := ioutil.ReadFile("./signed-tx.json")
 	require.NoError(t, err)
 
 	cdc := simapp.MakeCodec()
@@ -30,35 +36,33 @@ func TestLaunchpad_ConstructionSubmit(t *testing.T) {
 	toString := hex.EncodeToString(txBytes)
 	t.Logf("%s\n", toString)
 
-	//testTx := cosmosclient.InlineObject{
-	//	Tx: cosmosclient.StdTx{
-	//		//Value: stdTx,
-	//	},
-	//	Mode: "async",
-	//}
-	//
-	//m := mocks.CosmosTransactionsAPI{}
-	//m.
-	//	On("TxsPost", mock.Anything, testTx).
-	//	Return(cosmosclient.BroadcastTxCommitResult{
-	//		Hash:   expectedHash,
-	//		Height: 10,
-	//	}, nil, nil).Once()
-	//
-	//adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{Transactions: &m}, rosetta.NetworkProperties{})
-	//
-	//// re-encode it via the Amino wire protocol
-	//txBytes, err := cdc.MarshalBinaryLengthPrefixed(stdTx)
-	//require.NoError(t, err)
-	//
-	//toString := hex.EncodeToString(txBytes)
-	//
-	//resp, err2 := adapter.ConstructionSubmit(context.Background(), &types.ConstructionSubmitRequest{
-	//	SignedTransaction: toString,
-	//})
-	//fmt.Printf("%v\n", resp)
-	//
-	//require.Nil(t, err2)
-	//require.NotNil(t, resp)
-	//require.Equal(t, expectedHash, resp.TransactionIdentifier.Hash)
+	testTx := BroadcastReq{
+		Tx:   stdTx,
+		Mode: "async",
+	}
+
+	m := mocks.SdkClient{}
+	m.
+		On("PostTx", mock.Anything, testTx).
+		Return(sdk.TxResponse{
+			TxHash: expectedHash,
+			Height: 10,
+		}, nil, nil).Once()
+
+	adapter := NewLaunchpad(clientsdk.NewClient(""), tendermint.NewClient(""), rosetta.NetworkProperties{})
+
+	// re-encode it via the Amino wire protocol
+	txBytes, err := cdc.MarshalBinaryLengthPrefixed(stdTx)
+	require.NoError(t, err)
+
+	toString := hex.EncodeToString(txBytes)
+
+	resp, err2 := adapter.ConstructionSubmit(context.Background(), &types.ConstructionSubmitRequest{
+		SignedTransaction: toString,
+	})
+	fmt.Printf("%v\n", resp)
+
+	require.Nil(t, err2)
+	require.NotNil(t, resp)
+	require.Equal(t, expectedHash, resp.TransactionIdentifier.Hash)
 }
