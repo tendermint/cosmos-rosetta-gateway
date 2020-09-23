@@ -108,6 +108,7 @@ jobs:
           chmod +x starport
           ./starport app github.com/faddat/clay
           cd clay
+          ls
           ../starport serve --verbose > clay.log &
           cd ..
           chmod +x crg
