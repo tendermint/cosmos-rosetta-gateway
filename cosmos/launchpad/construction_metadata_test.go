@@ -2,8 +2,10 @@ package launchpad
 
 import (
 	"context"
-	sdktypes "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
 	"testing"
+
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
+	sdktypes "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
@@ -85,7 +87,7 @@ func TestLaunchpad_ConstructionMetadata_FailsOfflineMode(t *testing.T) {
 		OptionGas:     &feeMultiplier,
 	}
 
-	adapter := NewLaunchpad(CosmosAPI{}, altsdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 	_, err := adapter.ConstructionMetadata(context.Background(), &types.ConstructionMetadataRequest{
 		Options: options,
 	})

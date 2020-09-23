@@ -42,7 +42,7 @@ func TestLaunchpad_NetworkList_FailsOfflineMode(t *testing.T) {
 		OfflineMode: true,
 	}
 
-	adapter := NewLaunchpad(CosmosAPI{}, altsdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	_, err := adapter.NetworkList(context.Background(), nil)
 	require.Equal(t, err, ErrEndpointDisabledOfflineMode)
@@ -109,7 +109,7 @@ func TestLaunchpad_NetworkOptions_FailsOfflineMode(t *testing.T) {
 		OfflineMode: true,
 	}
 
-	adapter := NewLaunchpad(CosmosAPI{}, altsdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	_, err := adapter.NetworkOptions(context.Background(), nil)
 	require.Equal(t, err, ErrEndpointDisabledOfflineMode)
@@ -221,8 +221,7 @@ func TestLaunchpad_NetworkStatus_FailsOfflineMode(t *testing.T) {
 	}
 
 	adapter := NewLaunchpad(
-		CosmosAPI{},
-		altsdk.NewClient(""),
+		sdk.NewClient(""),
 		tendermint.NewClient(""),
 		properties,
 	)

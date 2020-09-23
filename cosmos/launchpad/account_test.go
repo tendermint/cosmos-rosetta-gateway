@@ -2,8 +2,10 @@ package launchpad
 
 import (
 	"context"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"testing"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdk2 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
@@ -82,7 +84,7 @@ func TestLaunchpad_AccountBalanceDoesNotWorkOfflineMode(t *testing.T) {
 		OfflineMode: true,
 	}
 
-	adapter := NewLaunchpad(CosmosAPI{}, altsdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(sdk2.NewClient(""), tendermint.NewClient(""), properties)
 	_, err := adapter.AccountBalance(context.Background(), &types.AccountBalanceRequest{
 		AccountIdentifier: &types.AccountIdentifier{
 			Address: "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na",

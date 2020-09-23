@@ -1,7 +1,14 @@
 package launchpad
 
 import (
+	"context"
 	"testing"
+
+	"github.com/coinbase/rosetta-sdk-go/types"
+	"github.com/stretchr/testify/require"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_Block(t *testing.T) {
@@ -375,7 +382,7 @@ func TestLaunchpad_Block_DoesNotWorkOfflineMode(t *testing.T) {
 		OfflineMode: true,
 	}
 
-	adapter := NewLaunchpad(CosmosAPI{}, altsdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	var height int64 = 1
 	_, err := adapter.Block(context.Background(), &types.BlockRequest{
@@ -397,7 +404,7 @@ func TestLaunchpad_BlockTransaction_FailsOfflineMode(t *testing.T) {
 		OfflineMode: true,
 	}
 
-	adapter := NewLaunchpad(CosmosAPI{}, altsdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 	_, txErr := adapter.BlockTransaction(context.Background(), &types.BlockTransactionRequest{
 		TransactionIdentifier: &types.TransactionIdentifier{
 			Hash: "1",

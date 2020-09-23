@@ -6,8 +6,9 @@ import (
 	"io/ioutil"
 	"testing"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
+
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 
@@ -73,7 +74,7 @@ func TestLaunchpad_ConstructionSubmit_FailsOfflineMode(t *testing.T) {
 	properties := rosetta.NetworkProperties{
 		OfflineMode: true,
 	}
-	adapter := NewLaunchpad(CosmosAPI{}, altsdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	_, err2 := adapter.ConstructionSubmit(context.Background(), &types.ConstructionSubmitRequest{
 		SignedTransaction: "dkajfkdjkads",

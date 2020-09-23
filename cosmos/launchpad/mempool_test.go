@@ -44,7 +44,7 @@ func TestLaunchpad_Mempool_FailsOfflineMode(t *testing.T) {
 	properties := rosetta.NetworkProperties{
 		OfflineMode: true,
 	}
-	adapter := NewLaunchpad(CosmosAPI{}, altsdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	_, err := adapter.Mempool(context.Background(), &types.NetworkRequest{})
 	require.Equal(t, ErrEndpointDisabledOfflineMode, err)
@@ -75,7 +75,7 @@ func TestLaunchpad_MempoolTransaction_FailsOfflineMode(t *testing.T) {
 	properties := rosetta.NetworkProperties{
 		OfflineMode: true,
 	}
-	adapter := NewLaunchpad(CosmosAPI{}, altsdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 	_, err := adapter.MempoolTransaction(context.Background(), &types.MempoolTransactionRequest{
 		TransactionIdentifier: &types.TransactionIdentifier{Hash: "ABCTHEHASH"},
 	})
