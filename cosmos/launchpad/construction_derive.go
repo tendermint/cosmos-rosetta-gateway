@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
-	cosmostypes "github.com/cosmos/cosmos-sdk/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func (l Launchpad) ConstructionDerive(ctx context.Context, r *types.ConstructionDeriveRequest) (*types.ConstructionDeriveResponse, *types.Error) {
@@ -12,7 +12,12 @@ func (l Launchpad) ConstructionDerive(ctx context.Context, r *types.Construction
 		return nil, ErrUnsupportedCurve
 	}
 
+	config := sdk.GetConfig()
+	config.SetBech32PrefixForAccount(
+		l.properties.AddrPrefix,
+		l.properties.AddrPrefix+sdk.PrefixPublic)
+
 	return &types.ConstructionDeriveResponse{
-		Address: cosmostypes.AccAddress(r.PublicKey.Bytes).String(),
+		Address: sdk.AccAddress(r.PublicKey.Bytes).String(),
 	}, nil
 }

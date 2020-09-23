@@ -21,6 +21,7 @@ var (
 	flagBlockchain    = flag.String("blockchain", "app", "Application's name (e.g. Cosmos Hub)")
 	flagNetworkID     = flag.String("network", "network", "Network's identifier (e.g. cosmos-hub-3, testnet-1, etc)")
 	flagOfflineMode   = flag.Bool("offline", false, "Flag that forces the rosetta service to run in offline mode, some endpoints won't work.")
+	flagAddrPrefix    = flag.String("prefix", "cosmos", "Bech32 prefix of address (e.g. cosmos, iaa, xrn:)")
 )
 
 func main() {
@@ -40,6 +41,7 @@ func runHandler() error {
 	properties := rosetta.NetworkProperties{
 		Blockchain:          *flagBlockchain,
 		Network:             *flagNetworkID,
+		AddrPrefix:          *flagAddrPrefix,
 		SupportedOperations: []string{launchpad.OperationTransfer},
 		OfflineMode:         *flagOfflineMode,
 	}
