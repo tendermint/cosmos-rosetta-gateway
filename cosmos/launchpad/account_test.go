@@ -4,13 +4,11 @@ import (
 	"context"
 	"testing"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
-	mocks3 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint/mocks"
+	mocks3 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
-
-	mocks2 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/mock"
@@ -23,9 +21,9 @@ import (
 
 func TestLaunchpad_AccountBalance(t *testing.T) {
 	m := &mocks.CosmosBankAPI{}
-	mt := &mocks2.TendermintInfoAPI{}
 	ma := &mocks3.TendermintClient{}
 	defer m.AssertExpectations(t)
+	defer ma.AssertExpectations(t)
 
 	m.
 		On("BankBalancesAddressGet", mock.Anything, "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na").
@@ -41,11 +39,11 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 	blockHash := "ABCDEFG"
 	ma.
 		On("Block", uint64(12345)).
-		Return(alttendermint.BlockResponse{
-			BlockId: alttendermint.BlockId{
+		Return(tendermint.BlockResponse{
+			BlockId: tendermint.BlockId{
 				Hash: blockHash,
 			},
-			Block: alttendermint.Block{},
+			Block: tendermint.Block{},
 		}, nil, nil)
 
 	properties := rosetta.NetworkProperties{
@@ -53,7 +51,7 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{Info: mt}, CosmosAPI{Bank: m}, altsdk.NewClient(""), ma, properties)
+	adapter := NewLaunchpad(CosmosAPI{Bank: m}, altsdk.NewClient(""), ma, properties)
 
 	res, err := adapter.AccountBalance(context.Background(), &types.AccountBalanceRequest{
 		AccountIdentifier: &types.AccountIdentifier{

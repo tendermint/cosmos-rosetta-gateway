@@ -21,7 +21,7 @@ func (l Launchpad) AccountBalance(ctx context.Context, request *types.AccountBal
 		return nil, ErrInterpreting
 	}
 
-	block, err := l.altTendermint.Block(uint64(height))
+	block, err := l.tendermint.Block(uint64(height))
 	if err != nil {
 		return nil, ErrNodeConnection
 	}
