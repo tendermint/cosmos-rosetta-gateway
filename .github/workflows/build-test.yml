@@ -90,7 +90,6 @@ jobs:
         uses: actions/download-artifact@v2.0.5
         with:
           name: crg amd64
-          path: crg
           
       - name: Setup go
         uses: actions/setup-go@v2.1.2
