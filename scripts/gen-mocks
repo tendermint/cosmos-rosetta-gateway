@@ -1,9 +1,8 @@
 #!/bin/bash
 
 rm -rf cosmos/launchpad/client/sdk/mocks/
-rm -rf cosmos/launchpad/client/altsdk/mocks/
-rm -rf cosmos/launchpad/client/alttendermint/mocks/
+rm -rf cosmos/launchpad/client/tendermint/mocks/
 
 cd cosmos/launchpad && \
-    mockery --name ^Cosmos.*?API --output client/sdk/mocks && \
-    mockery --name TendermintClient --output client/alttendermint/mocks
+    mockery --name SdkClient --output client/sdk/mocks
+    mockery --name TendermintClient --output client/tendermint/mocks
