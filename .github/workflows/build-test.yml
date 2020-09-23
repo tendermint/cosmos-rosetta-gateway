@@ -32,7 +32,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: clay ${{ matrix.targetos }}
-          path: build
+          path: crg
 
   linux:
     runs-on: ubuntu-latest
@@ -56,4 +56,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: clay ${{ matrix.arch }}
-          path: build
+          path: crg
