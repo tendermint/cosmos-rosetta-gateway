@@ -28,23 +28,3 @@ func TestGetTx(t *testing.T) {
 	require.NotNil(t, res)
 	require.Equal(t, hash, res.TxHash)
 }
-
-func TestPostTx(t *testing.T) {
-	bz, err := ioutil.ReadFile("testdata/broadcast.json")
-	require.NoError(t, err)
-
-	s := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		writer.Write(bz)
-	}))
-	defer s.Close()
-
-	client := NewClient(s.URL)
-
-	res, err := client.PostTx(context.Background(), bz)
-	t.Log(res)
-
-	require.NoError(t, err)
-	require.NotNil(t, res)
-	require.Equal(t, 1, len(res.Tx.GetMsgs()))
-	t.Log(res)
-}
