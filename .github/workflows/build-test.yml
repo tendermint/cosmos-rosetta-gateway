@@ -72,7 +72,8 @@ jobs:
           
       - uses: actions/upload-artifact@v2
         with:
-          path: crg
+          name: starport
+          path: build/starport
 
       - name: build starport
         run: make
@@ -97,7 +98,7 @@ jobs:
       - name: download starport
         uses: actions/download-artifact@v2.0.5
         with:
-          path: starport
+          name: starport
 
       - name: fire up starport
         timeout-minutes: 5
