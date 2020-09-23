@@ -1,3 +1,0 @@
-#!/bin/bash
-
-go run cmd/crg/*.go --blockchain "Test" --network "Test"

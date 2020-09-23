@@ -9,13 +9,12 @@ import (
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 	cosmosmocks "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
@@ -26,7 +25,7 @@ func TestLaunchpad_NetworkList(t *testing.T) {
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(CosmosAPI{}, altsdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	list, err := adapter.NetworkList(context.Background(), nil)
 	require.Nil(t, err)
@@ -37,17 +36,16 @@ func TestLaunchpad_NetworkList(t *testing.T) {
 }
 
 func TestLaunchpad_NetworkOptions(t *testing.T) {
-	m := &cosmosmocks.CosmosTendermintAPI{}
+	t.SkipNow()
+	m := &cosmosmocks.SdkClient{}
 	defer m.AssertExpectations(t)
 
-	m.
-		On("NodeInfoGet", mock.Anything).
-		Return(cosmosclient.InlineResponse200{
-			NodeInfo: cosmosclient.InlineResponse200NodeInfo{
-				Version: "5",
-			},
-		}, nil, nil).
-		Once()
+	//m.
+	//	On("GetNodeInfo", mock.Anything).
+	//	Return(rpc.NodeInfoResponse{
+	//			Version: "5",
+	//	}, nil, nil).
+	//	Once()
 
 	properties := rosetta.NetworkProperties{
 		Blockchain: "TheBlockchain",
@@ -58,7 +56,7 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(CosmosAPI{Tendermint: m}, altsdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(m, tendermint.NewClient(""), properties)
 
 	options, err := adapter.NetworkOptions(context.Background(), nil)
 	require.Nil(t, err)
@@ -151,8 +149,7 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 	}
 
 	adapter := NewLaunchpad(
-		CosmosAPI{},
-		altsdk.NewClient(""),
+		sdk.NewClient(""),
 		mt,
 		properties,
 	)

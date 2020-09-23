@@ -38,7 +38,7 @@ func (l Launchpad) ConstructionSubmit(ctx context.Context, req *types.Constructi
 		return nil, rosetta.WrapError(ErrInvalidTransaction, "error decoding tx")
 	}
 
-	resp, err := l.altCosmos.Broadcast(bytes)
+	resp, err := l.cosmos.PostTx(ctx, bytes)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrNodeConnection, fmt.Sprintf("error broadcasting tx: %s", err))
 	}
