@@ -1,12 +1,11 @@
-# This is a basic workflow that is manually triggered
-
-name: crg
+name: build and test against starport
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
 on: [push, pull_request]
 
 # This workflow makes x86_64 binaries for mac, windows, and linux.
+# TODO: Maybe make the whole workflow a matrix so that it tests mac, windows and linux.  currently only tests linux.
 
 
 jobs:
@@ -31,7 +30,7 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: clay ${{ matrix.targetos }}
+          name: crg ${{ matrix.targetos }}
           path: crg
 
   linux:
@@ -39,7 +38,7 @@ jobs:
     strategy:
       matrix:
         arch: [arm64, riscv64, amd64]
-    name: clay for ${{ matrix.arch }}
+    name: crg for ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@v2
 
@@ -55,5 +54,56 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: clay ${{ matrix.arch }}
+          name: crg ${{ matrix.arch }}
           path: crg
+          
+  starport: 
+    runs-on: ubuntu-latest
+    name: starport
+    steps:
+      - uses: actions/checkout@v2.3.2
+        with:
+          repository: tendermint/starport
+
+      - name: Setup go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.15
+          
+      - uses: actions/upload-artifact@v2
+        with:
+          path: crg
+
+      - name: build starport
+        run: make
+  
+  test crg:
+    runs-on: ubuntu-latest
+    name: test crg
+    steps:
+      - name: Download crg
+        uses: actions/download-artifact@v2.0.5
+        with:
+          name: crg amd64
+          path: crg
+
+      - name: download starport
+        uses: actions/download-artifact@v2.0.5
+        with:
+          path: starport
+
+      - name: fire up starport
+        timeout-minutes: 5
+        run: |
+          ./starport app github.com/faddat/clay
+          cd clay
+          starport serve --verbose > clay.log &
+          cd ..
+          ./crg 
+          
+      - uses: actions/upload-artifact@v2
+        with:
+          path: clay/clay.log
+        
+          
+    
