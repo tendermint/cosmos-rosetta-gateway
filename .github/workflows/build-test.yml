@@ -70,13 +70,15 @@ jobs:
         with:
           go-version: 1.15
           
+      - name: build starport
+        run: make
+          
       - uses: actions/upload-artifact@v2
         with:
           name: starport
           path: build/starport
 
-      - name: build starport
-        run: make
+
   
   
   test:
