@@ -105,10 +105,12 @@ jobs:
       - name: fire up starport
         timeout-minutes: 5
         run: |
+          chmod +x starport
           ./starport app github.com/faddat/clay
           cd clay
           starport serve --verbose > clay.log &
           cd ..
+          chmod +x crg
           ./crg 
           
       - uses: actions/upload-artifact@v2
