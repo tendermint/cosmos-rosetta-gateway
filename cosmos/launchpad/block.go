@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"golang.org/x/sync/errgroup"
@@ -15,15 +15,15 @@ import (
 
 func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.BlockResponse, *types.Error) {
 	var (
-		blockResp alttendermint.BlockResponse
+		blockResp tendermint.BlockResponse
 		err       error
 	)
 
 	// retrieve the block first.
 	if r.BlockIdentifier.Index != nil {
-		blockResp, err = l.altTendermint.Block(uint64(*r.BlockIdentifier.Index))
+		blockResp, err = l.tendermint.Block(uint64(*r.BlockIdentifier.Index))
 	} else {
-		blockResp, err = l.altTendermint.BlockByHash(HexPrefix(*r.BlockIdentifier.Hash))
+		blockResp, err = l.tendermint.BlockByHash(HexPrefix(*r.BlockIdentifier.Hash))
 	}
 	if err != nil {
 		return nil, ErrNodeConnection
@@ -34,13 +34,13 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 		txs []sdk.TxResponse
 		m   sync.Mutex
 	)
-	txsquery := fmt.Sprintf(`"tx.height=%s"`, blockResp.Block.Header.Height)
-	txsResp, _, err := l.tendermint.Info.TxSearch(ctx, txsquery, nil)
+	txsquery := fmt.Sprintf(`tx.height=%s`, blockResp.Block.Header.Height)
+	txsResp, err := l.tendermint.TxSearch(txsquery)
 	if err != nil {
 		return nil, ErrNodeConnection
 	}
 	g, ctx := errgroup.WithContext(ctx)
-	for _, txshort := range txsResp.Result.Txs {
+	for _, txshort := range txsResp.Txs {
 		hash := txshort.Hash
 		g.Go(func() error {
 			tx, err := l.altCosmos.GetTx(ctx, hash)

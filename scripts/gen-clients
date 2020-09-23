@@ -1,5 +1,8 @@
 #!/bin/bash
 
+cosmos=cosmos/launchpad/client/sdk/generated
+cosmosyml=cosmos/launchpad/client/sdk/swagger.yml
+
 tendermint=cosmos/launchpad/client/tendermint/generated
 tendermintyml=cosmos/launchpad/client/tendermint/openapi.yml
 

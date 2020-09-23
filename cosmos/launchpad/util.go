@@ -7,11 +7,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
@@ -41,7 +39,7 @@ func (l Launchpad) getTxByHash(ctx context.Context, hash string) (*types.Transac
 	return tx, nil
 }
 
-func toBlockIdentifier(result alttendermint.BlockResponse) (*types.BlockIdentifier, error) {
+func toBlockIdentifier(result tendermint.BlockResponse) (*types.BlockIdentifier, error) {
 	if result.BlockId.Hash == "" {
 		return nil, nil
 	}
@@ -64,7 +62,7 @@ func toTransactions(txs []sdk.TxResponse) (transactions []*types.Transaction, er
 
 // tendermintTxToRosettaTx converts a Tendermint api TxResponseResult to a Transaction
 // in the type expected by Rosetta.
-func tendermintTxToRosettaTx(res tendermintclient.TxResponseResult) *types.Transaction {
+func tendermintTxToRosettaTx(res tendermint.TxResponse) *types.Transaction {
 	return &types.Transaction{
 		TransactionIdentifier: &types.TransactionIdentifier{
 			Hash: res.Hash,

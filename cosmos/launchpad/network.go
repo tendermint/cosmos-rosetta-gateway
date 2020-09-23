@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"golang.org/x/sync/errgroup"
@@ -51,22 +51,22 @@ func (l Launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) 
 
 func (l Launchpad) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (*types.NetworkStatusResponse, *types.Error) {
 	var (
-		latestBlock  alttendermint.BlockResponse
-		genesisBlock alttendermint.BlockResponse
-		netInfo      alttendermint.NetInfoResponse
+		latestBlock  tendermint.BlockResponse
+		genesisBlock tendermint.BlockResponse
+		netInfo      tendermint.NetInfoResponse
 	)
 
 	g, _ := errgroup.WithContext(ctx)
 	g.Go(func() (err error) {
-		latestBlock, err = l.altTendermint.Block(0)
+		latestBlock, err = l.tendermint.Block(0)
 		return
 	})
 	g.Go(func() (err error) {
-		genesisBlock, err = l.altTendermint.Block(1)
+		genesisBlock, err = l.tendermint.Block(1)
 		return
 	})
 	g.Go(func() (err error) {
-		netInfo, err = l.altTendermint.NetInfo()
+		netInfo, err = l.tendermint.NetInfo()
 		return
 	})
 	if err := g.Wait(); err != nil {

@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint/mocks"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
 
@@ -16,7 +16,6 @@ import (
 	"github.com/stretchr/testify/require"
 
 	cosmosmocks "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
-	tendermintmocks "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
@@ -26,7 +25,7 @@ func TestLaunchpad_NetworkList(t *testing.T) {
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{}, sdk.NewClient(""), alttendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	list, err := adapter.NetworkList(context.Background(), nil)
 	require.Nil(t, err)
@@ -57,7 +56,7 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 		},
 	}
 
-	adapter := NewLaunchpad(TendermintAPI{}, m, alttendermint.NewClient(""), properties)
+	adapter := NewLaunchpad( m, tendermint.NewClient(""), properties)
 
 	options, err := adapter.NetworkOptions(context.Background(), nil)
 	require.Nil(t, err)
@@ -87,24 +86,22 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 }
 
 func TestLaunchpad_NetworkStatus(t *testing.T) {
-	m := &tendermintmocks.TendermintInfoAPI{}
-	defer m.AssertExpectations(t)
-
 	mt := &mocks.TendermintClient{}
+	defer mt.AssertExpectations(t)
 
 	ti, err := time.Parse(time.RFC3339, "2019-04-22T17:01:51Z")
 	require.NoError(t, err)
 
 	mt.
 		On("Block", uint64(0)).
-		Return(alttendermint.BlockResponse{
-			Block: alttendermint.Block{
-				Header: alttendermint.BlockHeader{
+		Return(tendermint.BlockResponse{
+			Block: tendermint.Block{
+				Header: tendermint.BlockHeader{
 					Time:   ti.Format(time.RFC3339),
 					Height: "2",
 				},
 			},
-			BlockId: alttendermint.BlockId{
+			BlockId: tendermint.BlockId{
 				Hash: "3",
 			},
 		}, nil, nil).
@@ -112,13 +109,13 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 
 	mt.
 		On("Block", uint64(1)).
-		Return(alttendermint.BlockResponse{
-			Block: alttendermint.Block{
-				Header: alttendermint.BlockHeader{
+		Return(tendermint.BlockResponse{
+			Block: tendermint.Block{
+				Header: tendermint.BlockHeader{
 					Height: "1",
 				},
 			},
-			BlockId: alttendermint.BlockId{
+			BlockId: tendermint.BlockId{
 				Hash: "4",
 			},
 		}, nil, nil).
@@ -126,15 +123,15 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 
 	mt.
 		On("NetInfo", mock.Anything).
-		Return(alttendermint.NetInfoResponse{
-			Peers: []alttendermint.Peer{
+		Return(tendermint.NetInfoResponse{
+			Peers: []tendermint.Peer{
 				{
-					NodeInfo: alttendermint.NodeInfo{
+					NodeInfo: tendermint.NodeInfo{
 						Id: "1",
 					},
 				},
 				{
-					NodeInfo: alttendermint.NodeInfo{
+					NodeInfo: tendermint.NodeInfo{
 						Id: "2",
 					},
 				},
@@ -152,7 +149,6 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 	}
 
 	adapter := NewLaunchpad(
-		TendermintAPI{Info: m},
 		sdk.NewClient(""),
 		mt,
 		properties,

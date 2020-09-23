@@ -5,7 +5,7 @@ import (
 	sdktypes "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
 	"testing"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/google/go-cmp/cmp"
@@ -56,7 +56,7 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 		ChainIdKey:       "TheNetwork",
 		OptionGas:        &feeMultiplier,
 	}
-	adapter := NewLaunchpad(TendermintAPI{}, m, alttendermint.NewClient(""), properties)
+	adapter := NewLaunchpad(m, tendermint.NewClient(""), properties)
 	metaResp, err := adapter.ConstructionMetadata(context.Background(), &types.ConstructionMetadataRequest{
 		NetworkIdentifier: &networkIdentifier,
 		Options:           options,

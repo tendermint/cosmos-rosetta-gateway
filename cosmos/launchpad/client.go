@@ -5,11 +5,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/rpc"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
-	"net/http"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
-	tendermintclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/generated"
 )
 
 type SdkClient interface {
@@ -19,19 +17,11 @@ type SdkClient interface {
 	GetNodeInfo(ctx context.Context) (rpc.NodeInfoResponse, error)
 }
 
-type TendermintAPI struct {
-	Info TendermintInfoAPI
-}
-
-type TendermintInfoAPI interface {
-	TxSearch(ctx context.Context, query string, localVarOptionals *tendermintclient.TxSearchOpts) (tendermintclient.TxSearchResponse, *http.Response, error)
-	Tx(ctx context.Context, hash string, localVarOptionals *tendermintclient.TxOpts) (tendermintclient.TxResponse, *http.Response, error)
-}
-
-// New Interfaces.
 type TendermintClient interface {
-	NetInfo() (alttendermint.NetInfoResponse, error)
-	Block(height uint64) (alttendermint.BlockResponse, error)
-	BlockByHash(hash string) (alttendermint.BlockResponse, error)
-	UnconfirmedTxs() (alttendermint.UnconfirmedTxsResponse, error)
+	NetInfo() (tendermint.NetInfoResponse, error)
+	Block(height uint64) (tendermint.BlockResponse, error)
+	BlockByHash(hash string) (tendermint.BlockResponse, error)
+	UnconfirmedTxs() (tendermint.UnconfirmedTxsResponse, error)
+	Tx(hash string) (tendermint.TxResponse, error)
+	TxSearch(query string) (tendermint.TxSearchResponse, error)
 }

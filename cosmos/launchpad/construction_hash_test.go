@@ -4,11 +4,13 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/alttendermint"
 	"io/ioutil"
 	"testing"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
+
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/altsdk"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/cosmos/cosmos-sdk/simapp"
@@ -30,7 +32,7 @@ func TestLaunchpad_ConstructionHash(t *testing.T) {
 	err = cdc.UnmarshalJSON(bz, &stdTx)
 	require.NoError(t, err)
 
-	adapter := NewLaunchpad(TendermintAPI{}, sdk.NewClient(""), alttendermint.NewClient(""), rosetta.NetworkProperties{})
+	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), rosetta.NetworkProperties{})
 
 	// re-encode it via the Amino wire protocol
 	txBytes, err := cdc.MarshalBinaryLengthPrefixed(stdTx)
