@@ -2,6 +2,7 @@ package launchpad
 
 import (
 	"context"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -12,12 +13,12 @@ func (l Launchpad) AccountBalance(ctx context.Context, request *types.AccountBal
 	*types.AccountBalanceResponse, *types.Error) {
 	resp, err := l.cosmos.GetAuthAccount(ctx, request.AccountIdentifier.Address)
 	if err != nil {
-		return nil, ErrNodeConnection
+		return nil, rosetta.WrapError(ErrNodeConnection, err.Error())
 	}
 
 	block, err := l.tendermint.Block(uint64(resp.Height))
 	if err != nil {
-		return nil, ErrNodeConnection
+		return nil, rosetta.WrapError(ErrNodeConnection, err.Error())
 	}
 
 	return &types.AccountBalanceResponse{

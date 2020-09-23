@@ -19,10 +19,9 @@ import (
 )
 
 func TestLaunchpad_ConstructionHash(t *testing.T) {
-	t.SkipNow() // TODO bring back.
 	expectedHash := "6f22ea7620ebcb5078d244f06e88dd26906ba1685135bfc34f83fefdd653198a"
 
-	bz, err := ioutil.ReadFile("./testdata/test-with-signature-delete.json")
+	bz, err := ioutil.ReadFile("./testdata/signed-tx.json")
 	require.NoError(t, err)
 
 	var stdTx auth.StdTx

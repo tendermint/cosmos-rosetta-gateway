@@ -37,9 +37,9 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 			Height: 12,
 			Result: sdktypes.Response{
 				Value: sdktypes.BaseAccount{
-					AccountNumber: 0,
+					AccountNumber: "0",
 					Address:       "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na",
-					Sequence:      1,
+					Sequence:      "1",
 				},
 			},
 		}, nil, nil).Once()

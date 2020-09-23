@@ -2,6 +2,8 @@ package launchpad
 
 import (
 	"context"
+	"github.com/cosmos/cosmos-sdk/client/rpc"
+	"github.com/tendermint/tendermint/p2p"
 	"testing"
 	"time"
 
@@ -36,16 +38,17 @@ func TestLaunchpad_NetworkList(t *testing.T) {
 }
 
 func TestLaunchpad_NetworkOptions(t *testing.T) {
-	t.SkipNow()
 	m := &cosmosmocks.SdkClient{}
 	defer m.AssertExpectations(t)
 
-	//m.
-	//	On("GetNodeInfo", mock.Anything).
-	//	Return(rpc.NodeInfoResponse{
-	//			Version: "5",
-	//	}, nil, nil).
-	//	Once()
+	m.
+		On("GetNodeInfo", mock.Anything).
+		Return(rpc.NodeInfoResponse{
+			DefaultNodeInfo: p2p.DefaultNodeInfo{
+				Version: "5",
+			},
+		}, nil, nil).
+		Once()
 
 	properties := rosetta.NetworkProperties{
 		Blockchain: "TheBlockchain",
