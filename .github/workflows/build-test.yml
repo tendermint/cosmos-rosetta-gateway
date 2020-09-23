@@ -56,35 +56,12 @@ jobs:
         with:
           name: crg ${{ matrix.arch }}
           path: crg
-          
-  starport: 
-    runs-on: ubuntu-latest
-    name: starport
-    steps:
-      - uses: actions/checkout@v2.3.2
-        with:
-          repository: tendermint/starport
-
-      - name: Setup go
-        uses: actions/setup-go@v2.1.2
-        with:
-          go-version: 1.15
-          
-      - name: build starport
-        run: make
-          
-      - uses: actions/upload-artifact@v2
-        with:
-          name: starport
-          path: build/starport
-
-
-  
+            
   
   test:
     runs-on: ubuntu-latest
     name: test crg and starport
-    needs: [starport, linux]
+    needs: linux
     steps:
       - name: Download crg
         uses: actions/download-artifact@v2.0.5
@@ -105,18 +82,15 @@ jobs:
         with:
           name: starport
 
-      - name: fire up starport
-        timeout-minutes: 5
-        continue-on-error: true
+      - name: install starport
+        run: npm i -g @tendermint/starport
+      
+      - name: build a simple blockchain
+        run: starport app github.com/faddat/clay
+        
+      - name: run blockchain and test crg
         run: |
-          chmod +x starport
-          ./starport app github.com/faddat/clay
-          cd clay
-          ls
-          ../starport serve --verbose
-          cd ..
-          chmod +x crg
-          ./crg 
+          starport serve -p clay --verbose       
           
       - uses: actions/upload-artifact@v2
         with:
