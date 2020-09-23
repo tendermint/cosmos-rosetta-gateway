@@ -77,7 +77,8 @@ jobs:
       - name: build starport
         run: make
   
-  test crg:
+  
+  test:
     runs-on: ubuntu-latest
     name: test crg and starport
     steps:
