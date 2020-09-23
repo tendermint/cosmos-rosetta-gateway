@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         targetos: [windows, darwin]
-    name: clay for ${{ matrix.targetos }}
+    name: crg for ${{ matrix.targetos }}
     steps:
       - uses: actions/checkout@v2
 
@@ -108,7 +108,7 @@ jobs:
           chmod +x starport
           ./starport app github.com/faddat/clay
           cd clay
-          starport serve --verbose > clay.log &
+          ../starport serve --verbose > clay.log &
           cd ..
           chmod +x crg
           ./crg 
