@@ -15,7 +15,8 @@ func TestAuthAccountClient(t *testing.T) {
 	require.NoError(t, err)
 
 	s := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		writer.Write(bz)
+		_, err = writer.Write(bz)
+		require.NoError(t, err)
 	}))
 	defer s.Close()
 

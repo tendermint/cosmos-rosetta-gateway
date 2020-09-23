@@ -15,8 +15,7 @@ import (
 )
 
 const (
-	typeMsgSend = "cosmos-sdk/MsgSend"
-	zerox       = "0x"
+	zerox = "0x"
 )
 
 // HexPrefix ensures that string representation of hex starts with 0x.
