@@ -81,6 +81,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     name: test crg and starport
+    needs: [starport, linux]
     steps:
       - name: Download crg
         uses: actions/download-artifact@v2.0.5
