@@ -43,7 +43,7 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 
 	blockHash := "ABCDEFG"
 	ma.
-		On("Block", uint64(12345)).
+		On("Block", uint64(12)).
 		Return(tendermint.BlockResponse{
 			BlockId: tendermint.BlockId{
 				Hash: blockHash,
