@@ -11,6 +11,10 @@ import (
 )
 
 func (l Launchpad) Mempool(ctx context.Context, request *types.NetworkRequest) (*types.MempoolResponse, *types.Error) {
+	if l.properties.OfflineMode {
+		return nil, ErrEndpointDisabledOfflineMode
+	}
+
 	txs, err := l.tendermint.UnconfirmedTxs()
 	if err != nil {
 		return nil, ErrNodeConnection
@@ -33,6 +37,10 @@ func (l Launchpad) Mempool(ctx context.Context, request *types.NetworkRequest) (
 }
 
 func (l Launchpad) MempoolTransaction(ctx context.Context, request *types.MempoolTransactionRequest) (*types.MempoolTransactionResponse, *types.Error) {
+	if l.properties.OfflineMode {
+		return nil, ErrEndpointDisabledOfflineMode
+	}
+
 	res, err := l.tendermint.Tx(request.TransactionIdentifier.Hash)
 	if err != nil {
 		return nil, ErrNodeConnection

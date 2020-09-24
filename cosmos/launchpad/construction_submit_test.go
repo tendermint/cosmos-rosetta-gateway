@@ -1,6 +1,7 @@
 package launchpad
 
 import (
+	"context"
 	"encoding/hex"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -11,6 +12,12 @@ import (
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 	"io/ioutil"
 	"testing"
+
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
+
+	"github.com/coinbase/rosetta-sdk-go/types"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 
 	"github.com/cosmos/cosmos-sdk/x/auth/client/rest"
 
@@ -65,4 +72,17 @@ func TestLaunchpad_ConstructionSubmit(t *testing.T) {
 	require.Nil(t, err2)
 	require.NotNil(t, resp)
 	require.Equal(t, expectedHash, resp.TransactionIdentifier.Hash)
+}
+
+func TestLaunchpad_ConstructionSubmit_FailsOfflineMode(t *testing.T) {
+	properties := rosetta.NetworkProperties{
+		OfflineMode: true,
+	}
+	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+
+	_, err2 := adapter.ConstructionSubmit(context.Background(), &types.ConstructionSubmitRequest{
+		SignedTransaction: "dkajfkdjkads",
+	})
+
+	require.Equal(t, ErrEndpointDisabledOfflineMode, err2)
 }

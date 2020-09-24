@@ -326,3 +326,45 @@ func TestLaunchpad_BlockTransactionWithError(t *testing.T) {
 	require.Equal(t, "Reverted", tx.Transaction.Operations[0].Status)
 	require.Equal(t, "Reverted", tx.Transaction.Operations[1].Status)
 }
+
+func TestLaunchpad_Block_DoesNotWorkOfflineMode(t *testing.T) {
+	properties := rosetta.NetworkProperties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+		SupportedOperations: []string{
+			OperationTransfer,
+		},
+		OfflineMode: true,
+	}
+
+	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+
+	var height int64 = 1
+	_, err := adapter.Block(context.Background(), &types.BlockRequest{
+		BlockIdentifier: &types.PartialBlockIdentifier{
+			Index: &height,
+		},
+	})
+	require.Equal(t, err, ErrEndpointDisabledOfflineMode)
+}
+
+func TestLaunchpad_BlockTransaction_FailsOfflineMode(t *testing.T) {
+	properties := rosetta.NetworkProperties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+		SupportedOperations: []string{
+			"Transfer",
+			"Reward",
+		},
+		OfflineMode: true,
+	}
+
+	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	_, txErr := adapter.BlockTransaction(context.Background(), &types.BlockTransactionRequest{
+		TransactionIdentifier: &types.TransactionIdentifier{
+			Hash: "1",
+		},
+	})
+
+	require.Equal(t, txErr, ErrEndpointDisabledOfflineMode)
+}

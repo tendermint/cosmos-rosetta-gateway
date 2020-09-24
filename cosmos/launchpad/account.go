@@ -11,6 +11,10 @@ import (
 
 func (l Launchpad) AccountBalance(ctx context.Context, request *types.AccountBalanceRequest) (
 	*types.AccountBalanceResponse, *types.Error) {
+	if l.properties.OfflineMode {
+		return nil, ErrEndpointDisabledOfflineMode
+	}
+
 	resp, err := l.cosmos.GetAuthAccount(ctx, request.AccountIdentifier.Address)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrNodeConnection, err.Error())

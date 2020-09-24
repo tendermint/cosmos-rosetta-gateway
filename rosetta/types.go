@@ -18,6 +18,7 @@ type DataAPI interface {
 }
 
 type ConstructionAPI interface {
+	server.ConstructionAPIServicer
 }
 
 type NetworkProperties struct {
@@ -25,4 +26,5 @@ type NetworkProperties struct {
 	Blockchain          string
 	Network             string
 	SupportedOperations []string
+	OfflineMode         bool
 }
