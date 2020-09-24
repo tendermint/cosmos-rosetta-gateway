@@ -22,6 +22,7 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 	properties := rosetta.NetworkProperties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
+		AddrPrefix: "test",
 		SupportedOperations: []string{
 			"Transfer",
 		},
@@ -53,8 +54,8 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 	}
 
 	expMetadata := map[string]interface{}{
-		AccountNumberKey: uint64(0),
-		SequenceKey:      uint64(1),
+		AccountNumberKey: "0",
+		SequenceKey:      "1",
 		ChainIdKey:       "TheNetwork",
 		OptionGas:        &feeMultiplier,
 	}

@@ -47,9 +47,16 @@ func TestLaunchpad_ConstructionSubmit(t *testing.T) {
 			TxHash: expectedHash,
 			Height: 10,
 		}, nil, nil).Once()
+	properties := rosetta.NetworkProperties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+		AddrPrefix: "test",
+		SupportedOperations: []string{
+			"Transfer",
+		},
+	}
 
-	adapter := NewLaunchpad(m, tendermint.NewClient(""), rosetta.NetworkProperties{})
-
+	adapter := NewLaunchpad(m, tendermint.NewClient(""), properties)
 	resp, err2 := adapter.ConstructionSubmit(context.Background(), &types.ConstructionSubmitRequest{
 		SignedTransaction: toString,
 	})

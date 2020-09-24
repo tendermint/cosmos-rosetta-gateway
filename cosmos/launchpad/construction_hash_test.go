@@ -24,12 +24,20 @@ func TestLaunchpad_ConstructionHash(t *testing.T) {
 	bz, err := ioutil.ReadFile("./testdata/signed-tx.json")
 	require.NoError(t, err)
 
+	properties := rosetta.NetworkProperties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+		AddrPrefix: "test",
+		SupportedOperations: []string{
+			"Transfer",
+		},
+	}
+	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+
 	var stdTx auth.StdTx
 	cdc := simapp.MakeCodec()
 	err = cdc.UnmarshalJSON(bz, &stdTx)
 	require.NoError(t, err)
-
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), rosetta.NetworkProperties{})
 
 	// re-encode it via the Amino wire protocol
 	txBytes, err := cdc.MarshalBinaryLengthPrefixed(stdTx)
