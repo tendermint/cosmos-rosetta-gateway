@@ -2,18 +2,21 @@ package launchpad
 
 import (
 	"context"
+	"testing"
+	"time"
+
 	"github.com/coinbase/rosetta-sdk-go/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	cosmostypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 	mocks1 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
-	"testing"
-	"time"
 )
 
 func TestLaunchpad_Block(t *testing.T) {
@@ -58,29 +61,29 @@ func TestLaunchpad_Block(t *testing.T) {
 		}, nil, nil).
 		Once()
 
-	addr1 := sdk.AccAddress([]byte("8"))
-	addr2 := sdk.AccAddress([]byte("9"))
-	coins1 := sdk.NewCoins(sdk.NewInt64Coin("atom", 10))
+	addr1 := cosmostypes.AccAddress([]byte("8"))
+	addr2 := cosmostypes.AccAddress([]byte("9"))
+	coins1 := cosmostypes.NewCoins(cosmostypes.NewInt64Coin("atom", 10))
 	testTx := auth.StdTx{
-		Msgs: []sdk.Msg{bank.NewMsgSend(addr1, addr2, coins1)},
+		Msgs: []cosmostypes.Msg{bank.NewMsgSend(addr1, addr2, coins1)},
 	}
 	mc.
 		On("GetTx", mock.Anything, "3").
-		Return(sdk.TxResponse{
+		Return(cosmostypes.TxResponse{
 			TxHash: "3",
 			Tx:     testTx,
 		}, nil, nil).
 		Once()
 
-	addr3 := sdk.AccAddress([]byte("8"))
-	addr4 := sdk.AccAddress([]byte("9"))
-	coins2 := sdk.NewCoins(sdk.NewInt64Coin("atom", 10))
+	addr3 := cosmostypes.AccAddress([]byte("8"))
+	addr4 := cosmostypes.AccAddress([]byte("9"))
+	coins2 := cosmostypes.NewCoins(cosmostypes.NewInt64Coin("atom", 10))
 	testTx = auth.StdTx{
-		Msgs: []sdk.Msg{bank.NewMsgSend(addr3, addr4, coins2)},
+		Msgs: []cosmostypes.Msg{bank.NewMsgSend(addr3, addr4, coins2)},
 	}
 	mc.
 		On("GetTx", mock.Anything, "4").
-		Return(sdk.TxResponse{
+		Return(cosmostypes.TxResponse{
 			TxHash: "4",
 			Tx:     testTx,
 		}, nil, nil).
@@ -216,15 +219,15 @@ func TestLaunchpad_BlockTransaction(t *testing.T) {
 	mc := &mocks.SdkClient{}
 	defer mc.AssertExpectations(t)
 
-	addr1 := sdk.AccAddress("8")
-	addr2 := sdk.AccAddress("9")
-	coins1 := sdk.NewCoins(sdk.NewInt64Coin("atom", 10))
+	addr1 := cosmostypes.AccAddress("8")
+	addr2 := cosmostypes.AccAddress("9")
+	coins1 := cosmostypes.NewCoins(cosmostypes.NewInt64Coin("atom", 10))
 	testTx := auth.StdTx{
-		Msgs: []sdk.Msg{bank.NewMsgSend(addr1, addr2, coins1)},
+		Msgs: []cosmostypes.Msg{bank.NewMsgSend(addr1, addr2, coins1)},
 	}
 	mc.
 		On("GetTx", mock.Anything, "1").
-		Return(sdk.TxResponse{
+		Return(cosmostypes.TxResponse{
 			TxHash: "1",
 			Tx:     testTx,
 		}, nil, nil).
@@ -293,15 +296,15 @@ func TestLaunchpad_BlockTransactionWithError(t *testing.T) {
 	mc := &mocks.SdkClient{}
 	defer mc.AssertExpectations(t)
 
-	addr1 := sdk.AccAddress("8")
-	addr2 := sdk.AccAddress("9")
-	coins1 := sdk.NewCoins(sdk.NewInt64Coin("atom", 10))
+	addr1 := cosmostypes.AccAddress("8")
+	addr2 := cosmostypes.AccAddress("9")
+	coins1 := cosmostypes.NewCoins(cosmostypes.NewInt64Coin("atom", 10))
 	testTx := auth.StdTx{
-		Msgs: []sdk.Msg{bank.NewMsgSend(addr1, addr2, coins1)},
+		Msgs: []cosmostypes.Msg{bank.NewMsgSend(addr1, addr2, coins1)},
 	}
 	mc.
 		On("GetTx", mock.Anything, "1").
-		Return(sdk.TxResponse{
+		Return(cosmostypes.TxResponse{
 			TxHash: "1",
 			Code:   7,
 			Tx:     testTx,

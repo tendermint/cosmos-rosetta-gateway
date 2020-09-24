@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	sdk2 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"

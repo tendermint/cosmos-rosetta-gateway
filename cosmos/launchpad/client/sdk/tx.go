@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/simapp"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/cosmos/cosmos-sdk/simapp"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func (c Client) GetTx(ctx context.Context, hash string) (sdk.TxResponse, error) {
@@ -32,7 +33,7 @@ func (c Client) GetTx(ctx context.Context, hash string) (sdk.TxResponse, error) 
 }
 
 func (c Client) PostTx(ctx context.Context, bz []byte) (sdk.TxResponse, error) {
-	r, err := http.Post(c.getEndpoint("/txs"), "", bytes.NewBuffer(bz))
+	r, err := http.Post(c.getEndpoint("/txs"), "application/json", bytes.NewBuffer(bz))
 	if err != nil {
 		return sdk.TxResponse{}, err
 	}

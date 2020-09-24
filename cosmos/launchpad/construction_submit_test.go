@@ -3,21 +3,17 @@ package launchpad
 import (
 	"context"
 	"encoding/hex"
-	"github.com/coinbase/rosetta-sdk-go/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stretchr/testify/mock"
-	clientsdk "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
+	"fmt"
+	cosmostypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 	"io/ioutil"
 	"testing"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
-
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
 
 	"github.com/cosmos/cosmos-sdk/x/auth/client/rest"
 
@@ -26,7 +22,7 @@ import (
 )
 
 func TestLaunchpad_ConstructionSubmit(t *testing.T) {
-	bz, err := ioutil.ReadFile("./signed-tx.json")
+	bz, err := ioutil.ReadFile("./testdata/test-with-signature-delete.json")
 	require.NoError(t, err)
 
 	cdc := simapp.MakeCodec()
@@ -43,26 +39,16 @@ func TestLaunchpad_ConstructionSubmit(t *testing.T) {
 	toString := hex.EncodeToString(txBytes)
 	t.Logf("%s\n", toString)
 
-	testTx := BroadcastReq{
-		Tx:   stdTx,
-		Mode: "async",
-	}
-
-	m := mocks.SdkClient{}
+	expectedHash := "6f22ea7620ebcb5078d244f06e88dd26906ba1685135bfc34f83fefdd653198a"
+	m := &mocks.SdkClient{}
 	m.
-		On("PostTx", mock.Anything, testTx).
-		Return(sdk.TxResponse{
+		On("PostTx", context.Background(), bz).
+		Return(cosmostypes.TxResponse{
 			TxHash: expectedHash,
 			Height: 10,
 		}, nil, nil).Once()
 
-	adapter := NewLaunchpad(clientsdk.NewClient(""), tendermint.NewClient(""), rosetta.NetworkProperties{})
-
-	// re-encode it via the Amino wire protocol
-	txBytes, err := cdc.MarshalBinaryLengthPrefixed(stdTx)
-	require.NoError(t, err)
-
-	toString := hex.EncodeToString(txBytes)
+	adapter := NewLaunchpad(m, tendermint.NewClient(""), rosetta.NetworkProperties{})
 
 	resp, err2 := adapter.ConstructionSubmit(context.Background(), &types.ConstructionSubmitRequest{
 		SignedTransaction: toString,

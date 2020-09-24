@@ -3,11 +3,12 @@ package sdk
 import (
 	"context"
 
-	"github.com/stretchr/testify/require"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestAuthAccountClient(t *testing.T) {

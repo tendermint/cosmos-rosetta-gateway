@@ -2,10 +2,11 @@ package launchpad
 
 import (
 	"context"
-	"github.com/cosmos/cosmos-sdk/client/rpc"
-	"github.com/tendermint/tendermint/p2p"
 	"testing"
 	"time"
+
+	"github.com/cosmos/cosmos-sdk/client/rpc"
+	"github.com/tendermint/tendermint/p2p"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
 
