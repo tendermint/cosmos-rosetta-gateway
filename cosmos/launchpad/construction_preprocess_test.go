@@ -19,11 +19,13 @@ func TestLaunchpad_ConstructionPreprocess(t *testing.T) {
 	properties := rosetta.NetworkProperties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
+		AddrPrefix: "test",
 		SupportedOperations: []string{
 			"Transfer",
 			"Reward",
 		},
 	}
+	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	ops := []*types.Operation{
 		{
@@ -31,7 +33,7 @@ func TestLaunchpad_ConstructionPreprocess(t *testing.T) {
 			Type:                "Transfer",
 			Status:              "Success",
 			Account: &types.AccountIdentifier{
-				Address: "cosmos12qqzw4tqu32anlcx0a3hupvgdhaf4cc8j9wfyd",
+				Address: "test12qqzw4tqu32anlcx0a3hupvgdhaf4cc87unhge",
 			},
 			Amount: &types.Amount{
 				Value: "-10",
@@ -47,7 +49,7 @@ func TestLaunchpad_ConstructionPreprocess(t *testing.T) {
 			Type:   "Transfer",
 			Status: "Success",
 			Account: &types.AccountIdentifier{
-				Address: "cosmos10rpmm9ur87le39hehteha37sg5awdsns6huyvy",
+				Address: "test10rpmm9ur87le39hehteha37sg5awdsnskwp6qs",
 			},
 			Amount: &types.Amount{
 				Value: "10",
@@ -60,11 +62,10 @@ func TestLaunchpad_ConstructionPreprocess(t *testing.T) {
 	feeMultiplier := float64(200000)
 
 	expOptions := map[string]interface{}{
-		OptionAddress: "cosmos12qqzw4tqu32anlcx0a3hupvgdhaf4cc8j9wfyd",
+		OptionAddress: "test12qqzw4tqu32anlcx0a3hupvgdhaf4cc87unhge",
 		OptionGas:     &feeMultiplier,
 	}
 
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 	deriveResp, deriveErr := adapter.ConstructionPreprocess(context.Background(), &types.ConstructionPreprocessRequest{
 		Operations:             ops,
 		SuggestedFeeMultiplier: &feeMultiplier,

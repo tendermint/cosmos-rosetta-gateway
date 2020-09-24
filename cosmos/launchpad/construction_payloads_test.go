@@ -59,10 +59,20 @@ func TestPayloadsEndpoint_Errors(t *testing.T) {
 }
 
 func TestGetSenderByOperations(t *testing.T) {
+	properties := rosetta.NetworkProperties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+		AddrPrefix: "test",
+		SupportedOperations: []string{
+			"Transfer",
+			"Reward",
+		},
+	}
+	_ = NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 	ops := []*types.Operation{
 		{
 			Account: &types.AccountIdentifier{
-				Address: "cosmos15tltvs59rt88geyenetv3klavlq2z30fe8z6hj",
+				Address: "test15tltvs59rt88geyenetv3klavlq2z30f47lymx",
 			},
 			Type: OperationTransfer,
 			Amount: &types.Amount{
@@ -76,7 +86,7 @@ func TestGetSenderByOperations(t *testing.T) {
 		},
 		{
 			Account: &types.AccountIdentifier{
-				Address: "cosmos16xyempempp92x9hyzz9wrgf94r6j9h5f06pxxv",
+				Address: "test16xyempempp92x9hyzz9wrgf94r6j9h5frruc2c",
 			},
 			Type: OperationTransfer,
 			Amount: &types.Amount{
@@ -104,10 +114,19 @@ func TestGetSenderByOperations(t *testing.T) {
 }
 
 func TestLaunchpad_ConstructionPayloads(t *testing.T) {
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), rosetta.NetworkProperties{})
+	properties := rosetta.NetworkProperties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+		AddrPrefix: "test",
+		SupportedOperations: []string{
+			"Transfer",
+			"Reward",
+		},
+	}
+	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	feeMultiplier := float64(200000)
-	senderAddr := "cosmos1khy4gsp06srvu3u65uyhrax7tnj2atez9ewh38"
+	senderAddr := "test1khy4gsp06srvu3u65uyhrax7tnj2atezfqnfan"
 	req := &types.ConstructionPayloadsRequest{
 		Operations: []*types.Operation{
 			{
@@ -131,7 +150,7 @@ func TestLaunchpad_ConstructionPayloads(t *testing.T) {
 				},
 				Type: OperationTransfer,
 				Account: &types.AccountIdentifier{
-					Address: "cosmos13qmcwpacu0zvsr7edpmasyn99pmcztvjhtctuz",
+					Address: "test13qmcwpacu0zvsr7edpmasyn99pmcztvjmj94sk",
 				},
 				Amount: &types.Amount{
 					Value: "5619726348293826415",

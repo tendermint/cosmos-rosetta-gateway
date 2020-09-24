@@ -4,7 +4,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	cosmostypes "github.com/cosmos/cosmos-sdk/types"
 	"net/http"
 	"os"
 
@@ -46,11 +45,6 @@ func runHandler() error {
 		SupportedOperations: []string{launchpad.OperationTransfer},
 		OfflineMode:         *flagOfflineMode,
 	}
-
-	config := cosmostypes.GetConfig()
-	config.SetBech32PrefixForAccount(
-		properties.AddrPrefix,
-		properties.AddrPrefix+cosmostypes.PrefixPublic)
 
 	h, err := service.New(
 		service.Network{

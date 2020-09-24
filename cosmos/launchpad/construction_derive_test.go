@@ -22,7 +22,7 @@ func TestLaunchpad_ConstructionDerive(t *testing.T) {
 	properties := rosetta.NetworkProperties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
-		AddrPrefix: "cosmos",
+		AddrPrefix: "test",
 		SupportedOperations: []string{
 			"Transfer",
 			"Reward",
@@ -38,7 +38,7 @@ func TestLaunchpad_ConstructionDerive(t *testing.T) {
 	})
 	require.Nil(t, deriveErr)
 	require.NotNil(t, deriveResp)
-	require.Equal(t, "cosmos15tltvs59rt88geyenetv3klavlq2z30fe8z6hj", deriveResp.Address)
+	require.Equal(t, "test15tltvs59rt88geyenetv3klavlq2z30f47lymx", deriveResp.Address)
 
 	// TODO: Use table driven tests
 	// check unsupported curve returns error
