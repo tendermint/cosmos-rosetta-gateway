@@ -2,34 +2,18 @@ package launchpad
 
 import (
 	"context"
-	"net/http"
+	"github.com/cosmos/cosmos-sdk/client/rpc"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
-
-	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 )
 
-type CosmosAPI struct {
-	Auth         CosmosAuthAPI
-	Bank         CosmosBankAPI
-	Tendermint   CosmosTendermintAPI
-	Transactions CosmosTransactionsAPI
-}
-
-type CosmosTransactionsAPI interface {
-	TxsHashGet(ctx context.Context, hash string) (cosmosclient.TxQuery, *http.Response, error)
-	TxsPost(ctx context.Context, txBroadcast cosmosclient.InlineObject) (cosmosclient.BroadcastTxCommitResult, *http.Response, error)
-}
-type CosmosBankAPI interface {
-	BankBalancesAddressGet(ctx context.Context, address string) (cosmosclient.InlineResponse2005, *http.Response, error)
-}
-
-type CosmosAuthAPI interface {
-	AuthAccountsAddressGet(ctx context.Context, address string) (cosmosclient.InlineResponse2006, *http.Response, error)
-}
-
-type CosmosTendermintAPI interface {
-	NodeInfoGet(ctx context.Context) (cosmosclient.InlineResponse200, *http.Response, error)
+type SdkClient interface {
+	GetAuthAccount(ctx context.Context, address string) (types.AccountResponse, error)
+	GetTx(ctx context.Context, hash string) (sdk.TxResponse, error)
+	PostTx(ctx context.Context, bytes []byte) (sdk.TxResponse, error)
+	GetNodeInfo(ctx context.Context) (rpc.NodeInfoResponse, error)
 }
 
 type TendermintClient interface {

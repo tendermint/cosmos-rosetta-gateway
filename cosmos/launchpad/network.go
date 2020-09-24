@@ -12,6 +12,10 @@ import (
 )
 
 func (l Launchpad) NetworkList(context.Context, *types.MetadataRequest) (*types.NetworkListResponse, *types.Error) {
+	if l.properties.OfflineMode {
+		return nil, ErrEndpointDisabledOfflineMode
+	}
+
 	return &types.NetworkListResponse{
 		NetworkIdentifiers: []*types.NetworkIdentifier{
 			{
@@ -23,7 +27,11 @@ func (l Launchpad) NetworkList(context.Context, *types.MetadataRequest) (*types.
 }
 
 func (l Launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) (*types.NetworkOptionsResponse, *types.Error) {
-	resp, _, err := l.cosmos.Tendermint.NodeInfoGet(ctx)
+	if l.properties.OfflineMode {
+		return nil, ErrEndpointDisabledOfflineMode
+	}
+
+	resp, err := l.cosmos.GetNodeInfo(ctx)
 	if err != nil {
 		return nil, ErrNodeConnection
 	}
@@ -31,7 +39,7 @@ func (l Launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) 
 	return &types.NetworkOptionsResponse{
 		Version: &types.Version{
 			RosettaVersion: "1.2.5",
-			NodeVersion:    resp.NodeInfo.Version,
+			NodeVersion:    resp.Version,
 		},
 		Allow: &types.Allow{
 			OperationStatuses: []*types.OperationStatus{
@@ -50,6 +58,10 @@ func (l Launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) 
 }
 
 func (l Launchpad) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (*types.NetworkStatusResponse, *types.Error) {
+	if l.properties.OfflineMode {
+		return nil, ErrEndpointDisabledOfflineMode
+	}
+
 	var (
 		latestBlock  tendermint.BlockResponse
 		genesisBlock tendermint.BlockResponse

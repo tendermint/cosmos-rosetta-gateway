@@ -3,6 +3,7 @@ package launchpad
 import (
 	"context"
 	"fmt"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"sync"
 	"time"
 
@@ -10,11 +11,13 @@ import (
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"golang.org/x/sync/errgroup"
-
-	cosmosclient "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/generated"
 )
 
 func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.BlockResponse, *types.Error) {
+	if l.properties.OfflineMode {
+		return nil, ErrEndpointDisabledOfflineMode
+	}
+
 	var (
 		blockResp tendermint.BlockResponse
 		err       error
@@ -32,7 +35,7 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 
 	// get all transactions for the block.
 	var (
-		txs []cosmosclient.TxQuery
+		txs []sdk.TxResponse
 		m   sync.Mutex
 	)
 	txsquery := fmt.Sprintf(`tx.height=%s`, blockResp.Block.Header.Height)
@@ -44,7 +47,7 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 	for _, txshort := range txsResp.Txs {
 		hash := txshort.Hash
 		g.Go(func() error {
-			tx, _, err := l.cosmos.Transactions.TxsHashGet(ctx, hash)
+			tx, err := l.cosmos.GetTx(ctx, hash)
 			if err != nil {
 				return err
 			}
@@ -94,6 +97,10 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 }
 
 func (l Launchpad) BlockTransaction(ctx context.Context, r *types.BlockTransactionRequest) (*types.BlockTransactionResponse, *types.Error) {
+	if l.properties.OfflineMode {
+		return nil, ErrEndpointDisabledOfflineMode
+	}
+
 	tx, err := l.getTxByHash(ctx, r.TransactionIdentifier.Hash)
 	if err != nil {
 		return nil, err
