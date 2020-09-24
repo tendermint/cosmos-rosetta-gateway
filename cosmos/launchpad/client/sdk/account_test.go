@@ -1,29 +1,43 @@
 package sdk
 
 import (
-	"context"
+	"bytes"
+	"encoding/json"
+
+	"testing"
 
 	"github.com/stretchr/testify/require"
-	"io/ioutil"
-	"net/http"
-	"net/http/httptest"
-	"testing"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/clienttest"
+	"github.com/tendermint/starport/starport/pkg/cmdrunner"
+	"github.com/tendermint/starport/starport/pkg/cmdrunner/step"
 )
 
 func TestAuthAccountClient(t *testing.T) {
-	bz, err := ioutil.ReadFile("testdata/account.json")
+	ctx, cancel := clienttest.Ctx()
+	t.Cleanup(cancel)
+	e, err := clienttest.NewLaunchpad(ctx, "crgapp")
 	require.NoError(t, err)
+	t.Cleanup(func() { require.NoError(t, e.Cleanup()) })
 
-	s := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		_, err = writer.Write(bz)
-		require.NoError(t, err)
-	}))
-	defer s.Close()
+	client := NewClient(e.SDKAddr)
 
-	client := NewClient(s.URL)
+	accountsb := &bytes.Buffer{}
+	require.NoError(t, cmdrunner.
+		New().
+		Run(ctx, step.New(
+			step.Exec(
+				e.Appcli(), "keys", "list",
+			),
+			step.Stdout(accountsb),
+		)))
+	var accounts []struct {
+		Address string `json:"address"`
+	}
+	require.NoError(t, json.NewDecoder(accountsb).Decode(&accounts))
+	require.True(t, len(accounts) != 0)
 
-	addr := "cosmos15lc6l4nm3s9ya5an5vnv9r6na437ajpznkplhx"
-	res, err := client.GetAuthAccount(context.Background(), addr)
+	addr := accounts[0].Address
+	res, err := client.GetAuthAccount(ctx, addr)
 	require.NoError(t, err)
 	require.NotNil(t, res)
 	t.Log(res.Result)
