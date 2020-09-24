@@ -51,18 +51,18 @@ starport serve --verbose
 Hold `ctrl` and press A, then D. You'll leave the screen session and the blockchain `clay` will run in the background.
 
 
-Install and use `crd`
+Install and use `crg`
 ```bash
-screen -S crd
+screen -S crg
 git clone https://github.com/tendermint/cosmos-rosetta-gateway
 cd cosmos-rosetta-gateway
 make
 ./crd
 ```
 
-Hold `ctrl` and press A, then D. You'll leave the screen session and `crd` will run in the background.
+Hold `ctrl` and press A, then D. You'll leave the screen session and `crg` will run in the background.
 
-Query the blockchain `clay` using the Rosetta API provided by `crd`
+Query the blockchain `clay` using the Rosetta API provided by `crg`
 
 ```
 curl --location --request POST 'http://localhost:8080/network/status' \
