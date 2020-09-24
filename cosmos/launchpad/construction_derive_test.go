@@ -51,7 +51,7 @@ func TestLaunchpad_ConstructionDerive(t *testing.T) {
 	require.Equal(t, ErrUnsupportedCurve, deriveErr)
 }
 
-func TestRandomeAddrPrefix(t *testing.T) {
+func TestRandomAddrPrefix(t *testing.T) {
 	data, err := hex.DecodeString("A2FEB642851ACE7464999E56C8DBFD67C0A145E9")
 	require.NoError(t, err)
 
