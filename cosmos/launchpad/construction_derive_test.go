@@ -50,32 +50,3 @@ func TestLaunchpad_ConstructionDerive(t *testing.T) {
 	})
 	require.Equal(t, ErrUnsupportedCurve, deriveErr)
 }
-
-func TestRandomAddrPrefix(t *testing.T) {
-	data, err := hex.DecodeString("A2FEB642851ACE7464999E56C8DBFD67C0A145E9")
-	require.NoError(t, err)
-
-	properties := rosetta.NetworkProperties{
-		Blockchain: "TheBlockchain",
-		Network:    "TheNetwork",
-		AddrPrefix: "rand",
-		SupportedOperations: []string{
-			"Transfer",
-			"Reward",
-		},
-	}
-
-	// Check using non cosmos address
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
-	deriveResp, deriveErr := adapter.ConstructionDerive(context.Background(), &types.ConstructionDeriveRequest{
-		PublicKey: &types.PublicKey{
-			Bytes:     data,
-			CurveType: "secp256k1",
-		},
-	})
-
-	require.Nil(t, deriveErr)
-	require.NotNil(t, deriveResp)
-	require.Equal(t, "rand15tltvs59rt88geyenetv3klavlq2z30ftqvksk", deriveResp.Address)
-
-}

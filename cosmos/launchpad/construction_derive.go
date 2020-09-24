@@ -12,11 +12,6 @@ func (l Launchpad) ConstructionDerive(ctx context.Context, r *types.Construction
 		return nil, ErrUnsupportedCurve
 	}
 
-	config := sdk.GetConfig()
-	config.SetBech32PrefixForAccount(
-		l.properties.AddrPrefix,
-		l.properties.AddrPrefix+sdk.PrefixPublic)
-
 	return &types.ConstructionDeriveResponse{
 		Address: sdk.AccAddress(r.PublicKey.Bytes).String(),
 	}, nil
