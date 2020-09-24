@@ -25,6 +25,7 @@ type NetworkProperties struct {
 	// Mandatory properties
 	Blockchain          string
 	Network             string
+	AddrPrefix          string
 	SupportedOperations []string
 	OfflineMode         bool
 }
