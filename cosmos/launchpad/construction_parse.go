@@ -16,7 +16,7 @@ const (
 )
 
 // ConstructionParse implements the /construction/parse endpoint.
-func (l Launchpad) ConstructionParse(ctx context.Context, request *types.ConstructionParseRequest) (*types.ConstructionParseResponse, *types.Error) {
+func (l launchpad) ConstructionParse(ctx context.Context, request *types.ConstructionParseRequest) (*types.ConstructionParseResponse, *types.Error) {
 	var stdTx struct {
 		Msgs          []sdk.Msg `json:"msgs"`
 		Memo          string    `json:"memo"`

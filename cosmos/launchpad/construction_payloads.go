@@ -14,7 +14,7 @@ import (
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
-func (l Launchpad) ConstructionPayloads(ctx context.Context, req *types.ConstructionPayloadsRequest) (*types.ConstructionPayloadsResponse, *types.Error) {
+func (l launchpad) ConstructionPayloads(ctx context.Context, req *types.ConstructionPayloadsRequest) (*types.ConstructionPayloadsResponse, *types.Error) {
 	// We only support for now Transfer type of operation.
 	if len(req.Operations) != 2 {
 		return nil, ErrInvalidOperation

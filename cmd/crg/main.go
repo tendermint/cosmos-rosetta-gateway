@@ -8,7 +8,6 @@ import (
 	"os"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 	"github.com/tendermint/cosmos-rosetta-gateway/service"
 )
 
@@ -31,28 +30,14 @@ func main() {
 }
 
 func runHandler() error {
-	properties := rosetta.NetworkProperties{
-		Blockchain: *flagBlockchain,
-		Network:    *flagNetworkID,
-
-		SupportedOperations: []string{launchpad.OperationTransfer},
-	}
-
-	h, err := service.New(
-		service.Network{
-			Properties: properties,
-			Adapter: launchpad.NewLaunchpad(
-				launchpad.Options{
-					CosmosEndpoint:     *flagAppRPC,
-					TendermintEndpoint: *flagTendermintRPC,
-					Blockchain:         *flagBlockchain,
-					Network:            *flagNetworkID,
-					AddrPrefix:         *flagAddrPrefix,
-					OfflineMode:        *flagOfflineMode,
-				},
-			),
-		},
-	)
+	h, err := service.New(launchpad.NewLaunchpadNetwork(launchpad.Options{
+		CosmosEndpoint:     *flagAppRPC,
+		TendermintEndpoint: *flagTendermintRPC,
+		Blockchain:         *flagBlockchain,
+		Network:            *flagNetworkID,
+		AddrPrefix:         *flagAddrPrefix,
+		OfflineMode:        *flagOfflineMode,
+	}))
 	if err != nil {
 		return err
 	}

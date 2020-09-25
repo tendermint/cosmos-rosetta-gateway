@@ -7,7 +7,7 @@ import (
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
 
-func (l Launchpad) ConstructionPreprocess(ctx context.Context, r *types.ConstructionPreprocessRequest) (*types.ConstructionPreprocessResponse, *types.Error) {
+func (l launchpad) ConstructionPreprocess(ctx context.Context, r *types.ConstructionPreprocessRequest) (*types.ConstructionPreprocessResponse, *types.Error) {
 	operations := r.Operations
 	if len(operations) < 1 {
 		return nil, ErrInterpreting
