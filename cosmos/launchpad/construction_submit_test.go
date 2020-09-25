@@ -3,10 +3,9 @@ package launchpad
 import (
 	"context"
 	"encoding/hex"
+	"encoding/json"
 	"io/ioutil"
 	"testing"
-
-	"github.com/stretchr/testify/mock"
 
 	cosmostypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
@@ -23,10 +22,22 @@ func TestLaunchpad_ConstructionSubmit(t *testing.T) {
 	require.NoError(t, err)
 	toString := hex.EncodeToString(bz)
 
+	var tx map[string]json.RawMessage
+	err = json.Unmarshal(bz, &tx)
+	require.NoError(t, err)
+
+	bReq := BroadcastReq{
+		Tx:   tx["value"],
+		Mode: "block",
+	}
+
+	byteRequest, err := json.Marshal(bReq)
+	require.NoError(t, err)
+
 	expectedHash := "6f22ea7620ebcb5078d244f06e88dd26906ba1685135bfc34f83fefdd653198a"
 	m := &mocks.SdkClient{}
 	m.
-		On("PostTx", context.Background(), mock.Anything).
+		On("PostTx", context.Background(), byteRequest).
 		Return(cosmostypes.TxResponse{
 			TxHash: expectedHash,
 			Height: 10,
