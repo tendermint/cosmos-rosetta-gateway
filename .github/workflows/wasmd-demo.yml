@@ -1,0 +1,22 @@
+   name: wasmd demo
+   on: [push, pull_request]
+   
+   
+   
+   
+   jobs:
+    build:
+    runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        name: Check out code
+
+      - name: Build and Publish Docker image
+        uses: zvfvrv/docker-bpgpr@1.0.0
+        with:
+          gh_token: ${{ secrets.TOKEN_GH }}
+          image_name: test
+          tag_with_ref: true
+          tag_with_sha: true
+          path: ./cosmwasm/
+          dockerfile: Dockerfile
