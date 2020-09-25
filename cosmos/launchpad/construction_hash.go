@@ -22,6 +22,9 @@ func (l launchpad) ConstructionHash(ctx context.Context, req *types.Construction
 	var stdTx auth.StdTx
 	cdc := simapp.MakeCodec()
 	err = cdc.UnmarshalJSON(bz, &stdTx)
+	if err != nil {
+		return nil, rosetta.WrapError(ErrInvalidTransaction, "invalid tx")
+	}
 
 	txBytes, err := cdc.MarshalBinaryLengthPrefixed(stdTx)
 	if err != nil {
