@@ -7,14 +7,13 @@ import (
 	"io/ioutil"
 	"testing"
 
-	cosmostypes "github.com/cosmos/cosmos-sdk/types"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
-
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
-
+	cosmostypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
+
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 )
 
 func TestLaunchpad_ConstructionSubmit(t *testing.T) {
