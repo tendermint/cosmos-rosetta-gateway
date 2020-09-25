@@ -14,7 +14,7 @@ import (
 )
 
 func TestLaunchpad_ConstructionDerive(t *testing.T) {
-	data, err := hex.DecodeString("A2FEB642851ACE7464999E56C8DBFD67C0A145E9")
+	data, err := hex.DecodeString("eb5ae98721020d5cdec9d5d170a8d6005e6e25505c423c77dd1431e96f294008e0cb5b8d5945")
 	require.NoError(t, err)
 
 	properties := properties{
@@ -32,7 +32,7 @@ func TestLaunchpad_ConstructionDerive(t *testing.T) {
 	})
 	require.Nil(t, deriveErr)
 	require.NotNil(t, deriveResp)
-	require.Equal(t, "test15tltvs59rt88geyenetv3klavlq2z30f47lymx", deriveResp.Address)
+	require.Equal(t, "test1rlv9zzy95k6wv2r8g7lqpcsu6hrxcpn6tdap74", deriveResp.Address)
 
 	// TODO: Use table driven tests
 	// check unsupported curve returns error
