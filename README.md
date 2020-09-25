@@ -8,7 +8,7 @@ Cosmos Rosetta Gateway is a Rosetta API adapter for Cosmos SDK Chains running Co
 
 Support for Cosmos-SDK **0.37** and Cosmos-SDK **0.40 "Stargate"** releases is coming soon.
 
-This repository contains both a library and a standalone binary, named **crg**.
+This repository contains both a library and a standalone binary, named **crg**.  Documentation on how to use the library is coming soon.
 
 ### Using crg
 The standalone executable will talk to your blockchain's API and serve as an API adapter, making it compatible with the Coinbase Rosetta blockchain API interface.
@@ -105,6 +105,9 @@ Success looks like:
   }
 }
 ```
+
+Additional requests are documented in the cosmos-rosetta-gateway Postman Collecton.
+
 
 ### Postman Collection
 
