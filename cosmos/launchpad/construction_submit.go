@@ -16,7 +16,7 @@ type BroadcastReq struct {
 	Mode string          `json:"mode"`
 }
 
-func (l Launchpad) ConstructionSubmit(ctx context.Context, req *types.ConstructionSubmitRequest) (*types.TransactionIdentifierResponse, *types.Error) {
+func (l launchpad) ConstructionSubmit(ctx context.Context, req *types.ConstructionSubmitRequest) (*types.TransactionIdentifierResponse, *types.Error) {
 	if l.properties.OfflineMode {
 		return nil, ErrEndpointDisabledOfflineMode
 	}
@@ -33,7 +33,7 @@ func (l Launchpad) ConstructionSubmit(ctx context.Context, req *types.Constructi
 	}
 
 	bReq := BroadcastReq{
-		Tx:   test["value"],
+		Tx:   test["tx"],
 		Mode: "block",
 	}
 

@@ -14,23 +14,25 @@ import (
 	"github.com/cosmos/cosmos-sdk/simapp"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/stretchr/testify/require"
-
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_ConstructionHash(t *testing.T) {
-	t.SkipNow() // TODO bring back.
 	expectedHash := "6f22ea7620ebcb5078d244f06e88dd26906ba1685135bfc34f83fefdd653198a"
 
-	bz, err := ioutil.ReadFile("./testdata/test-with-signature-delete.json")
+	bz, err := ioutil.ReadFile("./testdata/signed-tx.json")
 	require.NoError(t, err)
+
+	properties := properties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+		AddrPrefix: "test",
+	}
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	var stdTx auth.StdTx
 	cdc := simapp.MakeCodec()
 	err = cdc.UnmarshalJSON(bz, &stdTx)
 	require.NoError(t, err)
-
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), rosetta.NetworkProperties{})
 
 	// re-encode it via the Amino wire protocol
 	txBytes, err := cdc.MarshalBinaryLengthPrefixed(stdTx)

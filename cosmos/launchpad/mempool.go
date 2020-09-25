@@ -10,7 +10,7 @@ import (
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
 
-func (l Launchpad) Mempool(ctx context.Context, request *types.NetworkRequest) (*types.MempoolResponse, *types.Error) {
+func (l launchpad) Mempool(ctx context.Context, request *types.NetworkRequest) (*types.MempoolResponse, *types.Error) {
 	if l.properties.OfflineMode {
 		return nil, ErrEndpointDisabledOfflineMode
 	}
@@ -36,7 +36,7 @@ func (l Launchpad) Mempool(ctx context.Context, request *types.NetworkRequest) (
 	}, nil
 }
 
-func (l Launchpad) MempoolTransaction(ctx context.Context, request *types.MempoolTransactionRequest) (*types.MempoolTransactionResponse, *types.Error) {
+func (l launchpad) MempoolTransaction(ctx context.Context, request *types.MempoolTransactionRequest) (*types.MempoolTransactionResponse, *types.Error) {
 	if l.properties.OfflineMode {
 		return nil, ErrEndpointDisabledOfflineMode
 	}

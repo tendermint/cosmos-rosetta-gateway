@@ -2,11 +2,12 @@ package launchpad
 
 import (
 	"context"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
 
-func (l Launchpad) ConstructionPreprocess(ctx context.Context, r *types.ConstructionPreprocessRequest) (*types.ConstructionPreprocessResponse, *types.Error) {
+func (l launchpad) ConstructionPreprocess(ctx context.Context, r *types.ConstructionPreprocessRequest) (*types.ConstructionPreprocessResponse, *types.Error) {
 	operations := r.Operations
 	if len(operations) < 1 {
 		return nil, ErrInterpreting
@@ -14,10 +15,10 @@ func (l Launchpad) ConstructionPreprocess(ctx context.Context, r *types.Construc
 
 	txData, err := getTransferTxDataFromOperations(operations)
 	if err != nil {
-		return nil, ErrInvalidAddress
+		return nil, rosetta.WrapError(ErrInvalidAddress, err.Error())
 	}
 	if txData.From == nil {
-		return nil, ErrInvalidAddress
+		return nil, rosetta.WrapError(ErrInvalidAddress, err.Error())
 	}
 
 	var res = &types.ConstructionPreprocessResponse{

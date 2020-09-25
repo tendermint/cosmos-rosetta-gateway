@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	sdk2 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
@@ -17,7 +18,6 @@ import (
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
 	sdktypes "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_AccountBalance(t *testing.T) {
@@ -32,13 +32,13 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 			Height: 12,
 			Result: sdktypes.Response{
 				Value: sdktypes.BaseAccount{
-					AccountNumber: 0,
+					AccountNumber: "0",
 					Coins: []sdk.Coin{
 						{Denom: "stake", Amount: sdk.NewInt(400)},
 						{Denom: "token", Amount: sdk.NewInt(600)},
 					},
 					Address:  "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na",
-					Sequence: 1,
+					Sequence: "1",
 				},
 			},
 		}, nil, nil).Once()
@@ -53,12 +53,12 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 			Block: tendermint.Block{},
 		}, nil, nil)
 
-	properties := rosetta.NetworkProperties{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(m, ma, properties)
+	adapter := newAdapter(m, ma, properties)
 
 	res, err := adapter.AccountBalance(context.Background(), &types.AccountBalanceRequest{
 		AccountIdentifier: &types.AccountIdentifier{
@@ -78,13 +78,13 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 }
 
 func TestLaunchpad_AccountBalanceDoesNotWorkOfflineMode(t *testing.T) {
-	properties := rosetta.NetworkProperties{
+	properties := properties{
 		Blockchain:  "TheBlockchain",
 		Network:     "TheNetwork",
 		OfflineMode: true,
 	}
 
-	adapter := NewLaunchpad(sdk2.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newAdapter(sdk2.NewClient(""), tendermint.NewClient(""), properties)
 	_, err := adapter.AccountBalance(context.Background(), &types.AccountBalanceRequest{
 		AccountIdentifier: &types.AccountIdentifier{
 			Address: "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na",

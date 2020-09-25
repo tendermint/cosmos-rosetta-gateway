@@ -3,7 +3,6 @@ package sdk
 import (
 	"bytes"
 	"encoding/json"
-
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -44,7 +43,7 @@ func TestAuthAccountClient(t *testing.T) {
 
 	require.Equal(t, int64(9694), res.Height)
 	require.Equal(t, addr, res.Result.Value.Address)
-	require.Equal(t, 2, int(res.Result.Value.AccountNumber))
-	require.Equal(t, 4, int(res.Result.Value.Sequence))
+	require.Equal(t, "2", res.Result.Value.AccountNumber)
+	require.Equal(t, "4", res.Result.Value.Sequence)
 	require.Equal(t, int64(1000), res.Result.Value.Coins[0].Amount.Int64())
 }

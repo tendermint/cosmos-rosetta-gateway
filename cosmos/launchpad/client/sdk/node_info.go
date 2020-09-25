@@ -2,10 +2,11 @@ package sdk
 
 import (
 	"context"
-	"github.com/cosmos/cosmos-sdk/client/rpc"
-	"github.com/cosmos/cosmos-sdk/simapp"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/cosmos/cosmos-sdk/client/rpc"
+	"github.com/cosmos/cosmos-sdk/simapp"
 )
 
 func (c Client) GetNodeInfo(ctx context.Context) (rpc.NodeInfoResponse, error) {

@@ -51,7 +51,7 @@ func TestPayloadsEndpoint_Errors(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), rosetta.NetworkProperties{})
+			adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties{})
 			_, err := adapter.ConstructionPayloads(context.Background(), tt.req)
 			require.Equal(t, err, tt.expectedErr)
 		})
@@ -59,10 +59,16 @@ func TestPayloadsEndpoint_Errors(t *testing.T) {
 }
 
 func TestGetSenderByOperations(t *testing.T) {
+	properties := properties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+		AddrPrefix: "test",
+	}
+	_ = newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 	ops := []*types.Operation{
 		{
 			Account: &types.AccountIdentifier{
-				Address: "cosmos15tltvs59rt88geyenetv3klavlq2z30fe8z6hj",
+				Address: "test15tltvs59rt88geyenetv3klavlq2z30f47lymx",
 			},
 			Type: OperationTransfer,
 			Amount: &types.Amount{
@@ -76,7 +82,7 @@ func TestGetSenderByOperations(t *testing.T) {
 		},
 		{
 			Account: &types.AccountIdentifier{
-				Address: "cosmos16xyempempp92x9hyzz9wrgf94r6j9h5f06pxxv",
+				Address: "test16xyempempp92x9hyzz9wrgf94r6j9h5frruc2c",
 			},
 			Type: OperationTransfer,
 			Amount: &types.Amount{
@@ -104,10 +110,15 @@ func TestGetSenderByOperations(t *testing.T) {
 }
 
 func TestLaunchpad_ConstructionPayloads(t *testing.T) {
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), rosetta.NetworkProperties{})
+	properties := properties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+		AddrPrefix: "test",
+	}
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	feeMultiplier := float64(200000)
-	senderAddr := "cosmos1khy4gsp06srvu3u65uyhrax7tnj2atez9ewh38"
+	senderAddr := "test1khy4gsp06srvu3u65uyhrax7tnj2atezfqnfan"
 	req := &types.ConstructionPayloadsRequest{
 		Operations: []*types.Operation{
 			{
@@ -131,7 +142,7 @@ func TestLaunchpad_ConstructionPayloads(t *testing.T) {
 				},
 				Type: OperationTransfer,
 				Account: &types.AccountIdentifier{
-					Address: "cosmos13qmcwpacu0zvsr7edpmasyn99pmcztvjhtctuz",
+					Address: "test13qmcwpacu0zvsr7edpmasyn99pmcztvjmj94sk",
 				},
 				Amount: &types.Amount{
 					Value: "5619726348293826415",

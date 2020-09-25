@@ -8,7 +8,7 @@ import (
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
 
-func (l Launchpad) ConstructionMetadata(ctx context.Context, r *types.ConstructionMetadataRequest) (*types.ConstructionMetadataResponse, *types.Error) {
+func (l launchpad) ConstructionMetadata(ctx context.Context, r *types.ConstructionMetadataRequest) (*types.ConstructionMetadataResponse, *types.Error) {
 	if l.properties.OfflineMode {
 		return nil, ErrEndpointDisabledOfflineMode
 	}
