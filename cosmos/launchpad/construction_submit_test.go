@@ -20,7 +20,7 @@ import (
 func TestLaunchpad_ConstructionSubmit(t *testing.T) {
 	bz, err := ioutil.ReadFile("./testdata/signed-tx.json")
 	require.NoError(t, err)
-	toString := hex.EncodeToString(bz)
+	signedTx := hex.EncodeToString(bz)
 
 	var tx map[string]json.RawMessage
 	err = json.Unmarshal(bz, &tx)
@@ -50,7 +50,7 @@ func TestLaunchpad_ConstructionSubmit(t *testing.T) {
 
 	adapter := newAdapter(m, tendermint.NewClient(""), properties)
 	resp, err2 := adapter.ConstructionSubmit(context.Background(), &types.ConstructionSubmitRequest{
-		SignedTransaction: toString,
+		SignedTransaction: signedTx,
 	})
 
 	require.Nil(t, err2)
