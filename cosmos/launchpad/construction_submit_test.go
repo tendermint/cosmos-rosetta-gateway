@@ -52,7 +52,7 @@ func TestLaunchpad_ConstructionSubmit(t *testing.T) {
 		AddrPrefix: "test",
 	}
 
-	adapter := newLaunchpad(m, tendermint.NewClient(""), properties)
+	adapter := newAdapter(m, tendermint.NewClient(""), properties)
 	resp, err2 := adapter.ConstructionSubmit(context.Background(), &types.ConstructionSubmitRequest{
 		SignedTransaction: toString,
 	})
@@ -67,7 +67,7 @@ func TestLaunchpad_ConstructionSubmit_FailsOfflineMode(t *testing.T) {
 	properties := properties{
 		OfflineMode: true,
 	}
-	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	_, err2 := adapter.ConstructionSubmit(context.Background(), &types.ConstructionSubmitRequest{
 		SignedTransaction: "dkajfkdjkads",

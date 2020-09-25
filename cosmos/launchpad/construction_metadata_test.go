@@ -55,7 +55,7 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 		ChainIdKey:       "TheNetwork",
 		OptionGas:        &feeMultiplier,
 	}
-	adapter := newLaunchpad(m, tendermint.NewClient(""), properties)
+	adapter := newAdapter(m, tendermint.NewClient(""), properties)
 	metaResp, err := adapter.ConstructionMetadata(context.Background(), &types.ConstructionMetadataRequest{
 		NetworkIdentifier: &networkIdentifier,
 		Options:           options,
@@ -81,7 +81,7 @@ func TestLaunchpad_ConstructionMetadata_FailsOfflineMode(t *testing.T) {
 		OptionGas:     &feeMultiplier,
 	}
 
-	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 	_, err := adapter.ConstructionMetadata(context.Background(), &types.ConstructionMetadataRequest{
 		Options: options,
 	})

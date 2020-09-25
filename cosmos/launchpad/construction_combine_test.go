@@ -24,7 +24,7 @@ func TestLaunchpad_ConstructionCombine(t *testing.T) {
 		AddrPrefix: "test",
 	}
 
-	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 	bz, err := ioutil.ReadFile("./testdata/unsigned-tx.json")
 	require.NoError(t, err)
 

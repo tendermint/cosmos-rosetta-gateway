@@ -19,7 +19,7 @@ func TestLaunchpad_ConstructionPreprocess(t *testing.T) {
 		Network:    "TheNetwork",
 		AddrPrefix: "test",
 	}
-	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	ops := []*types.Operation{
 		{

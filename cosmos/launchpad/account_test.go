@@ -58,7 +58,7 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 		Network:    "TheNetwork",
 	}
 
-	adapter := newLaunchpad(m, ma, properties)
+	adapter := newAdapter(m, ma, properties)
 
 	res, err := adapter.AccountBalance(context.Background(), &types.AccountBalanceRequest{
 		AccountIdentifier: &types.AccountIdentifier{
@@ -84,7 +84,7 @@ func TestLaunchpad_AccountBalanceDoesNotWorkOfflineMode(t *testing.T) {
 		OfflineMode: true,
 	}
 
-	adapter := newLaunchpad(sdk2.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newAdapter(sdk2.NewClient(""), tendermint.NewClient(""), properties)
 	_, err := adapter.AccountBalance(context.Background(), &types.AccountBalanceRequest{
 		AccountIdentifier: &types.AccountIdentifier{
 			Address: "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na",

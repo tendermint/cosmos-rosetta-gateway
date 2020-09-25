@@ -23,7 +23,7 @@ func TestLaunchpad_ConstructionDerive(t *testing.T) {
 		AddrPrefix: "test",
 	}
 
-	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 	deriveResp, deriveErr := adapter.ConstructionDerive(context.Background(), &types.ConstructionDeriveRequest{
 		PublicKey: &types.PublicKey{
 			Bytes:     data,

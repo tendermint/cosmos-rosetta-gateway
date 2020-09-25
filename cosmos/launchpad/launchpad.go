@@ -63,7 +63,7 @@ func NewLaunchpadNetwork(options Options) service.Network {
 			Network:             options.Blockchain,
 			SupportedOperations: []string{OperationTransfer},
 		},
-		Adapter: newLaunchpad(
+		Adapter: newAdapter(
 			cosmosClient,
 			tendermintClient,
 			properties{
@@ -76,7 +76,7 @@ func NewLaunchpadNetwork(options Options) service.Network {
 	}
 }
 
-func newLaunchpad(cosmos SdkClient, tendermint TendermintClient, options properties) rosetta.Adapter {
+func newAdapter(cosmos SdkClient, tendermint TendermintClient, options properties) rosetta.Adapter {
 	config := sdk.GetConfig()
 	config.SetBech32PrefixForAccount(
 		options.AddrPrefix,

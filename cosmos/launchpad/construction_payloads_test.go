@@ -51,7 +51,7 @@ func TestPayloadsEndpoint_Errors(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties{})
+			adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties{})
 			_, err := adapter.ConstructionPayloads(context.Background(), tt.req)
 			require.Equal(t, err, tt.expectedErr)
 		})
@@ -64,7 +64,7 @@ func TestGetSenderByOperations(t *testing.T) {
 		Network:    "TheNetwork",
 		AddrPrefix: "test",
 	}
-	_ = newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	_ = newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 	ops := []*types.Operation{
 		{
 			Account: &types.AccountIdentifier{
@@ -115,7 +115,7 @@ func TestLaunchpad_ConstructionPayloads(t *testing.T) {
 		Network:    "TheNetwork",
 		AddrPrefix: "test",
 	}
-	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	feeMultiplier := float64(200000)
 	senderAddr := "test1khy4gsp06srvu3u65uyhrax7tnj2atezfqnfan"

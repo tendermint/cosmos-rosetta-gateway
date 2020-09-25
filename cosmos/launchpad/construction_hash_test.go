@@ -27,7 +27,7 @@ func TestLaunchpad_ConstructionHash(t *testing.T) {
 		Network:    "TheNetwork",
 		AddrPrefix: "test",
 	}
-	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	var stdTx auth.StdTx
 	cdc := simapp.MakeCodec()
