@@ -7,13 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - name: Kaniko build
-        uses: aevea/action-kaniko@master
-        with:
-         registry: docker.pkg.github.com
-         password: ${{ secrets.GITHUB_TOKEN }}
-         path: cosmwasm/
-         image: crg
+      - name: docker build
+        run: |
+          cd cosmwasm
+          docker build .
 
    
    
