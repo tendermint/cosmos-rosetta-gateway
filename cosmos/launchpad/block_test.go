@@ -16,7 +16,6 @@ import (
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 	mocks1 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_Block(t *testing.T) {
@@ -89,12 +88,9 @@ func TestLaunchpad_Block(t *testing.T) {
 		}, nil, nil).
 		Once()
 
-	properties := rosetta.NetworkProperties{
+	properties := Options{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			OperationTransfer,
-		},
 	}
 
 	adapter := NewLaunchpad(mc, ma, properties)
@@ -233,13 +229,9 @@ func TestLaunchpad_BlockTransaction(t *testing.T) {
 		}, nil, nil).
 		Once()
 
-	properties := rosetta.NetworkProperties{
+	properties := Options{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			"Transfer",
-			"Reward",
-		},
 	}
 
 	adapter := NewLaunchpad(mc, tendermint.NewClient(""), properties)
@@ -310,13 +302,9 @@ func TestLaunchpad_BlockTransactionWithError(t *testing.T) {
 			Tx:     testTx,
 		}, nil, nil).Once()
 
-	properties := rosetta.NetworkProperties{
+	properties := Options{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			"Transfer",
-			"Reward",
-		},
 	}
 
 	adapter := NewLaunchpad(mc, tendermint.NewClient(""), properties)
@@ -331,12 +319,9 @@ func TestLaunchpad_BlockTransactionWithError(t *testing.T) {
 }
 
 func TestLaunchpad_Block_DoesNotWorkOfflineMode(t *testing.T) {
-	properties := rosetta.NetworkProperties{
-		Blockchain: "TheBlockchain",
-		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			OperationTransfer,
-		},
+	properties := Options{
+		Blockchain:  "TheBlockchain",
+		Network:     "TheNetwork",
 		OfflineMode: true,
 	}
 
@@ -352,13 +337,9 @@ func TestLaunchpad_Block_DoesNotWorkOfflineMode(t *testing.T) {
 }
 
 func TestLaunchpad_BlockTransaction_FailsOfflineMode(t *testing.T) {
-	properties := rosetta.NetworkProperties{
-		Blockchain: "TheBlockchain",
-		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			"Transfer",
-			"Reward",
-		},
+	properties := Options{
+		Blockchain:  "TheBlockchain",
+		Network:     "TheNetwork",
 		OfflineMode: true,
 	}
 

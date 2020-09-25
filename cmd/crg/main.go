@@ -34,16 +34,14 @@ func main() {
 }
 
 func runHandler() error {
-
 	altClient := sdk.NewClient(fmt.Sprintf("http://%s", *flagAppRPC))
 	tendermintClient := tendermint.NewClient(fmt.Sprintf("http://%s", *flagTendermintRPC))
 
 	properties := rosetta.NetworkProperties{
-		Blockchain:          *flagBlockchain,
-		Network:             *flagNetworkID,
-		AddrPrefix:          *flagAddrPrefix,
+		Blockchain: *flagBlockchain,
+		Network:    *flagNetworkID,
+
 		SupportedOperations: []string{launchpad.OperationTransfer},
-		OfflineMode:         *flagOfflineMode,
 	}
 
 	h, err := service.New(
@@ -52,11 +50,15 @@ func runHandler() error {
 			Adapter: launchpad.NewLaunchpad(
 				altClient,
 				tendermintClient,
-				properties,
+				launchpad.Options{
+					Blockchain:  *flagBlockchain,
+					Network:     *flagNetworkID,
+					AddrPrefix:  *flagAddrPrefix,
+					OfflineMode: *flagOfflineMode,
+				},
 			),
 		},
 	)
-	// TODO: maybe create some constructor for specific adapters or Factory.
 	if err != nil {
 		return err
 	}

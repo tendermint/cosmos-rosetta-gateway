@@ -11,7 +11,7 @@ import (
 )
 
 func (l Launchpad) Mempool(ctx context.Context, request *types.NetworkRequest) (*types.MempoolResponse, *types.Error) {
-	if l.properties.OfflineMode {
+	if l.options.OfflineMode {
 		return nil, ErrEndpointDisabledOfflineMode
 	}
 
@@ -37,7 +37,7 @@ func (l Launchpad) Mempool(ctx context.Context, request *types.NetworkRequest) (
 }
 
 func (l Launchpad) MempoolTransaction(ctx context.Context, request *types.MempoolTransactionRequest) (*types.MempoolTransactionResponse, *types.Error) {
-	if l.properties.OfflineMode {
+	if l.options.OfflineMode {
 		return nil, ErrEndpointDisabledOfflineMode
 	}
 

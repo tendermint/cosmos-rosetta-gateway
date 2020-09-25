@@ -15,17 +15,13 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_ConstructionMetadata(t *testing.T) {
-	properties := rosetta.NetworkProperties{
+	properties := Options{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 		AddrPrefix: "test",
-		SupportedOperations: []string{
-			"Transfer",
-		},
 	}
 
 	networkIdentifier := types.NetworkIdentifier{
@@ -73,12 +69,9 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 }
 
 func TestLaunchpad_ConstructionMetadata_FailsOfflineMode(t *testing.T) {
-	properties := rosetta.NetworkProperties{
-		Blockchain: "TheBlockchain",
-		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			"Transfer",
-		},
+	properties := Options{
+		Blockchain:  "TheBlockchain",
+		Network:     "TheNetwork",
 		OfflineMode: true,
 	}
 

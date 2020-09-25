@@ -19,11 +19,10 @@ import (
 	"github.com/stretchr/testify/require"
 
 	cosmosmocks "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_NetworkList(t *testing.T) {
-	properties := rosetta.NetworkProperties{
+	properties := Options{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 	}
@@ -39,7 +38,7 @@ func TestLaunchpad_NetworkList(t *testing.T) {
 }
 
 func TestLaunchpad_NetworkList_FailsOfflineMode(t *testing.T) {
-	properties := rosetta.NetworkProperties{
+	properties := Options{
 		Blockchain:  "TheBlockchain",
 		Network:     "TheNetwork",
 		OfflineMode: true,
@@ -64,13 +63,9 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 		}, nil, nil).
 		Once()
 
-	properties := rosetta.NetworkProperties{
+	properties := Options{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			"Transfer",
-			"Reward",
-		},
 	}
 
 	adapter := NewLaunchpad(m, tendermint.NewClient(""), properties)
@@ -103,13 +98,9 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 }
 
 func TestLaunchpad_NetworkOptions_FailsOfflineMode(t *testing.T) {
-	properties := rosetta.NetworkProperties{
-		Blockchain: "TheBlockchain",
-		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			"Transfer",
-			"Reward",
-		},
+	properties := Options{
+		Blockchain:  "TheBlockchain",
+		Network:     "TheNetwork",
 		OfflineMode: true,
 	}
 
@@ -173,13 +164,9 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 		}, nil, nil).
 		Once()
 
-	properties := rosetta.NetworkProperties{
+	properties := Options{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			"Transfer",
-			"Reward",
-		},
 	}
 
 	adapter := NewLaunchpad(
@@ -214,13 +201,9 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 }
 
 func TestLaunchpad_NetworkStatus_FailsOfflineMode(t *testing.T) {
-	properties := rosetta.NetworkProperties{
-		Blockchain: "TheBlockchain",
-		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			"Transfer",
-			"Reward",
-		},
+	properties := Options{
+		Blockchain:  "TheBlockchain",
+		Network:     "TheNetwork",
 		OfflineMode: true,
 	}
 

@@ -12,8 +12,6 @@ import (
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/require"
-
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_Mempool(t *testing.T) {
@@ -28,7 +26,7 @@ func TestLaunchpad_Mempool(t *testing.T) {
 			},
 		}, nil, nil)
 
-	adapter := NewLaunchpad(sdk.NewClient(""), m, rosetta.NetworkProperties{})
+	adapter := NewLaunchpad(sdk.NewClient(""), m, Options{})
 
 	mempool, err := adapter.Mempool(context.Background(), &types.NetworkRequest{})
 	require.Nil(t, err)
@@ -41,7 +39,7 @@ func TestLaunchpad_Mempool(t *testing.T) {
 }
 
 func TestLaunchpad_Mempool_FailsOfflineMode(t *testing.T) {
-	properties := rosetta.NetworkProperties{
+	properties := Options{
 		OfflineMode: true,
 	}
 	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
@@ -61,7 +59,7 @@ func TestLaunchpad_MempoolTransaction(t *testing.T) {
 		},
 			nil, nil)
 
-	adapter := NewLaunchpad(sdk.NewClient(""), ma, rosetta.NetworkProperties{})
+	adapter := NewLaunchpad(sdk.NewClient(""), ma, Options{})
 	res, err := adapter.MempoolTransaction(context.Background(), &types.MempoolTransactionRequest{
 		TransactionIdentifier: &types.TransactionIdentifier{Hash: "ABCTHEHASH"},
 	})
@@ -72,7 +70,7 @@ func TestLaunchpad_MempoolTransaction(t *testing.T) {
 }
 
 func TestLaunchpad_MempoolTransaction_FailsOfflineMode(t *testing.T) {
-	properties := rosetta.NetworkProperties{
+	properties := Options{
 		OfflineMode: true,
 	}
 	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)

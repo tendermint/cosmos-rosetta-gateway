@@ -5,23 +5,36 @@ import (
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
-type Launchpad struct {
-	tendermint TendermintClient
+type Options struct {
+	// Blockchain represents the name of the blockchain, it is used for NetworkList endpoint.
+	Blockchain string
 
-	cosmos SdkClient
+	// Network represents the name of the network, it is used for NetworkList endpoint.
+	Network string
 
-	properties rosetta.NetworkProperties
+	// AddrPrefix is the prefix used for bech32 addresses.
+	AddrPrefix string
+
+	// Offline mode forces to run without querying the node. Some endpoints won't work.
+	OfflineMode bool
 }
 
-func NewLaunchpad(cosmos SdkClient, tendermint TendermintClient, properties rosetta.NetworkProperties) rosetta.Adapter {
+type Launchpad struct {
+	tendermint TendermintClient
+	cosmos     SdkClient
+
+	options Options
+}
+
+func NewLaunchpad(cosmos SdkClient, tendermint TendermintClient, options Options) rosetta.Adapter {
 	config := sdk.GetConfig()
 	config.SetBech32PrefixForAccount(
-		properties.AddrPrefix,
-		properties.AddrPrefix+sdk.PrefixPublic)
+		options.AddrPrefix,
+		options.AddrPrefix+sdk.PrefixPublic)
 
 	return &Launchpad{
 		cosmos:     cosmos,
 		tendermint: tendermint,
-		properties: properties,
+		options:    options,
 	}
 }

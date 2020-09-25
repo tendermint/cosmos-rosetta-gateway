@@ -18,7 +18,6 @@ import (
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
 	sdktypes "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_AccountBalance(t *testing.T) {
@@ -54,7 +53,7 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 			Block: tendermint.Block{},
 		}, nil, nil)
 
-	properties := rosetta.NetworkProperties{
+	properties := Options{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 	}
@@ -79,7 +78,7 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 }
 
 func TestLaunchpad_AccountBalanceDoesNotWorkOfflineMode(t *testing.T) {
-	properties := rosetta.NetworkProperties{
+	properties := Options{
 		Blockchain:  "TheBlockchain",
 		Network:     "TheNetwork",
 		OfflineMode: true,
