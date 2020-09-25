@@ -1,14 +1,12 @@
-   name: wasmd demo
-   on: [push, pull_request]
+name: wasmd demo
+on: [push, pull_request]
    
    
-   
-   
-   jobs:
+jobs:
     build:
-    runs-on: ubuntu-latest
+      runs-on: ubuntu-latest
       steps:
-        - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         name: Check out code
 
       - name: Build and Publish Docker image
