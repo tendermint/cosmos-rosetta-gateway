@@ -20,8 +20,7 @@ ENV SEED_NODE ec488c9215e1917e41bce5ef4b53d39ff6805166@195.201.88.9:26656
 RUN pacman -Syyu --noconfirm go base-devel rust git curl wget
 
 # DOWNLOAD AND COMPILE WASMD
-RUN git clone https://github.com/CosmWasm/wasmd && \
-      git checkout v0.10.0 && \
+RUN git clone https://github.com/cosmwasm/wasmd && \
       cd wasmd && \
       make build-coral 
       
