@@ -63,16 +63,16 @@ func NewLaunchpadNetwork(options Options) service.Network {
 			Network:             options.Blockchain,
 			SupportedOperations: []string{OperationTransfer},
 		},
-		Adapter: &launchpad{
-			tendermint: tendermintClient,
-			cosmos:     cosmosClient,
-			properties: properties{
+		Adapter: newLaunchpad(
+			cosmosClient,
+			tendermintClient,
+			properties{
 				Blockchain:  options.Blockchain,
 				Network:     options.Network,
 				AddrPrefix:  options.AddrPrefix,
 				OfflineMode: options.OfflineMode,
 			},
-		},
+		),
 	}
 }
 

@@ -4,7 +4,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"net/http"
 	"os"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad"
@@ -30,22 +29,20 @@ func main() {
 }
 
 func runHandler() error {
-	h, err := service.New(launchpad.NewLaunchpadNetwork(launchpad.Options{
-		CosmosEndpoint:     *flagAppRPC,
-		TendermintEndpoint: *flagTendermintRPC,
-		Blockchain:         *flagBlockchain,
-		Network:            *flagNetworkID,
-		AddrPrefix:         *flagAddrPrefix,
-		OfflineMode:        *flagOfflineMode,
-	}))
+	h, err := service.New(
+		service.Options{Port: 8080},
+		launchpad.NewLaunchpadNetwork(launchpad.Options{
+			CosmosEndpoint:     *flagAppRPC,
+			TendermintEndpoint: *flagTendermintRPC,
+			Blockchain:         *flagBlockchain,
+			Network:            *flagNetworkID,
+			AddrPrefix:         *flagAddrPrefix,
+			OfflineMode:        *flagOfflineMode,
+		}),
+	)
 	if err != nil {
 		return err
 	}
 
-	server := &http.Server{
-		Handler: h,
-		Addr:    ":8080",
-	}
-
-	return server.ListenAndServe()
+	return h.Start()
 }

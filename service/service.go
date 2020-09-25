@@ -13,8 +13,17 @@ import (
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
-type Service struct {
-	http.Handler
+type Service interface {
+	Start() error
+}
+
+type service struct {
+	h       http.Handler
+	options Options
+}
+
+type Options struct {
+	Port uint32
 }
 
 type Network struct {
@@ -22,7 +31,7 @@ type Network struct {
 	Adapter    rosetta.Adapter
 }
 
-func New(network Network) (*Service, error) {
+func New(options Options, network Network) (Service, error) {
 	asserter, err := assert.NewServer(
 		network.Properties.SupportedOperations,
 		false,
@@ -45,9 +54,14 @@ func New(network Network) (*Service, error) {
 		server.NewConstructionAPIController(network.Adapter, asserter),
 	)
 
-	s := &Service{
-		Handler: h,
+	s := &service{
+		h:       h,
+		options: options,
 	}
 
 	return s, nil
+}
+
+func (s service) Start() error {
+	return http.ListenAndServe("", s.h)
 }
