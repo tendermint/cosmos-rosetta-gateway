@@ -30,6 +30,7 @@ Hold `ctrl` and press A, then D. You'll leave the screen session and `crg` will 
 `crg` runs an http server on port 8080, and here are some query examples using `curl`:
 
 
+**Check Network Status**
 ```bash
 curl --location --request POST 'http://localhost:8080/network/status' \
 --header 'Content-Type: text/plain' \
@@ -41,16 +42,22 @@ curl --location --request POST 'http://localhost:8080/network/status' \
 }'
 ```
 
-```bash
-curl --location --request POST 'http://localhost:8080/network/status' \
---header 'Content-Type: text/plain' \
---data-raw '{
-    "network_identifier": {
-        "blockchain": "Test",
-        "network": "Test"
-    }
-}'
+```json
+{
+  "current_block_identifier": {
+    "index": 46564,
+    "hash": "2F4A700C064C0E66792DB80387035401421A985B1E4E10419E85F24E815E9D86"
+  },
+  "current_block_timestamp": 1601050588601,
+  "genesis_block_identifier": {
+    "index": 1,
+    "hash": "8FC19EA07352344DA72C1CB141C945A8FC6C9349FD5244DB6B9C891C17747E12"
+  },
+  "peers": null
+}
 ```
+
+
 
 
 
@@ -71,11 +78,24 @@ curl --location --request POST 'http://localhost:8080/block' \
 
 Success looks like:
 ```json
-{"block":{"block_identifier":{"index":17807,"hash":"8C78CBFA84AFC57E20E379B1135C7EE6A14CE115291C8241750505D4FFDDA261"},"parent_block_identifier":{"index":17806,"hash":"C0D4B2ED7B3DFEC3BF9673E132E6C32AA6AB3E1D566FB09AEA4292DA5FFDC349"},"timestamp":1600905197777,"transactions":null}}
+{
+  "block": {
+    "block_identifier": {
+      "index": 17807,
+      "hash": "8C78CBFA84AFC57E20E379B1135C7EE6A14CE115291C8241750505D4FFDDA261"
+    },
+    "parent_block_identifier": {
+      "index": 17806,
+      "hash": "C0D4B2ED7B3DFEC3BF9673E132E6C32AA6AB3E1D566FB09AEA4292DA5FFDC349"
+    },
+    "timestamp": 1600905197777,
+    "transactions": null
+  }
+}
 ```
 
 
 
 ### Postman Collection
 
-[Postman](https://postman.io) is a popular tool for working with and designing API systems.  We've made a [postman collection](https://www.postman.com/collections/0bb4205306d904245eee)
+[Postman](https://postman.io) is a popular tool for working with and designing API systems.  We've made a [postman collection](https://www.postman.com/collections/0bb4205306d904245eee) that contains a number common calls to both the data and construction APIs.
