@@ -3,6 +3,7 @@
 package service
 
 import (
+	"fmt"
 	"net/http"
 
 	assert "github.com/coinbase/rosetta-sdk-go/asserter"
@@ -63,5 +64,5 @@ func New(options Options, network Network) (Service, error) {
 }
 
 func (s service) Start() error {
-	return http.ListenAndServe("", s.h)
+	return http.ListenAndServe(fmt.Sprintf(":%d", s.options.Port), s.h)
 }
