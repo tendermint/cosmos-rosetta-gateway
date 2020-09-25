@@ -22,13 +22,6 @@ var (
 func main() {
 	flag.Parse()
 
-	if err := runHandler(); err != nil {
-		fmt.Fprintln(flag.CommandLine.Output(), err)
-		os.Exit(2)
-	}
-}
-
-func runHandler() error {
 	h, err := service.New(
 		service.Options{Port: 8080},
 		launchpad.NewLaunchpadNetwork(launchpad.Options{
@@ -41,8 +34,13 @@ func runHandler() error {
 		}),
 	)
 	if err != nil {
-		return err
+		fmt.Fprintln(flag.CommandLine.Output(), err)
+		os.Exit(2)
 	}
 
-	return h.Start()
+	err = h.Start()
+	if err != nil {
+		fmt.Fprintln(flag.CommandLine.Output(), err)
+		os.Exit(2)
+	}
 }
