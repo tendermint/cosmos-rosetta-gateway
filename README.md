@@ -11,10 +11,6 @@ Support for Cosmos-SDK **0.37** and Cosmos-SDK **0.40 "Stargate"** releases is c
 This repository contains both a library and a standalone binary, named **crg**.
 
 ### Using crg
-
-CRGis shipped in two forms for maximum flexiblity:
-
-* Standalone executable `crg`
 The standalone executable will talk to your blockchain's API and serve as an API adapter, making it compatible with the Coinbase Rosetta blockchain API interface.
 
 **Quick Test**:
@@ -27,14 +23,14 @@ screen -S crg
 git clone https://github.com/tendermint/cosmos-rosetta-gateway
 cd cosmos-rosetta-gateway
 make dev
-./crd
 ```
 
 Hold `ctrl` and press A, then D. You'll leave the screen session and `crg` will run in the background.
 
-Query the blockchain `clay` using the Rosetta API provided by `crg`
+`crg` runs an http server on port 8080, and here are some query examples using `curl`:
 
-```
+
+```bash
 curl --location --request POST 'http://localhost:8080/network/status' \
 --header 'Content-Type: text/plain' \
 --data-raw '{
@@ -44,6 +40,40 @@ curl --location --request POST 'http://localhost:8080/network/status' \
     }
 }'
 ```
+
+```bash
+curl --location --request POST 'http://localhost:8080/network/status' \
+--header 'Content-Type: text/plain' \
+--data-raw '{
+    "network_identifier": {
+        "blockchain": "Test",
+        "network": "Test"
+    }
+}'
+```
+
+
+
+Get Info on a particular block:
+```bash
+curl --location --request POST 'http://localhost:8080/block' \
+--header 'Content-Type: text/plain' \
+--data-raw '{
+    "network_identifier": {
+        "blockchain": "Test",
+        "network": "Test"
+    },
+    "block_identifier": {
+        "index": 17807
+    }
+}'
+```
+
+Success looks like:
+```json
+{"block":{"block_identifier":{"index":17807,"hash":"8C78CBFA84AFC57E20E379B1135C7EE6A14CE115291C8241750505D4FFDDA261"},"parent_block_identifier":{"index":17806,"hash":"C0D4B2ED7B3DFEC3BF9673E132E6C32AA6AB3E1D566FB09AEA4292DA5FFDC349"},"timestamp":1600905197777,"transactions":null}}
+```
+
 
 
 ### Postman Collection
