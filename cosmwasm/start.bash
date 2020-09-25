@@ -1,3 +1,5 @@
+# Template for two-process Docker image from:  https://docs.docker.com/config/containers/multi-service_container/
+
 #!/bin/bash
 
 # turn on bash's job control
