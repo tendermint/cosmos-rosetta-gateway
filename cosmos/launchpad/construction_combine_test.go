@@ -11,7 +11,6 @@ import (
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"github.com/cosmos/cosmos-sdk/simapp"
 	cosmostypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/stretchr/testify/require"
@@ -29,10 +28,9 @@ func TestLaunchpad_ConstructionCombine(t *testing.T) {
 	require.NoError(t, err)
 
 	var stdTx auth.StdTx
-	codec := simapp.MakeCodec()
-	err = codec.UnmarshalJSON(bz, &stdTx)
+	err = Codec.UnmarshalJSON(bz, &stdTx)
 	require.NoError(t, err)
-	txBytes, err := codec.MarshalJSON(stdTx)
+	txBytes, err := Codec.MarshalJSON(stdTx)
 	require.NoError(t, err)
 	txHex := hex.EncodeToString(txBytes)
 
@@ -60,7 +58,7 @@ func TestLaunchpad_ConstructionCombine(t *testing.T) {
 	bz, err = hex.DecodeString(combineRes.SignedTransaction)
 	require.NoError(t, err)
 	var signedStdTx auth.StdTx
-	err = codec.UnmarshalJSON(bz, &signedStdTx)
+	err = Codec.UnmarshalJSON(bz, &signedStdTx)
 	require.NoError(t, err)
 	require.Equal(t, stdTx.GetSigners(), signedStdTx.GetSigners())
 }
