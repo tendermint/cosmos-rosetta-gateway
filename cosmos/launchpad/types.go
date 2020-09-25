@@ -1,6 +1,7 @@
 package launchpad
 
 import (
+	"github.com/cosmos/cosmos-sdk/simapp"
 	"github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -20,3 +21,5 @@ type TransferTxData struct {
 	To     types.AccAddress
 	Amount types.Coin
 }
+
+var Codec = simapp.MakeCodec()
