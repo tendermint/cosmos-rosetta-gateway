@@ -15,17 +15,13 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_ConstructionMetadata(t *testing.T) {
-	properties := rosetta.NetworkProperties{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 		AddrPrefix: "test",
-		SupportedOperations: []string{
-			"Transfer",
-		},
 	}
 
 	networkIdentifier := types.NetworkIdentifier{
@@ -59,7 +55,7 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 		ChainIdKey:       "TheNetwork",
 		OptionGas:        &feeMultiplier,
 	}
-	adapter := NewLaunchpad(m, tendermint.NewClient(""), properties)
+	adapter := newAdapter(m, tendermint.NewClient(""), properties)
 	metaResp, err := adapter.ConstructionMetadata(context.Background(), &types.ConstructionMetadataRequest{
 		NetworkIdentifier: &networkIdentifier,
 		Options:           options,
@@ -73,12 +69,9 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 }
 
 func TestLaunchpad_ConstructionMetadata_FailsOfflineMode(t *testing.T) {
-	properties := rosetta.NetworkProperties{
-		Blockchain: "TheBlockchain",
-		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			"Transfer",
-		},
+	properties := properties{
+		Blockchain:  "TheBlockchain",
+		Network:     "TheNetwork",
 		OfflineMode: true,
 	}
 
@@ -88,7 +81,7 @@ func TestLaunchpad_ConstructionMetadata_FailsOfflineMode(t *testing.T) {
 		OptionGas:     &feeMultiplier,
 	}
 
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 	_, err := adapter.ConstructionMetadata(context.Background(), &types.ConstructionMetadataRequest{
 		Options: options,
 	})

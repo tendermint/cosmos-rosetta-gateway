@@ -11,21 +11,15 @@ import (
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/require"
-
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_ConstructionPreprocess(t *testing.T) {
-	properties := rosetta.NetworkProperties{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 		AddrPrefix: "test",
-		SupportedOperations: []string{
-			"Transfer",
-			"Reward",
-		},
 	}
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	ops := []*types.Operation{
 		{
@@ -74,6 +68,6 @@ func TestLaunchpad_ConstructionPreprocess(t *testing.T) {
 	require.Nil(t, deriveErr)
 	require.NotNil(t, deriveResp)
 	if diff := cmp.Diff(deriveResp.Options, expOptions); diff != "" {
-		t.Errorf("Options mismatch %s", diff)
+		t.Errorf("properties mismatch %s", diff)
 	}
 }

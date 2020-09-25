@@ -4,16 +4,15 @@ import (
 	"context"
 	"encoding/hex"
 	"fmt"
-	cosmostypes "github.com/cosmos/cosmos-sdk/types"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
 	"io/ioutil"
 	"testing"
 
-	"github.com/coinbase/rosetta-sdk-go/types"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+	cosmostypes "github.com/cosmos/cosmos-sdk/types"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
 
+	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
 	"github.com/cosmos/cosmos-sdk/x/auth/client/rest"
 
@@ -47,16 +46,13 @@ func TestLaunchpad_ConstructionSubmit(t *testing.T) {
 			TxHash: expectedHash,
 			Height: 10,
 		}, nil, nil).Once()
-	properties := rosetta.NetworkProperties{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 		AddrPrefix: "test",
-		SupportedOperations: []string{
-			"Transfer",
-		},
 	}
 
-	adapter := NewLaunchpad(m, tendermint.NewClient(""), properties)
+	adapter := newAdapter(m, tendermint.NewClient(""), properties)
 	resp, err2 := adapter.ConstructionSubmit(context.Background(), &types.ConstructionSubmitRequest{
 		SignedTransaction: toString,
 	})
@@ -68,10 +64,10 @@ func TestLaunchpad_ConstructionSubmit(t *testing.T) {
 }
 
 func TestLaunchpad_ConstructionSubmit_FailsOfflineMode(t *testing.T) {
-	properties := rosetta.NetworkProperties{
+	properties := properties{
 		OfflineMode: true,
 	}
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	_, err2 := adapter.ConstructionSubmit(context.Background(), &types.ConstructionSubmitRequest{
 		SignedTransaction: "dkajfkdjkads",

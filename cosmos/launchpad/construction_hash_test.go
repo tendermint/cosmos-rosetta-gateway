@@ -14,8 +14,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/simapp"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/stretchr/testify/require"
-
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_ConstructionHash(t *testing.T) {
@@ -24,15 +22,12 @@ func TestLaunchpad_ConstructionHash(t *testing.T) {
 	bz, err := ioutil.ReadFile("./testdata/signed-tx.json")
 	require.NoError(t, err)
 
-	properties := rosetta.NetworkProperties{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 		AddrPrefix: "test",
-		SupportedOperations: []string{
-			"Transfer",
-		},
 	}
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	var stdTx auth.StdTx
 	cdc := simapp.MakeCodec()

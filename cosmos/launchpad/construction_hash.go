@@ -11,7 +11,7 @@ import (
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
 
-func (l Launchpad) ConstructionHash(ctx context.Context, req *types.ConstructionHashRequest) (*types.TransactionIdentifierResponse, *types.Error) {
+func (l launchpad) ConstructionHash(ctx context.Context, req *types.ConstructionHashRequest) (*types.TransactionIdentifierResponse, *types.Error) {
 	bz, err := base64.StdEncoding.DecodeString(req.SignedTransaction)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrInvalidTransaction, "error decoding tx")

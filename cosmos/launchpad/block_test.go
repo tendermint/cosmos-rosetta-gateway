@@ -16,7 +16,6 @@ import (
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 	mocks1 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_Block(t *testing.T) {
@@ -89,15 +88,12 @@ func TestLaunchpad_Block(t *testing.T) {
 		}, nil, nil).
 		Once()
 
-	properties := rosetta.NetworkProperties{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			OperationTransfer,
-		},
 	}
 
-	adapter := NewLaunchpad(mc, ma, properties)
+	adapter := newAdapter(mc, ma, properties)
 
 	var h int64 = 1
 	block, blockErr := adapter.Block(context.Background(), &types.BlockRequest{
@@ -233,16 +229,12 @@ func TestLaunchpad_BlockTransaction(t *testing.T) {
 		}, nil, nil).
 		Once()
 
-	properties := rosetta.NetworkProperties{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			"Transfer",
-			"Reward",
-		},
 	}
 
-	adapter := NewLaunchpad(mc, tendermint.NewClient(""), properties)
+	adapter := newAdapter(mc, tendermint.NewClient(""), properties)
 
 	tx, txErr := adapter.BlockTransaction(context.Background(), &types.BlockTransactionRequest{
 		TransactionIdentifier: &types.TransactionIdentifier{
@@ -310,16 +302,12 @@ func TestLaunchpad_BlockTransactionWithError(t *testing.T) {
 			Tx:     testTx,
 		}, nil, nil).Once()
 
-	properties := rosetta.NetworkProperties{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			"Transfer",
-			"Reward",
-		},
 	}
 
-	adapter := NewLaunchpad(mc, tendermint.NewClient(""), properties)
+	adapter := newAdapter(mc, tendermint.NewClient(""), properties)
 	tx, txErr := adapter.BlockTransaction(context.Background(), &types.BlockTransactionRequest{
 		TransactionIdentifier: &types.TransactionIdentifier{
 			Hash: "1",
@@ -331,16 +319,13 @@ func TestLaunchpad_BlockTransactionWithError(t *testing.T) {
 }
 
 func TestLaunchpad_Block_DoesNotWorkOfflineMode(t *testing.T) {
-	properties := rosetta.NetworkProperties{
-		Blockchain: "TheBlockchain",
-		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			OperationTransfer,
-		},
+	properties := properties{
+		Blockchain:  "TheBlockchain",
+		Network:     "TheNetwork",
 		OfflineMode: true,
 	}
 
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	var height int64 = 1
 	_, err := adapter.Block(context.Background(), &types.BlockRequest{
@@ -352,17 +337,13 @@ func TestLaunchpad_Block_DoesNotWorkOfflineMode(t *testing.T) {
 }
 
 func TestLaunchpad_BlockTransaction_FailsOfflineMode(t *testing.T) {
-	properties := rosetta.NetworkProperties{
-		Blockchain: "TheBlockchain",
-		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			"Transfer",
-			"Reward",
-		},
+	properties := properties{
+		Blockchain:  "TheBlockchain",
+		Network:     "TheNetwork",
 		OfflineMode: true,
 	}
 
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 	_, txErr := adapter.BlockTransaction(context.Background(), &types.BlockTransactionRequest{
 		TransactionIdentifier: &types.TransactionIdentifier{
 			Hash: "1",

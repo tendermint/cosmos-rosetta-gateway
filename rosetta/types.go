@@ -27,5 +27,4 @@ type NetworkProperties struct {
 	Network             string
 	AddrPrefix          string
 	SupportedOperations []string
-	OfflineMode         bool
 }

@@ -10,7 +10,7 @@ import (
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
 
-func (l Launchpad) AccountBalance(ctx context.Context, request *types.AccountBalanceRequest) (
+func (l launchpad) AccountBalance(ctx context.Context, request *types.AccountBalanceRequest) (
 	*types.AccountBalanceResponse, *types.Error) {
 	if l.properties.OfflineMode {
 		return nil, ErrEndpointDisabledOfflineMode

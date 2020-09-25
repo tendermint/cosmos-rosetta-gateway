@@ -14,7 +14,7 @@ import (
 )
 
 // ConstructionCombine implements the /construction/combine endpoint.
-func (l Launchpad) ConstructionCombine(ctx context.Context, r *types.ConstructionCombineRequest,
+func (l launchpad) ConstructionCombine(ctx context.Context, r *types.ConstructionCombineRequest,
 ) (*types.ConstructionCombineResponse, *types.Error) {
 	bz, err := hex.DecodeString(r.UnsignedTransaction)
 	if err != nil {

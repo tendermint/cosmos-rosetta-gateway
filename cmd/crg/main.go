@@ -4,14 +4,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"net/http"
 	"os"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
-
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 	"github.com/tendermint/cosmos-rosetta-gateway/service"
 )
 
@@ -27,44 +22,25 @@ var (
 func main() {
 	flag.Parse()
 
-	if err := runHandler(); err != nil {
+	h, err := service.New(
+		service.Options{Port: 8080},
+		launchpad.NewLaunchpadNetwork(launchpad.Options{
+			CosmosEndpoint:     *flagAppRPC,
+			TendermintEndpoint: *flagTendermintRPC,
+			Blockchain:         *flagBlockchain,
+			Network:            *flagNetworkID,
+			AddrPrefix:         *flagAddrPrefix,
+			OfflineMode:        *flagOfflineMode,
+		}),
+	)
+	if err != nil {
 		fmt.Fprintln(flag.CommandLine.Output(), err)
 		os.Exit(2)
 	}
-}
 
-func runHandler() error {
-
-	altClient := sdk.NewClient(fmt.Sprintf("http://%s", *flagAppRPC))
-	tendermintClient := tendermint.NewClient(fmt.Sprintf("http://%s", *flagTendermintRPC))
-
-	properties := rosetta.NetworkProperties{
-		Blockchain:          *flagBlockchain,
-		Network:             *flagNetworkID,
-		AddrPrefix:          *flagAddrPrefix,
-		SupportedOperations: []string{launchpad.OperationTransfer},
-		OfflineMode:         *flagOfflineMode,
-	}
-
-	h, err := service.New(
-		service.Network{
-			Properties: properties,
-			Adapter: launchpad.NewLaunchpad(
-				altClient,
-				tendermintClient,
-				properties,
-			),
-		},
-	)
-	// TODO: maybe create some constructor for specific adapters or Factory.
+	err = h.Start()
 	if err != nil {
-		return err
+		fmt.Fprintln(flag.CommandLine.Output(), err)
+		os.Exit(2)
 	}
-
-	server := &http.Server{
-		Handler: h,
-		Addr:    ":8080",
-	}
-
-	return server.ListenAndServe()
 }
