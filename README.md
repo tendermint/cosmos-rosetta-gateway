@@ -13,9 +13,23 @@ This repository contains both a library and a standalone binary, named **crg**.
 ### Using crg
 The standalone executable will talk to your blockchain's API and serve as an API adapter, making it compatible with the Coinbase Rosetta blockchain API interface.
 
+**configuring crg**
+`crg` can be configured to match your chain using flags
+
+|   |   |    |
+|---|---|---|
+| Help | --help | explain these flags |
+| App RPC Endpoint  | --app-rpc localhost:1317  |       |
+| Tendermint RPC Endpoint  | --tendermint-rpc localhost:2665  |       |
+| Application Name  | --blockchain gaia  |  example: "Bitcoin |
+| Network ID | --network mainnet-1 |  In cosmos, usually the chain's version, like gaia hub 3 |
+| Offline Mode | --offline true | this allows crg to run even when there's no chain for it to connect to  |
+| Prefix | --prefix cosmos | bech32 prefix for addresses on your blockchain    |
+
 **Quick Test**:
 
-This test assumes that you've got a running blockhain that uses Cosmos-SDK 0.39.x, and that you have Go installed on your computer.
+This test assumes that you've got a running blockchain that uses Cosmos-SDK 0.39.x, and that you have Go installed on your computer.
+
 
 Install and use `crg`
 ```bash
@@ -90,19 +104,6 @@ Success looks like:
   }
 }
 ```
-
-**configuring crg**
-`crg` can be configured to match your chain using flags
-
-|   |   |    |
-|---|---|---|
-| Help | --help | explain these flags |
-| App RPC Endpoint  | --app-rpc localhost:1317  |       |
-| Tendermint RPC Endpoint  | --tendermint-rpc localhost:2665  |       |
-| Application Name  | --blockchain gaia  |  example: "Bitcoin |
-| Network ID | --network mainnet-1 |  In cosmos, usually the chain's version, like gaia hub 3 |
-| Offline Mode | --offline true | this allows crg to run even when there's no chain for it to connect to  |
-| Prefix | --prefix cosmos | bech32 prefix for addresses on your blockchain    |
 
 ### Postman Collection
 
