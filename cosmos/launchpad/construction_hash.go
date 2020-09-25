@@ -3,8 +3,10 @@ package launchpad
 import (
 	"context"
 	"crypto/sha256"
-	"encoding/base64"
 	"encoding/hex"
+
+	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/x/auth"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 
@@ -12,12 +14,21 @@ import (
 )
 
 func (l launchpad) ConstructionHash(ctx context.Context, req *types.ConstructionHashRequest) (*types.TransactionIdentifierResponse, *types.Error) {
-	bz, err := base64.StdEncoding.DecodeString(req.SignedTransaction)
+	bz, err := hex.DecodeString(req.SignedTransaction)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrInvalidTransaction, "error decoding tx")
 	}
 
-	hash := sha256.Sum256(bz)
+	var stdTx auth.StdTx
+	cdc := simapp.MakeCodec()
+	err = cdc.UnmarshalJSON(bz, &stdTx)
+
+	txBytes, err := cdc.MarshalBinaryLengthPrefixed(stdTx)
+	if err != nil {
+		return nil, rosetta.WrapError(ErrInvalidTransaction, "invalid tx")
+	}
+
+	hash := sha256.Sum256(txBytes)
 	bzHash := hash[:]
 
 	hashString := hex.EncodeToString(bzHash)
