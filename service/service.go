@@ -3,6 +3,7 @@
 package service
 
 import (
+	"fmt"
 	"net/http"
 
 	assert "github.com/coinbase/rosetta-sdk-go/asserter"
@@ -14,7 +15,12 @@ import (
 )
 
 type Service struct {
-	http.Handler
+	h       http.Handler
+	options Options
+}
+
+type Options struct {
+	Port uint32
 }
 
 type Network struct {
@@ -22,7 +28,7 @@ type Network struct {
 	Adapter    rosetta.Adapter
 }
 
-func New(network Network) (*Service, error) {
+func New(options Options, network Network) (*Service, error) {
 	asserter, err := assert.NewServer(
 		network.Properties.SupportedOperations,
 		false,
@@ -46,8 +52,13 @@ func New(network Network) (*Service, error) {
 	)
 
 	s := &Service{
-		Handler: h,
+		h:       h,
+		options: options,
 	}
 
 	return s, nil
+}
+
+func (s *Service) Start() error {
+	return http.ListenAndServe(fmt.Sprintf(":%d", s.options.Port), s.h)
 }

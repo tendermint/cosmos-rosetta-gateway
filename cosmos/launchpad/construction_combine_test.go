@@ -15,39 +15,34 @@ import (
 	cosmostypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/stretchr/testify/require"
-
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_ConstructionCombine(t *testing.T) {
-	pubKey, err := cosmostypes.GetPubKeyFromBech32("accpub", "cosmospub1addwnpepq2ngu5spnhp4qyt6zzlvdex5zncn5rrqscw6m9c6tn6hc4za4jyf60z3mtr")
-	require.NoError(t, err)
-
-	properties := rosetta.NetworkProperties{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			"Transfer",
-			"Reward",
-		},
+		AddrPrefix: "test",
 	}
 
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 	bz, err := ioutil.ReadFile("./testdata/unsigned-tx.json")
 	require.NoError(t, err)
+
 	var stdTx auth.StdTx
 	codec := simapp.MakeCodec()
 	err = codec.UnmarshalJSON(bz, &stdTx)
 	require.NoError(t, err)
 	txBytes, err := codec.MarshalJSON(stdTx)
 	require.NoError(t, err)
-
 	txHex := hex.EncodeToString(txBytes)
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+
+	pubKey, err := cosmostypes.GetPubKeyFromBech32("accpub", "testpub1addwnpepq2ngu5spnhp4qyt6zzlvdex5zncn5rrqscw6m9c6tn6hc4za4jyf6dj36w7")
+	require.NoError(t, err)
 	var combineRes, combineErr = adapter.ConstructionCombine(context.Background(), &types.ConstructionCombineRequest{
 		UnsignedTransaction: txHex,
 		Signatures: []*types.Signature{{
 			SigningPayload: &types.SigningPayload{
-				Address: "cosmos1qrv8g4hwt4z6ds8mednhhgx907wug9d6y8n9jy",
+				Address: "test1qrv8g4hwt4z6ds8mednhhgx907wug9d6y8n9jy",
 				Bytes:   txBytes,
 			},
 			PublicKey: &types.PublicKey{

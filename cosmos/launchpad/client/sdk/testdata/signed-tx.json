@@ -5,8 +5,8 @@
       {
         "type": "cosmos-sdk/MsgSend",
         "value": {
-          "from_address": "cosmos1nr0j3sgz5ukazskl2hafvt3ylsd2qzuwa0htn4",
-          "to_address": "cosmos1gqq25k62mysk0wwxzcfplsfygjpssvd7srs7yg",
+          "from_address": "test1nr0j3sgz5ukazskl2hafvt3ylsd2qzuwa0htn4",
+          "to_address": "test1gqq25k62mysk0wwxzcfplsfygjpssvd7srs7yg",
           "amount": [
             {
               "denom": "atom",

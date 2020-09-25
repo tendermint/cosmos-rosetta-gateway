@@ -4,11 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/simapp"
-	"github.com/cosmos/cosmos-sdk/types/rest"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/types/rest"
+
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
 )
 
 func (c Client) GetAuthAccount(ctx context.Context, address string) (types.AccountResponse, error) {

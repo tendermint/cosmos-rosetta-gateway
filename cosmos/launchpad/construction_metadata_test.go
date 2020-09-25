@@ -15,16 +15,13 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_ConstructionMetadata(t *testing.T) {
-	properties := rosetta.NetworkProperties{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			"Transfer",
-		},
+		AddrPrefix: "test",
 	}
 
 	networkIdentifier := types.NetworkIdentifier{
@@ -39,9 +36,9 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 			Height: 12,
 			Result: sdktypes.Response{
 				Value: sdktypes.BaseAccount{
-					AccountNumber: 0,
+					AccountNumber: "0",
 					Address:       "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na",
-					Sequence:      1,
+					Sequence:      "1",
 				},
 			},
 		}, nil, nil).Once()
@@ -53,12 +50,12 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 	}
 
 	expMetadata := map[string]interface{}{
-		AccountNumberKey: uint64(0),
-		SequenceKey:      uint64(1),
+		AccountNumberKey: "0",
+		SequenceKey:      "1",
 		ChainIdKey:       "TheNetwork",
 		OptionGas:        &feeMultiplier,
 	}
-	adapter := NewLaunchpad(m, tendermint.NewClient(""), properties)
+	adapter := newAdapter(m, tendermint.NewClient(""), properties)
 	metaResp, err := adapter.ConstructionMetadata(context.Background(), &types.ConstructionMetadataRequest{
 		NetworkIdentifier: &networkIdentifier,
 		Options:           options,
@@ -72,12 +69,9 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 }
 
 func TestLaunchpad_ConstructionMetadata_FailsOfflineMode(t *testing.T) {
-	properties := rosetta.NetworkProperties{
-		Blockchain: "TheBlockchain",
-		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			"Transfer",
-		},
+	properties := properties{
+		Blockchain:  "TheBlockchain",
+		Network:     "TheNetwork",
 		OfflineMode: true,
 	}
 
@@ -87,7 +81,7 @@ func TestLaunchpad_ConstructionMetadata_FailsOfflineMode(t *testing.T) {
 		OptionGas:     &feeMultiplier,
 	}
 
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 	_, err := adapter.ConstructionMetadata(context.Background(), &types.ConstructionMetadataRequest{
 		Options: options,
 	})

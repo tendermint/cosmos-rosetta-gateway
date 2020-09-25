@@ -5,6 +5,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/cosmos/cosmos-sdk/client/rpc"
+	"github.com/tendermint/tendermint/p2p"
+
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
@@ -16,16 +19,15 @@ import (
 	"github.com/stretchr/testify/require"
 
 	cosmosmocks "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_NetworkList(t *testing.T) {
-	properties := rosetta.NetworkProperties{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	list, err := adapter.NetworkList(context.Background(), nil)
 	require.Nil(t, err)
@@ -36,40 +38,37 @@ func TestLaunchpad_NetworkList(t *testing.T) {
 }
 
 func TestLaunchpad_NetworkList_FailsOfflineMode(t *testing.T) {
-	properties := rosetta.NetworkProperties{
+	properties := properties{
 		Blockchain:  "TheBlockchain",
 		Network:     "TheNetwork",
 		OfflineMode: true,
 	}
 
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	_, err := adapter.NetworkList(context.Background(), nil)
 	require.Equal(t, err, ErrEndpointDisabledOfflineMode)
 }
 
 func TestLaunchpad_NetworkOptions(t *testing.T) {
-	t.SkipNow()
 	m := &cosmosmocks.SdkClient{}
 	defer m.AssertExpectations(t)
 
-	//m.
-	//	On("GetNodeInfo", mock.Anything).
-	//	Return(rpc.NodeInfoResponse{
-	//			Version: "5",
-	//	}, nil, nil).
-	//	Once()
+	m.
+		On("GetNodeInfo", mock.Anything).
+		Return(rpc.NodeInfoResponse{
+			DefaultNodeInfo: p2p.DefaultNodeInfo{
+				Version: "5",
+			},
+		}, nil, nil).
+		Once()
 
-	properties := rosetta.NetworkProperties{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			"Transfer",
-			"Reward",
-		},
 	}
 
-	adapter := NewLaunchpad(m, tendermint.NewClient(""), properties)
+	adapter := newAdapter(m, tendermint.NewClient(""), properties)
 
 	options, err := adapter.NetworkOptions(context.Background(), nil)
 	require.Nil(t, err)
@@ -99,17 +98,13 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 }
 
 func TestLaunchpad_NetworkOptions_FailsOfflineMode(t *testing.T) {
-	properties := rosetta.NetworkProperties{
-		Blockchain: "TheBlockchain",
-		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			"Transfer",
-			"Reward",
-		},
+	properties := properties{
+		Blockchain:  "TheBlockchain",
+		Network:     "TheNetwork",
 		OfflineMode: true,
 	}
 
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	_, err := adapter.NetworkOptions(context.Background(), nil)
 	require.Equal(t, err, ErrEndpointDisabledOfflineMode)
@@ -169,16 +164,12 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 		}, nil, nil).
 		Once()
 
-	properties := rosetta.NetworkProperties{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			"Transfer",
-			"Reward",
-		},
 	}
 
-	adapter := NewLaunchpad(
+	adapter := newAdapter(
 		sdk.NewClient(""),
 		mt,
 		properties,
@@ -210,17 +201,13 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 }
 
 func TestLaunchpad_NetworkStatus_FailsOfflineMode(t *testing.T) {
-	properties := rosetta.NetworkProperties{
-		Blockchain: "TheBlockchain",
-		Network:    "TheNetwork",
-		SupportedOperations: []string{
-			"Transfer",
-			"Reward",
-		},
+	properties := properties{
+		Blockchain:  "TheBlockchain",
+		Network:     "TheNetwork",
 		OfflineMode: true,
 	}
 
-	adapter := NewLaunchpad(
+	adapter := newAdapter(
 		sdk.NewClient(""),
 		tendermint.NewClient(""),
 		properties,

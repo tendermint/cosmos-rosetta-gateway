@@ -3,9 +3,10 @@ package launchpad
 import (
 	"context"
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/x/bank"
 	"strconv"
 	"strings"
+
+	"github.com/cosmos/cosmos-sdk/x/bank"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
@@ -27,7 +28,7 @@ func HexPrefix(hex string) string {
 }
 
 // getTxByHash calls
-func (l Launchpad) getTxByHash(ctx context.Context, hash string) (*types.Transaction, *types.Error) {
+func (l launchpad) getTxByHash(ctx context.Context, hash string) (*types.Transaction, *types.Error) {
 	txQuery, err := l.cosmos.GetTx(ctx, hash)
 	if err != nil {
 		return nil, ErrNodeConnection

@@ -10,22 +10,14 @@ import (
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/stretchr/testify/require"
-
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func TestLaunchpad_ConstructionParse(t *testing.T) {
-	var (
-		properties = rosetta.NetworkProperties{
-			Blockchain: "TheBlockchain",
-			Network:    "TheNetwork",
-			SupportedOperations: []string{
-				"Transfer",
-				"Reward",
-			},
-		}
-		adapter = NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
-	)
+	properties := properties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+	}
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	cases := []struct {
 		name  string

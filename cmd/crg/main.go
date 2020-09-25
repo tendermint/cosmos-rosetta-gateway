@@ -4,14 +4,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"net/http"
 	"os"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
-
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 	"github.com/tendermint/cosmos-rosetta-gateway/service"
 )
 
@@ -21,48 +16,31 @@ var (
 	flagBlockchain    = flag.String("blockchain", "app", "Application's name (e.g. Cosmos Hub)")
 	flagNetworkID     = flag.String("network", "network", "Network's identifier (e.g. cosmos-hub-3, testnet-1, etc)")
 	flagOfflineMode   = flag.Bool("offline", false, "Flag that forces the rosetta service to run in offline mode, some endpoints won't work.")
+	flagAddrPrefix    = flag.String("prefix", "cosmos", "Bech32 prefix of address (e.g. cosmos, iaa, xrn:)")
 )
 
 func main() {
 	flag.Parse()
 
-	if err := runHandler(); err != nil {
+	h, err := service.New(
+		service.Options{Port: 8080},
+		launchpad.NewLaunchpadNetwork(launchpad.Options{
+			CosmosEndpoint:     *flagAppRPC,
+			TendermintEndpoint: *flagTendermintRPC,
+			Blockchain:         *flagBlockchain,
+			Network:            *flagNetworkID,
+			AddrPrefix:         *flagAddrPrefix,
+			OfflineMode:        *flagOfflineMode,
+		}),
+	)
+	if err != nil {
 		fmt.Fprintln(flag.CommandLine.Output(), err)
 		os.Exit(2)
 	}
-}
 
-func runHandler() error {
-
-	altClient := sdk.NewClient(fmt.Sprintf("http://%s", *flagAppRPC))
-	tendermintClient := tendermint.NewClient(fmt.Sprintf("http://%s", *flagTendermintRPC))
-
-	properties := rosetta.NetworkProperties{
-		Blockchain:          *flagBlockchain,
-		Network:             *flagNetworkID,
-		SupportedOperations: []string{launchpad.OperationTransfer},
-		OfflineMode:         *flagOfflineMode,
-	}
-
-	h, err := service.New(
-		service.Network{
-			Properties: properties,
-			Adapter: launchpad.NewLaunchpad(
-				altClient,
-				tendermintClient,
-				properties,
-			),
-		},
-	)
-	// TODO: maybe create some constructor for specific adapters or Factory.
+	err = h.Start()
 	if err != nil {
-		return err
+		fmt.Fprintln(flag.CommandLine.Output(), err)
+		os.Exit(2)
 	}
-
-	server := &http.Server{
-		Handler: h,
-		Addr:    ":8080",
-	}
-
-	return server.ListenAndServe()
 }

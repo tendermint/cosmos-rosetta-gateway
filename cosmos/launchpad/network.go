@@ -11,7 +11,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func (l Launchpad) NetworkList(context.Context, *types.MetadataRequest) (*types.NetworkListResponse, *types.Error) {
+func (l launchpad) NetworkList(context.Context, *types.MetadataRequest) (*types.NetworkListResponse, *types.Error) {
 	if l.properties.OfflineMode {
 		return nil, ErrEndpointDisabledOfflineMode
 	}
@@ -26,7 +26,7 @@ func (l Launchpad) NetworkList(context.Context, *types.MetadataRequest) (*types.
 	}, nil
 }
 
-func (l Launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) (*types.NetworkOptionsResponse, *types.Error) {
+func (l launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) (*types.NetworkOptionsResponse, *types.Error) {
 	if l.properties.OfflineMode {
 		return nil, ErrEndpointDisabledOfflineMode
 	}
@@ -57,7 +57,7 @@ func (l Launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) 
 	}, nil
 }
 
-func (l Launchpad) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (*types.NetworkStatusResponse, *types.Error) {
+func (l launchpad) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (*types.NetworkStatusResponse, *types.Error) {
 	if l.properties.OfflineMode {
 		return nil, ErrEndpointDisabledOfflineMode
 	}
