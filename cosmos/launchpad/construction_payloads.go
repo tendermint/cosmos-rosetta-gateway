@@ -4,8 +4,6 @@ import (
 	"context"
 	"encoding/hex"
 
-	"github.com/cosmos/cosmos-sdk/simapp"
-
 	"github.com/coinbase/rosetta-sdk-go/types"
 	cosmostypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
@@ -45,8 +43,7 @@ func (l launchpad) ConstructionPayloads(ctx context.Context, req *types.Construc
 	signBytes := auth.StdSignBytes(
 		metadata.ChainId, metadata.AccountNumber, metadata.Sequence, tx.Fee, tx.Msgs, tx.Memo,
 	)
-	codec := simapp.MakeCodec()
-	txBytes, err := codec.MarshalJSON(tx)
+	txBytes, err := Codec.MarshalJSON(tx)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrInvalidRequest, err.Error())
 	}
