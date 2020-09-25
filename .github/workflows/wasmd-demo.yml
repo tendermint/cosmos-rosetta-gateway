@@ -1,20 +1,21 @@
-name: wasmd demo
-on: [push, pull_request]
-   
-   
-jobs:
-    build:
-      runs-on: ubuntu-latest
-      steps:
-      - uses: actions/checkout@v2
-        name: Check out code
+name: Wasmd Demo Docker
+on: push
 
-      - name: Build and Publish Docker image
-        uses: zvfvrv/docker-bpgpr
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Kaniko build
+        uses: aevea/action-kaniko@master
         with:
-          gh_token: ${{ secrets.TOKEN_GH }}
-          image_name: test
-          tag_with_ref: true
-          tag_with_sha: true
-          path: ./cosmwasm/
-          dockerfile: Dockerfile
+         registry: docker.pkg.github.com
+         password: ${{ secrets.GITHUB_TOKEN }}
+         image: crg
+
+   
+   
+   
+   
+
