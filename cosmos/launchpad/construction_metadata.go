@@ -9,7 +9,7 @@ import (
 )
 
 func (l Launchpad) ConstructionMetadata(ctx context.Context, r *types.ConstructionMetadataRequest) (*types.ConstructionMetadataResponse, *types.Error) {
-	if l.options.OfflineMode {
+	if l.properties.OfflineMode {
 		return nil, ErrEndpointDisabledOfflineMode
 	}
 

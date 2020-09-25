@@ -15,7 +15,7 @@ import (
 )
 
 func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.BlockResponse, *types.Error) {
-	if l.options.OfflineMode {
+	if l.properties.OfflineMode {
 		return nil, ErrEndpointDisabledOfflineMode
 	}
 
@@ -98,7 +98,7 @@ func (l Launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 }
 
 func (l Launchpad) BlockTransaction(ctx context.Context, r *types.BlockTransactionRequest) (*types.BlockTransactionResponse, *types.Error) {
-	if l.options.OfflineMode {
+	if l.properties.OfflineMode {
 		return nil, ErrEndpointDisabledOfflineMode
 	}
 

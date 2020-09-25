@@ -88,12 +88,12 @@ func TestLaunchpad_Block(t *testing.T) {
 		}, nil, nil).
 		Once()
 
-	properties := Options{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(mc, ma, properties)
+	adapter := newLaunchpad(mc, ma, properties)
 
 	var h int64 = 1
 	block, blockErr := adapter.Block(context.Background(), &types.BlockRequest{
@@ -229,12 +229,12 @@ func TestLaunchpad_BlockTransaction(t *testing.T) {
 		}, nil, nil).
 		Once()
 
-	properties := Options{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(mc, tendermint.NewClient(""), properties)
+	adapter := newLaunchpad(mc, tendermint.NewClient(""), properties)
 
 	tx, txErr := adapter.BlockTransaction(context.Background(), &types.BlockTransactionRequest{
 		TransactionIdentifier: &types.TransactionIdentifier{
@@ -302,12 +302,12 @@ func TestLaunchpad_BlockTransactionWithError(t *testing.T) {
 			Tx:     testTx,
 		}, nil, nil).Once()
 
-	properties := Options{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(mc, tendermint.NewClient(""), properties)
+	adapter := newLaunchpad(mc, tendermint.NewClient(""), properties)
 	tx, txErr := adapter.BlockTransaction(context.Background(), &types.BlockTransactionRequest{
 		TransactionIdentifier: &types.TransactionIdentifier{
 			Hash: "1",
@@ -319,13 +319,13 @@ func TestLaunchpad_BlockTransactionWithError(t *testing.T) {
 }
 
 func TestLaunchpad_Block_DoesNotWorkOfflineMode(t *testing.T) {
-	properties := Options{
+	properties := properties{
 		Blockchain:  "TheBlockchain",
 		Network:     "TheNetwork",
 		OfflineMode: true,
 	}
 
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	var height int64 = 1
 	_, err := adapter.Block(context.Background(), &types.BlockRequest{
@@ -337,13 +337,13 @@ func TestLaunchpad_Block_DoesNotWorkOfflineMode(t *testing.T) {
 }
 
 func TestLaunchpad_BlockTransaction_FailsOfflineMode(t *testing.T) {
-	properties := Options{
+	properties := properties{
 		Blockchain:  "TheBlockchain",
 		Network:     "TheNetwork",
 		OfflineMode: true,
 	}
 
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 	_, txErr := adapter.BlockTransaction(context.Background(), &types.BlockTransactionRequest{
 		TransactionIdentifier: &types.TransactionIdentifier{
 			Hash: "1",

@@ -17,7 +17,7 @@ type BroadcastReq struct {
 }
 
 func (l Launchpad) ConstructionSubmit(ctx context.Context, req *types.ConstructionSubmitRequest) (*types.TransactionIdentifierResponse, *types.Error) {
-	if l.options.OfflineMode {
+	if l.properties.OfflineMode {
 		return nil, ErrEndpointDisabledOfflineMode
 	}
 

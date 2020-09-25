@@ -46,13 +46,13 @@ func TestLaunchpad_ConstructionSubmit(t *testing.T) {
 			TxHash: expectedHash,
 			Height: 10,
 		}, nil, nil).Once()
-	properties := Options{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 		AddrPrefix: "test",
 	}
 
-	adapter := NewLaunchpad(m, tendermint.NewClient(""), properties)
+	adapter := newLaunchpad(m, tendermint.NewClient(""), properties)
 	resp, err2 := adapter.ConstructionSubmit(context.Background(), &types.ConstructionSubmitRequest{
 		SignedTransaction: toString,
 	})
@@ -64,10 +64,10 @@ func TestLaunchpad_ConstructionSubmit(t *testing.T) {
 }
 
 func TestLaunchpad_ConstructionSubmit_FailsOfflineMode(t *testing.T) {
-	properties := Options{
+	properties := properties{
 		OfflineMode: true,
 	}
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	_, err2 := adapter.ConstructionSubmit(context.Background(), &types.ConstructionSubmitRequest{
 		SignedTransaction: "dkajfkdjkads",

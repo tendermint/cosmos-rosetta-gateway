@@ -22,12 +22,12 @@ func TestLaunchpad_ConstructionHash(t *testing.T) {
 	bz, err := ioutil.ReadFile("./testdata/signed-tx.json")
 	require.NoError(t, err)
 
-	properties := Options{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 		AddrPrefix: "test",
 	}
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	var stdTx auth.StdTx
 	cdc := simapp.MakeCodec()

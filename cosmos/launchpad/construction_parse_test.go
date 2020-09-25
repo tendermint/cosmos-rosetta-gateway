@@ -13,11 +13,11 @@ import (
 )
 
 func TestLaunchpad_ConstructionParse(t *testing.T) {
-	properties := Options{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 	}
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	cases := []struct {
 		name  string

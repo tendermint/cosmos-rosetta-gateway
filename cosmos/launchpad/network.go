@@ -12,22 +12,22 @@ import (
 )
 
 func (l Launchpad) NetworkList(context.Context, *types.MetadataRequest) (*types.NetworkListResponse, *types.Error) {
-	if l.options.OfflineMode {
+	if l.properties.OfflineMode {
 		return nil, ErrEndpointDisabledOfflineMode
 	}
 
 	return &types.NetworkListResponse{
 		NetworkIdentifiers: []*types.NetworkIdentifier{
 			{
-				Blockchain: l.options.Blockchain,
-				Network:    l.options.Network,
+				Blockchain: l.properties.Blockchain,
+				Network:    l.properties.Network,
 			},
 		},
 	}, nil
 }
 
 func (l Launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) (*types.NetworkOptionsResponse, *types.Error) {
-	if l.options.OfflineMode {
+	if l.properties.OfflineMode {
 		return nil, ErrEndpointDisabledOfflineMode
 	}
 
@@ -58,7 +58,7 @@ func (l Launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) 
 }
 
 func (l Launchpad) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (*types.NetworkStatusResponse, *types.Error) {
-	if l.options.OfflineMode {
+	if l.properties.OfflineMode {
 		return nil, ErrEndpointDisabledOfflineMode
 	}
 

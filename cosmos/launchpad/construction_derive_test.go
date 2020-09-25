@@ -17,13 +17,13 @@ func TestLaunchpad_ConstructionDerive(t *testing.T) {
 	data, err := hex.DecodeString("A2FEB642851ACE7464999E56C8DBFD67C0A145E9")
 	require.NoError(t, err)
 
-	properties := Options{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 		AddrPrefix: "test",
 	}
 
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 	deriveResp, deriveErr := adapter.ConstructionDerive(context.Background(), &types.ConstructionDeriveRequest{
 		PublicKey: &types.PublicKey{
 			Bytes:     data,

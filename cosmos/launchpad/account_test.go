@@ -53,12 +53,12 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 			Block: tendermint.Block{},
 		}, nil, nil)
 
-	properties := Options{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(m, ma, properties)
+	adapter := newLaunchpad(m, ma, properties)
 
 	res, err := adapter.AccountBalance(context.Background(), &types.AccountBalanceRequest{
 		AccountIdentifier: &types.AccountIdentifier{
@@ -78,13 +78,13 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 }
 
 func TestLaunchpad_AccountBalanceDoesNotWorkOfflineMode(t *testing.T) {
-	properties := Options{
+	properties := properties{
 		Blockchain:  "TheBlockchain",
 		Network:     "TheNetwork",
 		OfflineMode: true,
 	}
 
-	adapter := NewLaunchpad(sdk2.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newLaunchpad(sdk2.NewClient(""), tendermint.NewClient(""), properties)
 	_, err := adapter.AccountBalance(context.Background(), &types.AccountBalanceRequest{
 		AccountIdentifier: &types.AccountIdentifier{
 			Address: "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na",

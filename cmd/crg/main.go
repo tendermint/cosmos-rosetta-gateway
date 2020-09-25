@@ -7,10 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
-
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 	"github.com/tendermint/cosmos-rosetta-gateway/service"
 )
@@ -34,9 +31,6 @@ func main() {
 }
 
 func runHandler() error {
-	altClient := sdk.NewClient(fmt.Sprintf("http://%s", *flagAppRPC))
-	tendermintClient := tendermint.NewClient(fmt.Sprintf("http://%s", *flagTendermintRPC))
-
 	properties := rosetta.NetworkProperties{
 		Blockchain: *flagBlockchain,
 		Network:    *flagNetworkID,
@@ -48,13 +42,13 @@ func runHandler() error {
 		service.Network{
 			Properties: properties,
 			Adapter: launchpad.NewLaunchpad(
-				altClient,
-				tendermintClient,
 				launchpad.Options{
-					Blockchain:  *flagBlockchain,
-					Network:     *flagNetworkID,
-					AddrPrefix:  *flagAddrPrefix,
-					OfflineMode: *flagOfflineMode,
+					CosmosEndpoint:     *flagAppRPC,
+					TendermintEndpoint: *flagTendermintRPC,
+					Blockchain:         *flagBlockchain,
+					Network:            *flagNetworkID,
+					AddrPrefix:         *flagAddrPrefix,
+					OfflineMode:        *flagOfflineMode,
 				},
 			),
 		},

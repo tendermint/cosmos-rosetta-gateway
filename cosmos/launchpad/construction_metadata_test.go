@@ -18,7 +18,7 @@ import (
 )
 
 func TestLaunchpad_ConstructionMetadata(t *testing.T) {
-	properties := Options{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 		AddrPrefix: "test",
@@ -55,7 +55,7 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 		ChainIdKey:       "TheNetwork",
 		OptionGas:        &feeMultiplier,
 	}
-	adapter := NewLaunchpad(m, tendermint.NewClient(""), properties)
+	adapter := newLaunchpad(m, tendermint.NewClient(""), properties)
 	metaResp, err := adapter.ConstructionMetadata(context.Background(), &types.ConstructionMetadataRequest{
 		NetworkIdentifier: &networkIdentifier,
 		Options:           options,
@@ -69,7 +69,7 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 }
 
 func TestLaunchpad_ConstructionMetadata_FailsOfflineMode(t *testing.T) {
-	properties := Options{
+	properties := properties{
 		Blockchain:  "TheBlockchain",
 		Network:     "TheNetwork",
 		OfflineMode: true,
@@ -81,7 +81,7 @@ func TestLaunchpad_ConstructionMetadata_FailsOfflineMode(t *testing.T) {
 		OptionGas:     &feeMultiplier,
 	}
 
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 	_, err := adapter.ConstructionMetadata(context.Background(), &types.ConstructionMetadataRequest{
 		Options: options,
 	})

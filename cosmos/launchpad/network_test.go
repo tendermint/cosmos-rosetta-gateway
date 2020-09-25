@@ -22,12 +22,12 @@ import (
 )
 
 func TestLaunchpad_NetworkList(t *testing.T) {
-	properties := Options{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	list, err := adapter.NetworkList(context.Background(), nil)
 	require.Nil(t, err)
@@ -38,13 +38,13 @@ func TestLaunchpad_NetworkList(t *testing.T) {
 }
 
 func TestLaunchpad_NetworkList_FailsOfflineMode(t *testing.T) {
-	properties := Options{
+	properties := properties{
 		Blockchain:  "TheBlockchain",
 		Network:     "TheNetwork",
 		OfflineMode: true,
 	}
 
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	_, err := adapter.NetworkList(context.Background(), nil)
 	require.Equal(t, err, ErrEndpointDisabledOfflineMode)
@@ -63,12 +63,12 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 		}, nil, nil).
 		Once()
 
-	properties := Options{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(m, tendermint.NewClient(""), properties)
+	adapter := newLaunchpad(m, tendermint.NewClient(""), properties)
 
 	options, err := adapter.NetworkOptions(context.Background(), nil)
 	require.Nil(t, err)
@@ -98,13 +98,13 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 }
 
 func TestLaunchpad_NetworkOptions_FailsOfflineMode(t *testing.T) {
-	properties := Options{
+	properties := properties{
 		Blockchain:  "TheBlockchain",
 		Network:     "TheNetwork",
 		OfflineMode: true,
 	}
 
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	_, err := adapter.NetworkOptions(context.Background(), nil)
 	require.Equal(t, err, ErrEndpointDisabledOfflineMode)
@@ -164,12 +164,12 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 		}, nil, nil).
 		Once()
 
-	properties := Options{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 	}
 
-	adapter := NewLaunchpad(
+	adapter := newLaunchpad(
 		sdk.NewClient(""),
 		mt,
 		properties,
@@ -201,13 +201,13 @@ func TestLaunchpad_NetworkStatus(t *testing.T) {
 }
 
 func TestLaunchpad_NetworkStatus_FailsOfflineMode(t *testing.T) {
-	properties := Options{
+	properties := properties{
 		Blockchain:  "TheBlockchain",
 		Network:     "TheNetwork",
 		OfflineMode: true,
 	}
 
-	adapter := NewLaunchpad(
+	adapter := newLaunchpad(
 		sdk.NewClient(""),
 		tendermint.NewClient(""),
 		properties,

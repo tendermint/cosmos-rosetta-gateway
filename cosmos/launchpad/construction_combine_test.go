@@ -18,13 +18,13 @@ import (
 )
 
 func TestLaunchpad_ConstructionCombine(t *testing.T) {
-	properties := Options{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 		AddrPrefix: "test",
 	}
 
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 	bz, err := ioutil.ReadFile("./testdata/unsigned-tx.json")
 	require.NoError(t, err)
 

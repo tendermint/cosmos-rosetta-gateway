@@ -51,7 +51,7 @@ func TestPayloadsEndpoint_Errors(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), Options{})
+			adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties{})
 			_, err := adapter.ConstructionPayloads(context.Background(), tt.req)
 			require.Equal(t, err, tt.expectedErr)
 		})
@@ -59,12 +59,12 @@ func TestPayloadsEndpoint_Errors(t *testing.T) {
 }
 
 func TestGetSenderByOperations(t *testing.T) {
-	properties := Options{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 		AddrPrefix: "test",
 	}
-	_ = NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	_ = newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 	ops := []*types.Operation{
 		{
 			Account: &types.AccountIdentifier{
@@ -110,12 +110,12 @@ func TestGetSenderByOperations(t *testing.T) {
 }
 
 func TestLaunchpad_ConstructionPayloads(t *testing.T) {
-	properties := Options{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 		AddrPrefix: "test",
 	}
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	feeMultiplier := float64(200000)
 	senderAddr := "test1khy4gsp06srvu3u65uyhrax7tnj2atezfqnfan"

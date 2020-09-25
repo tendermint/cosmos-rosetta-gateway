@@ -14,12 +14,12 @@ import (
 )
 
 func TestLaunchpad_ConstructionPreprocess(t *testing.T) {
-	properties := Options{
+	properties := properties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
 		AddrPrefix: "test",
 	}
-	adapter := NewLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
+	adapter := newLaunchpad(sdk.NewClient(""), tendermint.NewClient(""), properties)
 
 	ops := []*types.Operation{
 		{
@@ -68,6 +68,6 @@ func TestLaunchpad_ConstructionPreprocess(t *testing.T) {
 	require.Nil(t, deriveErr)
 	require.NotNil(t, deriveResp)
 	if diff := cmp.Diff(deriveResp.Options, expOptions); diff != "" {
-		t.Errorf("Options mismatch %s", diff)
+		t.Errorf("properties mismatch %s", diff)
 	}
 }
