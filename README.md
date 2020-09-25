@@ -16,7 +16,7 @@ The standalone executable will talk to your blockchain's API and serve as an API
 **configuring crg**
 `crg` can be configured to match your chain using flags
 
-|   |   |    |
+| Task  | Flag  | Description |
 |---|---|---|
 | Help | --help | explain these flags |
 | App RPC Endpoint  | --app-rpc localhost:1317  |       |
@@ -56,6 +56,7 @@ curl --location --request POST 'http://localhost:8080/network/status' \
 }'
 ```
 
+Success looks like:
 ```json
 {
   "current_block_identifier": {
@@ -72,7 +73,7 @@ curl --location --request POST 'http://localhost:8080/network/status' \
 ```
 
 
-Get Info on a particular block:
+**Get Info on a particular block:**
 ```bash
 curl --location --request POST 'http://localhost:8080/block' \
 --header 'Content-Type: text/plain' \
