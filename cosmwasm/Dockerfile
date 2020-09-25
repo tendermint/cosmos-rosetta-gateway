@@ -27,7 +27,7 @@ RUN git clone https://github.com/CosmWasm/wasmd && \
       
 # DOWNLOAD AND COMPILE COSMOS ROSETTA GATEWAY
 RUN git clone https://github.com/tendermint/cosmos-rosetta-gateway && \
-      cd cosmos-rosetta-gateway
+      cd cosmos-rosetta-gateway && \
       make
       
 
