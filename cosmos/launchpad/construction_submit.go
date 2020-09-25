@@ -33,7 +33,7 @@ func (l Launchpad) ConstructionSubmit(ctx context.Context, req *types.Constructi
 	}
 
 	bReq := BroadcastReq{
-		Tx:   test["value"],
+		Tx:   test["tx"],
 		Mode: "block",
 	}
 

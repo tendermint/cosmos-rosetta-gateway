@@ -18,8 +18,8 @@ type BaseAccount struct {
 	Address       string    `json:"address" yaml:"address"`
 	Coins         sdk.Coins `json:"coins" yaml:"coins"`
 	PubKey        PublicKey `json:"public_key" yaml:"public_key"`
-	AccountNumber uint64    `json:"account_number" yaml:"account_number"`
-	Sequence      uint64    `json:"sequence" yaml:"sequence"`
+	AccountNumber string    `json:"account_number" yaml:"account_number"`
+	Sequence      string    `json:"sequence" yaml:"sequence"`
 }
 
 type PublicKey struct {

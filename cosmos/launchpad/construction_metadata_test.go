@@ -22,6 +22,7 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 	properties := rosetta.NetworkProperties{
 		Blockchain: "TheBlockchain",
 		Network:    "TheNetwork",
+		AddrPrefix: "test",
 		SupportedOperations: []string{
 			"Transfer",
 		},
@@ -39,9 +40,9 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 			Height: 12,
 			Result: sdktypes.Response{
 				Value: sdktypes.BaseAccount{
-					AccountNumber: 0,
+					AccountNumber: "0",
 					Address:       "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na",
-					Sequence:      1,
+					Sequence:      "1",
 				},
 			},
 		}, nil, nil).Once()
@@ -53,8 +54,8 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 	}
 
 	expMetadata := map[string]interface{}{
-		AccountNumberKey: uint64(0),
-		SequenceKey:      uint64(1),
+		AccountNumberKey: "0",
+		SequenceKey:      "1",
 		ChainIdKey:       "TheNetwork",
 		OptionGas:        &feeMultiplier,
 	}

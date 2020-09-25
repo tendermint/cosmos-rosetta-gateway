@@ -3,9 +3,10 @@ package launchpad
 import (
 	"context"
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/x/bank"
 	"strconv"
 	"strings"
+
+	"github.com/cosmos/cosmos-sdk/x/bank"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 

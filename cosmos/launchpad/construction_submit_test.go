@@ -3,14 +3,17 @@ package launchpad
 import (
 	"context"
 	"encoding/hex"
+	"fmt"
+	cosmostypes "github.com/cosmos/cosmos-sdk/types"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
 	"io/ioutil"
 	"testing"
-
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
 
 	"github.com/cosmos/cosmos-sdk/x/auth/client/rest"
 
@@ -19,7 +22,6 @@ import (
 )
 
 func TestLaunchpad_ConstructionSubmit(t *testing.T) {
-	t.SkipNow() // TODO bring back.
 	bz, err := ioutil.ReadFile("./testdata/test-with-signature-delete.json")
 	require.NoError(t, err)
 
@@ -37,37 +39,32 @@ func TestLaunchpad_ConstructionSubmit(t *testing.T) {
 	toString := hex.EncodeToString(txBytes)
 	t.Logf("%s\n", toString)
 
-	//testTx := cosmosclient.InlineObject{
-	//	Tx: cosmosclient.StdTx{
-	//		//Value: stdTx,
-	//	},
-	//	Mode: "async",
-	//}
-	//
-	//m := mocks.CosmosTransactionsAPI{}
-	//m.
-	//	On("TxsPost", mock.Anything, testTx).
-	//	Return(cosmosclient.BroadcastTxCommitResult{
-	//		Hash:   expectedHash,
-	//		Height: 10,
-	//	}, nil, nil).Once()
-	//
-	//adapter := NewLaunchpad(TendermintAPI{}, CosmosAPI{Transactions: &m}, rosetta.NetworkProperties{})
-	//
-	//// re-encode it via the Amino wire protocol
-	//txBytes, err := cdc.MarshalBinaryLengthPrefixed(stdTx)
-	//require.NoError(t, err)
-	//
-	//toString := hex.EncodeToString(txBytes)
-	//
-	//resp, err2 := adapter.ConstructionSubmit(context.Background(), &types.ConstructionSubmitRequest{
-	//	SignedTransaction: toString,
-	//})
-	//fmt.Printf("%v\n", resp)
-	//
-	//require.Nil(t, err2)
-	//require.NotNil(t, resp)
-	//require.Equal(t, expectedHash, resp.TransactionIdentifier.Hash)
+	expectedHash := "6f22ea7620ebcb5078d244f06e88dd26906ba1685135bfc34f83fefdd653198a"
+	m := &mocks.SdkClient{}
+	m.
+		On("PostTx", context.Background(), bz).
+		Return(cosmostypes.TxResponse{
+			TxHash: expectedHash,
+			Height: 10,
+		}, nil, nil).Once()
+	properties := rosetta.NetworkProperties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+		AddrPrefix: "test",
+		SupportedOperations: []string{
+			"Transfer",
+		},
+	}
+
+	adapter := NewLaunchpad(m, tendermint.NewClient(""), properties)
+	resp, err2 := adapter.ConstructionSubmit(context.Background(), &types.ConstructionSubmitRequest{
+		SignedTransaction: toString,
+	})
+	fmt.Printf("%v\n", resp)
+
+	require.Nil(t, err2)
+	require.NotNil(t, resp)
+	require.Equal(t, expectedHash, resp.TransactionIdentifier.Hash)
 }
 
 func TestLaunchpad_ConstructionSubmit_FailsOfflineMode(t *testing.T) {

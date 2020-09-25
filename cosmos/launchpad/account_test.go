@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	sdk2 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
@@ -32,13 +33,13 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 			Height: 12,
 			Result: sdktypes.Response{
 				Value: sdktypes.BaseAccount{
-					AccountNumber: 0,
+					AccountNumber: "0",
 					Coins: []sdk.Coin{
 						{Denom: "stake", Amount: sdk.NewInt(400)},
 						{Denom: "token", Amount: sdk.NewInt(600)},
 					},
 					Address:  "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na",
-					Sequence: 1,
+					Sequence: "1",
 				},
 			},
 		}, nil, nil).Once()
