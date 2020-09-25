@@ -1,6 +1,7 @@
 package types
 
 import (
+	"github.com/cosmos/cosmos-sdk/simapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -26,3 +27,5 @@ type PublicKey struct {
 	Type  string `json:"type,omitempty"`
 	Value string `json:"value,omitempty"`
 }
+
+var Codec = simapp.MakeCodec()

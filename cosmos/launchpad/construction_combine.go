@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"github.com/cosmos/cosmos-sdk/simapp"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/tendermint/tendermint/crypto"
 
@@ -21,9 +20,8 @@ func (l launchpad) ConstructionCombine(ctx context.Context, r *types.Constructio
 		return nil, rosetta.WrapError(ErrInvalidTransaction, "error decoding unsigned tx")
 	}
 
-	codec := simapp.MakeCodec()
 	var stdTx auth.StdTx
-	err = codec.UnmarshalJSON(bz, &stdTx)
+	err = Codec.UnmarshalJSON(bz, &stdTx)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrInvalidTransaction, fmt.Sprintf("unable to unmarshal tx: %s", err.Error()))
 	}
@@ -35,7 +33,7 @@ func (l launchpad) ConstructionCombine(ctx context.Context, r *types.Constructio
 			return nil, ErrUnsupportedCurve
 		}
 
-		err = codec.UnmarshalBinaryBare(signature.PublicKey.Bytes, &pk)
+		err = Codec.UnmarshalBinaryBare(signature.PublicKey.Bytes, &pk)
 		if err != nil {
 			return nil, rosetta.WrapError(ErrInvalidPubkey, "unable to unmarshal pubkey")
 		}
@@ -48,7 +46,7 @@ func (l launchpad) ConstructionCombine(ctx context.Context, r *types.Constructio
 	}
 
 	stdTx.Signatures = sigs
-	txBytes, err := codec.MarshalJSON(stdTx)
+	txBytes, err := Codec.MarshalJSON(stdTx)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrInvalidTransaction, "unable to marshal signed tx")
 	}
