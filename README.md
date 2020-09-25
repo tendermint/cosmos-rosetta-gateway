@@ -13,7 +13,7 @@ This repository contains both a library and a standalone binary, named **crg**. 
 ### Using crg
 The standalone executable will talk to your blockchain's API and serve as an API adapter, making it compatible with the Coinbase Rosetta blockchain API interface.
 
-**configuring crg**
+**Configuring crg**
 `crg` can be configured to match your chain using flags
 
 | Task  | Flag  | Description |
