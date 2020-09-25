@@ -26,14 +26,14 @@ func (l launchpad) ConstructionSubmit(ctx context.Context, req *types.Constructi
 		return nil, rosetta.WrapError(ErrInvalidTransaction, "error decoding tx")
 	}
 
-	var test map[string]json.RawMessage
-	err = json.Unmarshal(bz, &test)
+	var tx map[string]json.RawMessage
+	err = json.Unmarshal(bz, &tx)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrInvalidTransaction, "error unmarshaling tx")
 	}
 
 	bReq := BroadcastReq{
-		Tx:   test["tx"],
+		Tx:   tx["value"],
 		Mode: "block",
 	}
 
