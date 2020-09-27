@@ -5,7 +5,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 
-	"github.com/cosmos/cosmos-sdk/simapp"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
@@ -20,13 +19,12 @@ func (l launchpad) ConstructionHash(ctx context.Context, req *types.Construction
 	}
 
 	var stdTx auth.StdTx
-	cdc := simapp.MakeCodec()
-	err = cdc.UnmarshalJSON(bz, &stdTx)
+	err = Codec.UnmarshalJSON(bz, &stdTx)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrInvalidTransaction, "invalid tx")
 	}
 
-	txBytes, err := cdc.MarshalBinaryLengthPrefixed(stdTx)
+	txBytes, err := Codec.MarshalBinaryLengthPrefixed(stdTx)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrInvalidTransaction, "invalid tx")
 	}

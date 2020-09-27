@@ -5,8 +5,9 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
+
 	"github.com/cosmos/cosmos-sdk/client/rpc"
-	"github.com/cosmos/cosmos-sdk/simapp"
 )
 
 func (c Client) GetNodeInfo(ctx context.Context) (rpc.NodeInfoResponse, error) {
@@ -20,11 +21,9 @@ func (c Client) GetNodeInfo(ctx context.Context) (rpc.NodeInfoResponse, error) {
 	}
 
 	var infoRes rpc.NodeInfoResponse
-	codec := simapp.MakeCodec()
-	if err = codec.UnmarshalJSON(btes, &infoRes); err != nil {
+	if err = types.Codec.UnmarshalJSON(btes, &infoRes); err != nil {
 		return infoRes, err
 	}
 
 	return infoRes, nil
-
 }
