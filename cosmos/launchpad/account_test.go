@@ -27,7 +27,7 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 	defer ma.AssertExpectations(t)
 
 	m.
-		On("GetAuthAccount", mock.Anything, "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na").
+		On("GetAuthAccount", mock.Anything, "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na", "").
 		Return(sdktypes.AccountResponse{
 			Height: 12,
 			Result: sdktypes.Response{

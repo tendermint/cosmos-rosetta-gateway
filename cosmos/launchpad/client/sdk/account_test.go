@@ -24,10 +24,10 @@ func TestAuthAccountClient(t *testing.T) {
 	client := NewClient(s.URL)
 
 	addr := "cosmos15lc6l4nm3s9ya5an5vnv9r6na437ajpznkplhx"
-	res, err := client.GetAuthAccount(context.Background(), addr)
+	res, err := client.GetAuthAccount(context.Background(), addr, "")
 	require.NoError(t, err)
 	require.NotNil(t, res)
-	t.Log(res.Result)
+	t.Log(res)
 
 	require.Equal(t, int64(9694), res.Height)
 	require.Equal(t, addr, res.Result.Value.Address)

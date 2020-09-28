@@ -2,6 +2,7 @@ package launchpad
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 
@@ -16,7 +17,11 @@ func (l launchpad) AccountBalance(ctx context.Context, request *types.AccountBal
 		return nil, ErrEndpointDisabledOfflineMode
 	}
 
-	resp, err := l.cosmos.GetAuthAccount(ctx, request.AccountIdentifier.Address)
+	var reqHeight string
+	if request.BlockIdentifier != nil {
+		reqHeight = strconv.Itoa(int(*request.BlockIdentifier.Index))
+	}
+	resp, err := l.cosmos.GetAuthAccount(ctx, request.AccountIdentifier.Address, reqHeight)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrNodeConnection, err.Error())
 	}

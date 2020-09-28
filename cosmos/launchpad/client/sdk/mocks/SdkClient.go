@@ -19,20 +19,20 @@ type SdkClient struct {
 	mock.Mock
 }
 
-// GetAuthAccount provides a mock function with given fields: ctx, address
-func (_m *SdkClient) GetAuthAccount(ctx context.Context, address string) (types.AccountResponse, error) {
-	ret := _m.Called(ctx, address)
+// GetAuthAccount provides a mock function with given fields: ctx, address, height
+func (_m *SdkClient) GetAuthAccount(ctx context.Context, address string, height string) (types.AccountResponse, error) {
+	ret := _m.Called(ctx, address, height)
 
 	var r0 types.AccountResponse
-	if rf, ok := ret.Get(0).(func(context.Context, string) types.AccountResponse); ok {
-		r0 = rf(ctx, address)
+	if rf, ok := ret.Get(0).(func(context.Context, string, string) types.AccountResponse); ok {
+		r0 = rf(ctx, address, height)
 	} else {
 		r0 = ret.Get(0).(types.AccountResponse)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
-		r1 = rf(ctx, address)
+	if rf, ok := ret.Get(1).(func(context.Context, string, string) error); ok {
+		r1 = rf(ctx, address, height)
 	} else {
 		r1 = ret.Error(1)
 	}
