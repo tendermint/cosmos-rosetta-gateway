@@ -97,6 +97,8 @@ func New(ctx context.Context, appName string) (*Environment, error) {
 		}
 		time.Sleep(time.Second * 5)
 		if e.checkServerAvailabity(ctx) {
+			// wait servers to fully get ready.
+			time.Sleep(time.Second * 8)
 			return e, nil
 		}
 		fmt.Println("rpc servers aren't avaiable yet")

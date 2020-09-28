@@ -41,9 +41,9 @@ func TestAuthAccountClient(t *testing.T) {
 	require.NotNil(t, res)
 	t.Log(res.Result)
 
-	require.Equal(t, int64(9694), res.Height)
+	require.Equal(t, int64(1), res.Height)
 	require.Equal(t, addr, res.Result.Value.Address)
 	require.Equal(t, "2", res.Result.Value.AccountNumber)
-	require.Equal(t, "4", res.Result.Value.Sequence)
+	require.Equal(t, "1", res.Result.Value.Sequence)
 	require.Equal(t, int64(1000), res.Result.Value.Coins[0].Amount.Int64())
 }
