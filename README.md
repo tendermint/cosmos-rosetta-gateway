@@ -19,6 +19,7 @@ The standalone executable will talk to your blockchain's API and serve as an API
 | Task  | Flag  | Description |
 |---|---|---|
 | Help | --help | explain these flags |
+| Port | --port 8080  | the port where the service is listening |
 | App RPC Endpoint  | --app-rpc localhost:1317  |       |
 | Tendermint RPC Endpoint  | --tendermint-rpc localhost:2665  |       |
 | Application Name  | --blockchain gaia  |  example: "Bitcoin |
