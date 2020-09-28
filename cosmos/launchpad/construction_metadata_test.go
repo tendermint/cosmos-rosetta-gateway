@@ -31,7 +31,7 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 
 	m := &mocks.SdkClient{}
 	m.
-		On("GetAuthAccount", mock.Anything, "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na").
+		On("GetAuthAccount", mock.Anything, "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na", int64(0)).
 		Return(sdktypes.AccountResponse{
 			Height: 12,
 			Result: sdktypes.Response{

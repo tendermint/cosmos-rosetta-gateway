@@ -12,7 +12,7 @@ import (
 )
 
 type SdkClient interface {
-	GetAuthAccount(ctx context.Context, address string) (types.AccountResponse, error)
+	GetAuthAccount(ctx context.Context, address string, height int64) (types.AccountResponse, error)
 	GetTx(ctx context.Context, hash string) (sdk.TxResponse, error)
 	PostTx(ctx context.Context, bytes []byte) (sdk.TxResponse, error)
 	GetNodeInfo(ctx context.Context) (rpc.NodeInfoResponse, error)
