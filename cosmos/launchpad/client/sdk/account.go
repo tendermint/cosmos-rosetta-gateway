@@ -20,6 +20,9 @@ func (c Client) GetAuthAccount(ctx context.Context, address string) (types.Accou
 	if err != nil {
 		return types.AccountResponse{}, err
 	}
+	if r == nil {
+		return types.AccountResponse{}, nil
+	}
 	btes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return types.AccountResponse{}, err

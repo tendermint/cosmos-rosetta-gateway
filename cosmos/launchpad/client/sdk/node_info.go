@@ -15,6 +15,9 @@ func (c Client) GetNodeInfo(ctx context.Context) (rpc.NodeInfoResponse, error) {
 	if err != nil {
 		return rpc.NodeInfoResponse{}, err
 	}
+	if r == nil {
+		return rpc.NodeInfoResponse{}, nil
+	}
 	btes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return rpc.NodeInfoResponse{}, err

@@ -2,7 +2,6 @@ package launchpad
 
 import (
 	"context"
-
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
