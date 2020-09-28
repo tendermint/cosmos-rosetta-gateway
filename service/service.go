@@ -31,7 +31,7 @@ type Network struct {
 func New(options Options, network Network) (*Service, error) {
 	asserter, err := assert.NewServer(
 		network.Properties.SupportedOperations,
-		false,
+		true,
 		[]*types.NetworkIdentifier{
 			{
 				Blockchain: network.Properties.Blockchain,
