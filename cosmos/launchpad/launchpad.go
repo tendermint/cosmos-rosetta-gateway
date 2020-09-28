@@ -61,7 +61,7 @@ func NewLaunchpadNetwork(options Options) service.Network {
 	return service.Network{
 		Properties: rosetta.NetworkProperties{
 			Blockchain:          options.Blockchain,
-			Network:             options.Blockchain,
+			Network:             options.Network,
 			SupportedOperations: []string{OperationTransfer},
 		},
 		Adapter: newAdapter(

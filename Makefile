@@ -8,6 +8,9 @@ gen-all: gen-mocks
 gen-mocks:
 	scripts/gen-mocks
 
+install:
+	go install ./cmd/crg
+
 test:
 	go test -mod=readonly -race github.com/tendermint/cosmos-rosetta-gateway/...
 
