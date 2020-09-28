@@ -12,9 +12,9 @@ import (
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
 )
 
-func (c Client) GetAuthAccount(ctx context.Context, address string, height string) (types.AccountResponse, error) {
+func (c Client) GetAuthAccount(ctx context.Context, address string, height int64) (types.AccountResponse, error) {
 	var accRes rest.ResponseWithHeight
-	path := fmt.Sprintf("/auth/accounts/%s?height=%s", address, height)
+	path := fmt.Sprintf("/auth/accounts/%s?height=%d", address, height)
 	r, err := http.Get(c.getEndpoint(path))
 	if err != nil {
 		return types.AccountResponse{}, err
@@ -35,6 +35,7 @@ func (c Client) GetAuthAccount(ctx context.Context, address string, height strin
 	}
 	defer r.Body.Close()
 
+	fmt.Printf("this is res in cli %v", res)
 	return types.AccountResponse{
 		Height: accRes.Height,
 		Result: res,

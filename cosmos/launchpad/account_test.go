@@ -13,7 +13,6 @@ import (
 	mocks2 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
@@ -27,7 +26,7 @@ func TestLaunchpad_AccountBalance(t *testing.T) {
 	defer ma.AssertExpectations(t)
 
 	m.
-		On("GetAuthAccount", mock.Anything, "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na", "").
+		On("GetAuthAccount", context.Background(), "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na", int64(0)).
 		Return(sdktypes.AccountResponse{
 			Height: 12,
 			Result: sdktypes.Response{

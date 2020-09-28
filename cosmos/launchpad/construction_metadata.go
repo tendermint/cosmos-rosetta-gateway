@@ -22,7 +22,7 @@ func (l launchpad) ConstructionMetadata(ctx context.Context, r *types.Constructi
 		return nil, ErrInvalidAddress
 	}
 	addrString := addr.(string)
-	accRes, err := l.cosmos.GetAuthAccount(ctx, addrString, "")
+	accRes, err := l.cosmos.GetAuthAccount(ctx, addrString, int64(0))
 	if err != nil {
 		return nil, rosetta.WrapError(ErrInterpreting, err.Error())
 	}
