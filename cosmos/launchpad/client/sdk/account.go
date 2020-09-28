@@ -35,7 +35,6 @@ func (c Client) GetAuthAccount(ctx context.Context, address string, height int64
 	}
 	defer r.Body.Close()
 
-	fmt.Printf("this is res in cli %v", res)
 	return types.AccountResponse{
 		Height: accRes.Height,
 		Result: res,

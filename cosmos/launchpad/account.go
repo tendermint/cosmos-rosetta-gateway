@@ -2,7 +2,6 @@ package launchpad
 
 import (
 	"context"
-	"fmt"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -20,7 +19,6 @@ func (l launchpad) AccountBalance(ctx context.Context, request *types.AccountBal
 	if request.BlockIdentifier != nil {
 		reqHeight = *request.BlockIdentifier.Index
 	}
-	fmt.Printf("this is request ht %d", reqHeight)
 	resp, err := l.cosmos.GetAuthAccount(ctx, request.AccountIdentifier.Address, reqHeight)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrNodeConnection, err.Error())

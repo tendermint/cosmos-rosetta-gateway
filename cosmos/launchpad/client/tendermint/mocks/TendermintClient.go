@@ -4,6 +4,7 @@ package mocks
 
 import (
 	mock "github.com/stretchr/testify/mock"
+
 	tendermint "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 )
 
