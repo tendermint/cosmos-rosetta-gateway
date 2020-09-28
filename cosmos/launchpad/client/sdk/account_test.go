@@ -12,11 +12,14 @@ import (
 )
 
 func TestAuthAccountClient(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
 	ctx, cancel := clienttest.Ctx()
 	t.Cleanup(cancel)
 	e, err := clienttest.NewLaunchpad(ctx, "crgapp")
 	require.NoError(t, err)
-	t.Cleanup(func() { require.NoError(t, e.Cleanup()) })
+	t.Cleanup(e.Cleanup)
 
 	client := NewClient(e.SDKAddr)
 
@@ -41,7 +44,7 @@ func TestAuthAccountClient(t *testing.T) {
 	require.NotNil(t, res)
 	t.Log(res.Result)
 
-	require.Equal(t, int64(1), res.Height)
+	require.Greater(t, res.Height, int64(0))
 	require.Equal(t, addr, res.Result.Value.Address)
 	require.Equal(t, "2", res.Result.Value.AccountNumber)
 	require.Equal(t, "1", res.Result.Value.Sequence)

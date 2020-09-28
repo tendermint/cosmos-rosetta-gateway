@@ -48,9 +48,7 @@ func New(ctx context.Context, appName string) (*Environment, error) {
 	if e.checkServerAvailabity(ctx) {
 		return nil, errors.New("a cosmos app is already running, stop it first")
 	}
-	if err := e.Cleanup(); err != nil {
-		return nil, err
-	}
+	e.Cleanup()
 	var err error
 	installOnce.Do(func() { err = errors.Wrap(installStarport(ctx), "cannot install starport") })
 	if err != nil {
@@ -124,7 +122,7 @@ func (e *Environment) Appd() string { return e.appName + "d" }
 func (e *Environment) Appcli() string { return e.appName + "cli" }
 
 // Cleanup shutdowns app servers and cleans up the testing environment.
-func (e *Environment) Cleanup() error {
+func (e *Environment) Cleanup() {
 	if e.serveCancel != nil {
 		e.serveCancel()
 		e.serveG.Wait()
@@ -135,11 +133,7 @@ func (e *Environment) Cleanup() error {
 	if appcliPath, _ := exec.LookPath(e.Appcli()); appcliPath != "" {
 		os.Remove(appcliPath)
 	}
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return err
-	}
+	home, _ := os.UserHomeDir()
 	os.RemoveAll(filepath.Join(home, "."+e.Appcli()))
 	os.RemoveAll(filepath.Join(home, "."+e.Appd()))
-	return nil
 }
