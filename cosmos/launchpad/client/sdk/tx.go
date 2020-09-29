@@ -19,7 +19,7 @@ func (c Client) GetTx(ctx context.Context, hash string) (sdk.TxResponse, error) 
 		return sdk.TxResponse{}, err
 	}
 	if r == nil {
-		return sdk.TxResponse{}, nil
+		return sdk.TxResponse{}, fmt.Errorf("unable to fetch data from endpoint %s", c.getEndpoint(path))
 	}
 	btes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -41,7 +41,7 @@ func (c Client) PostTx(ctx context.Context, bz []byte) (sdk.TxResponse, error) {
 		return sdk.TxResponse{}, err
 	}
 	if r == nil {
-		return sdk.TxResponse{}, nil
+		return sdk.TxResponse{}, fmt.Errorf("unable to get response from endpoint %s", c.getEndpoint("/txs"))
 	}
 	btes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
