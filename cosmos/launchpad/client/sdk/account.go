@@ -19,6 +19,9 @@ func (c Client) GetAuthAccount(ctx context.Context, address string, height int64
 	if err != nil {
 		return types.AccountResponse{}, err
 	}
+	if r == nil {
+		return types.AccountResponse{}, fmt.Errorf("unable to fetch data from endpoint %s", c.getEndpoint(path))
+	}
 	btes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return types.AccountResponse{}, err

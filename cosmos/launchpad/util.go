@@ -33,7 +33,9 @@ func (l launchpad) getTxByHash(ctx context.Context, hash string) (*types.Transac
 	if err != nil {
 		return nil, ErrNodeConnection
 	}
-
+	if txQuery.Tx == nil {
+		return nil, ErrInvalidTxHash
+	}
 	tx := cosmosTxToRosettaTx(txQuery)
 
 	return tx, nil
