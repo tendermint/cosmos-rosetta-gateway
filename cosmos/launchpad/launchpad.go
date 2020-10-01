@@ -62,7 +62,7 @@ func NewLaunchpadNetwork(options Options) service.Network {
 		Properties: rosetta.NetworkProperties{
 			Blockchain:          options.Blockchain,
 			Network:             options.Network,
-			SupportedOperations: []string{OperationTransfer},
+			SupportedOperations: supportedOps,
 		},
 		Adapter: newAdapter(
 			cosmosClient,

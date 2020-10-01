@@ -14,17 +14,19 @@ func (l launchpad) ConstructionPreprocess(ctx context.Context, r *types.Construc
 		return nil, ErrInterpreting
 	}
 
-	txData, err := getTransferTxDataFromOperations(operations)
+	msg, err := getMsgDataFromOperations(operations)
 	if err != nil {
-		return nil, rosetta.WrapError(ErrInvalidAddress, err.Error())
+		return nil, rosetta.WrapError(ErrInvalidOperation, err.Error())
 	}
-	if txData.From == nil {
-		return nil, rosetta.WrapError(ErrInvalidAddress, err.Error())
+
+	signers := msg.GetSigners()
+	if len(signers) != 1 {
+		return nil, rosetta.WrapError(ErrInvalidAddress, "invalid number of signers")
 	}
 
 	var res = &types.ConstructionPreprocessResponse{
 		Options: map[string]interface{}{
-			OptionAddress: txData.From.String(),
+			OptionAddress: signers[0].String(),
 			OptionGas:     r.SuggestedFeeMultiplier,
 			// TODO: Check if memo is needed
 		},

@@ -128,10 +128,14 @@ func toOperations(msg []sdk.Msg, hasError bool) (operations []*types.Operation) 
 	return
 }
 
+func getMsgDataFromOperations(ops []*types.Operation) (sdk.Msg, error) {
+	return getTransferTxDataFromOperations(ops)
+}
+
 // getTransferTxDataFromOperations extracts the from and to addresses from a list of operations.
 // We assume that it comes formated in the correct way. And that the balance of the sender is the same
 // as the receiver operations.
-func getTransferTxDataFromOperations(ops []*types.Operation) (*TransferTxData, error) {
+func getTransferTxDataFromOperations(ops []*types.Operation) (sdk.Msg, error) {
 	var (
 		transferData = &TransferTxData{}
 		err          error
@@ -158,5 +162,6 @@ func getTransferTxDataFromOperations(ops []*types.Operation) (*TransferTxData, e
 		}
 	}
 
-	return transferData, nil
+	msg := bank.NewMsgSend(transferData.From, transferData.To, sdk.NewCoins(transferData.Amount))
+	return msg, nil
 }

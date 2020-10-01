@@ -2,6 +2,7 @@ package launchpad
 
 import (
 	"context"
+	"github.com/cosmos/cosmos-sdk/x/bank"
 	"testing"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
@@ -44,7 +45,7 @@ func TestPayloadsEndpoint_Errors(t *testing.T) {
 					},
 				},
 			},
-			expectedErr: rosetta.WrapError(ErrInvalidOperation, "the operations are not Transfer"),
+			expectedErr: rosetta.WrapError(ErrInvalidOperation, "operation type mismatch"),
 		},
 	}
 
@@ -96,17 +97,17 @@ func TestGetSenderByOperations(t *testing.T) {
 		},
 	}
 
-	transferData, err := getTransferTxDataFromOperations(ops)
+	msg, err := getMsgDataFromOperations(ops)
 	require.NoError(t, err)
-
+	newMsg := msg.(bank.MsgSend)
 	expectedFrom, err := types2.AccAddressFromBech32(ops[1].Account.Address)
 	require.NoError(t, err)
 	expectedTo, err := types2.AccAddressFromBech32(ops[0].Account.Address)
 	require.NoError(t, err)
 
-	require.Equal(t, expectedFrom, transferData.From)
-	require.Equal(t, expectedTo, transferData.To)
-	require.Equal(t, types2.NewCoin("stake", types2.NewInt(12345)), transferData.Amount)
+	require.Equal(t, expectedFrom, newMsg.FromAddress)
+	require.Equal(t, expectedTo, newMsg.ToAddress)
+	require.Equal(t, types2.Coins{types2.NewCoin("stake", types2.NewInt(12345))}, newMsg.Amount)
 }
 
 func TestLaunchpad_ConstructionPayloads(t *testing.T) {

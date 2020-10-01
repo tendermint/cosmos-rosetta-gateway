@@ -10,6 +10,7 @@ const (
 	StatusSuccess  = "Success"
 
 	OperationTransfer = "Transfer"
+	OperationDelegate = "Delegate"
 
 	OptionAddress = "address"
 	OptionGas     = "gas"
@@ -21,5 +22,7 @@ type TransferTxData struct {
 	To     types.AccAddress
 	Amount types.Coin
 }
+
+var supportedOps = []string{OperationTransfer, OperationDelegate}
 
 var Codec = simapp.MakeCodec()
