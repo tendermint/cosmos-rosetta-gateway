@@ -17,13 +17,14 @@ var (
 	flagNetworkID     = flag.String("network", "network", "Network's identifier (e.g. cosmos-hub-3, testnet-1, etc)")
 	flagOfflineMode   = flag.Bool("offline", false, "Flag that forces the rosetta service to run in offline mode, some endpoints won't work.")
 	flagAddrPrefix    = flag.String("prefix", "cosmos", "Bech32 prefix of address (e.g. cosmos, iaa, xrn:)")
+	flagPort          = flag.Uint("port", 8080, "The port where the service is exposed.")
 )
 
 func main() {
 	flag.Parse()
 
 	h, err := service.New(
-		service.Options{Port: 8080},
+		service.Options{Port: uint32(*flagPort)},
 		launchpad.NewLaunchpadNetwork(launchpad.Options{
 			CosmosEndpoint:     *flagAppRPC,
 			TendermintEndpoint: *flagTendermintRPC,
@@ -38,6 +39,7 @@ func main() {
 		os.Exit(2)
 	}
 
+	fmt.Fprintf(flag.CommandLine.Output(), "Listening at http://localhost:%d\n", *flagPort)
 	err = h.Start()
 	if err != nil {
 		fmt.Fprintln(flag.CommandLine.Output(), err)

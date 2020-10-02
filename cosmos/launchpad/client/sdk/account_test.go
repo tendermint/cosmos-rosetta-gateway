@@ -39,10 +39,9 @@ func TestAuthAccountClient(t *testing.T) {
 	require.True(t, len(accounts) != 0)
 
 	addr := accounts[0].Address
-	res, err := client.GetAuthAccount(ctx, addr)
+	res, err := client.GetAuthAccount(ctx, addr, 0)
 	require.NoError(t, err)
 	require.NotNil(t, res)
-	t.Log(res.Result)
 
 	require.Greater(t, res.Height, int64(0))
 	require.Equal(t, addr, res.Result.Value.Address)
