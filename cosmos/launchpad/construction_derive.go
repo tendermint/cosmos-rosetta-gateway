@@ -3,9 +3,13 @@ package launchpad
 import (
 	"context"
 
+	secp256k12 "github.com/tendermint/tendermint/crypto/secp256k1"
+
+	secp256k1 "github.com/btcsuite/btcd/btcec"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+
 	"github.com/coinbase/rosetta-sdk-go/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	cryptoamino "github.com/tendermint/tendermint/crypto/encoding/amino"
 )
 
 func (l launchpad) ConstructionDerive(ctx context.Context, r *types.ConstructionDeriveRequest) (*types.ConstructionDeriveResponse, *types.Error) {
@@ -13,12 +17,15 @@ func (l launchpad) ConstructionDerive(ctx context.Context, r *types.Construction
 		return nil, ErrUnsupportedCurve
 	}
 
-	pubKey, err := cryptoamino.PubKeyFromBytes(r.PublicKey.Bytes)
+	pubKey, err := secp256k1.ParsePubKey(r.PublicKey.Bytes, secp256k1.S256())
 	if err != nil {
-		return nil, ErrInvalidPubkey
+		return nil, rosetta.WrapError(ErrInvalidPubkey, err.Error())
 	}
 
+	var compressedPublicKey secp256k12.PubKeySecp256k1
+	copy(compressedPublicKey[:], pubKey.SerializeCompressed())
+
 	return &types.ConstructionDeriveResponse{
-		Address: sdk.AccAddress(pubKey.Address().Bytes()).String(),
+		Address: sdk.AccAddress(compressedPublicKey.Address().Bytes()).String(),
 	}, nil
 }
