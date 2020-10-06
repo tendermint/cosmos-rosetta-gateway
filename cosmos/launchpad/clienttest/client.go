@@ -125,7 +125,7 @@ func (e *Environment) Appcli() string { return e.appName + "cli" }
 func (e *Environment) Cleanup() {
 	if e.serveCancel != nil {
 		e.serveCancel()
-		e.serveG.Wait()
+		_ = e.serveG.Wait()
 	}
 	if appdPath, _ := exec.LookPath(e.Appd()); appdPath != "" {
 		os.Remove(appdPath)
