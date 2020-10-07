@@ -16,11 +16,11 @@ require (
 	github.com/spf13/viper v1.7.1 // indirect
 	github.com/stretchr/objx v0.3.0 // indirect
 	github.com/stretchr/testify v1.6.1
+	github.com/tendermint/starport v0.0.11-0.20200924143929-4cbe2b57c65c
 	github.com/tendermint/tendermint v0.33.8
 	github.com/vektra/mockery/v2 v2.2.1
 	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a // indirect
 	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208
-	golang.org/x/sys v0.0.0-20200922070232-aee5d888a860 // indirect
 	golang.org/x/tools v0.0.0-20200921210052-fa0125251cc4 // indirect
 	gopkg.in/ini.v1 v1.61.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
