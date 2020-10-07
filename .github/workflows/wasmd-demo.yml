@@ -1,0 +1,19 @@
+name: Wasmd Demo Docker
+on: push
+
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.3
+      - name: docker build
+        run: |
+          cd cosmwasm
+          docker build .
+
+   
+   
+   
+   
+
