@@ -3,6 +3,7 @@ package launchpad
 import (
 	"context"
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/x/staking"
 	"strconv"
 	"strings"
 
@@ -129,7 +130,15 @@ func toOperations(msg []sdk.Msg, hasError bool) (operations []*types.Operation) 
 }
 
 func getMsgDataFromOperations(ops []*types.Operation) (sdk.Msg, error) {
-	return getTransferTxDataFromOperations(ops)
+	op := ops[0]
+	switch op.Type {
+	case OperationTransfer:
+		return getTransferTxDataFromOperations(ops)
+	case OperationDelegate:
+		return getDelegateDataFromOperations(ops)
+	}
+
+	return nil, fmt.Errorf("unable to iterate operations")
 }
 
 // getTransferTxDataFromOperations extracts the from and to addresses from a list of operations.
@@ -137,18 +146,19 @@ func getMsgDataFromOperations(ops []*types.Operation) (sdk.Msg, error) {
 // as the receiver operations.
 func getTransferTxDataFromOperations(ops []*types.Operation) (sdk.Msg, error) {
 	var (
-		transferData = &TransferTxData{}
-		err          error
+		from, to sdk.AccAddress
+		sendAmt  sdk.Coin
+		err      error
 	)
 
 	for _, op := range ops {
 		if strings.HasPrefix(op.Amount.Value, "-") {
-			transferData.From, err = sdk.AccAddressFromBech32(op.Account.Address)
+			from, err = sdk.AccAddressFromBech32(op.Account.Address)
 			if err != nil {
 				return nil, err
 			}
 		} else {
-			transferData.To, err = sdk.AccAddressFromBech32(op.Account.Address)
+			to, err = sdk.AccAddressFromBech32(op.Account.Address)
 			if err != nil {
 				return nil, err
 			}
@@ -158,10 +168,43 @@ func getTransferTxDataFromOperations(ops []*types.Operation) (sdk.Msg, error) {
 				return nil, fmt.Errorf("invalid amount")
 			}
 
-			transferData.Amount = sdk.NewCoin(op.Amount.Currency.Symbol, sdk.NewInt(amount))
+			sendAmt = sdk.NewCoin(op.Amount.Currency.Symbol, sdk.NewInt(amount))
 		}
 	}
 
-	msg := bank.NewMsgSend(transferData.From, transferData.To, sdk.NewCoins(transferData.Amount))
+	msg := bank.NewMsgSend(from, to, sdk.NewCoins(sendAmt))
+	return msg, nil
+}
+
+func getDelegateDataFromOperations(ops []*types.Operation) (sdk.Msg, error) {
+	var (
+		delAddr sdk.AccAddress
+		valAddr sdk.ValAddress
+		sendAmt sdk.Coin
+		err     error
+	)
+
+	for _, op := range ops {
+		if strings.HasPrefix(op.Amount.Value, "-") {
+			delAddr, err = sdk.AccAddressFromBech32(op.Account.Address)
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			valAddr, err = sdk.ValAddressFromBech32(op.Account.Address)
+			if err != nil {
+				return nil, err
+			}
+
+			amount, err := strconv.ParseInt(op.Amount.Value, 10, 64)
+			if err != nil {
+				return nil, fmt.Errorf("invalid amount")
+			}
+
+			sendAmt = sdk.NewCoin(op.Amount.Currency.Symbol, sdk.NewInt(amount))
+		}
+	}
+
+	msg := staking.NewMsgDelegate(delAddr, valAddr, sendAmt)
 	return msg, nil
 }
