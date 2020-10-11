@@ -32,6 +32,16 @@ func (l launchpad) ConstructionMetadata(ctx context.Context, r *types.Constructi
 		return nil, rosetta.WrapError(ErrInvalidAddress, "gas not set")
 	}
 
+	memo, ok := r.Options[OptionMemo]
+	if !ok {
+		return nil, rosetta.WrapError(ErrInvalidMemo, "memo not set")
+	}
+
+	fee, ok := r.Options[OptionFee]
+	if !ok {
+		return nil, rosetta.WrapError(ErrInvalidFee, "fee not set")
+	}
+
 	// TODO: Check if suggested fee can be added
 	res := &types.ConstructionMetadataResponse{
 		Metadata: map[string]interface{}{
@@ -39,6 +49,8 @@ func (l launchpad) ConstructionMetadata(ctx context.Context, r *types.Constructi
 			SequenceKey:      accRes.Result.Value.Sequence,
 			ChainIdKey:       r.NetworkIdentifier.Network,
 			GasKey:           gas,
+			OptionMemo:       memo,
+			OptionFee:        fee,
 		},
 	}
 

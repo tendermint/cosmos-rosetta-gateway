@@ -2,6 +2,7 @@ package launchpad
 
 import (
 	"fmt"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strconv"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -20,6 +21,8 @@ type PayloadReqMetadata struct {
 	Sequence      uint64
 	AccountNumber uint64
 	Gas           uint64
+	Memo          string
+	Fee           sdk.Coin
 }
 
 // GetMetadataFromPayloadReq obtains the metadata from the request to /construction/payloads endpoint.
@@ -64,10 +67,25 @@ func GetMetadataFromPayloadReq(req *types.ConstructionPayloadsRequest) (*Payload
 		return nil, fmt.Errorf("invalid gas value")
 	}
 
+	memo, ok := req.Metadata[OptionMemo]
+	if !ok {
+		return nil, fmt.Errorf("memo metadata was not provided")
+	}
+	memoStr, ok := memo.(string)
+	if !ok {
+		return nil, fmt.Errorf("invalid memo")
+	}
+
+	_, ok = req.Metadata[OptionMemo]
+	if !ok {
+		return nil, fmt.Errorf("fee metadata was not provided")
+	}
 	return &PayloadReqMetadata{
 		ChainId:       chainId,
 		Sequence:      uint64(seqNum),
 		AccountNumber: uint64(accNum),
 		Gas:           uint64(gasF64),
+		Memo:          memoStr,
+		Fee:           sdk.NewCoin("tokens", sdk.NewInt(0.001)),
 	}, nil
 }

@@ -12,6 +12,8 @@ const (
 	OperationTransfer = "Transfer"
 
 	OptionAddress = "address"
+	OptionFee     = "fee"
+	OptionMemo    = "memo"
 	OptionGas     = "gas"
 )
 
