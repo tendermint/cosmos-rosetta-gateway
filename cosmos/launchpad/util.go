@@ -88,43 +88,75 @@ func cosmosTxToRosettaTx(tx sdk.TxResponse) *types.Transaction {
 
 func toOperations(msg []sdk.Msg, hasError bool) (operations []*types.Operation) {
 	for i, msg := range msg {
-		newMsg, ok := msg.(bank.MsgSend)
-		if !ok {
-			continue
-		}
-		fromAddress := newMsg.FromAddress
-		toAddress := newMsg.ToAddress
-		amounts := newMsg.Amount
-		if len(amounts) == 0 {
-			continue
-		}
-		coin := amounts[0]
-		sendOp := func(account, amount string, index int) *types.Operation {
-			status := StatusSuccess
-			if hasError {
-				status = StatusReverted
+		switch msg.Type() {
+		case "MsgSend":
+			newMsg := msg.(bank.MsgSend)
+			fromAddress := newMsg.FromAddress
+			toAddress := newMsg.ToAddress
+			amounts := newMsg.Amount
+			if len(amounts) == 0 {
+				continue
 			}
-			return &types.Operation{
-				OperationIdentifier: &types.OperationIdentifier{
-					Index: int64(index),
-				},
-				Type:   OperationTransfer,
-				Status: status,
-				Account: &types.AccountIdentifier{
-					Address: account,
-				},
-				Amount: &types.Amount{
-					Value: amount,
-					Currency: &types.Currency{
-						Symbol: coin.Denom,
+			coin := amounts[0]
+			sendOp := func(account, amount string, index int) *types.Operation {
+				status := StatusSuccess
+				if hasError {
+					status = StatusReverted
+				}
+				return &types.Operation{
+					OperationIdentifier: &types.OperationIdentifier{
+						Index: int64(index),
 					},
-				},
+					Type:   OperationTransfer,
+					Status: status,
+					Account: &types.AccountIdentifier{
+						Address: account,
+					},
+					Amount: &types.Amount{
+						Value: amount,
+						Currency: &types.Currency{
+							Symbol: coin.Denom,
+						},
+					},
+				}
 			}
+			operations = append(operations,
+				sendOp(fromAddress.String(), "-"+coin.Amount.String(), i),
+				sendOp(toAddress.String(), coin.Amount.String(), i+1),
+			)
+
+		case "MsgDelegate":
+			newMsg := msg.(staking.MsgDelegate)
+			srcAddr := newMsg.DelegatorAddress
+			valAddr := newMsg.ValidatorAddress
+			delAmt := newMsg.Amount
+			sendOp := func(account, amount string, index int) *types.Operation {
+				status := StatusSuccess
+				if hasError {
+					status = StatusReverted
+				}
+				return &types.Operation{
+					OperationIdentifier: &types.OperationIdentifier{
+						Index: int64(index),
+					},
+					Type:   OperationDelegate,
+					Status: status,
+					Account: &types.AccountIdentifier{
+						Address: account,
+					},
+					Amount: &types.Amount{
+						Value: amount,
+						Currency: &types.Currency{
+							Symbol: delAmt.Denom,
+						},
+					},
+				}
+			}
+			operations = append(operations,
+				sendOp(srcAddr.String(), "-"+delAmt.Amount.String(), i),
+				sendOp(valAddr.String(), delAmt.Amount.String(), i+1),
+			)
 		}
-		operations = append(operations,
-			sendOp(fromAddress.String(), "-"+coin.Amount.String(), i),
-			sendOp(toAddress.String(), coin.Amount.String(), i+1),
-		)
 	}
 	return
 }
@@ -180,7 +212,7 @@ func getDelegateDataFromOperations(ops []*types.Operation) (sdk.Msg, error) {
 	var (
 		delAddr sdk.AccAddress
 		valAddr sdk.ValAddress
-		sendAmt sdk.Coin
+		delAmt  sdk.Coin
 		err     error
 	)
 
@@ -201,10 +233,10 @@ func getDelegateDataFromOperations(ops []*types.Operation) (sdk.Msg, error) {
 				return nil, fmt.Errorf("invalid amount")
 			}
 
-			sendAmt = sdk.NewCoin(op.Amount.Currency.Symbol, sdk.NewInt(amount))
+			delAmt = sdk.NewCoin(op.Amount.Currency.Symbol, sdk.NewInt(amount))
 		}
 	}
 
-	msg := staking.NewMsgDelegate(delAddr, valAddr, sendAmt)
+	msg := staking.NewMsgDelegate(delAddr, valAddr, delAmt)
 	return msg, nil
 }

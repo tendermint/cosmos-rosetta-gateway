@@ -175,3 +175,62 @@ func TestLaunchpad_ConstructionPayloads(t *testing.T) {
 	require.Equal(t, senderAddr, resp.Payloads[0].Address)
 	require.Equal(t, types.SignatureType("secp256k1"), resp.Payloads[0].SignatureType)
 }
+
+func TestLaunchpad_ConstructionPayloadsDelegate(t *testing.T) {
+	properties := properties{
+		Blockchain: "TheBlockchain",
+		Network:    "TheNetwork",
+		AddrPrefix: "test",
+	}
+	adapter := newAdapter(sdk.NewClient(""), tendermint.NewClient(""), properties)
+
+	feeMultiplier := float64(200000)
+	senderAddr := "test1khy4gsp06srvu3u65uyhrax7tnj2atezfqnfan"
+	req := &types.ConstructionPayloadsRequest{
+		Operations: []*types.Operation{
+			{
+				OperationIdentifier: &types.OperationIdentifier{Index: 0},
+				Type:                OperationDelegate,
+				Account: &types.AccountIdentifier{
+					Address: senderAddr,
+				},
+				Amount: &types.Amount{
+					Value: "-5619726348293826415",
+					Currency: &types.Currency{
+						Symbol:   "atom", // TODO: Panic when bad symbol.
+						Decimals: 18,
+					},
+				},
+			},
+			{
+				OperationIdentifier: &types.OperationIdentifier{Index: 1},
+				RelatedOperations: []*types.OperationIdentifier{
+					{Index: 0},
+				},
+				Type: OperationDelegate,
+				Account: &types.AccountIdentifier{
+					Address: "cosmosvaloper136vdmygdxpmwqvrtgmhv658gfc8wacr7h89r60",
+				},
+				Amount: &types.Amount{
+					Value: "5619726348293826415",
+					Currency: &types.Currency{
+						Symbol:   "atom",
+						Decimals: 18,
+					},
+				},
+			},
+		},
+		Metadata: map[string]interface{}{
+			ChainIdKey:       "theChainId",
+			AccountNumberKey: "11",
+			SequenceKey:      "12",
+			OptionGas:        feeMultiplier,
+		},
+	}
+
+	resp, err := adapter.ConstructionPayloads(context.Background(), req)
+	require.Nil(t, err)
+
+	require.Equal(t, senderAddr, resp.Payloads[0].Address)
+	require.Equal(t, types.SignatureType("secp256k1"), resp.Payloads[0].SignatureType)
+}
