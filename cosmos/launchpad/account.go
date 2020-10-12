@@ -2,6 +2,7 @@ package launchpad
 
 import (
 	"context"
+
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -35,6 +36,12 @@ func (l launchpad) AccountBalance(ctx context.Context, request *types.AccountBal
 			Hash:  block.BlockId.Hash,
 		},
 		Balances: convertCoinsToRosettaBalances(resp.Result.Value.Coins),
+		Coins: []*types.Coin{
+			{
+				&types.CoinIdentifier{Identifier: "atom"},
+				convertCoinsToRosettaBalances(resp.Result.Value.Coins)[1],
+			},
+		},
 	}, nil
 }
 

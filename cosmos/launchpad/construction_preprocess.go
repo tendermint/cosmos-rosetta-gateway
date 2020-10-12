@@ -25,7 +25,7 @@ func (l launchpad) ConstructionPreprocess(ctx context.Context, r *types.Construc
 	var res = &types.ConstructionPreprocessResponse{
 		Options: map[string]interface{}{
 			OptionAddress: txData.From.String(),
-			OptionGas:     r.SuggestedFeeMultiplier,
+			OptionGas:     200000,
 			// TODO: Check if memo is needed
 		},
 	}
