@@ -22,10 +22,15 @@ func (l launchpad) ConstructionDerive(ctx context.Context, r *types.Construction
 		return nil, rosetta.WrapError(ErrInvalidPubkey, err.Error())
 	}
 
-	var compressedPublicKey secp256k12.PubKeySecp256k1
-	copy(compressedPublicKey[:], pubKey.SerializeCompressed())
+	err = sdk.VerifyAddressFormat(pubKey.SerializeCompressed())
+	if err != nil {
+		return nil, rosetta.WrapError(ErrInvalidPubkey, err.Error())
+	}
+
+	var pubkeyBytes secp256k12.PubKeySecp256k1
+	copy(pubkeyBytes[:], pubKey.SerializeCompressed())
 
 	return &types.ConstructionDeriveResponse{
-		Address: sdk.AccAddress(compressedPublicKey.Address().Bytes()).String(),
+		Address: sdk.AccAddress(pubkeyBytes.Address()).String(),
 	}, nil
 }
