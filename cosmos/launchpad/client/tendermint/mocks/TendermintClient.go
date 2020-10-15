@@ -4,7 +4,6 @@ package mocks
 
 import (
 	mock "github.com/stretchr/testify/mock"
-
 	tendermint "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 )
 
@@ -64,6 +63,27 @@ func (_m *TendermintClient) NetInfo() (tendermint.NetInfoResponse, error) {
 		r0 = rf()
 	} else {
 		r0 = ret.Get(0).(tendermint.NetInfoResponse)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func() error); ok {
+		r1 = rf()
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// Status provides a mock function with given fields:
+func (_m *TendermintClient) Status() (tendermint.StatusResponse, error) {
+	ret := _m.Called()
+
+	var r0 tendermint.StatusResponse
+	if rf, ok := ret.Get(0).(func() tendermint.StatusResponse); ok {
+		r0 = rf()
+	} else {
+		r0 = ret.Get(0).(tendermint.StatusResponse)
 	}
 
 	var r1 error
