@@ -26,6 +26,9 @@ func (c Client) Status() (StatusResponse, error) {
 	}
 	var jsonResp map[string]json.RawMessage
 	err = json.Unmarshal(body, &jsonResp)
+	if err != nil {
+		return StatusResponse{}, err
+	}
 
 	var statusResp StatusResponse
 	err = json.Unmarshal(jsonResp["result"], &statusResp)
