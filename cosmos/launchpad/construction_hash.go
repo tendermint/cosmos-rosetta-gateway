@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
+	"strings"
 
 	"github.com/cosmos/cosmos-sdk/x/auth"
 
@@ -36,7 +37,7 @@ func (l launchpad) ConstructionHash(ctx context.Context, req *types.Construction
 
 	return &types.TransactionIdentifierResponse{
 		TransactionIdentifier: &types.TransactionIdentifier{
-			Hash: hashString,
+			Hash: strings.ToUpper(hashString),
 		},
 	}, nil
 }

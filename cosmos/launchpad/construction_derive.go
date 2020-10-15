@@ -26,6 +26,6 @@ func (l launchpad) ConstructionDerive(ctx context.Context, r *types.Construction
 	copy(pubkeyBytes[:], pubKey.SerializeCompressed())
 
 	return &types.ConstructionDeriveResponse{
-		Address: sdk.AccAddress(pubkeyBytes.Address()).String(),
+		Address: sdk.AccAddress(pubkeyBytes.Address().Bytes()).String(),
 	}, nil
 }
