@@ -5,10 +5,11 @@ import (
 	"encoding/hex"
 	"fmt"
 
+	secp256k1 "github.com/btcsuite/btcd/btcec"
+	secp256k12 "github.com/tendermint/tendermint/crypto/secp256k1"
+
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/tendermint/tendermint/crypto"
-
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
@@ -25,7 +26,6 @@ func (l launchpad) ConstructionCombine(ctx context.Context, r *types.Constructio
 	if err != nil {
 		return nil, rosetta.WrapError(ErrInvalidTransaction, fmt.Sprintf("unable to unmarshal tx: %s", err.Error()))
 	}
-	var pk crypto.PubKey
 	var sigs []auth.StdSignature
 
 	for _, signature := range r.Signatures {
@@ -33,13 +33,16 @@ func (l launchpad) ConstructionCombine(ctx context.Context, r *types.Constructio
 			return nil, ErrUnsupportedCurve
 		}
 
-		err = Codec.UnmarshalBinaryBare(signature.PublicKey.Bytes, &pk)
+		pubKey, err := secp256k1.ParsePubKey(signature.PublicKey.Bytes, secp256k1.S256())
 		if err != nil {
-			return nil, rosetta.WrapError(ErrInvalidPubkey, "unable to unmarshal pubkey")
+			return nil, rosetta.WrapError(ErrInvalidPubkey, err.Error())
 		}
 
+		var compressedPublicKey secp256k12.PubKeySecp256k1
+		copy(compressedPublicKey[:], pubKey.SerializeCompressed())
+
 		sign := auth.StdSignature{
-			PubKey:    pk,
+			PubKey:    compressedPublicKey,
 			Signature: signature.Bytes,
 		}
 		sigs = append(sigs, sign)
