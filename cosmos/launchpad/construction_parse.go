@@ -2,7 +2,6 @@ package launchpad
 
 import (
 	"context"
-	"encoding/base64"
 	"encoding/hex"
 
 	types2 "github.com/cosmos/cosmos-sdk/types"
@@ -20,13 +19,14 @@ const (
 func (l launchpad) ConstructionParse(ctx context.Context, request *types.ConstructionParseRequest) (*types.ConstructionParseResponse, *types.Error) {
 	rawTx, err := hex.DecodeString(request.Transaction)
 	if err != nil {
-		if rawTx, err = base64.StdEncoding.DecodeString(request.Transaction); err != nil {
-			return nil, ErrInvalidTransaction
-		}
+		return nil, ErrInvalidTransaction
 	}
 
 	var stdTx auth.StdTx
 	err = Codec.UnmarshalJSON(rawTx, &stdTx)
+	if err != nil {
+		return nil, ErrInvalidTransaction
+	}
 
 	var signers []string
 	for _, sig := range stdTx.Signatures {
