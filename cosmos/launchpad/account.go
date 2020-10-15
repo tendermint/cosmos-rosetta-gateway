@@ -38,8 +38,8 @@ func (l launchpad) AccountBalance(ctx context.Context, request *types.AccountBal
 		Balances: convertCoinsToRosettaBalances(resp.Result.Value.Coins),
 		Coins: []*types.Coin{
 			{
-				&types.CoinIdentifier{Identifier: "atom"},
-				convertCoinsToRosettaBalances(resp.Result.Value.Coins)[1],
+				CoinIdentifier: &types.CoinIdentifier{Identifier: "atom"},
+				Amount:         convertCoinsToRosettaBalances(resp.Result.Value.Coins)[1],
 			},
 		},
 	}, nil
