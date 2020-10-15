@@ -172,5 +172,5 @@ func TestLaunchpad_ConstructionPayloads(t *testing.T) {
 	//require.Equal(t, expectedUnssignedTx, resp.UnsignedTransaction)
 
 	require.Equal(t, senderAddr, resp.Payloads[0].Address)
-	require.Equal(t, types.SignatureType("secp256k1"), resp.Payloads[0].SignatureType)
+	require.Equal(t, types.SignatureType("ecdsa"), resp.Payloads[0].SignatureType)
 }
