@@ -12,7 +12,7 @@ import (
 )
 
 func TestLaunchpad_ConstructionHash(t *testing.T) {
-	expectedHash := "fd2ee60a7fc7d91b348f11d73a8556aed46a05d1f18d842d63d9e74650a9ef19"
+	expectedHash := "FD2EE60A7FC7D91B348F11D73A8556AED46A05D1F18D842D63D9E74650A9EF19"
 
 	properties := properties{
 		Blockchain: "TheBlockchain",

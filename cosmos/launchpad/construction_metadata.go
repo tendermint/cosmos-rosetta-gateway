@@ -2,7 +2,6 @@ package launchpad
 
 import (
 	"context"
-
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -32,12 +31,17 @@ func (l launchpad) ConstructionMetadata(ctx context.Context, r *types.Constructi
 		return nil, rosetta.WrapError(ErrInvalidAddress, "gas not set")
 	}
 
+	statusRes, err := l.tendermint.Status()
+	if err != nil {
+		return nil, rosetta.WrapError(ErrInterpreting, err.Error())
+	}
+
 	// TODO: Check if suggested fee can be added
 	res := &types.ConstructionMetadataResponse{
 		Metadata: map[string]interface{}{
 			AccountNumberKey: accRes.Result.Value.AccountNumber,
 			SequenceKey:      accRes.Result.Value.Sequence,
-			ChainIdKey:       r.NetworkIdentifier.Network,
+			ChainIdKey:       statusRes.NodeInfo.Network,
 			GasKey:           gas,
 		},
 	}

@@ -6,12 +6,13 @@ import (
 	"io/ioutil"
 	"testing"
 
+	secp256k1 "github.com/btcsuite/btcd/btcec"
+
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
-	cosmostypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/stretchr/testify/require"
 )
@@ -34,7 +35,7 @@ func TestLaunchpad_ConstructionCombine(t *testing.T) {
 	require.NoError(t, err)
 	txHex := hex.EncodeToString(txBytes)
 
-	pubKey, err := cosmostypes.GetPubKeyFromBech32("accpub", "testpub1addwnpepq2ngu5spnhp4qyt6zzlvdex5zncn5rrqscw6m9c6tn6hc4za4jyf6dj36w7")
+	pk, err := secp256k1.NewPrivateKey(secp256k1.S256())
 	require.NoError(t, err)
 	var combineRes, combineErr = adapter.ConstructionCombine(context.Background(), &types.ConstructionCombineRequest{
 		UnsignedTransaction: txHex,
@@ -45,7 +46,7 @@ func TestLaunchpad_ConstructionCombine(t *testing.T) {
 			},
 			PublicKey: &types.PublicKey{
 				CurveType: types.Secp256k1,
-				Bytes:     pubKey.Bytes(),
+				Bytes:     pk.PubKey().SerializeCompressed(),
 			},
 			SignatureType: types.Ecdsa,
 			// uses random bytes as signing is out of scope for rosetta

@@ -82,11 +82,11 @@ func cosmosTxToRosettaTx(tx sdk.TxResponse) *types.Transaction {
 		TransactionIdentifier: &types.TransactionIdentifier{
 			Hash: tx.TxHash,
 		},
-		Operations: toOperations(tx.Tx.GetMsgs(), hasError),
+		Operations: toOperations(tx.Tx.GetMsgs(), hasError, false),
 	}
 }
 
-func toOperations(msg []sdk.Msg, hasError bool) (operations []*types.Operation) {
+func toOperations(msg []sdk.Msg, hasError bool, withoutStatus bool) (operations []*types.Operation) {
 	for i, msg := range msg {
 		switch msg.Type() {
 		case "MsgSend":
@@ -102,6 +102,9 @@ func toOperations(msg []sdk.Msg, hasError bool) (operations []*types.Operation) 
 				status := StatusSuccess
 				if hasError {
 					status = StatusReverted
+				}
+				if withoutStatus {
+					status = ""
 				}
 				return &types.Operation{
 					OperationIdentifier: &types.OperationIdentifier{

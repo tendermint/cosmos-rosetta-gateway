@@ -3,6 +3,9 @@ package launchpad
 import (
 	"context"
 	"encoding/hex"
+
+	"github.com/tendermint/tendermint/crypto"
+
 	"github.com/coinbase/rosetta-sdk-go/types"
 	cosmostypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
@@ -49,8 +52,8 @@ func (l launchpad) ConstructionPayloads(ctx context.Context, req *types.Construc
 		Payloads: []*types.SigningPayload{
 			{
 				Address:       signers[0].String(),
-				Bytes:         signBytes,
-				SignatureType: "secp256k1",
+				Bytes:         crypto.Sha256(signBytes),
+				SignatureType: "ecdsa",
 			},
 		},
 	}, nil

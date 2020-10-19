@@ -15,6 +15,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/mocks"
+	mocks1 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint/mocks"
 )
 
 func TestLaunchpad_ConstructionMetadata(t *testing.T) {
@@ -29,7 +30,11 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 		Network:    "TheNetwork",
 	}
 
-	m := &mocks.SdkClient{}
+	var (
+		m  = &mocks.SdkClient{}
+		mt = &mocks1.TendermintClient{}
+	)
+
 	m.
 		On("GetAuthAccount", mock.Anything, "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na", int64(0)).
 		Return(sdktypes.AccountResponse{
@@ -40,6 +45,14 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 					Address:       "cosmos15f92rjkapauptyw6lt94rlwq4dcg99nncwc8na",
 					Sequence:      "1",
 				},
+			},
+		}, nil, nil).Once()
+
+	mt.
+		On("Status", mock.Anything).
+		Return(tendermint.StatusResponse{
+			NodeInfo: tendermint.StatusNodeInfo{
+				Network: "TheNetwork",
 			},
 		}, nil, nil).Once()
 
@@ -55,7 +68,8 @@ func TestLaunchpad_ConstructionMetadata(t *testing.T) {
 		ChainIdKey:       "TheNetwork",
 		OptionGas:        &feeMultiplier,
 	}
-	adapter := newAdapter(m, tendermint.NewClient(""), properties)
+
+	adapter := newAdapter(m, mt, properties)
 	metaResp, err := adapter.ConstructionMetadata(context.Background(), &types.ConstructionMetadataRequest{
 		NetworkIdentifier: &networkIdentifier,
 		Options:           options,

@@ -22,6 +22,7 @@ type TendermintClient interface {
 	NetInfo() (tendermint.NetInfoResponse, error)
 	Block(height uint64) (tendermint.BlockResponse, error)
 	BlockByHash(hash string) (tendermint.BlockResponse, error)
+	Status() (tendermint.StatusResponse, error)
 	UnconfirmedTxs() (tendermint.UnconfirmedTxsResponse, error)
 	Tx(hash string) (tendermint.TxResponse, error)
 	TxSearch(query string) (tendermint.TxSearchResponse, error)
