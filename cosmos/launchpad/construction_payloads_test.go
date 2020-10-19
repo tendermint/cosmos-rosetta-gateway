@@ -158,6 +158,8 @@ func TestLaunchpad_ConstructionPayloads(t *testing.T) {
 			AccountNumberKey: "11",
 			SequenceKey:      "12",
 			OptionGas:        feeMultiplier,
+			OptionMemo:       "test",
+			OptionFee:        "0.01uatom",
 		},
 	}
 

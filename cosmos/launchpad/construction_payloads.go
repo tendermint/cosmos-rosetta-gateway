@@ -40,8 +40,9 @@ func (l launchpad) ConstructionPayloads(ctx context.Context, req *types.Construc
 	}
 
 	tx := auth.NewStdTx([]cosmostypes.Msg{msg}, auth.StdFee{
-		Gas: metadata.Gas,
-	}, nil, "TODO memo") // TODO fees and memo.
+		Amount: cosmostypes.Coins{metadata.Fee},
+		Gas:    metadata.Gas,
+	}, nil, metadata.Memo)
 	signBytes := auth.StdSignBytes(
 		metadata.ChainId, metadata.AccountNumber, metadata.Sequence, tx.Fee, tx.Msgs, tx.Memo,
 	)

@@ -76,16 +76,17 @@ func GetMetadataFromPayloadReq(req *types.ConstructionPayloadsRequest) (*Payload
 		return nil, fmt.Errorf("invalid memo")
 	}
 
-	_, ok = req.Metadata[OptionMemo]
+	feeCoin := sdk.NewCoin("tokens", sdk.NewInt(0.001))
 	if !ok {
-		return nil, fmt.Errorf("fee metadata was not provided")
+		return nil, fmt.Errorf("invalid fee")
 	}
+
 	return &PayloadReqMetadata{
 		ChainId:       chainId,
 		Sequence:      uint64(seqNum),
 		AccountNumber: uint64(accNum),
 		Gas:           uint64(gasF64),
 		Memo:          memoStr,
-		Fee:           sdk.NewCoin("tokens", sdk.NewInt(0.001)),
+		Fee:           feeCoin,
 	}, nil
 }

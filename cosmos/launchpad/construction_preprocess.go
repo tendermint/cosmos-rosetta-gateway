@@ -32,7 +32,7 @@ func (l launchpad) ConstructionPreprocess(ctx context.Context, r *types.Construc
 	feeCoins := sdk.NewCoin(fee.Currency.Symbol, sdk.NewInt(amount))
 	memo, ok := r.Metadata["memo"]
 	if !ok {
-		return nil, ErrInvalidFee
+		return nil, ErrInvalidMemo
 	}
 
 	var res = &types.ConstructionPreprocessResponse{
