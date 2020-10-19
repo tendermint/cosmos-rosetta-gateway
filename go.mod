@@ -3,6 +3,7 @@ module github.com/tendermint/cosmos-rosetta-gateway
 go 1.14
 
 require (
+	github.com/btcsuite/btcd v0.20.1-beta
 	github.com/coinbase/rosetta-sdk-go v0.3.4
 	github.com/cosmos/cosmos-sdk v0.39.1
 	github.com/fsnotify/fsnotify v1.4.9 // indirect

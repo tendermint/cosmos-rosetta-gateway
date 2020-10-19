@@ -38,9 +38,9 @@ func (l launchpad) ConstructionPreprocess(ctx context.Context, r *types.Construc
 	var res = &types.ConstructionPreprocessResponse{
 		Options: map[string]interface{}{
 			OptionAddress: txData.From.String(),
-			OptionGas:     r.SuggestedFeeMultiplier,
 			OptionFee:     feeCoins.String(),
 			OptionMemo:    memo,
+			OptionGas:     200000,
 		},
 	}
 	return res, nil
