@@ -1,8 +1,0 @@
-#!/bin/bash
-
-rm -rf cosmos/launchpad/client/sdk/mocks/
-rm -rf cosmos/launchpad/client/tendermint/mocks/
-
-cd cosmos/launchpad && \
-    mockery --name SdkClient --output client/sdk/mocks
-    mockery --name TendermintClient --output client/tendermint/mocks
