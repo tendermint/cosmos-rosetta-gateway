@@ -58,11 +58,25 @@ func TestLaunchpad_ConstructionPreprocess(t *testing.T) {
 	expOptions := map[string]interface{}{
 		OptionAddress: "test12qqzw4tqu32anlcx0a3hupvgdhaf4cc87unhge",
 		OptionGas:     200000,
+		OptionFee:     "12345stake",
+		OptionMemo:    "",
 	}
 
+	amount := &types.Amount{
+		Value: "12345",
+		Currency: &types.Currency{
+			Symbol:   "stake",
+			Decimals: 0,
+		},
+		Metadata: nil,
+	}
 	deriveResp, deriveErr := adapter.ConstructionPreprocess(context.Background(), &types.ConstructionPreprocessRequest{
 		Operations:             ops,
 		SuggestedFeeMultiplier: &feeMultiplier,
+		MaxFee:                 []*types.Amount{amount},
+		Metadata: map[string]interface{}{
+			OptionMemo: "",
+		},
 	})
 
 	require.Nil(t, deriveErr)
