@@ -15,7 +15,7 @@ test:
 	go test -mod=readonly -race github.com/tendermint/cosmos-rosetta-gateway/...
 
 dev:
-	go run cmd/crg/*.go --blockchain "Test" --network "Test"
+	go run cmd/crg/*.go --blockchain "Test" --network "blog"
 
 format:
 	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "*/generated/*" | xargs gofmt -w -s
