@@ -12,6 +12,7 @@ type StatusResponse struct {
 
 type StatusNodeInfo struct {
 	Network string `json:"network"`
+	Version string `json:"version"`
 }
 
 func (c Client) Status() (StatusResponse, error) {

@@ -2,12 +2,11 @@ package launchpad
 
 import (
 	"context"
-
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"strconv"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
+	sdk "github.com/irisnet/irishub/types"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 )
 
 func (l launchpad) AccountBalance(ctx context.Context, request *types.AccountBalanceRequest) (
@@ -25,23 +24,23 @@ func (l launchpad) AccountBalance(ctx context.Context, request *types.AccountBal
 		return nil, rosetta.WrapError(ErrNodeConnection, err.Error())
 	}
 
-	block, err := l.tendermint.Block(uint64(resp.Height))
+	block, err := l.tendermint.Block(0)
 	if err != nil {
 		return nil, rosetta.WrapError(ErrNodeConnection, err.Error())
 	}
 
+	height, err := strconv.Atoi(block.Block.Header.Height)
+	if err != nil {
+		return nil, rosetta.WrapError(ErrInterpreting, err.Error())
+	}
+
 	return &types.AccountBalanceResponse{
 		BlockIdentifier: &types.BlockIdentifier{
-			Index: resp.Height,
-			Hash:  block.BlockId.Hash,
+			Index: int64(height),
+			Hash:  block.BlockMeta.BlockId.Hash,
 		},
-		Balances: convertCoinsToRosettaBalances(resp.Result.Value.Coins),
-		Coins: []*types.Coin{
-			{
-				CoinIdentifier: &types.CoinIdentifier{Identifier: "atom"},
-				Amount:         convertCoinsToRosettaBalances(resp.Result.Value.Coins)[1],
-			},
-		},
+		Balances: convertCoinsToRosettaBalances(resp.Value.Coins),
+		Coins:    []*types.Coin{},
 	}, nil
 }
 

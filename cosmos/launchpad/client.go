@@ -3,8 +3,7 @@ package launchpad
 import (
 	"context"
 
-	"github.com/cosmos/cosmos-sdk/client/rpc"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
 
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
 
@@ -12,10 +11,9 @@ import (
 )
 
 type SdkClient interface {
-	GetAuthAccount(ctx context.Context, address string, height int64) (types.AccountResponse, error)
+	GetAuthAccount(ctx context.Context, address string, height int64) (types.Response, error)
 	GetTx(ctx context.Context, hash string) (sdk.TxResponse, error)
 	PostTx(ctx context.Context, bytes []byte) (sdk.TxResponse, error)
-	GetNodeInfo(ctx context.Context) (rpc.NodeInfoResponse, error)
 }
 
 type TendermintClient interface {

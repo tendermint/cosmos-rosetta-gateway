@@ -6,11 +6,11 @@ import (
 	"sync"
 	"time"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
+	sdk2 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -28,7 +28,7 @@ func (l launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 	if r.BlockIdentifier.Index != nil {
 		blockResp, err = l.tendermint.Block(uint64(*r.BlockIdentifier.Index))
 	} else {
-		blockResp, err = l.tendermint.BlockByHash(HexPrefix(*r.BlockIdentifier.Hash))
+		return nil, rosetta.WrapError(ErrInvalidRequest, "block by hash not supported")
 	}
 	if err != nil {
 		return nil, ErrNodeConnection
@@ -36,7 +36,7 @@ func (l launchpad) Block(ctx context.Context, r *types.BlockRequest) (*types.Blo
 
 	// get all transactions for the block.
 	var (
-		txs []sdk.TxResponse
+		txs []sdk2.TxResponse
 		m   sync.Mutex
 	)
 	txsquery := fmt.Sprintf(`tx.height=%s`, blockResp.Block.Header.Height)

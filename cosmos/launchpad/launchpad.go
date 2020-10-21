@@ -3,13 +3,11 @@ package launchpad
 import (
 	"fmt"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/tendermint/cosmos-rosetta-gateway/service"
-
 	cosmos "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
+
 	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+	"github.com/tendermint/cosmos-rosetta-gateway/service"
 )
 
 type Options struct {
@@ -78,11 +76,6 @@ func NewLaunchpadNetwork(options Options) service.Network {
 }
 
 func newAdapter(cosmos SdkClient, tendermint TendermintClient, options properties) rosetta.Adapter {
-	config := sdk.GetConfig()
-	config.SetBech32PrefixForAccount(
-		options.AddrPrefix,
-		options.AddrPrefix+sdk.PrefixPublic)
-
 	return &launchpad{
 		cosmos:     cosmos,
 		tendermint: tendermint,

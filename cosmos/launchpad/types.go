@@ -1,8 +1,8 @@
 package launchpad
 
 import (
-	"github.com/cosmos/cosmos-sdk/simapp"
-	"github.com/cosmos/cosmos-sdk/types"
+	"github.com/irisnet/irishub/app"
+	"github.com/irisnet/irishub/types"
 )
 
 const (
@@ -22,4 +22,4 @@ type TransferTxData struct {
 	Amount types.Coin
 }
 
-var Codec = simapp.MakeCodec()
+var Codec = app.MakeLatestCodec()

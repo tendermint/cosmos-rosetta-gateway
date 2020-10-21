@@ -6,26 +6,17 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/cosmos/cosmos-sdk/x/bank"
-
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdk2 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
+	"github.com/irisnet/irishub/modules/bank"
+	sdk "github.com/irisnet/irishub/types"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
 )
 
 const (
 	zerox = "0x"
 )
-
-// HexPrefix ensures that string representation of hex starts with 0x.
-func HexPrefix(hex string) string {
-	if !strings.HasPrefix(hex, zerox) {
-		return zerox + hex
-	}
-	return hex
-}
 
 // getTxByHash calls
 func (l launchpad) getTxByHash(ctx context.Context, hash string) (*types.Transaction, *types.Error) {
@@ -42,7 +33,7 @@ func (l launchpad) getTxByHash(ctx context.Context, hash string) (*types.Transac
 }
 
 func toBlockIdentifier(result tendermint.BlockResponse) (*types.BlockIdentifier, error) {
-	if result.BlockId.Hash == "" {
+	if result.BlockMeta.BlockId.Hash == "" {
 		return nil, nil
 	}
 	height, err := strconv.ParseUint(result.Block.Header.Height, 10, 64)
@@ -51,11 +42,11 @@ func toBlockIdentifier(result tendermint.BlockResponse) (*types.BlockIdentifier,
 	}
 	return &types.BlockIdentifier{
 		Index: int64(height),
-		Hash:  result.BlockId.Hash,
+		Hash:  result.BlockMeta.BlockId.Hash,
 	}, nil
 }
 
-func toTransactions(txs []sdk.TxResponse) (transactions []*types.Transaction, err error) {
+func toTransactions(txs []sdk2.TxResponse) (transactions []*types.Transaction, err error) {
 	for _, tx := range txs {
 		transactions = append(transactions, cosmosTxToRosettaTx(tx))
 	}
@@ -75,7 +66,7 @@ func tendermintTxToRosettaTx(res tendermint.TxResponse) *types.Transaction {
 
 // cosmosTxToRosettaTx converts a Cosmos api TxQuery to a Transaction
 // in the type expected by Rosetta.
-func cosmosTxToRosettaTx(tx sdk.TxResponse) *types.Transaction {
+func cosmosTxToRosettaTx(tx sdk2.TxResponse) *types.Transaction {
 	hasError := tx.Code > 0
 	return &types.Transaction{
 		TransactionIdentifier: &types.TransactionIdentifier{
@@ -91,9 +82,9 @@ func toOperations(msg []sdk.Msg, hasError bool, withoutStatus bool) (operations 
 		if !ok {
 			continue
 		}
-		fromAddress := newMsg.FromAddress
-		toAddress := newMsg.ToAddress
-		amounts := newMsg.Amount
+		fromAddress := newMsg.Inputs[0]
+		toAddress := newMsg.Outputs[0]
+		amounts := newMsg.Inputs[0].Coins
 		if len(amounts) == 0 {
 			continue
 		}
@@ -124,8 +115,8 @@ func toOperations(msg []sdk.Msg, hasError bool, withoutStatus bool) (operations 
 			}
 		}
 		operations = append(operations,
-			sendOp(fromAddress.String(), "-"+coin.Amount.String(), i),
-			sendOp(toAddress.String(), coin.Amount.String(), i+1),
+			sendOp(fromAddress.Address.String(), "-"+coin.Amount.String(), i),
+			sendOp(toAddress.Address.String(), coin.Amount.String(), i+1),
 		)
 	}
 	return

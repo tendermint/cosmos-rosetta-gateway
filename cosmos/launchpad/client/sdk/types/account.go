@@ -1,14 +1,9 @@
 package types
 
 import (
-	"github.com/cosmos/cosmos-sdk/simapp"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/irisnet/irishub/app"
+	sdk "github.com/irisnet/irishub/types"
 )
-
-type AccountResponse struct {
-	Height int64    `json:"height,omitempty"`
-	Result Response `json:"result,omitempty"`
-}
 
 type Response struct {
 	Type  string      `json:"type,omitempty"`
@@ -28,4 +23,4 @@ type PublicKey struct {
 	Value string `json:"value,omitempty"`
 }
 
-var Codec = simapp.MakeCodec()
+var Codec = app.MakeLatestCodec()

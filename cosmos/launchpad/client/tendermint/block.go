@@ -8,8 +8,12 @@ import (
 )
 
 type BlockResponse struct {
+	BlockMeta BlockMeta `json:"block_meta,omitempty"`
+	Block     Block     `json:"block,omitempty"`
+}
+
+type BlockMeta struct {
 	BlockId BlockId `json:"block_id,omitempty"`
-	Block   Block   `json:"block,omitempty"`
 }
 
 type BlockId struct {

@@ -31,7 +31,7 @@ func (l launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) 
 		return nil, ErrEndpointDisabledOfflineMode
 	}
 
-	resp, err := l.cosmos.GetNodeInfo(ctx)
+	resp, err := l.tendermint.Status()
 	if err != nil {
 		return nil, ErrNodeConnection
 	}
@@ -39,7 +39,7 @@ func (l launchpad) NetworkOptions(ctx context.Context, _ *types.NetworkRequest) 
 	return &types.NetworkOptionsResponse{
 		Version: &types.Version{
 			RosettaVersion: "1.2.5",
-			NodeVersion:    resp.Version,
+			NodeVersion:    resp.NodeInfo.Version,
 		},
 		Allow: &types.Allow{
 			OperationStatuses: []*types.OperationStatus{
@@ -105,12 +105,12 @@ func (l launchpad) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (
 	return &types.NetworkStatusResponse{
 		CurrentBlockIdentifier: &types.BlockIdentifier{
 			Index: int64(height),
-			Hash:  latestBlock.BlockId.Hash,
+			Hash:  latestBlock.BlockMeta.BlockId.Hash,
 		},
 		CurrentBlockTimestamp: t.UnixNano() / 1000000,
 		GenesisBlockIdentifier: &types.BlockIdentifier{
 			Index: 1,
-			Hash:  genesisBlock.BlockId.Hash,
+			Hash:  genesisBlock.BlockMeta.BlockId.Hash,
 		},
 		Peers: peers,
 	}, nil
