@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/irishub/client/sdk/types"
 )
 
 func (c Client) GetAuthAccount(ctx context.Context, address string, height int64) (types.Response, error) {

@@ -1,4 +1,4 @@
-package launchpad
+package irishub
 
 import "github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 

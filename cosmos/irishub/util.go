@@ -1,4 +1,4 @@
-package launchpad
+package irishub
 
 import (
 	"context"
@@ -6,12 +6,12 @@ import (
 	"strconv"
 	"strings"
 
-	sdk2 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
+	sdk2 "github.com/tendermint/cosmos-rosetta-gateway/cosmos/irishub/client/sdk"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/irisnet/irishub/modules/bank"
 	sdk "github.com/irisnet/irishub/types"
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/irishub/client/tendermint"
 )
 
 const (

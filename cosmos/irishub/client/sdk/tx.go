@@ -3,17 +3,21 @@ package sdk
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
-	"github.com/irisnet/irishub/types"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/irisnet/irishub/modules/auth"
+
+	"github.com/irisnet/irishub/types"
 
 	"github.com/irisnet/irishub/app"
 )
 
 type TxResponse struct {
-	Code int64
-	Tx types.Tx
+	Code   int64
+	Tx     types.Tx
 	TxHash string
 }
 
@@ -32,11 +36,20 @@ func (c Client) GetTx(ctx context.Context, hash string) (TxResponse, error) {
 		return TxResponse{}, err
 	}
 
-	var txRes TxResponse
-	codec := app.MakeLatestCodec()
-	if err = codec.UnmarshalJSON(btes, &txRes); err != nil {
+	var jsonTxRes map[string]json.RawMessage
+	err = json.Unmarshal(btes, &jsonTxRes)
+	if err != nil {
 		return TxResponse{}, err
 	}
+
+	var txRes TxResponse
+	var stdTx auth.StdTx
+	codec := app.MakeLatestCodec()
+	if err = codec.UnmarshalJSON(jsonTxRes["tx"], &stdTx); err != nil {
+		return TxResponse{}, err
+	}
+
+	txRes.Tx = stdTx
 
 	return txRes, nil
 }

@@ -1,4 +1,4 @@
-package launchpad
+package irishub
 
 import (
 	"fmt"

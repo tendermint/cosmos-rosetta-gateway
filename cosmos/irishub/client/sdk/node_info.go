@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/irishub/client/sdk/types"
 )
 
 type NodeInfoResponse struct {

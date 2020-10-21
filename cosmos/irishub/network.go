@@ -1,11 +1,11 @@
-package launchpad
+package irishub
 
 import (
 	"context"
 	"strconv"
 	"time"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/irishub/client/tendermint"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"golang.org/x/sync/errgroup"

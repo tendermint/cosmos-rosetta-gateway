@@ -1,13 +1,13 @@
-package launchpad
+package irishub
 
 import (
 	"context"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/irishub/client/sdk"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk/types"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/irishub/client/sdk/types"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/irishub/client/tendermint"
 )
 
 type SdkClient interface {

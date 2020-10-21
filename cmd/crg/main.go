@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad"
+	"github.com/irisnet/irishub/types"
+
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/irishub"
 	"github.com/tendermint/cosmos-rosetta-gateway/service"
 )
 
@@ -23,9 +25,11 @@ var (
 func main() {
 	flag.Parse()
 
+	types.SetNetworkType(types.Mainnet)
+
 	h, err := service.New(
 		service.Options{Port: uint32(*flagPort)},
-		launchpad.NewLaunchpadNetwork(launchpad.Options{
+		irishub.NewLaunchpadNetwork(irishub.Options{
 			CosmosEndpoint:     *flagAppRPC,
 			TendermintEndpoint: *flagTendermintRPC,
 			Blockchain:         *flagBlockchain,

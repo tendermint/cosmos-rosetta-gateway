@@ -1,11 +1,11 @@
-package launchpad
+package irishub
 
 import (
 	"fmt"
 
-	cosmos "github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/sdk"
+	cosmos "github.com/tendermint/cosmos-rosetta-gateway/cosmos/irishub/client/sdk"
 
-	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/client/tendermint"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/irishub/client/tendermint"
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 	"github.com/tendermint/cosmos-rosetta-gateway/service"
 )
