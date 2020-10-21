@@ -17,8 +17,9 @@ import (
 
 type TxResponse struct {
 	Code   int64
-	Tx     types.Tx
 	TxHash string
+	Tx     types.Tx
+	Height int64
 }
 
 func (c Client) GetTx(ctx context.Context, hash string) (TxResponse, error) {
@@ -50,6 +51,7 @@ func (c Client) GetTx(ctx context.Context, hash string) (TxResponse, error) {
 	}
 
 	txRes.Tx = stdTx
+	txRes.TxHash = hash
 
 	return txRes, nil
 }
