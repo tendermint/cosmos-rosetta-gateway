@@ -12,7 +12,7 @@ install:
 	go install ./cmd/crg
 
 test:
-	go test -mod=readonly -race github.com/tendermint/cosmos-rosetta-gateway/...
+	go test -v -mod=readonly -race github.com/tendermint/cosmos-rosetta-gateway/...
 
 dev:
 	go run cmd/crg/*.go --blockchain "Test" --network "Test"

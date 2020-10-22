@@ -1,33 +1,28 @@
 package sdk
 
 import (
-	"context"
-	"io/ioutil"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/require"
+	"github.com/tendermint/cosmos-rosetta-gateway/cosmos/launchpad/clienttest"
 )
 
 func TestGetNodeInfo(t *testing.T) {
-	bz, err := ioutil.ReadFile("testdata/nodeinfo.json")
+	if testing.Short() {
+		t.Skip()
+	}
+	ctx, cancel := clienttest.Ctx()
+	t.Cleanup(cancel)
+	e, err := clienttest.NewLaunchpad(ctx, "crgapp")
 	require.NoError(t, err)
+	t.Cleanup(e.Cleanup)
 
-	s := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		_, err = writer.Write(bz)
-		require.NoError(t, err)
-	}))
-	defer s.Close()
+	client := NewClient(e.SDKAddr)
 
-	client := NewClient(s.URL)
-
-	moniker := "mynode"
-	res, err := client.GetNodeInfo(context.Background())
-	t.Log(res)
-
+	res, err := client.GetNodeInfo(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, res)
-	require.Equal(t, moniker, res.Moniker)
+
+	require.Equal(t, "mynode", res.Moniker)
 	require.Equal(t, "0.33.7", res.Version)
 }
