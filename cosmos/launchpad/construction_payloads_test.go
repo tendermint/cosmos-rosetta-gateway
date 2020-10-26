@@ -232,5 +232,5 @@ func TestLaunchpad_ConstructionPayloadsDelegate(t *testing.T) {
 	require.Nil(t, err)
 
 	require.Equal(t, senderAddr, resp.Payloads[0].Address)
-	require.Equal(t, types.SignatureType("secp256k1"), resp.Payloads[0].SignatureType)
+	require.Equal(t, types.SignatureType("ecdsa"), resp.Payloads[0].SignatureType)
 }

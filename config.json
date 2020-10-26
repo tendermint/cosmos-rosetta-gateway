@@ -1,7 +1,7 @@
 {
   "network": {
     "blockchain": "Test",
-    "network": "Test"
+    "network": "blog"
   },
   "online_url": "http://localhost:8080",
   "data_directory": "",

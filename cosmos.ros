@@ -24,7 +24,7 @@ request_funds(1){
 }
 create_account(1){
   create{
-    network = {"network":"Test", "blockchain":"Test"};
+    network = {"network":"blog", "blockchain":"Test"};
     key = generate_key({"curve_type": "secp256k1"});
     account = derive({
       "network_identifier": {{network}},
@@ -39,7 +39,7 @@ create_account(1){
 }
 transfer(10){	
   transfer{
-    transfer.network = {"network":"Test", "blockchain":"Test"};
+    transfer.network = {"network":"blog", "blockchain":"Test"};
     currency = {"symbol":"stake", "decimals":0};
     sender = find_balance({
       "minimum_balance":{

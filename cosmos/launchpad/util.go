@@ -88,8 +88,9 @@ func cosmosTxToRosettaTx(tx sdk.TxResponse) *types.Transaction {
 
 func toOperations(msg []sdk.Msg, hasError bool, withoutStatus bool) (operations []*types.Operation) {
 	for i, msg := range msg {
-		switch msg.Type() {
-		case "MsgSend":
+		x := msg.Type()
+		switch x {
+		case "send":
 			newMsg := msg.(bank.MsgSend)
 			fromAddress := newMsg.FromAddress
 			toAddress := newMsg.ToAddress
@@ -128,7 +129,7 @@ func toOperations(msg []sdk.Msg, hasError bool, withoutStatus bool) (operations 
 				sendOp(toAddress.String(), coin.Amount.String(), i+1),
 			)
 
-		case "MsgDelegate":
+		case "delegate":
 			newMsg := msg.(staking.MsgDelegate)
 			srcAddr := newMsg.DelegatorAddress
 			valAddr := newMsg.ValidatorAddress
