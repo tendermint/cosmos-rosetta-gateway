@@ -1,0 +1,22 @@
+[
+  {
+    "account_identifier": {
+      "address":"cosmos1nh0h4rr0g9gtgr6x9tfmf7525l30zgp87z8lau"
+    },
+    "currency":{
+      "symbol":"token",
+      "decimals":0
+    },
+    "value": "1000"
+  },
+  {
+    "account_identifier": {
+      "address":"cosmos1f6d5p7vze6ff5mqs393er67zmx3emrs52ptc93"
+    },
+    "currency":{
+      "symbol":"token",
+      "decimals":0
+    },
+    "value": "500"
+  }
+]
