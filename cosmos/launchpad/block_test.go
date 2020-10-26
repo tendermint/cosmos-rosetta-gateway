@@ -132,9 +132,27 @@ func TestLaunchpad_Block(t *testing.T) {
 					},
 					Operations: []*types.Operation{
 						{
-							OperationIdentifier: &types.OperationIdentifier{},
-							Type:                OperationTransfer,
-							Status:              StatusSuccess,
+							OperationIdentifier: &types.OperationIdentifier{
+								Index: 3,
+							},
+							Type:   OperationFee,
+							Status: StatusSuccess,
+							Account: &types.AccountIdentifier{
+								Address: addr3.String(),
+							},
+							Amount: &types.Amount{
+								Value: "",
+								Currency: &types.Currency{
+									Symbol: "",
+								},
+							},
+						},
+						{
+							OperationIdentifier: &types.OperationIdentifier{
+								Index: 1,
+							},
+							Type:   OperationTransfer,
+							Status: StatusSuccess,
 							Account: &types.AccountIdentifier{
 								Address: addr3.String(),
 							},
@@ -147,7 +165,7 @@ func TestLaunchpad_Block(t *testing.T) {
 						},
 						{
 							OperationIdentifier: &types.OperationIdentifier{
-								Index: 1,
+								Index: 2,
 							},
 							Type:   OperationTransfer,
 							Status: StatusSuccess,
@@ -276,6 +294,22 @@ func TestLaunchpad_BlockTransaction(t *testing.T) {
 						Value: "10",
 						Currency: &types.Currency{
 							Symbol: "atom",
+						},
+					},
+				},
+				{
+					OperationIdentifier: &types.OperationIdentifier{
+						Index: 2,
+					},
+					Type:   OperationFee,
+					Status: StatusSuccess,
+					Account: &types.AccountIdentifier{
+						Address: addr1.String(),
+					},
+					Amount: &types.Amount{
+						Value: "",
+						Currency: &types.Currency{
+							Symbol: "",
 						},
 					},
 				},

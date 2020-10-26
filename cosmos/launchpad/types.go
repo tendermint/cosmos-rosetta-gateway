@@ -10,11 +10,11 @@ const (
 	StatusSuccess  = "Success"
 
 	OperationTransfer = "Transfer"
-
-	OptionAddress = "address"
-	OptionFee     = "fee"
-	OptionMemo    = "memo"
-	OptionGas     = "gas"
+	OperationFee      = "Fee"
+	OptionAddress     = "address"
+	OptionFee         = "fee"
+	OptionMemo        = "memo"
+	OptionGas         = "gas"
 )
 
 // TransferTxData represents a Tx that sends value.

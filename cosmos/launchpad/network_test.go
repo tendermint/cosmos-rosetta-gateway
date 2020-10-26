@@ -92,6 +92,7 @@ func TestLaunchpad_NetworkOptions(t *testing.T) {
 			},
 			OperationTypes: []string{
 				OperationTransfer,
+				OperationFee,
 			},
 		},
 	}, options)

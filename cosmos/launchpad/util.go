@@ -3,6 +3,7 @@ package launchpad
 import (
 	"context"
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/x/auth"
 	"strconv"
 	"strings"
 
@@ -13,6 +14,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/ante"
 )
 
 const (
@@ -77,11 +79,48 @@ func tendermintTxToRosettaTx(res tendermint.TxResponse) *types.Transaction {
 // in the type expected by Rosetta.
 func cosmosTxToRosettaTx(tx sdk.TxResponse) *types.Transaction {
 	hasError := tx.Code > 0
+	ops := toOperations(tx.Tx.GetMsgs(), hasError, false)
+	feeTx := tx.Tx.(authtypes.FeeTx)
+
+	ops = append(ops, convertFeeToOp(feeTx))
 	return &types.Transaction{
 		TransactionIdentifier: &types.TransactionIdentifier{
 			Hash: tx.TxHash,
 		},
-		Operations: toOperations(tx.Tx.GetMsgs(), hasError, false),
+		Operations: ops,
+	}
+}
+
+func convertFeeToOp(tx authtypes.FeeTx) *types.Operation {
+	fee := tx.GetFee()
+	if len(fee) > 1 {
+		return nil
+	}
+
+	feePayer := tx.FeePayer()
+
+	index := len(tx.GetMsgs()) + 1
+
+	var feeValue, denom string
+	if fee != nil {
+		feeValue = fee[0].Amount.String()
+		denom = fee[0].Denom
+	}
+	return &types.Operation{
+		OperationIdentifier: &types.OperationIdentifier{
+			Index: int64(index),
+		},
+		Type:   OperationFee,
+		Status: StatusSuccess,
+		Account: &types.AccountIdentifier{
+			Address: feePayer.String(),
+		},
+		Amount: &types.Amount{
+			Value: feeValue,
+			Currency: &types.Currency{
+				Symbol: denom,
+			},
+		},
 	}
 }
 
@@ -162,4 +201,38 @@ func getTransferTxDataFromOperations(ops []*types.Operation) (*TransferTxData, e
 	}
 
 	return transferData, nil
+}
+
+func getOpsFromTx(tx auth.StdTx, hasError bool, withoutStatus bool) []*types.Operation {
+	ops := toOperations(tx.Msgs, hasError, withoutStatus)
+	feeOps := getFeeOpFromTx(tx)
+	ops = append(ops, feeOps)
+	return ops
+}
+
+func getFeeOpFromTx(tx auth.StdTx) *types.Operation {
+	fee := tx.GetFee()
+	if len(fee) != 1 {
+		return nil
+	}
+
+	feePayer := tx.FeePayer()
+
+	index := len(tx.GetMsgs()) + 1
+	return &types.Operation{
+		OperationIdentifier: &types.OperationIdentifier{
+			Index: int64(index),
+		},
+		Type:   OperationFee,
+		Status: StatusSuccess,
+		Account: &types.AccountIdentifier{
+			Address: feePayer.String(),
+		},
+		Amount: &types.Amount{
+			Value: fee[0].Amount.String(),
+			Currency: &types.Currency{
+				Symbol: fee[0].Denom,
+			},
+		},
+	}
 }

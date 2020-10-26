@@ -3,6 +3,7 @@ package launchpad
 import (
 	"context"
 	"encoding/hex"
+	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
 
 	types2 "github.com/cosmos/cosmos-sdk/types"
 
@@ -19,26 +20,26 @@ const (
 func (l launchpad) ConstructionParse(ctx context.Context, request *types.ConstructionParseRequest) (*types.ConstructionParseResponse, *types.Error) {
 	rawTx, err := hex.DecodeString(request.Transaction)
 	if err != nil {
-		return nil, ErrInvalidTransaction
+		return nil, rosetta.WrapError(ErrInvalidTransaction, err.Error())
 	}
 
 	var stdTx auth.StdTx
 	err = Codec.UnmarshalJSON(rawTx, &stdTx)
 	if err != nil {
-		return nil, ErrInvalidTransaction
+		return nil, rosetta.WrapError(ErrInvalidTransaction, err.Error())
 	}
 
 	var signers []string
 	for _, sig := range stdTx.Signatures {
 		addr, err := types2.AccAddressFromHex(sig.PubKey.Address().String())
 		if err != nil {
-			return nil, ErrInvalidTransaction
+			return nil, rosetta.WrapError(ErrInvalidTransaction, err.Error())
 		}
 		signers = append(signers, addr.String())
 	}
 
 	return &types.ConstructionParseResponse{
-		Operations: toOperations(stdTx.Msgs, false, true),
+		Operations: getOpsFromTx(stdTx, false, true),
 		Signers:    signers,
 	}, nil
 }
