@@ -22,6 +22,7 @@ require (
 	github.com/vektra/mockery/v2 v2.2.1
 	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208
 	golang.org/x/tools v0.0.0-20200921210052-fa0125251cc4 // indirect
+	google.golang.org/grpc v1.33.0
 	gopkg.in/ini.v1 v1.61.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
 )
