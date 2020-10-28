@@ -19,7 +19,7 @@ type Service struct {
 }
 
 type Options struct {
-	Endpoint string
+	ListenAddress string
 }
 
 type Network struct {
@@ -59,5 +59,5 @@ func New(options Options, network Network) (*Service, error) {
 }
 
 func (s *Service) Start() error {
-	return http.ListenAndServe(s.options.Endpoint, s.h)
+	return http.ListenAndServe(s.options.ListenAddress, s.h)
 }
