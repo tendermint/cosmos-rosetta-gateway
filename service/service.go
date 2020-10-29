@@ -37,6 +37,7 @@ func New(options Options, network Network) (*Service, error) {
 				Network:    network.Properties.Network,
 			},
 		},
+		[]string{},
 	)
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot build asserter")

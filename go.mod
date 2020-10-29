@@ -3,12 +3,14 @@ module github.com/tendermint/cosmos-rosetta-gateway
 go 1.14
 
 require (
-	github.com/coinbase/rosetta-sdk-go v0.3.4
+	github.com/coinbase/rosetta-sdk-go v0.5.8
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
+	github.com/google/addlicense v0.0.0-20200622132530-df58acafd6d5 // indirect
 	github.com/magiconair/properties v1.8.3 // indirect
 	github.com/pelletier/go-toml v1.8.1 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.20.0 // indirect
+	github.com/segmentio/golines v0.0.0-20200306054842-869934f8da7b // indirect
 	github.com/spf13/afero v1.4.0 // indirect
 	github.com/spf13/cast v1.3.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
