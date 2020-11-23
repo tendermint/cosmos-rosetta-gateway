@@ -3,7 +3,6 @@
 package service
 
 import (
-	"fmt"
 	"net/http"
 
 	assert "github.com/coinbase/rosetta-sdk-go/asserter"
@@ -20,7 +19,7 @@ type Service struct {
 }
 
 type Options struct {
-	Port uint32
+	ListenAddress string
 }
 
 type Network struct {
@@ -38,6 +37,7 @@ func New(options Options, network Network) (*Service, error) {
 				Network:    network.Properties.Network,
 			},
 		},
+		nil,
 	)
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot build asserter")
@@ -60,5 +60,5 @@ func New(options Options, network Network) (*Service, error) {
 }
 
 func (s *Service) Start() error {
-	return http.ListenAndServe(fmt.Sprintf(":%d", s.options.Port), s.h)
+	return http.ListenAndServe(s.options.ListenAddress, s.h)
 }
