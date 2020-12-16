@@ -1,64 +1,49 @@
-// Package http exposes Rosetta API over HTTP by wrapping functions from the
-// crg/services package.
 package service
 
 import (
-	"net/http"
-
-	assert "github.com/coinbase/rosetta-sdk-go/asserter"
-	"github.com/coinbase/rosetta-sdk-go/server"
+	"context"
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"github.com/pkg/errors"
-
 	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+	"time"
 )
 
-type Service struct {
-	h       http.Handler
-	options Options
-}
+// genesisBlockFetchTimeout defines a timeout to fetch the genesis block
+const genesisBlockFetchTimeout = 15 * time.Second
 
-type Options struct {
-	ListenAddress string
-}
+// NewOnlineNetwork builds a single network adapter.
+// It will get the Genesis block on the beginning to avoid calling it everytime.
+func NewOnlineNetwork(client rosetta.NodeClient, network *types.NetworkIdentifier) (rosetta.OnlineAPI, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), genesisBlockFetchTimeout)
+	defer cancel()
 
-type Network struct {
-	Properties rosetta.NetworkProperties
-	Adapter    rosetta.Adapter
-}
-
-func New(options Options, network Network) (*Service, error) {
-	asserter, err := assert.NewServer(
-		network.Properties.SupportedOperations,
-		true,
-		[]*types.NetworkIdentifier{
-			{
-				Blockchain: network.Properties.Blockchain,
-				Network:    network.Properties.Network,
-			},
-		},
-		nil,
-	)
+	var genesisHeight int64 = 1
+	block, err := client.BlockByHeight(ctx, &genesisHeight)
 	if err != nil {
-		return nil, errors.Wrap(err, "cannot build asserter")
+		return OnlineNetwork{}, err
 	}
 
-	h := server.NewRouter(
-		server.NewAccountAPIController(network.Adapter, asserter),
-		server.NewBlockAPIController(network.Adapter, asserter),
-		server.NewNetworkAPIController(network.Adapter, asserter),
-		server.NewMempoolAPIController(network.Adapter, asserter),
-		server.NewConstructionAPIController(network.Adapter, asserter),
-	)
-
-	s := &Service{
-		h:       h,
-		options: options,
-	}
-
-	return s, nil
+	return OnlineNetwork{
+		client:  client,
+		network: network,
+		networkOptions: &types.NetworkOptionsResponse{Version: &types.Version{
+			RosettaVersion: rosetta.SpecVersion,
+			NodeVersion:    client.Version(),
+		}, Allow: &types.Allow{
+			OperationStatuses:       client.OperationStatuses(),
+			OperationTypes:          client.OperationTypes(),
+			Errors:                  rosetta.AllowedErrors.RosettaErrors(),
+			HistoricalBalanceLookup: true,
+		}},
+		genesisBlockIdentifier: block.Block,
+	}, nil
 }
 
-func (s *Service) Start() error {
-	return http.ListenAndServe(s.options.ListenAddress, s.h)
+// OnlineNetwork groups together all the components required for the full rosetta implementation
+type OnlineNetwork struct {
+	client rosetta.NodeClient // used to query cosmos app + tendermint
+
+	network        *types.NetworkIdentifier      // identifies the network, it's static
+	networkOptions *types.NetworkOptionsResponse // identifies the network options, it's static
+
+	genesisBlockIdentifier *types.BlockIdentifier // identifies genesis block, it's static
 }
