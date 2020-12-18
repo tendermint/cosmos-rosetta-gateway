@@ -3,7 +3,8 @@ package service
 import (
 	"context"
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+	"github.com/tendermint/cosmos-rosetta-gateway/errors"
+	crgtypes "github.com/tendermint/cosmos-rosetta-gateway/types"
 )
 
 // AccountBalance retrieves the account balance of an address
@@ -11,7 +12,7 @@ import (
 func (on OnlineNetwork) AccountBalance(ctx context.Context, request *types.AccountBalanceRequest) (*types.AccountBalanceResponse, *types.Error) {
 	var (
 		height int64
-		block  rosetta.BlockResponse
+		block  crgtypes.BlockResponse
 		err    error
 	)
 
@@ -19,25 +20,25 @@ func (on OnlineNetwork) AccountBalance(ctx context.Context, request *types.Accou
 	case request.BlockIdentifier == nil:
 		block, err = on.client.BlockByHeight(ctx, nil)
 		if err != nil {
-			return nil, rosetta.ToRosettaError(err)
+			return nil, errors.ToRosetta(err)
 		}
 	case request.BlockIdentifier.Hash != nil:
 		block, err = on.client.BlockByHash(ctx, *request.BlockIdentifier.Hash)
 		if err != nil {
-			return nil, rosetta.ToRosettaError(err)
+			return nil, errors.ToRosetta(err)
 		}
 		height = block.Block.Index
 	case request.BlockIdentifier.Index != nil:
 		height = *request.BlockIdentifier.Index
 		block, err = on.client.BlockByHeight(ctx, &height)
 		if err != nil {
-			return nil, rosetta.ToRosettaError(err)
+			return nil, errors.ToRosetta(err)
 		}
 	}
 
 	accountCoins, err := on.client.Balances(ctx, request.AccountIdentifier.Address, &height)
 	if err != nil {
-		return nil, rosetta.ToRosettaError(err)
+		return nil, errors.ToRosetta(err)
 	}
 
 	return &types.AccountBalanceResponse{
@@ -51,7 +52,7 @@ func (on OnlineNetwork) AccountBalance(ctx context.Context, request *types.Accou
 // Block gets the transactions in the given block
 func (on OnlineNetwork) Block(ctx context.Context, request *types.BlockRequest) (*types.BlockResponse, *types.Error) {
 	var (
-		blockResponse rosetta.BlockTransactionsResponse
+		blockResponse crgtypes.BlockTransactionsResponse
 		err           error
 	)
 	// block identifier is assumed not to be nil as rosetta will do this check for us
@@ -60,15 +61,16 @@ func (on OnlineNetwork) Block(ctx context.Context, request *types.BlockRequest) 
 	case request.BlockIdentifier.Hash != nil:
 		blockResponse, err = on.client.BlockTransactionsByHash(ctx, *request.BlockIdentifier.Hash)
 		if err != nil {
-			return nil, rosetta.ToRosettaError(err)
+			return nil, errors.ToRosetta(err)
 		}
 	case request.BlockIdentifier.Index != nil:
 		blockResponse, err = on.client.BlockTransactionsByHeight(ctx, request.BlockIdentifier.Index)
 		if err != nil {
-			return nil, rosetta.ToRosettaError(err)
+			return nil, errors.ToRosetta(err)
 		}
 	default:
-		return nil, rosetta.WrapError(rosetta.ErrBadArgument, "at least one of hash or index needs to be specified").RosettaError()
+		err := errors.WrapError(errors.ErrBadArgument, "at least one of hash or index needs to be specified")
+		return nil, errors.ToRosetta(err)
 	}
 
 	return &types.BlockResponse{
@@ -88,7 +90,7 @@ func (on OnlineNetwork) Block(ctx context.Context, request *types.BlockRequest) 
 func (on OnlineNetwork) BlockTransaction(ctx context.Context, request *types.BlockTransactionRequest) (*types.BlockTransactionResponse, *types.Error) {
 	tx, err := on.client.GetTx(ctx, request.TransactionIdentifier.Hash)
 	if err != nil {
-		return nil, rosetta.ToRosettaError(err)
+		return nil, errors.ToRosetta(err)
 	}
 
 	return &types.BlockTransactionResponse{
@@ -100,7 +102,7 @@ func (on OnlineNetwork) BlockTransaction(ctx context.Context, request *types.Blo
 func (on OnlineNetwork) Mempool(ctx context.Context, _ *types.NetworkRequest) (*types.MempoolResponse, *types.Error) {
 	txs, err := on.client.Mempool(ctx)
 	if err != nil {
-		return nil, rosetta.ToRosettaError(err)
+		return nil, errors.ToRosetta(err)
 	}
 
 	return &types.MempoolResponse{
@@ -113,7 +115,7 @@ func (on OnlineNetwork) Mempool(ctx context.Context, _ *types.NetworkRequest) (*
 func (on OnlineNetwork) MempoolTransaction(ctx context.Context, request *types.MempoolTransactionRequest) (*types.MempoolTransactionResponse, *types.Error) {
 	tx, err := on.client.GetUnconfirmedTx(ctx, request.TransactionIdentifier.Hash)
 	if err != nil {
-		return nil, rosetta.ToRosettaError(err)
+		return nil, errors.ToRosetta(err)
 	}
 
 	return &types.MempoolTransactionResponse{
@@ -132,17 +134,17 @@ func (on OnlineNetwork) NetworkOptions(_ context.Context, _ *types.NetworkReques
 func (on OnlineNetwork) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (*types.NetworkStatusResponse, *types.Error) {
 	block, err := on.client.BlockByHeight(ctx, nil)
 	if err != nil {
-		return nil, rosetta.ToRosettaError(err)
+		return nil, errors.ToRosetta(err)
 	}
 
 	peers, err := on.client.Peers(ctx)
 	if err != nil {
-		return nil, rosetta.ToRosettaError(err)
+		return nil, errors.ToRosetta(err)
 	}
 
 	syncStatus, err := on.client.Status(ctx)
 	if err != nil {
-		return nil, rosetta.ToRosettaError(err)
+		return nil, errors.ToRosetta(err)
 	}
 
 	return &types.NetworkStatusResponse{

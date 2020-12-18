@@ -1,4 +1,4 @@
-package rosetta
+package types
 
 import (
 	"context"

@@ -4,18 +4,18 @@ import (
 	"context"
 	"encoding/hex"
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
+	"github.com/tendermint/cosmos-rosetta-gateway/errors"
 )
 
 func (on OnlineNetwork) ConstructionCombine(ctx context.Context, request *types.ConstructionCombineRequest) (*types.ConstructionCombineResponse, *types.Error) {
 	txBytes, err := hex.DecodeString(request.UnsignedTransaction)
 	if err != nil {
-		return nil, rosetta.ToRosettaError(err)
+		return nil, errors.ToRosetta(err)
 	}
 
 	signedTx, err := on.client.SignedTx(ctx, txBytes, request.Signatures)
 	if err != nil {
-		return nil, rosetta.ToRosettaError(err)
+		return nil, errors.ToRosetta(err)
 	}
 
 	return &types.ConstructionCombineResponse{
@@ -34,7 +34,7 @@ func (on OnlineNetwork) ConstructionHash(ctx context.Context, request *types.Con
 func (on OnlineNetwork) ConstructionMetadata(ctx context.Context, request *types.ConstructionMetadataRequest) (*types.ConstructionMetadataResponse, *types.Error) {
 	metadata, err := on.client.ConstructionMetadataFromOptions(ctx, request.Options)
 	if err != nil {
-		return nil, rosetta.ToRosettaError(err)
+		return nil, errors.ToRosetta(err)
 	}
 
 	return &types.ConstructionMetadataResponse{
@@ -45,11 +45,12 @@ func (on OnlineNetwork) ConstructionMetadata(ctx context.Context, request *types
 func (on OnlineNetwork) ConstructionParse(ctx context.Context, request *types.ConstructionParseRequest) (*types.ConstructionParseResponse, *types.Error) {
 	txBytes, err := hex.DecodeString(request.Transaction)
 	if err != nil {
-		return nil, rosetta.ErrInvalidTransaction.RosettaError()
+		err := errors.WrapError(errors.ErrInvalidTransaction, err.Error())
+		return nil, errors.ToRosetta(err)
 	}
 	ops, signers, err := on.client.TxOperationsAndSignersAccountIdentifiers(request.Signed, txBytes)
 	if err != nil {
-		return nil, rosetta.ToRosettaError(err)
+		return nil, errors.ToRosetta(err)
 	}
 	return &types.ConstructionParseResponse{
 		Operations:               ops,
@@ -62,7 +63,7 @@ func (on OnlineNetwork) ConstructionParse(ctx context.Context, request *types.Co
 func (on OnlineNetwork) ConstructionPayloads(ctx context.Context, request *types.ConstructionPayloadsRequest) (*types.ConstructionPayloadsResponse, *types.Error) {
 	payload, err := on.client.ConstructionPayload(ctx, request)
 	if err != nil {
-		return nil, rosetta.ToRosettaError(err)
+		return nil, errors.ToRosetta(err)
 	}
 	return payload, nil
 }
@@ -70,7 +71,7 @@ func (on OnlineNetwork) ConstructionPayloads(ctx context.Context, request *types
 func (on OnlineNetwork) ConstructionPreprocess(ctx context.Context, request *types.ConstructionPreprocessRequest) (*types.ConstructionPreprocessResponse, *types.Error) {
 	options, err := on.client.PreprocessOperationsToOptions(ctx, request)
 	if err != nil {
-		return nil, rosetta.ToRosettaError(err)
+		return nil, errors.ToRosetta(err)
 	}
 
 	return &types.ConstructionPreprocessResponse{
@@ -81,12 +82,12 @@ func (on OnlineNetwork) ConstructionPreprocess(ctx context.Context, request *typ
 func (on OnlineNetwork) ConstructionSubmit(ctx context.Context, request *types.ConstructionSubmitRequest) (*types.TransactionIdentifierResponse, *types.Error) {
 	txBytes, err := hex.DecodeString(request.SignedTransaction)
 	if err != nil {
-		return nil, rosetta.ToRosettaError(err)
+		return nil, errors.ToRosetta(err)
 	}
 
 	res, meta, err := on.client.PostTx(txBytes)
 	if err != nil {
-		return nil, rosetta.ToRosettaError(err)
+		return nil, errors.ToRosetta(err)
 	}
 
 	return &types.TransactionIdentifierResponse{

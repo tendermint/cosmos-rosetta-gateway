@@ -1,18 +1,18 @@
-package crg
+package server
 
 import (
 	"fmt"
 	assert "github.com/coinbase/rosetta-sdk-go/asserter"
 	"github.com/coinbase/rosetta-sdk-go/server"
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"github.com/tendermint/cosmos-rosetta-gateway/rosetta"
-	"github.com/tendermint/cosmos-rosetta-gateway/service"
+	"github.com/tendermint/cosmos-rosetta-gateway/internal/service"
+	crgtypes "github.com/tendermint/cosmos-rosetta-gateway/types"
 	"net/http"
 )
 
 type Settings struct {
 	Network *types.NetworkIdentifier
-	Client  rosetta.NodeClient
+	Client  crgtypes.NodeClient
 	Listen  string
 }
 
