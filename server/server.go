@@ -2,13 +2,14 @@ package server
 
 import (
 	"fmt"
+	"net/http"
+	"time"
+
 	assert "github.com/coinbase/rosetta-sdk-go/asserter"
 	"github.com/coinbase/rosetta-sdk-go/server"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/tendermint/cosmos-rosetta-gateway/internal/service"
 	crgtypes "github.com/tendermint/cosmos-rosetta-gateway/types"
-	"net/http"
-	"time"
 )
 
 const DefaultRetries = 5
@@ -33,16 +34,16 @@ type Settings struct {
 	RetryWait time.Duration
 }
 
-type Handler struct {
+type Server struct {
 	h    http.Handler
 	addr string
 }
 
-func (h Handler) Start() error {
+func (h Server) Start() error {
 	return http.ListenAndServe(h.addr, h.h)
 }
 
-func NewHandler(settings Settings) (Handler, error) {
+func NewServer(settings Settings) (Server, error) {
 	asserter, err := assert.NewServer(
 		settings.OfflineServicer.SupportedOperations(),
 		true,
@@ -50,7 +51,7 @@ func NewHandler(settings Settings) (Handler, error) {
 		nil,
 	)
 	if err != nil {
-		return Handler{}, fmt.Errorf("cannot build asserter: %w", err)
+		return Server{}, fmt.Errorf("cannot build asserter: %w", err)
 	}
 
 	var (
@@ -63,7 +64,7 @@ func NewHandler(settings Settings) (Handler, error) {
 		adapter, err = newOnlineAdapter(settings)
 	}
 	if err != nil {
-		return Handler{}, err
+		return Server{}, err
 	}
 	h := server.NewRouter(
 		server.NewAccountAPIController(adapter, asserter),
@@ -73,7 +74,7 @@ func NewHandler(settings Settings) (Handler, error) {
 		server.NewConstructionAPIController(adapter, asserter),
 	)
 
-	return Handler{
+	return Server{
 		h:    h,
 		addr: settings.Listen,
 	}, nil
