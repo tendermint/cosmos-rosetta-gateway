@@ -22,8 +22,11 @@ type NetworkInformationProvider interface {
 
 // OnlineServicer defines the API the implementation must expose if online
 type OnlineServicer interface {
-	NetworkInformationProvider
-	OfflineServicer
+	// Ready checks if the servicer constraints for queries are satisfied
+	// for example the node might still not be ready, it's useful in process
+	// when the rosetta instance might come up before the node itself
+	// the servicer must return nil if the node is ready
+	Ready() error
 	// Data API
 
 	// Balances fetches the balance of the given address
@@ -87,18 +90,14 @@ type BlockResponse struct {
 	TxCount              int64
 }
 
-// OnlineAPI defines the exposed APIs
+// API defines the exposed APIs
 // if the service is online
-type OnlineAPI interface {
+type API interface {
 	DataAPI
 	ConstructionAPI
 }
 
-type OfflineAPI interface {
-	ConstructionOfflineAPI
-}
-
-// DataAPI defines the full data OnlineAPI implementation
+// DataAPI defines the full data API implementation
 type DataAPI interface {
 	server.NetworkAPIServicer
 	server.AccountAPIServicer
