@@ -13,7 +13,7 @@ const genesisBlockFetchTimeout = 15 * time.Second
 
 // NewOnlineNetwork builds a single network adapter.
 // It will get the Genesis block on the beginning to avoid calling it everytime.
-func NewOnlineNetwork(client crgtypes.NodeClient, network *types.NetworkIdentifier) (crgtypes.OnlineAPI, error) {
+func NewOnlineNetwork(client crgtypes.OnlineServicer, network *types.NetworkIdentifier) (crgtypes.OnlineAPI, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), genesisBlockFetchTimeout)
 	defer cancel()
 
@@ -26,22 +26,25 @@ func NewOnlineNetwork(client crgtypes.NodeClient, network *types.NetworkIdentifi
 	return OnlineNetwork{
 		client:  client,
 		network: network,
-		networkOptions: &types.NetworkOptionsResponse{Version: &types.Version{
-			RosettaVersion: crgtypes.SpecVersion,
-			NodeVersion:    client.Version(),
-		}, Allow: &types.Allow{
-			OperationStatuses:       client.OperationStatuses(),
-			OperationTypes:          client.OperationTypes(),
-			Errors:                  errors.SealAndListErrors(),
-			HistoricalBalanceLookup: true,
-		}},
+		networkOptions: &types.NetworkOptionsResponse{
+			Version: &types.Version{
+				RosettaVersion: crgtypes.SpecVersion,
+				NodeVersion:    client.Version(),
+			},
+			Allow: &types.Allow{
+				OperationStatuses:       client.OperationStatuses(),
+				OperationTypes:          client.OperationTypes(),
+				Errors:                  errors.SealAndListErrors(),
+				HistoricalBalanceLookup: true,
+			},
+		},
 		genesisBlockIdentifier: block.Block,
 	}, nil
 }
 
 // OnlineNetwork groups together all the components required for the full rosetta implementation
 type OnlineNetwork struct {
-	client crgtypes.NodeClient // used to query cosmos app + tendermint
+	client crgtypes.OnlineServicer // used to query cosmos app + tendermint
 
 	network        *types.NetworkIdentifier      // identifies the network, it's static
 	networkOptions *types.NetworkOptionsResponse // identifies the network options, it's static

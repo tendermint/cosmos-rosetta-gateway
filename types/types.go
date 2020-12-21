@@ -9,10 +9,23 @@ import (
 // SpecVersion defines the specification of rosetta
 const SpecVersion = ""
 
-// NodeClient defines the interface
-// a client has to implement in order to
-// interact with cosmos-sdk chains
-type NodeClient interface {
+// NetworkInformationProvider defines the interface used to provide information regarding
+// the network and the version of the cosmos sdk used
+type NetworkInformationProvider interface {
+	// SupportedOperations lists the operations supported by the implementation
+	SupportedOperations() []string
+	// OperationsStatuses returns the list of statuses supported by the implementation
+	OperationStatuses() []*types.OperationStatus
+	// Version returns the version of the node
+	Version() string
+}
+
+// OnlineServicer defines the API the implementation must expose if online
+type OnlineServicer interface {
+	NetworkInformationProvider
+	OfflineServicer
+	// Data API
+
 	// Balances fetches the balance of the given address
 	// if height is not nil, then the balance will be displayed
 	// at the provided height, otherwise last block balance will be returned
@@ -39,17 +52,27 @@ type NodeClient interface {
 	// Status returns the node status, such as sync data, version etc
 	Status(ctx context.Context) (*types.SyncStatus, error)
 
-	PostTx(txBytes []byte) (res *types.TransactionIdentifier, meta map[string]interface{}, err error)
-	SignedTx(ctx context.Context, txBytes []byte, sigs []*types.Signature) (signedTxBytes []byte, err error)
-	TxOperationsAndSignersAccountIdentifiers(signed bool, hexBytes []byte) (ops []*types.Operation, signers []*types.AccountIdentifier, err error)
-	ConstructionMetadataFromOptions(ctx context.Context, options map[string]interface{}) (meta map[string]interface{}, err error)
-	ConstructionPayload(ctx context.Context, req *types.ConstructionPayloadsRequest) (resp *types.ConstructionPayloadsResponse, err error)
-	PreprocessOperationsToOptions(ctx context.Context, req *types.ConstructionPreprocessRequest) (options map[string]interface{}, err error)
+	// Construction API
 
-	SupportedOperations() []string
-	OperationStatuses() []*types.OperationStatus
-	OperationTypes() []string
-	Version() string
+	// PostTx posts txBytes to the node and returns the transaction identifier plus metadata related
+	// to the transaction itself.
+	PostTx(txBytes []byte) (res *types.TransactionIdentifier, meta map[string]interface{}, err error)
+	// ConstructionMetadataFromOptions
+	ConstructionMetadataFromOptions(ctx context.Context, options map[string]interface{}) (meta map[string]interface{}, err error)
+}
+
+// OfflineServicer defines the functionalities supported without having access to the node
+type OfflineServicer interface {
+	NetworkInformationProvider
+	// SignedTx returns the signed transaction given the tx bytes (msgs) plus the signatures
+	SignedTx(ctx context.Context, txBytes []byte, sigs []*types.Signature) (signedTxBytes []byte, err error)
+	// TxOperationsAndSignersAccountIdentifiers returns the operations related to a transaction and the account
+	// identifiers if the transaction is signed
+	TxOperationsAndSignersAccountIdentifiers(signed bool, hexBytes []byte) (ops []*types.Operation, signers []*types.AccountIdentifier, err error)
+	// ConstructionPayload returns the construction payload given the request
+	ConstructionPayload(ctx context.Context, req *types.ConstructionPayloadsRequest) (resp *types.ConstructionPayloadsResponse, err error)
+	// PreprocessOperationsToOptions returns the options given the preprocess operations
+	PreprocessOperationsToOptions(ctx context.Context, req *types.ConstructionPreprocessRequest) (options map[string]interface{}, err error)
 }
 
 type BlockTransactionsResponse struct {
@@ -72,7 +95,7 @@ type OnlineAPI interface {
 }
 
 type OfflineAPI interface {
-	ConstructionAPI
+	ConstructionOfflineAPI
 }
 
 // DataAPI defines the full data OnlineAPI implementation
@@ -83,7 +106,53 @@ type DataAPI interface {
 	server.MempoolAPIServicer
 }
 
-// ConstructionAPI defines the construction OnlineAPI implementation
+var _ server.ConstructionAPIServicer = ConstructionAPI(nil)
+
+// ConstructionAPI defines the full construction API with
+// the online and offline endpoints
 type ConstructionAPI interface {
-	server.ConstructionAPIServicer
+	ConstructionOnlineAPI
+	ConstructionOfflineAPI
+}
+
+// ConstructionOnlineAPI defines the construction methods
+// allowed in an online implementation
+type ConstructionOnlineAPI interface {
+	ConstructionMetadata(
+		context.Context,
+		*types.ConstructionMetadataRequest,
+	) (*types.ConstructionMetadataResponse, *types.Error)
+	ConstructionSubmit(
+		context.Context,
+		*types.ConstructionSubmitRequest,
+	) (*types.TransactionIdentifierResponse, *types.Error)
+}
+
+// ConstructionOfflineAPI defines the construction methods
+// allowed
+type ConstructionOfflineAPI interface {
+	ConstructionCombine(
+		context.Context,
+		*types.ConstructionCombineRequest,
+	) (*types.ConstructionCombineResponse, *types.Error)
+	ConstructionDerive(
+		context.Context,
+		*types.ConstructionDeriveRequest,
+	) (*types.ConstructionDeriveResponse, *types.Error)
+	ConstructionHash(
+		context.Context,
+		*types.ConstructionHashRequest,
+	) (*types.TransactionIdentifierResponse, *types.Error)
+	ConstructionParse(
+		context.Context,
+		*types.ConstructionParseRequest,
+	) (*types.ConstructionParseResponse, *types.Error)
+	ConstructionPayloads(
+		context.Context,
+		*types.ConstructionPayloadsRequest,
+	) (*types.ConstructionPayloadsResponse, *types.Error)
+	ConstructionPreprocess(
+		context.Context,
+		*types.ConstructionPreprocessRequest,
+	) (*types.ConstructionPreprocessResponse, *types.Error)
 }

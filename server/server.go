@@ -12,7 +12,7 @@ import (
 
 type Settings struct {
 	Network *types.NetworkIdentifier
-	Client  crgtypes.NodeClient
+	Client  crgtypes.OnlineServicer
 	Listen  string
 }
 
