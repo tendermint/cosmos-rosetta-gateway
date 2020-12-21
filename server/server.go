@@ -19,10 +19,8 @@ const DefaultRetryWait = 5 * time.Second
 type Settings struct {
 	// Network contains the information regarding the network
 	Network *types.NetworkIdentifier
-	// OnlineServicer is the online API handler
-	OnlineServicer crgtypes.OnlineServicer
-	// OfflineServicer is the offline API handler
-	OfflineServicer crgtypes.OfflineServicer
+	// Client is the online API handler
+	Client crgtypes.Client
 	// Listen is the address the handler will listen at
 	Listen string
 	// Offline defines if the rosetta service should be exposed in offline mode
@@ -45,7 +43,7 @@ func (h Server) Start() error {
 
 func NewServer(settings Settings) (Server, error) {
 	asserter, err := assert.NewServer(
-		settings.OfflineServicer.SupportedOperations(),
+		settings.Client.SupportedOperations(),
 		true,
 		[]*types.NetworkIdentifier{settings.Network},
 		nil,
@@ -81,18 +79,15 @@ func NewServer(settings Settings) (Server, error) {
 }
 
 func newOfflineAdapter(settings Settings) (crgtypes.API, error) {
-	if settings.OfflineServicer == nil {
-		return nil, fmt.Errorf("offline servicer is nil")
+	if settings.Client == nil {
+		return nil, fmt.Errorf("client is nil")
 	}
-	return service.NewOffline(settings.Network, settings.OfflineServicer)
+	return service.NewOffline(settings.Network, settings.Client)
 }
 
 func newOnlineAdapter(settings Settings) (crgtypes.API, error) {
-	if settings.OfflineServicer == nil {
-		return nil, fmt.Errorf("offline servicer is nil")
-	}
-	if settings.OnlineServicer == nil {
-		return nil, fmt.Errorf("online servicer is nil")
+	if settings.Client == nil {
+		return nil, fmt.Errorf("client is nil")
 	}
 	if settings.Retries <= 0 {
 		settings.Retries = DefaultRetries
@@ -100,14 +95,20 @@ func newOnlineAdapter(settings Settings) (crgtypes.API, error) {
 	if settings.RetryWait == 0 {
 		settings.RetryWait = DefaultRetryWait
 	}
+
 	var err error
+	err = settings.Client.Bootstrap()
+	if err != nil {
+		return nil, err
+	}
+
 	for i := 0; i < settings.Retries; i++ {
-		err = settings.OnlineServicer.Ready()
+		err = settings.Client.Ready()
 		if err != nil {
 			time.Sleep(settings.RetryWait)
 			continue
 		}
-		return service.NewOnlineNetwork(settings.Network, settings.OnlineServicer, settings.OfflineServicer)
+		return service.NewOnlineNetwork(settings.Network, settings.Client, settings.OfflineServicer)
 	}
 	return nil, fmt.Errorf("maximum number of retries exceeded, last error: %w", err)
 }

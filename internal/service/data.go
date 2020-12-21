@@ -18,25 +18,25 @@ func (on OnlineNetwork) AccountBalance(ctx context.Context, request *types.Accou
 
 	switch {
 	case request.BlockIdentifier == nil:
-		block, err = on.onlineServicer.BlockByHeight(ctx, nil)
+		block, err = on.client.BlockByHeight(ctx, nil)
 		if err != nil {
 			return nil, errors.ToRosetta(err)
 		}
 	case request.BlockIdentifier.Hash != nil:
-		block, err = on.onlineServicer.BlockByHash(ctx, *request.BlockIdentifier.Hash)
+		block, err = on.client.BlockByHash(ctx, *request.BlockIdentifier.Hash)
 		if err != nil {
 			return nil, errors.ToRosetta(err)
 		}
 		height = block.Block.Index
 	case request.BlockIdentifier.Index != nil:
 		height = *request.BlockIdentifier.Index
-		block, err = on.onlineServicer.BlockByHeight(ctx, &height)
+		block, err = on.client.BlockByHeight(ctx, &height)
 		if err != nil {
 			return nil, errors.ToRosetta(err)
 		}
 	}
 
-	accountCoins, err := on.onlineServicer.Balances(ctx, request.AccountIdentifier.Address, &height)
+	accountCoins, err := on.client.Balances(ctx, request.AccountIdentifier.Address, &height)
 	if err != nil {
 		return nil, errors.ToRosetta(err)
 	}
@@ -59,12 +59,12 @@ func (on OnlineNetwork) Block(ctx context.Context, request *types.BlockRequest) 
 	// check if we have to query via hash or block number
 	switch {
 	case request.BlockIdentifier.Hash != nil:
-		blockResponse, err = on.onlineServicer.BlockTransactionsByHash(ctx, *request.BlockIdentifier.Hash)
+		blockResponse, err = on.client.BlockTransactionsByHash(ctx, *request.BlockIdentifier.Hash)
 		if err != nil {
 			return nil, errors.ToRosetta(err)
 		}
 	case request.BlockIdentifier.Index != nil:
-		blockResponse, err = on.onlineServicer.BlockTransactionsByHeight(ctx, request.BlockIdentifier.Index)
+		blockResponse, err = on.client.BlockTransactionsByHeight(ctx, request.BlockIdentifier.Index)
 		if err != nil {
 			return nil, errors.ToRosetta(err)
 		}
@@ -88,7 +88,7 @@ func (on OnlineNetwork) Block(ctx context.Context, request *types.BlockRequest) 
 // BlockTransaction gets the given transaction in the specified block, we do not need to check the block itself too
 // due to the fact that tendermint achieves instant finality
 func (on OnlineNetwork) BlockTransaction(ctx context.Context, request *types.BlockTransactionRequest) (*types.BlockTransactionResponse, *types.Error) {
-	tx, err := on.onlineServicer.GetTx(ctx, request.TransactionIdentifier.Hash)
+	tx, err := on.client.GetTx(ctx, request.TransactionIdentifier.Hash)
 	if err != nil {
 		return nil, errors.ToRosetta(err)
 	}
@@ -100,7 +100,7 @@ func (on OnlineNetwork) BlockTransaction(ctx context.Context, request *types.Blo
 
 // Mempool fetches the transactions contained in the mempool
 func (on OnlineNetwork) Mempool(ctx context.Context, _ *types.NetworkRequest) (*types.MempoolResponse, *types.Error) {
-	txs, err := on.onlineServicer.Mempool(ctx)
+	txs, err := on.client.Mempool(ctx)
 	if err != nil {
 		return nil, errors.ToRosetta(err)
 	}
@@ -113,7 +113,7 @@ func (on OnlineNetwork) Mempool(ctx context.Context, _ *types.NetworkRequest) (*
 // MempoolTransaction fetches a single transaction in the mempool
 // NOTE: it is not implemented yet
 func (on OnlineNetwork) MempoolTransaction(ctx context.Context, request *types.MempoolTransactionRequest) (*types.MempoolTransactionResponse, *types.Error) {
-	tx, err := on.onlineServicer.GetUnconfirmedTx(ctx, request.TransactionIdentifier.Hash)
+	tx, err := on.client.GetUnconfirmedTx(ctx, request.TransactionIdentifier.Hash)
 	if err != nil {
 		return nil, errors.ToRosetta(err)
 	}
@@ -132,17 +132,17 @@ func (on OnlineNetwork) NetworkOptions(_ context.Context, _ *types.NetworkReques
 }
 
 func (on OnlineNetwork) NetworkStatus(ctx context.Context, _ *types.NetworkRequest) (*types.NetworkStatusResponse, *types.Error) {
-	block, err := on.onlineServicer.BlockByHeight(ctx, nil)
+	block, err := on.client.BlockByHeight(ctx, nil)
 	if err != nil {
 		return nil, errors.ToRosetta(err)
 	}
 
-	peers, err := on.onlineServicer.Peers(ctx)
+	peers, err := on.client.Peers(ctx)
 	if err != nil {
 		return nil, errors.ToRosetta(err)
 	}
 
-	syncStatus, err := on.onlineServicer.Status(ctx)
+	syncStatus, err := on.client.Status(ctx)
 	if err != nil {
 		return nil, errors.ToRosetta(err)
 	}

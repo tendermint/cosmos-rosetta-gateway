@@ -54,7 +54,7 @@ func (on OnlineNetwork) ConstructionHash(ctx context.Context, request *types.Con
 }
 
 func (on OnlineNetwork) ConstructionMetadata(ctx context.Context, request *types.ConstructionMetadataRequest) (*types.ConstructionMetadataResponse, *types.Error) {
-	metadata, err := on.onlineServicer.ConstructionMetadataFromOptions(ctx, request.Options)
+	metadata, err := on.client.ConstructionMetadataFromOptions(ctx, request.Options)
 	if err != nil {
 		return nil, errors.ToRosetta(err)
 	}
@@ -107,7 +107,7 @@ func (on OnlineNetwork) ConstructionSubmit(ctx context.Context, request *types.C
 		return nil, errors.ToRosetta(err)
 	}
 
-	res, meta, err := on.onlineServicer.PostTx(txBytes)
+	res, meta, err := on.client.PostTx(txBytes)
 	if err != nil {
 		return nil, errors.ToRosetta(err)
 	}

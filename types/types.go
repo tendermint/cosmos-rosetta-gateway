@@ -2,6 +2,7 @@ package types
 
 import (
 	"context"
+
 	"github.com/coinbase/rosetta-sdk-go/server"
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
@@ -20,13 +21,16 @@ type NetworkInformationProvider interface {
 	Version() string
 }
 
-// OnlineServicer defines the API the implementation must expose if online
-type OnlineServicer interface {
+// Client defines the API the client implementation should provide.
+type Client interface {
+	// Needed if the client needs to perform some action before connecting.
+	Bootstrap() error
 	// Ready checks if the servicer constraints for queries are satisfied
 	// for example the node might still not be ready, it's useful in process
 	// when the rosetta instance might come up before the node itself
 	// the servicer must return nil if the node is ready
 	Ready() error
+
 	// Data API
 
 	// Balances fetches the balance of the given address
@@ -62,10 +66,11 @@ type OnlineServicer interface {
 	PostTx(txBytes []byte) (res *types.TransactionIdentifier, meta map[string]interface{}, err error)
 	// ConstructionMetadataFromOptions
 	ConstructionMetadataFromOptions(ctx context.Context, options map[string]interface{}) (meta map[string]interface{}, err error)
+	OfflineClient
 }
 
-// OfflineServicer defines the functionalities supported without having access to the node
-type OfflineServicer interface {
+// OfflineClient defines the functionalities supported without having access to the node
+type OfflineClient interface {
 	NetworkInformationProvider
 	// SignedTx returns the signed transaction given the tx bytes (msgs) plus the signatures
 	SignedTx(ctx context.Context, txBytes []byte, sigs []*types.Signature) (signedTxBytes []byte, err error)

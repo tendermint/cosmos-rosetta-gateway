@@ -10,7 +10,7 @@ import (
 // NewOffline instantiates the instance of an offline network
 // whilst the offline network does not support the DataAPI,
 // it supports a subset of the construction API.
-func NewOffline(network *types.NetworkIdentifier, servicer crgtypes.OfflineServicer) (crgtypes.API, error) {
+func NewOffline(network *types.NetworkIdentifier, servicer crgtypes.Client) (crgtypes.API, error) {
 	return OfflineNetwork{
 		OnlineNetwork{
 			offlineServicer: servicer,
