@@ -16,7 +16,16 @@ type Settings struct {
 	Listen  string
 }
 
-func Serve(settings Settings) error {
+type Handler struct {
+	h    http.Handler
+	addr string
+}
+
+func (h Handler) Start() error {
+	return http.ListenAndServe(h.addr, h.h)
+}
+
+func NewHandler(settings Settings) (Handler, error) {
 	asserter, err := assert.NewServer(
 		settings.Client.SupportedOperations(),
 		true,
@@ -24,11 +33,11 @@ func Serve(settings Settings) error {
 		nil,
 	)
 	if err != nil {
-		return fmt.Errorf("cannot build asserter: %w", err)
+		return Handler{}, fmt.Errorf("cannot build asserter: %w", err)
 	}
 	adapter, err := service.NewOnlineNetwork(settings.Client, settings.Network)
 	if err != nil {
-		return err
+		return Handler{}, err
 	}
 	h := server.NewRouter(
 		server.NewAccountAPIController(adapter, asserter),
@@ -38,5 +47,8 @@ func Serve(settings Settings) error {
 		server.NewConstructionAPIController(adapter, asserter),
 	)
 
-	return http.ListenAndServe(settings.Listen, h)
+	return Handler{
+		h:    h,
+		addr: settings.Listen,
+	}, nil
 }
