@@ -13,7 +13,7 @@ import (
 func NewOffline(network *types.NetworkIdentifier, servicer crgtypes.Client) (crgtypes.API, error) {
 	return OfflineNetwork{
 		OnlineNetwork{
-			offlineServicer: servicer,
+			client: servicer,
 			network:         network,
 		},
 	}, nil

@@ -15,7 +15,7 @@ func (on OnlineNetwork) ConstructionCombine(ctx context.Context, request *types.
 		return nil, errors.ToRosetta(err)
 	}
 
-	signedTx, err := on.offlineServicer.SignedTx(ctx, txBytes, request.Signatures)
+	signedTx, err := on.client.SignedTx(ctx, txBytes, request.Signatures)
 	if err != nil {
 		return nil, errors.ToRosetta(err)
 	}
@@ -26,7 +26,7 @@ func (on OnlineNetwork) ConstructionCombine(ctx context.Context, request *types.
 }
 
 func (on OnlineNetwork) ConstructionDerive(ctx context.Context, request *types.ConstructionDeriveRequest) (*types.ConstructionDeriveResponse, *types.Error) {
-	account, err := on.offlineServicer.AccountIdentifierFromPublicKey(request.PublicKey)
+	account, err := on.client.AccountIdentifierFromPublicKey(request.PublicKey)
 	if err != nil {
 		return nil, errors.ToRosetta(err)
 	}
@@ -70,7 +70,7 @@ func (on OnlineNetwork) ConstructionParse(ctx context.Context, request *types.Co
 		err := errors.WrapError(errors.ErrInvalidTransaction, err.Error())
 		return nil, errors.ToRosetta(err)
 	}
-	ops, signers, err := on.offlineServicer.TxOperationsAndSignersAccountIdentifiers(request.Signed, txBytes)
+	ops, signers, err := on.client.TxOperationsAndSignersAccountIdentifiers(request.Signed, txBytes)
 	if err != nil {
 		return nil, errors.ToRosetta(err)
 	}
@@ -83,7 +83,7 @@ func (on OnlineNetwork) ConstructionParse(ctx context.Context, request *types.Co
 }
 
 func (on OnlineNetwork) ConstructionPayloads(ctx context.Context, request *types.ConstructionPayloadsRequest) (*types.ConstructionPayloadsResponse, *types.Error) {
-	payload, err := on.offlineServicer.ConstructionPayload(ctx, request)
+	payload, err := on.client.ConstructionPayload(ctx, request)
 	if err != nil {
 		return nil, errors.ToRosetta(err)
 	}
@@ -91,7 +91,7 @@ func (on OnlineNetwork) ConstructionPayloads(ctx context.Context, request *types
 }
 
 func (on OnlineNetwork) ConstructionPreprocess(ctx context.Context, request *types.ConstructionPreprocessRequest) (*types.ConstructionPreprocessResponse, *types.Error) {
-	options, err := on.offlineServicer.PreprocessOperationsToOptions(ctx, request)
+	options, err := on.client.PreprocessOperationsToOptions(ctx, request)
 	if err != nil {
 		return nil, errors.ToRosetta(err)
 	}
