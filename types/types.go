@@ -76,6 +76,8 @@ type OfflineServicer interface {
 	ConstructionPayload(ctx context.Context, req *types.ConstructionPayloadsRequest) (resp *types.ConstructionPayloadsResponse, err error)
 	// PreprocessOperationsToOptions returns the options given the preprocess operations
 	PreprocessOperationsToOptions(ctx context.Context, req *types.ConstructionPreprocessRequest) (options map[string]interface{}, err error)
+	// AccountIdentifierFromPublicKey returns the account identifier given the public key
+	AccountIdentifierFromPublicKey(pubKey *types.PublicKey) (*types.AccountIdentifier, error)
 }
 
 type BlockTransactionsResponse struct {

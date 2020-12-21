@@ -2,9 +2,11 @@ package service
 
 import (
 	"context"
+	"crypto/sha256"
 	"encoding/hex"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/tendermint/cosmos-rosetta-gateway/errors"
+	"strings"
 )
 
 func (on OnlineNetwork) ConstructionCombine(ctx context.Context, request *types.ConstructionCombineRequest) (*types.ConstructionCombineResponse, *types.Error) {
@@ -24,11 +26,31 @@ func (on OnlineNetwork) ConstructionCombine(ctx context.Context, request *types.
 }
 
 func (on OnlineNetwork) ConstructionDerive(ctx context.Context, request *types.ConstructionDeriveRequest) (*types.ConstructionDeriveResponse, *types.Error) {
-	panic("implemenet")
+	account, err := on.offlineServicer.AccountIdentifierFromPublicKey(request.PublicKey)
+	if err != nil {
+		return nil, errors.ToRosetta(err)
+	}
+	return &types.ConstructionDeriveResponse{
+		AccountIdentifier: account,
+		Metadata:          nil,
+	}, nil
 }
 
 func (on OnlineNetwork) ConstructionHash(ctx context.Context, request *types.ConstructionHashRequest) (*types.TransactionIdentifierResponse, *types.Error) {
-	panic("implemenet")
+	bz, err := hex.DecodeString(request.SignedTransaction)
+	if err != nil {
+		return nil, errors.ToRosetta(errors.WrapError(errors.ErrInvalidTransaction, "error decoding tx"))
+	}
+
+	hash := sha256.Sum256(bz)
+	bzHash := hash[:]
+	hashString := hex.EncodeToString(bzHash)
+
+	return &types.TransactionIdentifierResponse{
+		TransactionIdentifier: &types.TransactionIdentifier{
+			Hash: strings.ToUpper(hashString),
+		},
+	}, nil
 }
 
 func (on OnlineNetwork) ConstructionMetadata(ctx context.Context, request *types.ConstructionMetadataRequest) (*types.ConstructionMetadataResponse, *types.Error) {
