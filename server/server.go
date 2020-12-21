@@ -108,7 +108,7 @@ func newOnlineAdapter(settings Settings) (crgtypes.API, error) {
 			time.Sleep(settings.RetryWait)
 			continue
 		}
-		return service.NewOnlineNetwork(settings.Network, settings.Client, settings.OfflineServicer)
+		return service.NewOnlineNetwork(settings.Network, settings.Client)
 	}
 	return nil, fmt.Errorf("maximum number of retries exceeded, last error: %w", err)
 }
