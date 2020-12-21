@@ -96,10 +96,14 @@ func newOnlineAdapter(settings Settings) (crgtypes.API, error) {
 	if settings.Retries <= 0 {
 		settings.Retries = DefaultRetries
 	}
+	if settings.RetryWait == 0 {
+		settings.RetryWait = DefaultRetryWait
+	}
 	var err error
 	for i := 0; i < settings.Retries; i++ {
 		err = settings.OnlineServicer.Ready()
 		if err != nil {
+			time.Sleep(settings.RetryWait)
 			continue
 		}
 		return service.NewOnlineNetwork(settings.Network, settings.OnlineServicer, settings.OfflineServicer)
