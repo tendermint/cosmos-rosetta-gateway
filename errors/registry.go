@@ -2,9 +2,10 @@ package errors
 
 import (
 	"fmt"
-	"github.com/coinbase/rosetta-sdk-go/types"
 	"os"
 	"sync"
+
+	"github.com/coinbase/rosetta-sdk-go/types"
 )
 
 type errorRegistry struct {
@@ -23,7 +24,6 @@ func (r errorRegistry) add(err *Error) {
 		_, _ = fmt.Fprint(os.Stderr, "[ROSETTA] WARNING: attempts to register an already registered error will be ignored, code: ", err.rosErr.Code)
 	}
 	r.errors[err.rosErr.Code] = err.rosErr
-	return
 }
 
 func (r errorRegistry) list() []*types.Error {
