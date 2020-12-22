@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/tendermint/cosmos-rosetta-gateway/errors"
 	crgtypes "github.com/tendermint/cosmos-rosetta-gateway/types"

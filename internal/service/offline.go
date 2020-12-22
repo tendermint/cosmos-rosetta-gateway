@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/coinbase/rosetta-sdk-go/types"
 	crgerrs "github.com/tendermint/cosmos-rosetta-gateway/errors"
 	crgtypes "github.com/tendermint/cosmos-rosetta-gateway/types"
@@ -13,8 +14,8 @@ import (
 func NewOffline(network *types.NetworkIdentifier, servicer crgtypes.Client) (crgtypes.API, error) {
 	return OfflineNetwork{
 		OnlineNetwork{
-			client: servicer,
-			network:         network,
+			client:  servicer,
+			network: network,
 		},
 	}, nil
 }

@@ -4,9 +4,10 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
+	"strings"
+
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/tendermint/cosmos-rosetta-gateway/errors"
-	"strings"
 )
 
 func (on OnlineNetwork) ConstructionCombine(ctx context.Context, request *types.ConstructionCombineRequest) (*types.ConstructionCombineResponse, *types.Error) {
