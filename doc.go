@@ -17,6 +17,6 @@
 // ├── pkg                            > reusable, generic utils.
 // │   └── doc.go
 // └── service                        > the actual Rosetta API implementation as high level Go funcs.
-//	└── online.go
+//	└── service.go
 
 package crg
