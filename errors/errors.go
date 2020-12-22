@@ -35,6 +35,26 @@ func (e *Error) Error() string {
 	return fmt.Sprintf("rosetta: (%d) %s", e.rosErr.Code, e.rosErr.Message)
 }
 
+// Is implements errors.Is for *Error, two errors are considered equal
+// if their error codes are identical
+func (e *Error) Is(err error) bool {
+	// check if one is nil and the other isn't
+	if (e == nil && err != nil) || (err == nil && e != nil) {
+		return false
+	}
+	// assert it can be casted
+	rosErr, ok := err.(*Error)
+	if !ok {
+		return false
+	}
+	// check that both *Error's are correctly initialized to avoid dereference panics
+	if (rosErr.rosErr == nil && e.rosErr != nil) || (e.rosErr == nil && rosErr.rosErr != nil) {
+		return false
+	}
+	// messages are equal if their error codes match
+	return rosErr.rosErr.Code == e.rosErr.Code
+}
+
 // WrapError wraps the rosetta error with additional context
 func WrapError(err *Error, msg string) *Error {
 	return &Error{rosErr: &types.Error{
