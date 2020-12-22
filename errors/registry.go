@@ -42,11 +42,7 @@ func (r errorRegistry) seal() {
 	r.sealed = true
 }
 
-var registry errorRegistry
-
-func init() {
-	registry = errorRegistry{
-		mu:     new(sync.RWMutex),
-		errors: make(map[int32]*types.Error),
-	}
+var registry = errorRegistry{
+	mu:     new(sync.RWMutex),
+	errors: make(map[int32]*types.Error),
 }
