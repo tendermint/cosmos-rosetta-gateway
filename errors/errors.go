@@ -82,13 +82,15 @@ func FromGRPCToRosettaError(err error) *Error {
 }
 
 func RegisterError(code int32, message string, retryable bool, description string) *Error {
-	return &Error{rosErr: &types.Error{
+	e := &Error{rosErr: &types.Error{
 		Code:        code,
 		Message:     message,
 		Description: &description,
 		Retriable:   retryable,
 		Details:     nil,
 	}}
+	registry.add(e)
+	return e
 }
 
 // Default error list
