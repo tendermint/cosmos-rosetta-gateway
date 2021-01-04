@@ -118,6 +118,23 @@ var (
 	// ErrUnknown defines an unknown error, if this is returned it means
 	// the library is ignoring an error
 	ErrUnknown = RegisterError(0, "unknown", false, "unknown error")
+	// ErrOffline is returned when there is an attempt to query an endpoint in offline mode
+	ErrOffline = RegisterError(1, "cannot query endpoint in offline mode", false, "returned when querying an online endpoint in offline mode")
+	// ErrNetworkNotSupported is returned when there is an attempt to query a network which is not supported
+	ErrNetworkNotSupported = RegisterError(2, "network is not supported", false, "returned when querying a non supported network")
+	// ErrCodec is returned when there's an error while marshalling or unmarshalling data
+	ErrCodec = RegisterError(3, "encode/decode error", true, "returned when there are errors encoding or decoding information to and from the node")
+	// ErrInvalidOperation is returned when the operation supplied to rosetta is not a valid one
+	ErrInvalidOperation = RegisterError(4, "invalid operation", false, "returned when the operation is not valid")
+	// ErrInvalidTransaction is returned when the provided hex bytes of a TX are not valid
+	ErrInvalidTransaction = RegisterError(5, "invalid transaction", false, "returned when the transaction is invalid")
+	// ErrInvalidAddress is returned when the byte of the address are bad
+	ErrInvalidAddress = RegisterError(7, "invalid address", false, "returned when the address is malformed")
+	// ErrInvalidPubkey is returned when the public key is invalid
+	ErrInvalidPubkey = RegisterError(8, "invalid pubkey", false, "returned when the public key is invalid")
+	// ErrInterpreting is returned when there are errors interpreting the data from the node, most likely related to breaking changes, version incompatibilities
+	ErrInterpreting = RegisterError(9, "error interpreting data from node", false, "returned when there are issues interpreting requests or response from node")
+	ErrInvalidMemo  = RegisterError(11, "invalid memo", false, "returned when the memo is invalid")
 	// ErrBadArgument is returned when the request is malformed
 	ErrBadArgument = RegisterError(400, "bad argument", false, "request is malformed")
 	// ErrNotFound is returned when the required object was not found
@@ -128,22 +145,8 @@ var (
 	ErrInternal = RegisterError(500, "internal error", false, "returned when the node experiences internal errors")
 	// ErrBadGateway is returned when there are problems interacting with the nodes
 	ErrBadGateway = RegisterError(502, "bad gateway", true, "return when the node is unreachable")
-	// ErrOffline is returned when there is an attempt to query an endpoint in offline mode
-	ErrOffline = RegisterError(1, "cannot query endpoint in offline mode", false, "returned when querying an online endpoint in offline mode")
-	// ErrNetworkNotSupported is returned when there is an attempt to query a network which is not supported
-	ErrNetworkNotSupported = RegisterError(2, "network is not supported", false, "returned when querying a non supported network")
-	// ErrCodec is returned when there's an error while marshalling or unmarshalling data
-	ErrCodec = RegisterError(3, "encode/decode error", true, "returned when there are errors encoding or decoding information to and from the node")
 	// ErrNotImplemented is returned when a method is not implemented yet
 	ErrNotImplemented = RegisterError(14, "not implemented", false, "returned when querying an endpoint which is not implemented")
 	// ErrUnsupportedCurve is returned when the curve specified is not supported
 	ErrUnsupportedCurve = RegisterError(15, "unsupported curve, expected secp256k1", false, "returned when using an unsupported crypto curve")
-	// ErrInvalidPubkey is returned when the public key is invalid
-	ErrInvalidPubkey      = RegisterError(8, "invalid pubkey", false, "returned when the public key is invalid")
-	ErrInterpreting       = RegisterError(1, "error interpreting data from node", false, "returned when there are issues interpreting requests or response from node")
-	ErrInvalidAddress     = RegisterError(7, "invalid address", false, "returned when the address is malformed")
-	ErrInvalidMemo        = RegisterError(11, "invalid memo", false, "returned when the memo is invalid")
-	ErrInvalidOperation   = RegisterError(4, "invalid operation", false, "returned when the operation is not valid")
-	ErrInvalidRequest     = RegisterError(6, "invalid request", false, "returned when the request is malformed")
-	ErrInvalidTransaction = RegisterError(5, "invalid transaction", false, "returned when the transaction is invalid")
 )
