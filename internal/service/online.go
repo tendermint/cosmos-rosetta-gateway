@@ -25,20 +25,9 @@ func NewOnlineNetwork(network *types.NetworkIdentifier, client crgtypes.Client) 
 	}
 
 	return OnlineNetwork{
-		client:  client,
-		network: network,
-		networkOptions: &types.NetworkOptionsResponse{
-			Version: &types.Version{
-				RosettaVersion: crgtypes.SpecVersion,
-				NodeVersion:    client.Version(),
-			},
-			Allow: &types.Allow{
-				OperationStatuses:       client.OperationStatuses(),
-				OperationTypes:          client.SupportedOperations(),
-				Errors:                  errors.SealAndListErrors(),
-				HistoricalBalanceLookup: true,
-			},
-		},
+		client:                 client,
+		network:                network,
+		networkOptions:         networkOptionsFromClient(client),
 		genesisBlockIdentifier: block.Block,
 	}, nil
 }
@@ -51,4 +40,20 @@ type OnlineNetwork struct {
 	networkOptions *types.NetworkOptionsResponse // identifies the network options, it's static
 
 	genesisBlockIdentifier *types.BlockIdentifier // identifies genesis block, it's static
+}
+
+// networkOptionsFromClient builds network options given the client
+func networkOptionsFromClient(client crgtypes.Client) *types.NetworkOptionsResponse {
+	return &types.NetworkOptionsResponse{
+		Version: &types.Version{
+			RosettaVersion: crgtypes.SpecVersion,
+			NodeVersion:    client.Version(),
+		},
+		Allow: &types.Allow{
+			OperationStatuses:       client.OperationStatuses(),
+			OperationTypes:          client.SupportedOperations(),
+			Errors:                  errors.SealAndListErrors(),
+			HistoricalBalanceLookup: true,
+		},
+	}
 }
