@@ -43,11 +43,25 @@ func (on OnlineNetwork) AccountBalance(ctx context.Context, request *types.Accou
 	}
 
 	return &types.AccountBalanceResponse{
-		BlockIdentifier: block.Block,
-		Balances:        accountCoins,
+		BlockIdentifier: (*types.BlockIdentifier)(block.Block),
+		Balances:        convertBalances(accountCoins...),
 		Coins:           nil,
 		Metadata:        nil,
 	}, nil
+}
+
+func convertBalances(crgAmts ...*crgtypes.Amount) []*types.Amount {
+	rosAmts := make([]*types.Amount, len(crgAmts))
+
+	for i, crgAmt := range crgAmts {
+		rosAmts[i] = &types.Amount{
+			Value:    crgAmt.Value,
+			Currency: (*types.Currency)(crgAmt.Currency),
+			Metadata: crgAmt.Metadata,
+		}
+	}
+
+	return rosAmts
 }
 
 // Block gets the transactions in the given block
@@ -76,14 +90,70 @@ func (on OnlineNetwork) Block(ctx context.Context, request *types.BlockRequest) 
 
 	return &types.BlockResponse{
 		Block: &types.Block{
-			BlockIdentifier:       blockResponse.Block,
-			ParentBlockIdentifier: blockResponse.ParentBlock,
+			BlockIdentifier:       (*types.BlockIdentifier)(blockResponse.Block),
+			ParentBlockIdentifier: (*types.BlockIdentifier)(blockResponse.ParentBlock),
 			Timestamp:             blockResponse.MillisecondTimestamp,
-			Transactions:          blockResponse.Transactions,
+			Transactions:          convertTransactions(blockResponse.Transactions...),
 			Metadata:              nil,
 		},
 		OtherTransactions: nil,
 	}, nil
+}
+
+func convertTransactions(crgTxs ...*crgtypes.Transaction) []*types.Transaction {
+	rosTxs := make([]*types.Transaction, len(crgTxs))
+
+	for i, crgTx := range crgTxs {
+		rosTxs[i] = &types.Transaction{
+			TransactionIdentifier: (*types.TransactionIdentifier)(crgTx.TransactionIdentifier),
+			Operations:            convertOperations(crgTx.Operations),
+			Metadata:              crgTx.Metadata,
+		}
+	}
+
+	return rosTxs
+}
+
+func convertOperations(crgOps []*crgtypes.Operation) []*types.Operation {
+	rosOps := make([]*types.Operation, len(crgOps))
+
+	for i, crgOp := range crgOps {
+		rosOps[i] = &types.Operation{
+			OperationIdentifier: (*types.OperationIdentifier)(crgOp.OperationIdentifier),
+			RelatedOperations:   convertOperationIdentifiers(crgOp.RelatedOperations...),
+			Type:                crgOp.Type,
+			Status:              crgOp.Status,
+			Account:             convertAccountIdentifiers(crgOp.Account)[0],
+			Amount:              convertBalances(crgOp.Amount)[0],
+			Metadata:            crgOp.Metadata,
+		}
+	}
+
+	return rosOps
+}
+
+func convertAccountIdentifiers(crgAccs ...*crgtypes.AccountIdentifier) []*types.AccountIdentifier {
+	rosAccs := make([]*types.AccountIdentifier, len(crgAccs))
+
+	for i, crgAcc := range crgAccs {
+		rosAccs[i] = &types.AccountIdentifier{
+			Address:    crgAcc.Address,
+			SubAccount: (*types.SubAccountIdentifier)(crgAcc.SubAccount),
+			Metadata:   crgAcc.Metadata,
+		}
+	}
+
+	return rosAccs
+}
+
+func convertOperationIdentifiers(crgOps ...*crgtypes.OperationIdentifier) []*types.OperationIdentifier {
+	rosOps := make([]*types.OperationIdentifier, len(crgOps))
+
+	for i, crgOp := range crgOps {
+		rosOps[i] = (*types.OperationIdentifier)(crgOp)
+	}
+
+	return rosOps
 }
 
 // BlockTransaction gets the given transaction in the specified block, we do not need to check the block itself too
@@ -95,7 +165,7 @@ func (on OnlineNetwork) BlockTransaction(ctx context.Context, request *types.Blo
 	}
 
 	return &types.BlockTransactionResponse{
-		Transaction: tx,
+		Transaction: convertTransactions(tx)[0],
 	}, nil
 }
 
@@ -107,8 +177,18 @@ func (on OnlineNetwork) Mempool(ctx context.Context, _ *types.NetworkRequest) (*
 	}
 
 	return &types.MempoolResponse{
-		TransactionIdentifiers: txs,
+		TransactionIdentifiers: convertTransactionIdentifiers(txs),
 	}, nil
+}
+
+func convertTransactionIdentifiers(crgTxs []*crgtypes.TransactionIdentifier) []*types.TransactionIdentifier {
+	rosTxs := make([]*types.TransactionIdentifier, len(crgTxs))
+
+	for i, crgTx := range crgTxs {
+		rosTxs[i] = (*types.TransactionIdentifier)(crgTx)
+	}
+
+	return rosTxs
 }
 
 // MempoolTransaction fetches a single transaction in the mempool
@@ -120,7 +200,7 @@ func (on OnlineNetwork) MempoolTransaction(ctx context.Context, request *types.M
 	}
 
 	return &types.MempoolTransactionResponse{
-		Transaction: tx,
+		Transaction: convertTransactions(tx)[0],
 	}, nil
 }
 
@@ -149,11 +229,21 @@ func (on OnlineNetwork) NetworkStatus(ctx context.Context, _ *types.NetworkReque
 	}
 
 	return &types.NetworkStatusResponse{
-		CurrentBlockIdentifier: block.Block,
+		CurrentBlockIdentifier: (*types.BlockIdentifier)(block.Block),
 		CurrentBlockTimestamp:  block.MillisecondTimestamp,
 		GenesisBlockIdentifier: on.genesisBlockIdentifier,
 		OldestBlockIdentifier:  nil,
-		SyncStatus:             syncStatus,
-		Peers:                  peers,
+		SyncStatus:             (*types.SyncStatus)(syncStatus),
+		Peers:                  convertPeers(peers),
 	}, nil
+}
+
+func convertPeers(crg []*crgtypes.Peer) []*types.Peer {
+	rosPeers := make([]*types.Peer, len(crg))
+
+	for i, crgPeer := range crg {
+		rosPeers[i] = (*types.Peer)(crgPeer)
+	}
+
+	return rosPeers
 }

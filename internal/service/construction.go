@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
+	crgtypes "github.com/tendermint/cosmos-rosetta-gateway/types"
 	"strings"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -16,7 +17,7 @@ func (on OnlineNetwork) ConstructionCombine(ctx context.Context, request *types.
 		return nil, errors.ToRosetta(err)
 	}
 
-	signedTx, err := on.client.SignedTx(ctx, txBytes, request.Signatures)
+	signedTx, err := on.client.SignedTx(ctx, txBytes, toSignatures(request.Signatures))
 	if err != nil {
 		return nil, errors.ToRosetta(err)
 	}
@@ -26,13 +27,39 @@ func (on OnlineNetwork) ConstructionCombine(ctx context.Context, request *types.
 	}, nil
 }
 
+func toSignatures(rosSigs []*types.Signature) []*crgtypes.Signature {
+	crgSigs := make([]*crgtypes.Signature, len(rosSigs))
+
+	for i, rosSig := range rosSigs {
+		crgSigs[i] = &crgtypes.Signature{
+			SigningPayload: &crgtypes.SigningPayload{
+				AccountIdentifier: &crgtypes.AccountIdentifier{
+					Address:    rosSig.SigningPayload.AccountIdentifier.Address,
+					SubAccount: (*crgtypes.SubAccountIdentifier)(rosSig.SigningPayload.AccountIdentifier.SubAccount),
+					Metadata:   rosSig.SigningPayload.AccountIdentifier.Metadata,
+				},
+				Bytes:         rosSig.SigningPayload.Bytes,
+				SignatureType: (crgtypes.SignatureType)(rosSig.SigningPayload.SignatureType),
+			},
+			PublicKey:     nil,
+			SignatureType: "",
+			Bytes:         nil,
+		}
+	}
+
+	return crgSigs
+}
+
 func (on OnlineNetwork) ConstructionDerive(ctx context.Context, request *types.ConstructionDeriveRequest) (*types.ConstructionDeriveResponse, *types.Error) {
-	account, err := on.client.AccountIdentifierFromPublicKey(request.PublicKey)
+	account, err := on.client.AccountIdentifierFromPublicKey(&crgtypes.PublicKey{
+		Bytes:     request.PublicKey.Bytes,
+		CurveType: (crgtypes.CurveType)(request.PublicKey.CurveType),
+	})
 	if err != nil {
 		return nil, errors.ToRosetta(err)
 	}
 	return &types.ConstructionDeriveResponse{
-		AccountIdentifier: account,
+		AccountIdentifier: convertAccountIdentifiers(account)[0],
 		Metadata:          nil,
 	}, nil
 }
@@ -76,23 +103,59 @@ func (on OnlineNetwork) ConstructionParse(ctx context.Context, request *types.Co
 		return nil, errors.ToRosetta(err)
 	}
 	return &types.ConstructionParseResponse{
-		Operations:               ops,
-		AccountIdentifierSigners: signers,
+		Operations:               convertOperations(ops),
+		AccountIdentifierSigners: convertAccountIdentifiers(signers...),
 		Metadata:                 nil,
 	}, nil
 
 }
 
 func (on OnlineNetwork) ConstructionPayloads(ctx context.Context, request *types.ConstructionPayloadsRequest) (*types.ConstructionPayloadsResponse, *types.Error) {
-	payload, err := on.client.ConstructionPayload(ctx, request)
+	payload, err := on.client.ConstructionPayload(ctx, &crgtypes.ConstructionPayloadsRequest{
+		NetworkIdentifier: &crgtypes.NetworkIdentifier{
+			Blockchain:           request.NetworkIdentifier.Blockchain,
+			Network:              request.NetworkIdentifier.Network,
+			SubNetworkIdentifier: (*crgtypes.SubNetworkIdentifier)(request.NetworkIdentifier.SubNetworkIdentifier),
+		},
+		Operations: toOperations(request.Operations...),
+		Metadata:   request.Metadata,
+		PublicKeys: toPublicKeys(request.PublicKeys),
+	})
 	if err != nil {
 		return nil, errors.ToRosetta(err)
 	}
-	return payload, nil
+	return &types.ConstructionPayloadsResponse{
+		UnsignedTransaction: payload.UnsignedTransaction,
+		Payloads:            convertPayloads(payload.Payloads),
+	}, nil
+}
+
+func convertPayloads(crgPayloads []*crgtypes.SigningPayload) []*types.SigningPayload {
+	rosPayloads := make([]*types.SigningPayload, len(crgPayloads))
+
+	for i, crgPayload := range crgPayloads {
+		rosPayloads[i] = &types.SigningPayload{
+			AccountIdentifier: convertAccountIdentifiers(crgPayload.AccountIdentifier)[0],
+			Bytes:             crgPayload.Bytes,
+			SignatureType:     (types.SignatureType)(crgPayload.SignatureType),
+		}
+	}
+
+	return rosPayloads
 }
 
 func (on OnlineNetwork) ConstructionPreprocess(ctx context.Context, request *types.ConstructionPreprocessRequest) (*types.ConstructionPreprocessResponse, *types.Error) {
-	options, err := on.client.PreprocessOperationsToOptions(ctx, request)
+	options, err := on.client.PreprocessOperationsToOptions(ctx, &crgtypes.ConstructionPreprocessRequest{
+		NetworkIdentifier: &crgtypes.NetworkIdentifier{
+			Blockchain:           request.NetworkIdentifier.Blockchain,
+			Network:              request.NetworkIdentifier.Network,
+			SubNetworkIdentifier: (*crgtypes.SubNetworkIdentifier)(request.NetworkIdentifier.SubNetworkIdentifier),
+		},
+		Operations:             toOperations(request.Operations...),
+		Metadata:               request.Metadata,
+		MaxFee:                 toBalances(request.MaxFee)[0],
+		SuggestedFeeMultiplier: request.SuggestedFeeMultiplier,
+	})
 	if err != nil {
 		return nil, errors.ToRosetta(err)
 	}
@@ -100,6 +163,10 @@ func (on OnlineNetwork) ConstructionPreprocess(ctx context.Context, request *typ
 	return &types.ConstructionPreprocessResponse{
 		Options: options,
 	}, nil
+}
+
+func toOperations(rosOps ...*types.Operation) []*crgtypes.Operation {
+	crgOps := make()
 }
 
 func (on OnlineNetwork) ConstructionSubmit(ctx context.Context, request *types.ConstructionSubmitRequest) (*types.TransactionIdentifierResponse, *types.Error) {
@@ -114,7 +181,7 @@ func (on OnlineNetwork) ConstructionSubmit(ctx context.Context, request *types.C
 	}
 
 	return &types.TransactionIdentifierResponse{
-		TransactionIdentifier: res,
+		TransactionIdentifier: (*types.TransactionIdentifier)(res),
 		Metadata:              meta,
 	}, nil
 }
