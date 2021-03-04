@@ -26,7 +26,7 @@ func (on OnlineNetwork) ConstructionCombine(ctx context.Context, request *types.
 	}, nil
 }
 
-func (on OnlineNetwork) ConstructionDerive(ctx context.Context, request *types.ConstructionDeriveRequest) (*types.ConstructionDeriveResponse, *types.Error) {
+func (on OnlineNetwork) ConstructionDerive(_ context.Context, request *types.ConstructionDeriveRequest) (*types.ConstructionDeriveResponse, *types.Error) {
 	account, err := on.client.AccountIdentifierFromPublicKey(request.PublicKey)
 	if err != nil {
 		return nil, errors.ToRosetta(err)
@@ -97,9 +97,7 @@ func (on OnlineNetwork) ConstructionPreprocess(ctx context.Context, request *typ
 		return nil, errors.ToRosetta(err)
 	}
 
-	return &types.ConstructionPreprocessResponse{
-		Options: options,
-	}, nil
+	return options, nil
 }
 
 func (on OnlineNetwork) ConstructionSubmit(ctx context.Context, request *types.ConstructionSubmitRequest) (*types.TransactionIdentifierResponse, *types.Error) {

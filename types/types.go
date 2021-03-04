@@ -80,7 +80,7 @@ type OfflineClient interface {
 	// ConstructionPayload returns the construction payload given the request
 	ConstructionPayload(ctx context.Context, req *types.ConstructionPayloadsRequest) (resp *types.ConstructionPayloadsResponse, err error)
 	// PreprocessOperationsToOptions returns the options given the preprocess operations
-	PreprocessOperationsToOptions(ctx context.Context, req *types.ConstructionPreprocessRequest) (options map[string]interface{}, err error)
+	PreprocessOperationsToOptions(ctx context.Context, req *types.ConstructionPreprocessRequest) (resp *types.ConstructionPreprocessResponse, err error)
 	// AccountIdentifierFromPublicKey returns the account identifier given the public key
 	AccountIdentifierFromPublicKey(pubKey *types.PublicKey) (*types.AccountIdentifier, error)
 }
