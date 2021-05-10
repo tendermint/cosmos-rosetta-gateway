@@ -45,7 +45,6 @@ func (on OnlineNetwork) AccountBalance(ctx context.Context, request *types.Accou
 	return &types.AccountBalanceResponse{
 		BlockIdentifier: block.Block,
 		Balances:        accountCoins,
-		Coins:           nil,
 		Metadata:        nil,
 	}, nil
 }
