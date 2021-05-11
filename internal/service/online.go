@@ -6,6 +6,7 @@ import (
 
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/tendermint/cosmos-rosetta-gateway/errors"
+	crgerrs "github.com/tendermint/cosmos-rosetta-gateway/errors"
 	crgtypes "github.com/tendermint/cosmos-rosetta-gateway/types"
 )
 
@@ -40,6 +41,12 @@ type OnlineNetwork struct {
 	networkOptions *types.NetworkOptionsResponse // identifies the network options, it's static
 
 	genesisBlockIdentifier *types.BlockIdentifier // identifies genesis block, it's static
+}
+
+// AccountsCoins - relevant only for UTXO based chain
+// see https://www.rosetta-api.org/docs/AccountApi.html#accountcoins
+func (o OnlineNetwork) AccountCoins(_ context.Context, _ *types.AccountCoinsRequest) (*types.AccountCoinsResponse, *types.Error) {
+	return nil, crgerrs.ToRosetta(crgerrs.ErrOffline)
 }
 
 // networkOptionsFromClient builds network options given the client
