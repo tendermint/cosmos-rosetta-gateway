@@ -3,6 +3,10 @@
 
 This project provides the shared lib that implements the Coinbase Rosetta API used in Cosmos-SDK. This includes the libraries that are used by different versions of the SDK, including Launchpad and Stargate.
 
+<!--
+> ⚠️ This library has been embedded in the Cosmos SDK and is no longer maintained
+> see: https://github.com/cosmos/cosmos-sdk/issues/9300
+-->
 
 [![Rosetta SDK version](https://img.shields.io/badge/Rosetta%20SDK-v0.6.10-informational)](https://github.com/coinbase/rosetta-sdk-go/releases/tag/v0.6.10)
 
