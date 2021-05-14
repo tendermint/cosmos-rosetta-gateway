@@ -1,0 +1,100 @@
+name: build and test against starport
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on: [push, pull_request]
+
+# This workflow makes x86_64 binaries for mac, windows, and linux.
+# TODO: Maybe make the whole workflow a matrix so that it tests mac, windows and linux.  currently only tests linux.
+
+
+jobs:
+  mac-windows:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        targetos: [windows, darwin]
+    name: crg for ${{ matrix.targetos }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.15
+        env:
+          GOOS: ${{ matrix.targetos }}
+
+      - name: Compile
+        run: make
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: crg ${{ matrix.targetos }}
+          path: crg
+
+  linux:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [arm64, riscv64, amd64]
+    name: crg for ${{ matrix.arch }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup go
+        uses: actions/setup-go@v2.1.2
+        with:
+          go-version: 1.15
+        env:
+          GOARCH: ${{ matrix.arch }}
+
+      - name: Compile
+        run: make
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: crg ${{ matrix.arch }}
+          path: crg
+            
+  
+  test:
+    runs-on: ubuntu-latest
+    name: test crg and starport
+    needs: linux
+    steps:
+      - name: Download crg
+        uses: actions/download-artifact@v2.0.5
+        with:
+          name: crg amd64
+          
+      - name: Setup go
+        uses: actions/setup-go@v2.1.2
+        with:
+          go-version: 1.15
+      
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '14'
+        
+      - name: download starport
+        uses: actions/download-artifact@v2.0.5
+        with:
+          name: starport
+
+      - name: install starport
+        run: npm i -g @tendermint/starport
+      
+      - name: build a simple blockchain
+        run: starport app github.com/faddat/clay
+        
+      - name: run blockchain and test crg
+        run: |
+          starport serve -p clay --verbose       
+          
+      - uses: actions/upload-artifact@v2
+        with:
+          path: clay/clay.log
+        
+          
+    
